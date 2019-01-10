@@ -96,7 +96,7 @@ void commonItems::parser::parseFile(const std::string& filename)
 	if (firstChar == '\xEF')
 	{
 		char bitBucket[3];
-		theFile.read(bitBucket, 3);
+		theFile.read(bitBucket, sizeof(bitBucket));
 	}
 
 	parseStream(theFile);
