@@ -276,7 +276,7 @@ namespace parser_UTF8
 		if (firstChar == (char)0xEF)
 		{
 			char bitBucket[3];
-			read.read(bitBucket, 3);
+			read.read(bitBucket, sizeof(bitBucket));
 		}
 
 		const static Parser<std::string::iterator> p;

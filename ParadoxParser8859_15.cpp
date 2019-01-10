@@ -279,7 +279,7 @@ namespace parser_8859_15
 		if (firstChar == (char)0xEF)
 		{
 			char bitBucket[3];
-			read.read(bitBucket, 3);
+			read.read(bitBucket, sizeof(bitBucket));
 			LOG(LogLevel::Warning) << "Identified a BOM in a file that shouldn't be UTF-8";
 		}
 
