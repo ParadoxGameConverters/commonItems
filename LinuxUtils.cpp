@@ -353,41 +353,57 @@ namespace Utils
 	*/
 	void GetAllFilesInFolder(const std::string& unresolvedPath, std::set<std::string>& fileNames)
 	{
-                using namespace std;
+		using namespace std;
 		const string path = resolvePath(unresolvedPath);
-                DIR *dir = opendir(path.c_str());
-                if(dir == NULL)
-                {
+		DIR *dir = opendir(path.c_str());
+		if(dir == NULL)
+		{
 			LOG(LogLevel::Error) << "unable to get all files in folder: " << path;
-                        if(errno == EACCES)
-                        {
-                                LOG(LogLevel::Error) << "\tno permission to read directory ";
-                        }else if(errno == ENOENT)
-                        {
-                                LOG(LogLevel::Error) << "\tdirectory does not exist";
-                        }else if(errno == ENOTDIR)
-                        {
-                                LOG(LogLevel::Error) << "\tpath is not a directory";
-                        }else{
-                                LOG(LogLevel::Error) << "\tunable to open directory";
-                        }
-                }else{
-                        struct dirent *dirent_ptr;
-                        while((dirent_ptr = readdir(dir)) != NULL){
-                                string filename{dirent_ptr->d_name};
-                                if(IsRegularNodeName(filename) && IsRegularFile(ConcatenateNodeName(path,filename))){
-                                        if(errno != 0){
-                                                fileNames.clear();
-                                                closedir(dir);
-                                                LOG(LogLevel::Error) << "an error occurred hile trying to list files in path: " << path;
-                                                return;
-                                        }
-                                        fileNames.insert(filename);
-                                }
-                        }
-                        closedir(dir);
-                }
-        }
+			if(errno == EACCES)
+			{
+				LOG(LogLevel::Error) << "\tno permission to read directory ";
+			}
+			else if(errno == ENOENT)
+			{
+				LOG(LogLevel::Error) << "\tdirectory does not exist";
+			}
+			else if(errno == ENOTDIR)
+			{
+				LOG(LogLevel::Error) << "\tpath is not a directory";
+			}
+			else{
+				LOG(LogLevel::Error) << "\tunable to open directory";
+			}
+		}
+		else
+		{
+			struct dirent *dirent_ptr;
+			errno = 0;
+			while((dirent_ptr = readdir(dir)) != NULL)
+			{
+				string filename{dirent_ptr->d_name};
+				if(errno != 0)
+				{
+					fileNames.clear();
+					closedir(dir);
+					LOG(LogLevel::Error) << "an error occurred while trying to list this file:(isRegularFile, path, filename, combined, errno) " << IsRegularFile(ConcatenateNodeName(path,filename)) <<", "<< path << ", " << filename << ", " <<ConcatenateNodeName(path,filename) << ", " << errno <<"\n";
+					return;
+				}
+				if(IsRegularNodeName(filename) && IsRegularFile(ConcatenateNodeName(path,filename)))
+				{
+					fileNames.insert(filename);
+				}
+				else if(errno != 0)
+				{
+					fileNames.clear();
+					closedir(dir);
+					LOG(LogLevel::Error) << "an error occurred while trying to list this file:(isRegularFile, path, filename, combined, errno) " << IsRegularFile(ConcatenateNodeName(path,filename)) <<", "<< path << ", " << filename << ", " <<ConcatenateNodeName(path,filename) << ", " << errno <<"\n";
+					return; 
+				}
+			}
+			closedir(dir);
+		}
+	}
 
 	void GetAllFilesInFolderRecursiveWithRelativePath(const std::string& path, const std::string &relative_path, std::set<std::string>& filenames)
         {
