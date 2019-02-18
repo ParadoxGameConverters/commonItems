@@ -53,6 +53,10 @@ Log::~Log()
 	std::string logMessage = logMessageStream.str();
 	Utils::WriteToConsole(logLevel, logMessage);
 	WriteToFile(logLevel, logMessage);
+	if (logLevel == LogLevel::Error)
+	{
+		std::cerr << logMessage;
+	}
 }
 
 
