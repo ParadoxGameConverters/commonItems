@@ -36,7 +36,10 @@ std::string getNextLexeme(std::istream& theStream);
 void commonItems::ignoreItem(const std::string& unused, std::istream& theStream)
 {
 	std::string next = getNextLexeme(theStream); // equals
-	next = getNextLexeme(theStream);
+	if (next == "=")
+	{
+		next = getNextLexeme(theStream);
+	}
 	if (next == "{")
 	{
 		int braceDepth = 1;
