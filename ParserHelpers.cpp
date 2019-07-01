@@ -1,4 +1,4 @@
-/*Copyright (c) 2018 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -101,19 +101,15 @@ void commonItems::ignoreString(const std::string& unused, std::istream& theStrea
 }
 
 
-commonItems::intList::intList(std::istream& theStream):
-	ints()
+commonItems::intList::intList(std::istream& theStream)
 {
-	registerKeyword(std::regex("\\d+"), [this](const std::string& theInt, std::istream& theStream)
-	{
+	registerKeyword(std::regex("\\d+"), [this](const std::string& theInt, std::istream& theStream){
 		ints.push_back(std::stoi(theInt));
-	}
-	);
-	registerKeyword(std::regex("\\\"\\d+\\\""), [this](const std::string& theInt, std::istream& theStream)
-	{
-		ints.push_back(std::stoi(theInt));
-	}
-	);
+	});
+	registerKeyword(std::regex("\\\"\\d+\\\""), [this](const std::string& theInt, std::istream& theStream){
+		auto newInt = theInt.substr(1, theInt.size() - 2);
+		ints.push_back(std::stoi(newInt));
+	});
 
 	parseStream(theStream);
 }
