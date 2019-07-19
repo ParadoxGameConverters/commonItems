@@ -173,6 +173,18 @@ class stringsOfItemNames: commonItems::parser
 		std::vector<std::string> theStrings;
 };
 
+
+class assignments: commonItems::parser
+{
+	public:
+		assignments(std::istream& theStream);
+
+		std::map<std::string, std::string> getAssignments() const { return theAssignments; }
+
+	private:
+		std::map<std::string, std::string> theAssignments;
+};
+
 }
 
 
