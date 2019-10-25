@@ -366,3 +366,15 @@ commonItems::stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 	parseStream(theStream);
 }
+
+
+commonItems::assignments::assignments(std::istream& theStream)
+{
+	registerKeyword(std::regex("[a-zA-Z0-9_]+"), [this](const std::string& assignmentName, std::istream& theStream) {
+		auto equals = getNextTokenWithoutMatching(theStream);
+		auto assignmentValue = getNextTokenWithoutMatching(theStream);
+		theAssignments.insert(std::make_pair(assignmentName, *assignmentValue));
+	});
+
+	parseStream(theStream);
+}

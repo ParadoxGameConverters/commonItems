@@ -469,7 +469,6 @@ namespace Utils
 		}
 	}
 
-
 	void GetAllFilesInFolderRecursiveWithRelativePath(const std::string& path, const std::string &relative_path, std::set<std::string>& filenames)
         {
                 using namespace std;
