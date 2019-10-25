@@ -1,4 +1,4 @@
-/*Copyright (c) 2018 The Paradox Game Converters Project
+/*Copyright (c) 2019 The Paradox Game Converters Project
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -82,6 +82,7 @@ namespace Utils
 	std::string getCurrentDirectory();
 	// Adds all files (just the file name) in the specified folder to the given collection.
 	void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames);
+	void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders);
 
 	// For the specified folder and all subfolders, adds all files (just the subdirectory and file name)
 	// to the given collection.
