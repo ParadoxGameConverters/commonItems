@@ -83,6 +83,25 @@ void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNam
 }
 
 
+void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders)
+{
+	WIN32_FIND_DATA findData;
+	HANDLE findHandle = FindFirstFileW(convertUTF8ToUTF16(path + "/*").c_str(), &findData);
+	if (findHandle == INVALID_HANDLE_VALUE)
+	{
+		return;
+	}
+	do
+	{
+		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+		{
+			subfolders.insert(convertUTF16ToUTF8(findData.cFileName));
+		}
+	} while (FindNextFileW(findHandle, &findData) != 0);
+	FindClose(findHandle);
+}
+
+
 void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames)
 {
 	struct _finddata_t provinceFileData;

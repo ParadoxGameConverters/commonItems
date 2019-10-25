@@ -348,6 +348,12 @@ namespace Utils
                 return GetFileMode(path, mode) && S_ISREG(mode);
 	}	
 	
+	bool IsDirectory(const std::string& path)
+	{
+		mode_t mode;
+		return GetFileMode(path, mode) && S_ISDIR(mode);
+	}
+
 	/*
 		Note: since the function signature did not allow for a return value, it clears the fileNames set when an error occurs to make sure no operations are done on an incomplete list of files
 	*/
@@ -404,6 +410,65 @@ namespace Utils
 			closedir(dir);
 		}
 	}
+
+	/*
+		Note: since the function signature did not allow for a return value, it clears the fileNames set when an error
+		occurs to make sure no operations are done on an incomplete list of files
+	*/
+	void GetAllSubfolders(const std::string& unresolvedPath, std::set<std::string>& fileNames)
+	{
+		using namespace std;
+		const string path = resolvePath(unresolvedPath);
+		DIR *dir = opendir(path.c_str());
+		if(dir == NULL)
+		{
+			LOG(LogLevel::Error) << "unable to get all files in folder: " << path;
+			if(errno == EACCES)
+			{
+				LOG(LogLevel::Error) << "\tno permission to read directory ";
+			}
+			else if(errno == ENOENT)
+			{
+				LOG(LogLevel::Error) << "\tdirectory does not exist";
+			}
+			else if(errno == ENOTDIR)
+			{
+				LOG(LogLevel::Error) << "\tpath is not a directory";
+			}
+			else{
+				LOG(LogLevel::Error) << "\tunable to open directory";
+			}
+		}
+		else
+		{
+			struct dirent *dirent_ptr;
+			errno = 0;
+			while((dirent_ptr = readdir(dir)) != NULL)
+			{
+				string filename{dirent_ptr->d_name};
+				if(errno != 0)
+				{
+					fileNames.clear();
+					closedir(dir);
+					LOG(LogLevel::Error) << "an error occurred while trying to list this file:(isRegularFile, path, filename, combined, errno) " << IsRegularFile(ConcatenateNodeName(path,filename)) <<", "<< path << ", " << filename << ", " <<ConcatenateNodeName(path,filename) << ", " << errno <<"\n";
+					return;
+				}
+				if(IsRegularNodeName(filename) && IsDirectory(ConcatenateNodeName(path,filename)))
+				{
+					fileNames.insert(filename);
+				}
+				else if(errno != 0)
+				{
+					fileNames.clear();
+					closedir(dir);
+					LOG(LogLevel::Error) << "an error occurred while trying to list this file:(isRegularFile, path, filename, combined, errno) " << IsRegularFile(ConcatenateNodeName(path,filename)) <<", "<< path << ", " << filename << ", " <<ConcatenateNodeName(path,filename) << ", " << errno <<"\n";
+					return;
+				}
+			}
+			closedir(dir);
+		}
+	}
+
 
 	void GetAllFilesInFolderRecursiveWithRelativePath(const std::string& path, const std::string &relative_path, std::set<std::string>& filenames)
         {
