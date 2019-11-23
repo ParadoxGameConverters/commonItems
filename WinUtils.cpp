@@ -222,7 +222,7 @@ bool renameFolder(const std::string& sourceFolder, const std::string& destFolder
 
 	delete[] from;
 	delete[] to;
-	return true;
+	return doesFolderExist(destFolder);
 }
 
 
