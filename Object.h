@@ -77,6 +77,8 @@ class Object
 	  std::vector<std::string> getKeys();
 	  std::vector<std::shared_ptr<Object>> getValue(const std::string& key) const;
 	  std::optional<std::string> getToken(int index);
+	  std::optional<int> tokenAsInt(int index);
+	  std::optional<double> tokenAsFloat(int index);
 	  int numTokens();
 	  double safeGetFloat(const std::string& k, double def = 0.0);
 	  std::string safeGetString(const std::string& k, std::string def = "");

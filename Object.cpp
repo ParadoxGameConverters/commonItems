@@ -189,6 +189,23 @@ std::optional<std::string> Object::getToken(const int index)
 	return tokens[index];
 }
 
+std::optional<int> Object::tokenAsInt(const int index)
+{
+        auto asString = getToken(index);
+        if (!asString) {
+          return {};
+        }
+        return atoi(asString.value().c_str());
+}
+
+std::optional<double> Object::tokenAsFloat(const int index)
+{
+        auto asString = getToken(index);
+        if (!asString) {
+          return {};
+        }
+        return atof(asString.value().c_str());
+}
 
 int Object::numTokens()
 {
