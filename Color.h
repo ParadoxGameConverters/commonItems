@@ -52,6 +52,9 @@ namespace commonItems
 			friend std::ostream& operator<<(std::ostream&, const Color&);
 
 			void GetRGB(int& r, int& g, int& b) const;
+			int r() const { return c[0]; }
+			int g() const { return c[1]; }
+			int b() const { return c[2]; }
 
 			operator bool() const; // Returns true if the color has been initialized with an RGB triplet.
 
