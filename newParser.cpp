@@ -232,7 +232,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		else if (inString && inputChar == '\n')
 		{
 			// fix paradox' mistake and don't break proper names in half
-			inputChar = " ";
+			inputChar = (" ")[0];
 		}
 		else if ((inputChar == '\"') && !inString && (toReturn.size() == 0))
 		{
