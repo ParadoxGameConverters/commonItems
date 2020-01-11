@@ -34,11 +34,17 @@ namespace commonItems
 std::string getNextLexeme(std::istream& theStream);
 
 }
+
+
+void commonItems::parser::registerKeyword(std::string keyword, parsingFunction function)
+{
+	registeredKeywordStrings.insert(std::make_pair(keyword, function));
+}
 			
 
 void commonItems::parser::registerKeyword(std::regex keyword, parsingFunction function)
 {
-	registeredKeywords.push_back(make_pair(keyword, function));
+	registeredKeywordRegexes.push_back(std::make_pair(keyword, function));
 }
 
 
@@ -104,6 +110,13 @@ void commonItems::parser::parseFile(const std::string& filename)
 }
 
 
+void commonItems::parser::clearRegisteredKeywords() noexcept
+{
+	registeredKeywordStrings.clear();
+	registeredKeywordRegexes.clear();
+}
+
+
 std::optional<std::string> commonItems::parser::getNextToken(std::istream& theStream)
 {
 	theStream >> std::noskipws;
@@ -121,14 +134,23 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		toReturn = getNextLexeme(theStream);
 
 		bool matched = false;
-		for (auto registration: registeredKeywords)
+		if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
 		{
-			std::smatch match;
-			if (std::regex_match(toReturn, match, registration.first))
+			match->second(toReturn, theStream);
+			matched = true;
+		}
+
+		if (!matched)
+		{
+			for (auto registration: registeredKeywordRegexes)
 			{
-				registration.second(toReturn, theStream);
-				matched = true;
-				break;
+				std::smatch match;
+				if (std::regex_match(toReturn, match, registration.first))
+				{
+					registration.second(toReturn, theStream);
+					matched = true;
+					break;
+				}
 			}
 		}
 
