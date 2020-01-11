@@ -222,12 +222,17 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 				break;
 			}
 		}
-		else if (inputChar == '\n')
+		else if (!inString && inputChar == '\n')
 		{
 			if (toReturn.size() > 0)
 			{
 				break;
 			}
+		}
+		else if (inString && inputChar == '\n')
+		{
+			// fix paradox' mistake and don't break proper names in half
+			inString = " ";
 		}
 		else if ((inputChar == '\"') && !inString && (toReturn.size() == 0))
 		{
