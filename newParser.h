@@ -29,6 +29,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
 #include <istream>
 #include <functional>
 #include <list>
+#include <map>
 #include <optional>
 #include <regex>
 #include <string>
@@ -51,17 +52,19 @@ class parser
 		parser& operator=(const parser&) = default;
 		parser& operator=(parser&&) = default;
 
+		void registerKeyword(std::string keyword, parsingFunction);
 		void registerKeyword(std::regex keyword, parsingFunction);
 		void parseStream(std::istream& theStream);
 		void parseFile(const std::string& filename);
 
-		void clearRegisteredKeywords() noexcept { registeredKeywords.clear(); }
+		void clearRegisteredKeywords() noexcept;
 
 		std::optional<std::string> getNextToken(std::istream& theStream);
 		std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
 	private:
-		std::list<std::pair<std::regex, parsingFunction>> registeredKeywords;
+		std::map<std::string, parsingFunction> registeredKeywordStrings;
+		std::list<std::pair<std::regex, parsingFunction>> registeredKeywordRegexes;
 		std::string nextToken;
 		int braceDepth = 0;
 };
