@@ -1,7 +1,6 @@
 #include "newParser.h"
-#include "Log.h"
-#include <cctype>
 #include <fstream>
+#include "Log.h"
 
 
 namespace commonItems
@@ -11,7 +10,6 @@ std::string getNextLexeme(std::istream& theStream);
 
 }
 
-
 void commonItems::parser::registerKeyword(std::string keyword, parsingFunction function)
 {
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
@@ -20,7 +18,7 @@ void commonItems::parser::registerKeyword(std::string keyword, parsingFunction f
 
 void commonItems::parser::registerRegex(std::string keyword, parsingFunction function)
 {
-	registeredKeywordRegexes.insert(std::make_pair(keyword, function));
+	registeredKeywordRegexes.push_back(std::make_pair(keyword, function));
 }
 
 
@@ -72,7 +70,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 			break;
 		}
 	}
-	generatedRegexes.clear();
+	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
 
@@ -99,9 +97,9 @@ void commonItems::parser::parseFile(const std::string& filename)
 
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
-	registeredKeywordStrings.clear();
-	registeredKeywordRegexes.clear();
-	registeredRegexes.clear();
+	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
+	std::vector<std::pair<std::string, parsingFunction>>().swap(registeredKeywordRegexes);
+	std::vector<std::pair<std::regex, parsingFunction>>().swap(registeredRegexes);
 }
 
 
@@ -224,14 +222,14 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 				break;
 			}
 		}
-		else if (!inQuotes && inputChar == '\n')
+		else if (!inQuotes && (inputChar == '\n'))
 		{
 			if (toReturn.size() > 0)
 			{
 				break;
 			}
 		}
-		else if (inQuotes && inputChar == '\n')
+		else if (inQuotes && (inputChar == '\n'))
 		{
 			// fix paradox' mistake and don't break proper names in half
 			inputChar = (" ")[0];

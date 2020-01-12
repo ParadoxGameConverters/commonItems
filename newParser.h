@@ -1,15 +1,10 @@
 #ifndef NEW_PARSER_H
 #define NEW_PARSER_H
 
-#include <istream>
 #include <functional>
-#include <list>
 #include <map>
 #include <optional>
 #include <regex>
-#include <string>
-#include <utility>
-
 
 namespace commonItems
 {
@@ -21,7 +16,7 @@ namespace commonItems
 		parser() = default;
 		~parser() = default;
 		parser(const parser&) = default;
-		parser(parser&&) = default;
+		parser(parser&&) noexcept = default;
 		parser& operator=(const parser&) = default;
 		parser& operator=(parser&&) = default;
 
@@ -38,9 +33,9 @@ namespace commonItems
 
 	private:
 		std::map<std::string, parsingFunction> registeredKeywordStrings;
-		std::map<std::string, parsingFunction> registeredKeywordRegexes;
-		std::list<std::pair<std::regex, parsingFunction>> registeredRegexes;
-		std::list<std::pair<std::regex, parsingFunction>> generatedRegexes;
+		std::vector<std::pair<std::string, parsingFunction>> registeredKeywordRegexes;
+		std::vector<std::pair<std::regex, parsingFunction>> registeredRegexes;
+		std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 	};
 }
 
