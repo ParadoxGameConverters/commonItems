@@ -206,7 +206,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 {
 	std::string toReturn;
 
-	bool inString = false;
+	bool inQuotes = false;
 	while (true)
 	{
 		char inputChar;
@@ -215,7 +215,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		{
 			break;
 		}
-		else if (!inString && (inputChar == '#'))
+		else if (!inQuotes && (inputChar == '#'))
 		{
 			std::string bitbucket;
 			std::getline(theStream, bitbucket);
@@ -224,37 +224,37 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 				break;
 			}
 		}
-		else if (!inString && inputChar == '\n')
+		else if (!inQuotes && inputChar == '\n')
 		{
 			if (toReturn.size() > 0)
 			{
 				break;
 			}
 		}
-		else if (inString && inputChar == '\n')
+		else if (inQuotes && inputChar == '\n')
 		{
 			// fix paradox' mistake and don't break proper names in half
 			inputChar = (" ")[0];
 		}
-		else if ((inputChar == '\"') && !inString && (toReturn.size() == 0))
+		else if ((inputChar == '\"') && !inQuotes && (toReturn.size() == 0))
 		{
-			inString = true;
+			inQuotes = true;
 			toReturn += inputChar;
 		}
-		else if ((inputChar == '\"') && inString)
+		else if ((inputChar == '\"') && inQuotes)
 		{
-			inString = false;
+			inQuotes = false;
 			toReturn += inputChar;
 			break;
 		}
-		else if (!inString && std::isspace(inputChar))
+		else if (!inQuotes && std::isspace(inputChar))
 		{
 			if (toReturn.size() > 0)
 			{
 				break;
 			}
 		}
-		else if (!inString && (inputChar == '{'))
+		else if (!inQuotes && (inputChar == '{'))
 		{
 			if (toReturn.size() == 0)
 			{
@@ -266,7 +266,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inString && (inputChar == '}'))
+		else if (!inQuotes && (inputChar == '}'))
 		{
 			if (toReturn.size() == 0)
 			{
@@ -278,7 +278,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inString && (inputChar == '='))
+		else if (!inQuotes && (inputChar == '='))
 		{
 			if (toReturn.size() == 0)
 			{
