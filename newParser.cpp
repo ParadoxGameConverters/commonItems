@@ -33,6 +33,10 @@ void commonItems::parser::registerKeyword(std::regex keyword, parsingFunction fu
 void commonItems::parser::parseStream(std::istream& theStream)
 {
 	int braceDepth = 0;
+	for (const auto& keywordItr : registeredKeywordRegexes)
+	{
+		generatedRegexes.push_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
+	}
 
 	while (true)
 	{
@@ -68,6 +72,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 			break;
 		}
 	}
+	generatedRegexes.clear();
 }
 
 
@@ -125,10 +130,10 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (auto registration : registeredKeywordRegexes)
+			for (auto registration : generatedRegexes)
 			{
 				std::smatch match;
-				if (std::regex_match(toReturn, match, std::regex(registration.first)))
+				if (std::regex_match(toReturn, match, registration.first))
 				{
 					registration.second(toReturn, theStream);
 					matched = true;

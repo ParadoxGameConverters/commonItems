@@ -40,8 +40,7 @@ namespace commonItems
 		std::map<std::string, parsingFunction> registeredKeywordStrings;
 		std::map<std::string, parsingFunction> registeredKeywordRegexes;
 		std::list<std::pair<std::regex, parsingFunction>> registeredRegexes;
-		std::string nextToken;
-		int braceDepth = 0;
+		std::list<std::pair<std::regex, parsingFunction>> generatedRegexes;
 	};
 }
 
