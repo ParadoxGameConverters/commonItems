@@ -1,31 +1,7 @@
-/*Copyright (c) 2018 The Paradox Game Converters Project
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-
-
-
 #include "newParser.h"
 #include "Log.h"
 #include <cctype>
 #include <fstream>
-
 
 
 namespace commonItems
@@ -40,11 +16,17 @@ void commonItems::parser::registerKeyword(std::string keyword, parsingFunction f
 {
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
 }
-			
+
+
+void commonItems::parser::registerRegex(std::string keyword, parsingFunction function)
+{
+	registeredKeywordRegexes.insert(std::make_pair(keyword, function));
+}
+
 
 void commonItems::parser::registerKeyword(std::regex keyword, parsingFunction function)
 {
-	registeredKeywordRegexes.push_back(std::make_pair(keyword, function));
+	registeredRegexes.push_back(std::make_pair(keyword, function));
 }
 
 
@@ -114,6 +96,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	registeredKeywordStrings.clear();
 	registeredKeywordRegexes.clear();
+	registeredRegexes.clear();
 }
 
 
@@ -142,7 +125,21 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (auto registration: registeredKeywordRegexes)
+			for (auto registration : registeredKeywordRegexes)
+			{
+				std::smatch match;
+				if (std::regex_match(toReturn, match, std::regex(registration.first)))
+				{
+					registration.second(toReturn, theStream);
+					matched = true;
+					break;
+				}
+			}
+		}
+
+		if (!matched)
+		{
+			for (auto registration: registeredRegexes)
 			{
 				std::smatch match;
 				if (std::regex_match(toReturn, match, registration.first))
