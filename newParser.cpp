@@ -31,7 +31,7 @@ void commonItems::parser::registerKeyword(std::regex keyword, parsingFunction fu
 void commonItems::parser::parseStream(std::istream& theStream)
 {
 	int braceDepth = 0;
-	for (auto keywordItr : registeredKeywordRegexes)
+	for (const auto& keywordItr : registeredKeywordRegexes)
 	{
 		generatedRegexes.push_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
 	}
