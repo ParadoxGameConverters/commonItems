@@ -243,6 +243,7 @@ commonItems::singleDouble::singleDouble(std::istream& theStream):
 commonItems::stringList::stringList(std::istream& theStream):
 	strings()
 {
+	registerKeyword("\"\"", [](const std::string& unused, std::istream& theStream){});
 	registerKeyword(std::regex("[^[:s:]^=^\\{^\\}^\\\"]+"), [this](const std::string& theString, std::istream& theStream)
 	{
 		strings.push_back(theString);
