@@ -25,6 +25,7 @@ namespace commonItems
 		void registerKeyword(std::regex keyword, parsingFunction);
 		void parseStream(std::istream& theStream);
 		void parseFile(const std::string& filename);
+		void parseFile(const std::wstring& filename);
 
 		void clearRegisteredKeywords() noexcept;
 

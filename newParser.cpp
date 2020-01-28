@@ -1,7 +1,7 @@
 #include "newParser.h"
 #include <fstream>
 #include "Log.h"
-
+#include "OSCompatibilityLayer.h"
 
 namespace commonItems
 {
@@ -80,6 +80,26 @@ void commonItems::parser::parseFile(const std::string& filename)
 	if (!theFile.is_open())
 	{
 		LOG(LogLevel::Error) << "Could not open " << filename << " for parsing.";
+		return;
+	}
+
+	const char firstChar = theFile.peek();
+	if (firstChar == '\xEF')
+	{
+		char bitBucket[3];
+		theFile.read(bitBucket, sizeof(bitBucket));
+	}
+
+	parseStream(theFile);
+	theFile.close();
+}
+
+void commonItems::parser::parseFile(const std::wstring& filename)
+{
+	std::ifstream theFile(filename);
+	if (!theFile.is_open())
+	{
+		LOG(LogLevel::Error) << "Could not open " << Utils::convertUTF16ToUTF8(filename) << " for parsing.";
 		return;
 	}
 
