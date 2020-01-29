@@ -82,15 +82,9 @@ void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>
 	{
 		if (!p.is_directory())
 		{
-#if __linux__
-			auto lastSlash = p.path().native().find_last_of("/");
-			auto tempDir = p.path().native().substr(0, lastSlash);
-			lastSlash = tempDir.find_last_of("/");
-#else
 			auto lastSlash = p.path().native().find_last_of(L"\\");
 			auto tempDir = p.path().native().substr(0, lastSlash);
 			lastSlash = tempDir.find_last_of(L"\\");
-#endif
 			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
 			auto returnName = "/" + convertUTF16ToUTF8(dirName) + "/" + p.path().filename().string();
 			filenames.insert(returnName);
