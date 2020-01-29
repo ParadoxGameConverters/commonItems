@@ -1,39 +1,35 @@
 #include "newParser.h"
 #include <fstream>
 #include "Log.h"
-
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace commonItems
 {
-
-std::string getNextLexeme(std::istream& theStream);
-
+	std::string getNextLexeme(std::istream& theStream);
 }
 
-void commonItems::parser::registerKeyword(std::string keyword, parsingFunction function)
+void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunction& function)
 {
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
 }
 
-
-void commonItems::parser::registerRegex(std::string keyword, parsingFunction function)
+void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	registeredKeywordRegexes.push_back(std::make_pair(keyword, function));
+	registeredKeywordRegexes.emplace_back(std::make_pair(keyword, function));
 }
 
-
-void commonItems::parser::registerKeyword(std::regex keyword, parsingFunction function)
+void commonItems::parser::registerKeyword(const std::regex& keyword, const parsingFunction& function)
 {
-	registeredRegexes.push_back(std::make_pair(keyword, function));
+	registeredRegexes.emplace_back(std::make_pair(keyword, function));
 }
-
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
-	int braceDepth = 0;
+	auto braceDepth = 0;
 	for (const auto& keywordItr : registeredKeywordRegexes)
 	{
-		generatedRegexes.push_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
+		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
 	}
 
 	while (true)
@@ -41,42 +37,23 @@ void commonItems::parser::parseStream(std::istream& theStream)
 		auto token = getNextToken(theStream);
 		if (token)
 		{
-			if (*token == "=")
-			{
-				continue;
-			}
-
-			else if (*token == "{")
-			{
-				braceDepth++;
-			}
-
+			if (*token == "=") continue;
+			if (*token == "{") braceDepth++;
 			else if (*token == "}")
 			{
 				braceDepth--;
-				if (braceDepth == 0)
-				{
-					break;
-				}
+				if (braceDepth == 0) break;
 			}
-
-			else
-			{
-				LOG(LogLevel::Warning) << "Unknown token while parsing stream: " << *token;
-			}
+			else LOG(LogLevel::Warning) << "Unknown token while parsing stream: " << *token;
 		}
-		else
-		{
-			break;
-		}
+		else break;
 	}
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
-
 void commonItems::parser::parseFile(const std::string& filename)
 {
-	std::ifstream theFile(filename);
+	std::ifstream theFile(fs::u8path(filename));
 	if (!theFile.is_open())
 	{
 		LOG(LogLevel::Error) << "Could not open " << filename << " for parsing.";
@@ -94,7 +71,6 @@ void commonItems::parser::parseFile(const std::string& filename)
 	theFile.close();
 }
 
-
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
@@ -102,24 +78,20 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(registeredRegexes);
 }
 
-
 std::optional<std::string> commonItems::parser::getNextToken(std::istream& theStream)
 {
 	theStream >> std::noskipws;
 
 	std::string toReturn;
 
-	bool gotToken = false;
+	auto gotToken = false;
 	while (!gotToken)
 	{
-		if (theStream.eof())
-		{
-			return {};
-		}
+		if (theStream.eof()) return {};
 
 		toReturn = getNextLexeme(theStream);
 
-		bool matched = false;
+		auto matched = false;
 		if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
 		{
 			match->second(toReturn, theStream);
@@ -128,7 +100,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (auto registration : generatedRegexes)
+			for (const auto& registration : generatedRegexes)
 			{
 				std::smatch match;
 				if (std::regex_match(toReturn, match, registration.first))
@@ -142,7 +114,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (auto registration: registeredRegexes)
+			for (const auto& registration: registeredRegexes)
 			{
 				std::smatch match;
 				if (std::regex_match(toReturn, match, registration.first))
@@ -153,21 +125,11 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				}
 			}
 		}
-
-		if (!matched)
-		{
-			gotToken = true;
-		}
+		if (!matched) gotToken = true;
 	}
 
-	if (toReturn.size() > 0)
-	{
-		return toReturn;
-	}
-	else
-	{
-		return {};
-	}
+	if (!toReturn.empty()) return toReturn;
+	return std::nullopt;
 }
 
 
@@ -177,26 +139,17 @@ std::optional<std::string> commonItems::parser::getNextTokenWithoutMatching(std:
 
 	std::string toReturn;
 
-	bool gotToken = false;
+	auto gotToken = false;
 	while (!gotToken)
 	{
-		if (theStream.eof())
-		{
-			return {};
-		}
-
+		if (theStream.eof()) return std::nullopt;
+		
 		toReturn = getNextLexeme(theStream);
 		gotToken = true;
 	}
 
-	if (toReturn.size() > 0)
-	{
-		return toReturn;
-	}
-	else
-	{
-		return {};
-	}
+	if (!toReturn.empty()) return toReturn;
+	return std::nullopt;
 }
 
 
@@ -204,57 +157,47 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 {
 	std::string toReturn;
 
-	bool inQuotes = false;
+	auto inQuotes = false;
 	while (true)
 	{
 		char inputChar;
 		theStream >> inputChar;
-		if (theStream.eof())
+		if (theStream.eof()) break;
+		if (!inQuotes && inputChar == '#')
 		{
-			break;
+			std::string bitBucket;
+			std::getline(theStream, bitBucket);
+			if (!toReturn.empty()) break;
 		}
-		else if (!inQuotes && (inputChar == '#'))
+		else if (inputChar == '\n')
 		{
-			std::string bitbucket;
-			std::getline(theStream, bitbucket);
-			if (toReturn.size() > 0)
+			if (!inQuotes)
 			{
-				break;
+				if (!toReturn.empty()) break;
+			}
+			else
+			{
+				// fix paradox' mistake and don't break proper names in half
+				inputChar = (" ")[0];
 			}
 		}
-		else if (!inQuotes && (inputChar == '\n'))
-		{
-			if (toReturn.size() > 0)
-			{
-				break;
-			}
-		}
-		else if (inQuotes && (inputChar == '\n'))
-		{
-			// fix paradox' mistake and don't break proper names in half
-			inputChar = (" ")[0];
-		}
-		else if ((inputChar == '\"') && !inQuotes && (toReturn.size() == 0))
+		else if (inputChar == '\"' && !inQuotes && toReturn.empty())
 		{
 			inQuotes = true;
 			toReturn += inputChar;
 		}
-		else if ((inputChar == '\"') && inQuotes)
+		else if (inputChar == '\"' && inQuotes)
 		{
-			inQuotes = false;
 			toReturn += inputChar;
 			break;
 		}
 		else if (!inQuotes && std::isspace(inputChar))
 		{
-			if (toReturn.size() > 0)
-			{
-				break;
-			}
+			if (!toReturn.empty()) break;
 		}
-		else if (!inQuotes && (inputChar == '{'))
+		else if (!inQuotes && inputChar == '{')
 		{
-			if (toReturn.size() == 0)
+			if (toReturn.empty())
 			{
 				toReturn += inputChar;
 			}
@@ -264,9 +207,9 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && (inputChar == '}'))
+		else if (!inQuotes && inputChar == '}')
 		{
-			if (toReturn.size() == 0)
+			if (toReturn.empty())
 			{
 				toReturn += inputChar;
 			}
@@ -276,9 +219,9 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && (inputChar == '='))
+		else if (!inQuotes && inputChar == '=')
 		{
-			if (toReturn.size() == 0)
+			if (toReturn.empty())
 			{
 				toReturn += inputChar;
 			}
@@ -293,6 +236,5 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			toReturn += inputChar;
 		}
 	}
-
 	return toReturn;
 }
