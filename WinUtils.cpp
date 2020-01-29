@@ -182,15 +182,17 @@ bool renameFolder(const std::string& sourceFolder, const std::string& destFolder
 
 bool DoesFileExist(const std::string& path)
 {
-	DWORD attributes = GetFileAttributesW(convertUTF8ToUTF16(path).c_str());
-	return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
+	const auto tempPath = fs::u8path(path);
+	if (exists(tempPath) && !is_directory(tempPath)) return true;
+	return false;
 }
 
 
 bool doesFolderExist(const std::string& path)
 {
-	DWORD attributes = GetFileAttributesW(convertUTF8ToUTF16(path).c_str());
-	return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
+	const auto tempPath = fs::u8path(path);
+	if (exists(tempPath) && is_directory(tempPath)) return true;
+	return false;
 }
 
 
