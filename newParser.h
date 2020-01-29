@@ -20,16 +20,16 @@ namespace commonItems
 		parser& operator=(const parser&) = default;
 		parser& operator=(parser&&) = default;
 
-		void registerKeyword(std::string keyword, parsingFunction);
-		void registerRegex(std::string keyword, parsingFunction);
-		void registerKeyword(std::regex keyword, parsingFunction);
+		void registerKeyword(const std::string& keyword, const parsingFunction& function);
+		void registerRegex(const std::string& keyword, const parsingFunction& function);
+		void registerKeyword(const std::regex& keyword, const parsingFunction& function);
 		void parseStream(std::istream& theStream);
 		void parseFile(const std::string& filename);
 
 		void clearRegisteredKeywords() noexcept;
 
 		std::optional<std::string> getNextToken(std::istream& theStream);
-		std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
+		static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
 	private:
 		std::map<std::string, parsingFunction> registeredKeywordStrings;

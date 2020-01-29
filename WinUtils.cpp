@@ -1,34 +1,12 @@
-/*Copyright (c) 2018 The Paradox Game Converters Project
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-
-
-
 #include "OSCompatibilityLayer.h"
 #include <Windows.h>
 #include <iostream>
-#include <io.h>
 #include <Shellapi.h>
 #include <list>
 #include <algorithm>
 #include "Log.h"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 
 
@@ -66,20 +44,16 @@ std::string getCurrentDirectory()
 
 void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
 {
-	WIN32_FIND_DATA findData;
-	HANDLE findHandle = FindFirstFileW(convertUTF8ToUTF16(path + "/*").c_str(), &findData);
-	if (findHandle == INVALID_HANDLE_VALUE)
+	if (!exists(fs::u8path(path))) return;
+	if (is_empty(fs::u8path(path))) return;
+	for (auto& p : fs::directory_iterator(fs::u8path(path)))
 	{
-		return;
-	}
-	do
-	{
-		if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		if (!p.is_directory())
 		{
-			fileNames.insert(convertUTF16ToUTF8(findData.cFileName));
+			fileNames.insert(p.path().filename().string());
 		}
-	} while (FindNextFileW(findHandle, &findData) != 0);
-	FindClose(findHandle);
+			
+	}
 }
 
 
@@ -104,37 +78,23 @@ void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders
 
 void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames)
 {
-	struct _finddata_t provinceFileData;
-	intptr_t	fileListing	= NULL;
-	std::list<std::string> directories;
-	directories.push_back("");
-
-	while (!directories.empty())
+	for (auto& p : fs::recursive_directory_iterator(fs::u8path(path)))
 	{
-		if ((fileListing = _findfirst((path + directories.front() + "/*").c_str(), &provinceFileData)) == -1L)
+		if (!p.is_directory())
 		{
-			LOG(LogLevel::Error) << "Could not open directory " << path << '/' << directories.front() << "/*";
-			exit(-1);
+#if __linux__
+			auto lastSlash = p.path().native().find_last_of("/");
+			auto tempDir = p.path().native().substr(0, lastSlash);
+			lastSlash = tempDir.find_last_of("/");
+#else
+			auto lastSlash = p.path().native().find_last_of(L"\\");
+			auto tempDir = p.path().native().substr(0, lastSlash);
+			lastSlash = tempDir.find_last_of(L"\\");
+#endif
+			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
+			auto returnName = "/" + convertUTF16ToUTF8(dirName) + "/" + p.path().filename().string();
+			filenames.insert(returnName);
 		}
-
-		do
-		{
-			if (strcmp(provinceFileData.name, ".") == 0 || strcmp(provinceFileData.name, "..") == 0)
-			{
-				continue;
-			}
-			if (provinceFileData.attrib & _A_SUBDIR)
-			{
-				std::string newDirectory = directories.front() + "/" + provinceFileData.name;
-				directories.push_back(newDirectory);
-			}
-			else
-			{
-				filenames.insert(directories.front() + "/" + provinceFileData.name);
-			}
-		} while (_findnext(fileListing, &provinceFileData) == 0);
-		_findclose(fileListing);
-		directories.pop_front();
 	}
 }
 
