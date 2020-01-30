@@ -1,33 +1,8 @@
-/*Copyright (c) 2018 The Paradox Game Converters Project
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be included
-in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
-
-
-
 #include "Color.h"
 #include <chrono>
 #include <random>
 #include <sstream>
 #include "Object.h"
-
-
 
 commonItems::Color::Color():
 	initialized(false),
@@ -87,7 +62,7 @@ void commonItems::Color::RandomlyFlunctuate(const int stdDev)
 	std::normal_distribution<double> distribution(0.0, stdDev / 4.0);
 	for (auto& component : c)	// the component under consideration
 	{
-		component += static_cast<int>(allChange + distribution(generator) + 0.5);
+		component += lround(allChange + distribution(generator));
 		if (component < 0)
 		{
 			component = 0;
