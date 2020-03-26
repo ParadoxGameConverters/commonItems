@@ -178,7 +178,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			else
 			{
 				// fix paradox' mistake and don't break proper names in half
-				inputChar = (" ")[0];
+				toReturn += " ";
 			}
 		}
 		else if (inputChar == '\"' && !inQuotes && toReturn.empty())
