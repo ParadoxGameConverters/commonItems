@@ -45,7 +45,7 @@ std::string getCurrentDirectory()
 void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
 {
 	if (!exists(fs::u8path(path))) return;
-	if (is_empty(fs::u8path(path))) return;
+	if (fs::is_empty(fs::u8path(path))) return;
 	for (auto& p : fs::directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
@@ -468,6 +468,14 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 	std::cout << logMessage;
 }
 
+std::string convertWin1251ToUTF8(const std::string& Win1251)
+{
+	return cp2utf(Win1251);
+}
 
+std::string convertUTF8toWin1251(const std::string& UTF8)
+{
+	return utf2cp(UTF8);
+}
 
 } // namespace Utils
