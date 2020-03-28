@@ -357,6 +357,26 @@ std::string convertWin1252ToUTF8(const std::string& input)
 	return convertUTF16ToUTF8(convertWin1252ToUTF16(input));
 }
 
+std::string convertWin1250ToUTF8(const std::string& input)
+{
+	return convertUTF16ToUTF8(convertWin1250ToUTF16(input));
+}
+
+std::wstring convertWin1250ToUTF16(const std::string& input)
+{
+	const int requiredSize = MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, NULL, 0);
+	wchar_t* wideKeyArray = new wchar_t[requiredSize];
+
+	if (0 == MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
+	{
+		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+	}
+	std::wstring returnable(wideKeyArray);
+
+	delete[] wideKeyArray;
+
+	return returnable;
+}
 
 std::wstring convertWin1252ToUTF16(const std::string& input)
 {
