@@ -7,6 +7,7 @@ namespace fs = std::filesystem;
 namespace commonItems
 {
 	std::string getNextLexeme(std::istream& theStream);
+	std::string getNextLexemeWithNewlines(std::istream& theStream);
 }
 
 void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunction& function)
@@ -189,6 +190,96 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		else if (inputChar == '\"' && inQuotes)
 		{
 			toReturn += inputChar;
+			break;
+		}
+		else if (!inQuotes && std::isspace(inputChar))
+		{
+			if (!toReturn.empty()) break;
+		}
+		else if (!inQuotes && inputChar == '{')
+		{
+			if (toReturn.empty())
+			{
+				toReturn += inputChar;
+			}
+			else
+			{
+				theStream.putback('{');
+			}
+			break;
+		}
+		else if (!inQuotes && inputChar == '}')
+		{
+			if (toReturn.empty())
+			{
+				toReturn += inputChar;
+			}
+			else
+			{
+				theStream.putback('}');
+			}
+			break;
+		}
+		else if (!inQuotes && inputChar == '=')
+		{
+			if (toReturn.empty())
+			{
+				toReturn += inputChar;
+			}
+			else
+			{
+				theStream.putback('=');
+			}
+			break;
+		}
+		else
+		{
+			toReturn += inputChar;
+		}
+	}
+	return toReturn;
+}
+
+std::string commonItems::getNextLexemeWithNewlines(std::istream& theStream)
+{
+	std::string toReturn;
+
+	auto inQuotes = false;
+	while (true)
+	{
+		char inputChar;
+		theStream >> inputChar;
+		if (theStream.eof()) break;
+		if (!inQuotes && inputChar == '#')
+		{
+			std::string bitBucket;
+			std::getline(theStream, bitBucket);
+			if (!toReturn.empty()) break;
+		}
+		else if (inputChar == '\n')
+		{
+			if (!inQuotes)
+			{
+				if (!toReturn.empty()) {
+					toReturn += inputChar;
+					break;
+				}
+			}
+			else
+			{
+				// fix paradox' mistake and don't break proper names in half
+				toReturn += " ";
+			}
+		}
+		else if (inputChar == '\"' && !inQuotes && toReturn.empty())
+		{
+			inQuotes = true;
+			toReturn += inputChar;
+		}
+		else if (inputChar == '\"' && inQuotes)
+		{
+			toReturn += inputChar;
+			toReturn += '\n';
 			break;
 		}
 		else if (!inQuotes && std::isspace(inputChar))
