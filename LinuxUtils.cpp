@@ -1129,6 +1129,18 @@ namespace Utils
 		return ConvertString<string, wstring>("ISO−8859−15", "wchar_t", UTF8);
 	}
 	
+	std::string convertWin1250ToUTF8(const std::string& Win1252)
+	{
+		using namespace std;
+		return ConvertString<string, string>("CP1250", "UTF-8", Win1252);
+	}
+
+	std::string convertWin1251ToUTF8(const std::string& Win1252)
+	{
+		using namespace std;
+		return ConvertString<string, string>("CP1251", "UTF-8", Win1252);
+	}
+
 	std::string convertWin1252ToUTF8(const std::string& Win1252)
 	{
 		using namespace std;
