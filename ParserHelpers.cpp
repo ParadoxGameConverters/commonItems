@@ -79,6 +79,10 @@ std::string commonItems::singleItem(const std::string& unused, std::istream& the
 			}
 		}
 	}
+	if (toReturn.substr(0, 1) == "\"")
+	{
+		toReturn = toReturn.substr(1, toReturn.length() - 2);
+	}
 	return toReturn;
 }
 
