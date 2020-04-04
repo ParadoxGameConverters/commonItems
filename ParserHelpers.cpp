@@ -11,6 +11,17 @@ std::string getNextLexemeWithNewlines(std::istream& theStream);
 }
 
 
+void commonItems::absorbBOM(std::istream& theStream)
+{
+	const char firstChar = theStream.peek();
+	if (firstChar == '\xEF')
+	{
+		char bitBucket[3];
+		theStream.read(bitBucket, sizeof(bitBucket));
+	}
+}
+
+
 void commonItems::ignoreItem(const std::string& unused, std::istream& theStream)
 {
 	std::string next = getNextLexeme(theStream); // equals
