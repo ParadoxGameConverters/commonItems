@@ -281,10 +281,20 @@ std::string commonItems::getNextLexemeWithNewlines(std::istream& theStream)
 			toReturn += inputChar;
 			toReturn += '\n';
 			break;
+		} 
+		else if (!inQuotes && inputChar == '\t') 
+		{
+			if (!toReturn.empty()) {
+				toReturn += "\n";
+				break;
+			}
 		}
 		else if (!inQuotes && std::isspace(inputChar))
 		{
-			if (!toReturn.empty()) break;
+			if (!toReturn.empty()) {
+				toReturn += inputChar;
+				break;
+			}
 		}
 		else if (!inQuotes && inputChar == '{')
 		{
