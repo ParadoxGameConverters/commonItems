@@ -114,6 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,12 +141,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\CardinalToOrdinal.cpp" />
+    <ClCompile Include="..\Color.cpp" />
+    <ClCompile Include="..\iconvlite.cpp" />
+    <ClCompile Include="..\Log.cpp" />
+    <ClCompile Include="..\newParser.cpp" />
+    <ClCompile Include="..\ParserHelpers.cpp" />
+    <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CardinalToOrdinalTests.cpp" />
+    <ClCompile Include="ColorTests.cpp" />
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h" />
+    <ClInclude Include="..\Color.h" />
+    <ClInclude Include="..\iconvlite.h" />
+    <ClInclude Include="..\Log.h" />
+    <ClInclude Include="..\newParser.h" />
+    <ClInclude Include="..\OSCompatibilityLayer.h" />
+    <ClInclude Include="..\ParserHelpers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <iconvlite.h>
+#include "iconvlite.h"
 
 static void cp2utf1(char *out, const char *in) {
     static const int table[128] = {
