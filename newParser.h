@@ -3,7 +3,7 @@
 
 
 
-#pragma message("Use Parser.h instead of newParser.h")
+#pragma message("Warning: Use Parser.h instead of newParser.h")
 
 
 

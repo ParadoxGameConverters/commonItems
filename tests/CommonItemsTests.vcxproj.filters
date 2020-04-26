@@ -57,9 +57,6 @@
     <ClCompile Include="..\Parser.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="..\newParser.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="ParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
@@ -105,9 +102,6 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\Parser.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\newParser.h">
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\StringUtils.h">
