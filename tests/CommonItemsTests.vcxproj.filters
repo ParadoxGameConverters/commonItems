@@ -60,6 +60,9 @@
     <ClCompile Include="..\newParser.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="ParserTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h">
