@@ -146,6 +146,7 @@
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\Log.cpp" />
     <ClCompile Include="..\newParser.cpp" />
+    <ClCompile Include="..\Parser.cpp" />
     <ClCompile Include="..\ParserHelpers.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CardinalToOrdinalTests.cpp" />
@@ -154,6 +155,7 @@
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
+    <ClCompile Include="LogTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h" />
@@ -162,6 +164,7 @@
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
     <ClInclude Include="..\newParser.h" />
+    <ClInclude Include="..\Parser.h" />
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />
   </ItemGroup>

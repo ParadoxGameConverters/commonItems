@@ -1,42 +1,14 @@
 #ifndef NEW_PARSER_H
 #define NEW_PARSER_H
 
-#include <functional>
-#include <map>
-#include <optional>
-#include <regex>
 
-namespace commonItems
-{
-	typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
 
-	class parser
-	{
-	public:
-		parser() = default;
-		~parser() = default;
-		parser(const parser&) = default;
-		parser(parser&&) noexcept = default;
-		parser& operator=(const parser&) = default;
-		parser& operator=(parser&&) = default;
+#pragma message("Use Parser.h instead of newParser.h")
 
-		void registerKeyword(const std::string& keyword, const parsingFunction& function);
-		void registerRegex(const std::string& keyword, const parsingFunction& function);
-		void registerKeyword(const std::regex& keyword, const parsingFunction& function);
-		void parseStream(std::istream& theStream);
-		void parseFile(const std::string& filename);
 
-		void clearRegisteredKeywords() noexcept;
 
-		std::optional<std::string> getNextToken(std::istream& theStream);
-		static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
+#include "Parser.h"
 
-	private:
-		std::map<std::string, parsingFunction> registeredKeywordStrings;
-		std::vector<std::pair<std::string, parsingFunction>> registeredKeywordRegexes;
-		std::vector<std::pair<std::regex, parsingFunction>> registeredRegexes;
-		std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
-	};
-}
+
 
 #endif // NEW_PARSER_H
