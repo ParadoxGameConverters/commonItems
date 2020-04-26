@@ -5,9 +5,10 @@
 #include <ostream>
 #include <string>
 
-class Version : commonItems::parser
+class Version: commonItems::parser
 {
-public:
+  public:
+	class Factory;
 	Version() = default;
 	Version(const Version&) = default;
 	Version(Version&&) = default;
@@ -15,6 +16,10 @@ public:
 	Version& operator=(Version&&) = default;
 	~Version() = default;
 
+	explicit Version(const int firstPart, const int secondPart, const int thirdPart, const int fourthPart):
+		 firstPart(firstPart), secondPart(secondPart), thirdPart(thirdPart), fourthPart(fourthPart)
+	{
+	}
 	explicit Version(std::string version);
 	explicit Version(std::istream& theStream);
 
@@ -27,7 +32,21 @@ public:
 
 	friend std::ostream& operator<<(std::ostream&, const Version& version);
 
-private:
+  private:
+	int firstPart = 0;
+	int secondPart = 0;
+	int thirdPart = 0;
+	int fourthPart = 0;
+};
+
+
+class Version::Factory: parser
+{
+  public:
+	Factory();
+	Version getVersion(std::istream& theStream);
+
+  private:
 	int firstPart = 0;
 	int secondPart = 0;
 	int thirdPart = 0;
