@@ -1,37 +1,38 @@
 #include "ParserHelpers.h"
 #include "Log.h"
+#include "StringUtils.h"
 #include <cctype>
 #include <sstream>
 
 
 namespace commonItems
 {
+
 std::string getNextLexeme(std::istream& theStream);
 std::string getNextLexemeWithNewlines(std::istream& theStream);
-}
 
 
-void commonItems::absorbBOM(std::istream& theStream)
+void absorbBOM(std::istream& theStream)
 {
 	const char firstChar = theStream.peek();
 	if (firstChar == '\xEF')
 	{
 		char bitBucket[3];
-		theStream.read(bitBucket, sizeof(bitBucket));
+		theStream.read(bitBucket, sizeof bitBucket);
 	}
 }
 
 
-void commonItems::ignoreItem(const std::string& unused, std::istream& theStream)
+void ignoreItem(const std::string& unused, std::istream& theStream)
 {
-	std::string next = getNextLexeme(theStream); // equals
+	auto next = getNextLexeme(theStream);
 	if (next == "=")
 	{
 		next = getNextLexeme(theStream);
 	}
 	if (next == "{")
 	{
-		int braceDepth = 1;
+		auto braceDepth = 1;
 		while (true)
 		{
 			if (theStream.eof())
@@ -39,7 +40,7 @@ void commonItems::ignoreItem(const std::string& unused, std::istream& theStream)
 				return;
 			}
 
-			std::string token = getNextLexeme(theStream);
+			auto token = getNextLexeme(theStream);
 			if (token == "{")
 			{
 				braceDepth++;
@@ -56,17 +57,18 @@ void commonItems::ignoreItem(const std::string& unused, std::istream& theStream)
 	}
 }
 
-std::string commonItems::singleItem(const std::string& unused, std::istream& theStream)
+
+std::string singleItem(const std::string& unused, std::istream& theStream)
 {
-	std::string next = getNextLexeme(theStream); // equals
+	auto next = getNextLexeme(theStream);
 	if (next == "=")
 	{
 		next = getNextLexeme(theStream);
 	}
-	std::string toReturn = next;	
+	auto toReturn = next;
 	if (next == "{")
 	{
-		int braceDepth = 1;
+		auto braceDepth = 1;
 		while (true)
 		{
 			if (theStream.eof())
@@ -74,7 +76,7 @@ std::string commonItems::singleItem(const std::string& unused, std::istream& the
 				return toReturn;
 			}
 
-			std::string token = getNextLexemeWithNewlines(theStream);
+			auto token = getNextLexemeWithNewlines(theStream);
 			toReturn += token;
 			if (token == "{")
 			{
@@ -90,16 +92,14 @@ std::string commonItems::singleItem(const std::string& unused, std::istream& the
 			}
 		}
 	}
-	if (toReturn.substr(0, 1) == "\"")
-	{
-		toReturn = toReturn.substr(1, toReturn.length() - 2);
-	}
-	return toReturn;
+
+	return stringutils::remQuotes(toReturn);
 }
 
-void commonItems::ignoreObject(const std::string& unused, std::istream& theStream)
+
+void ignoreObject(const std::string& unused, std::istream& theStream)
 {
-	int braceDepth = 0;
+	auto braceDepth = 0;
 	while (true)
 	{
 		if (theStream.eof())
@@ -107,7 +107,7 @@ void commonItems::ignoreObject(const std::string& unused, std::istream& theStrea
 			return;
 		}
 
-		std::string token = getNextLexeme(theStream);
+		auto token = getNextLexeme(theStream);
 		if (token == "{")
 		{
 			braceDepth++;
@@ -124,35 +124,31 @@ void commonItems::ignoreObject(const std::string& unused, std::istream& theStrea
 }
 
 
-void commonItems::ignoreString(const std::string& unused, std::istream& theStream)
+void ignoreString(const std::string& unused, std::istream& theStream)
 {
-	commonItems::singleString ignore(theStream);
+	singleString ignore(theStream);
 }
 
 
-commonItems::intList::intList(std::istream& theStream)
+intList::intList(std::istream& theStream)
 {
-	registerKeyword(std::regex("\\d+"), [this](const std::string& theInt, std::istream& theStream){
-		ints.push_back(std::stoi(theInt));
+	registerRegex(R"(\d+)", [this](const std::string& theInt, std::istream& theStream) {
+		integers.push_back(std::stoi(theInt));
 	});
-	registerKeyword(std::regex("\\\"\\d+\\\""), [this](const std::string& theInt, std::istream& theStream){
-		auto newInt = theInt.substr(1, theInt.size() - 2);
-		ints.push_back(std::stoi(newInt));
+	registerRegex(R"(\"\d+\")", [this](const std::string& theInt, std::istream& theStream) {
+		const auto newInt = theInt.substr(1, theInt.size() - 2);
+		integers.push_back(std::stoi(newInt));
 	});
 
 	parseStream(theStream);
 }
 
 
-commonItems::singleInt::singleInt(std::istream& theStream):
-	theInt()
+singleInt::singleInt(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	auto token = *getNextTokenWithoutMatching(theStream);
-	if (token.substr(0,1) == "\"")
-	{
-		token = token.substr(1, token.length() - 2);
-	}
+	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+
 	try
 	{
 		theInt = stoi(token);
@@ -165,98 +161,92 @@ commonItems::singleInt::singleInt(std::istream& theStream):
 }
 
 
-commonItems::simpleObject::simpleObject(std::istream& theStream) : values()
+simpleObject::simpleObject(std::istream& theStream)
 {
-        auto equals = getNextTokenWithoutMatching(theStream);
-        int braceDepth = 0;
-        std::string key;
-        while (true)
-        {
-                if (theStream.eof())
-                {
-                        return;
-                }
+	auto equals = getNextTokenWithoutMatching(theStream);
 
-                char inputChar;
-                theStream >> inputChar;
-
-                if (inputChar == '{')
-                {
-                        braceDepth++;
-                }
-                else if (inputChar == '}')
-                {
-                        braceDepth--;
-                        if (braceDepth == 0)
-                        {
-                                return;
-                        }
-                }
-                else if (braceDepth > 1)
-                {
-                        // Internal object; ignore.
-                        continue;
-                }
-                else if (inputChar == '=')
-                {
-                        auto value = getNextTokenWithoutMatching(theStream);
-                        values[key] = *value;
-                        key.clear();
-                }
-                else if (!isspace(inputChar))
-                {
-                        key += inputChar;
-                }
-        }
-}
-
-std::string commonItems::simpleObject::getValue(const std::string& key) const
-{
-        if (values.find(key) == values.end())
-        {
-                return "";
-        }
-        return values.at(key);
-}
-
-int commonItems::simpleObject::getValueAsInt(const std::string& key) const
-{
-        auto value = getValue(key);
-        if (value.empty())
-        {
-                return 0;
-        }
-        return std::stoi(value);
-}
-
-commonItems::doubleList::doubleList(std::istream& theStream):
-	doubles()
-{
-	registerKeyword(std::regex("-?\\d+(.\\d+)?"), [this](const std::string& theDouble, std::istream& theStream)
+	auto braceDepth = 0;
+	std::string key;
+	while (true)
 	{
+		if (theStream.eof())
+		{
+			return;
+		}
+
+		char inputChar;
+		theStream >> inputChar;
+
+		if (inputChar == '{')
+		{
+			braceDepth++;
+		}
+		else if (inputChar == '}')
+		{
+			braceDepth--;
+			if (braceDepth == 0)
+			{
+				return;
+			}
+		}
+		else if (braceDepth > 1)
+		{
+			// Internal object; ignore.
+		}
+		else if (inputChar == '=')
+		{
+			auto value = getNextTokenWithoutMatching(theStream);
+			values[key] = *value;
+			key.clear();
+		}
+		else if (!isspace(inputChar))
+		{
+			key += inputChar;
+		}
+	}
+}
+
+
+std::string simpleObject::getValue(const std::string& key) const
+{
+	if (values.find(key) == values.end())
+	{
+		return "";
+	}
+	return values.at(key);
+}
+
+
+int simpleObject::getValueAsInt(const std::string& key) const
+{
+	const auto value = getValue(key);
+	if (value.empty())
+	{
+		return 0;
+	}
+	return std::stoi(value);
+}
+
+
+doubleList::doubleList(std::istream& theStream)
+{
+	registerRegex(R"(-?\d+(.\d+)?)", [this](const std::string& theDouble, std::istream& theStream) {
 		doubles.push_back(std::stof(theDouble));
-	}
-	);
-	registerKeyword(std::regex("\\\"-?\\d+(.\\d+)?\\\""), [this](const std::string& theDouble, std::istream& theStream)
-	{
-		auto newDouble = theDouble.substr(1, theDouble.size() - 2);
+	});
+	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
+		const auto newDouble = stringutils::remQuotes(theDouble);
 		doubles.push_back(std::stof(newDouble));
-	}
-	);
+	});
 
 	parseStream(theStream);
 }
 
 
-commonItems::singleDouble::singleDouble(std::istream& theStream):
-	theDouble()
+singleDouble::singleDouble(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	auto token = *getNextTokenWithoutMatching(theStream);
-	if (token.substr(0,1) == "\"")
-	{
-		token = token.substr(1, token.length() - 2);
-	}
+	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+
 	try
 	{
 		theDouble = stof(token);
@@ -269,47 +259,31 @@ commonItems::singleDouble::singleDouble(std::istream& theStream):
 }
 
 
-commonItems::stringList::stringList(std::istream& theStream):
-	strings()
+stringList::stringList(std::istream& theStream)
 {
-	registerKeyword("\"\"", [](const std::string& unused, std::istream& theStream){});
-	registerKeyword(std::regex("[^[:s:]^=^\\{^\\}^\\\"]+"), [this](const std::string& theString, std::istream& theStream)
-	{
+	registerKeyword(R"("")", [](const std::string& unused, std::istream& theStream) {
+	});
+	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
 		strings.push_back(theString);
-	}
-	);
-	registerKeyword(std::regex("\\\"[^\n^=^\\{^\\}^\\\"]+\\\""), [this](const std::string& theString, std::istream& theStream)
-	{
-		if (theString.substr(0,1) == "\"")
-		{
-			strings.push_back(theString.substr(1, theString.size() - 2));
-		}
-		else
-		{
-			strings.push_back(theString);
-		}
-	}
-	);
+	});
+	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")", [this](const std::string& theString, std::istream& theStream) {
+		strings.emplace_back(stringutils::remQuotes(theString));
+	});
 
 	parseStream(theStream);
 }
 
 
-commonItems::singleString::singleString(std::istream& theStream):
-	theString()
+singleString::singleString(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	theString = *getNextTokenWithoutMatching(theStream);
-	if (theString.substr(0,1) == "\"")
-	{
-		theString = theString.substr(1, theString.size() - 2);
-	}
+	theString = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
 }
 
 
-commonItems::stringOfObject::stringOfObject(std::istream& theStream)
+stringOfObject::stringOfObject(std::istream& theStream)
 {
-	int braceDepth = 0;
+	auto braceDepth = 0;
 	while (true)
 	{
 		if (theStream.eof())
@@ -338,15 +312,15 @@ commonItems::stringOfObject::stringOfObject(std::istream& theStream)
 }
 
 
-commonItems::stringOfItem::stringOfItem(std::istream& theStream)
+stringOfItem::stringOfItem(std::istream& theStream)
 {
-	auto equals = getNextLexeme(theStream);
-	auto next = getNextLexeme(theStream);
+	const auto equals = getNextLexeme(theStream);
+	const auto next = getNextLexeme(theStream);
 	theString = equals + " " + next;
 
 	if (next == "{")
 	{
-		int braceDepth = 1;
+		auto braceDepth = 1;
 		while (true)
 		{
 			if (theStream.eof())
@@ -376,20 +350,20 @@ commonItems::stringOfItem::stringOfItem(std::istream& theStream)
 }
 
 
-commonItems::stringsOfItems::stringsOfItems(std::istream& theStream)
+stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerKeyword(std::regex("[a-zA-Z0-9_]+"), [this](const std::string& itemName, std::istream& theStream){
-		stringOfItem theItem(theStream);
-		theStrings.push_back(itemName + theItem.getString() + "\n");
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
+		const stringOfItem theItem(theStream);
+		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
 
 	parseStream(theStream);
 }
 
 
-commonItems::stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
+stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerKeyword(std::regex("[a-zA-Z0-9_]+"), [this](const std::string& itemName, std::istream& theStream){
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
 		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
@@ -398,13 +372,15 @@ commonItems::stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 }
 
 
-commonItems::assignments::assignments(std::istream& theStream)
+assignments::assignments(std::istream& theStream)
 {
-	registerKeyword(std::regex("[a-zA-Z0-9_]+"), [this](const std::string& assignmentName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
 		auto equals = getNextTokenWithoutMatching(theStream);
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
-		theAssignments.insert(std::make_pair(assignmentName, *assignmentValue));
+		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));
 	});
 
 	parseStream(theStream);
 }
+
+} // namespace commonItems
