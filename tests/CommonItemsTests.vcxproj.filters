@@ -72,6 +72,12 @@
     <ClCompile Include="StringUtilsTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\Version.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="VersionTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h">
@@ -102,6 +108,9 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\StringUtils.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Version.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
