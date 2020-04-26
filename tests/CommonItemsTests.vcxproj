@@ -159,6 +159,7 @@
     <ClCompile Include="LogTests.cpp" />
     <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
+    <ClCompile Include="StringUtilsTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h" />
