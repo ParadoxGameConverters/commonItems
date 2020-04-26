@@ -148,6 +148,7 @@
     <ClCompile Include="..\newParser.cpp" />
     <ClCompile Include="..\Parser.cpp" />
     <ClCompile Include="..\ParserHelpers.cpp" />
+    <ClCompile Include="..\StringUtils.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CardinalToOrdinalTests.cpp" />
     <ClCompile Include="ColorTests.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
+    <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +170,7 @@
     <ClInclude Include="..\Parser.h" />
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />
+    <ClInclude Include="..\StringUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

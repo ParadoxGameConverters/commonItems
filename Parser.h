@@ -27,7 +27,7 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
-	[[deprecated]] void registerKeyword(const std::regex& keyword, const parsingFunction& function);
+	void registerKeyword(const std::regex& keyword, const parsingFunction& function);
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);

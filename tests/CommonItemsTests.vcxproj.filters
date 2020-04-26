@@ -63,6 +63,12 @@
     <ClCompile Include="ParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="ParserHelperTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\StringUtils.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h">
@@ -90,6 +96,9 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\newParser.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\StringUtils.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
