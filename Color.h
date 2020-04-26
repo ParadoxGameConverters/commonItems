@@ -26,11 +26,14 @@ class Color: parser
 	[[nodiscard]] int g() const { return c[1]; }
 	[[nodiscard]] int b() const { return c[2]; }
 
-	explicit operator bool() const { return initialized; } // Returns true if the color has been initialized with an RGB triplet.
+	explicit operator bool() const
+	{
+		return initialized;
+	} // Returns true if the color has been initialized with an RGB triplet.
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
 	// bit more (with a much smaller standard deviation).
-	[[deprecated]] void RandomlyFlunctuate(const int stdDev) { RandomlyFluctuate(stdDev); }
+	[[deprecated("Use RandomlyFluctuate()")]] void RandomlyFlunctuate(const int stdDev) { RandomlyFluctuate(stdDev); }
 	void RandomlyFluctuate(int stdDev);
 
 	friend std::ostream& operator<<(std::ostream&, const Color&);
@@ -40,7 +43,7 @@ class Color: parser
 	std::array<int, 3> c{0, 0, 0};
 };
 
-	
+
 std::ostream& operator<<(std::ostream&, const Color&);
 
 
