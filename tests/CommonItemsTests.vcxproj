@@ -158,6 +158,7 @@
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
+    <ClCompile Include="OSCompatibilityLayerTests.cpp" />
     <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
     <ClCompile Include="StringUtilsTests.cpp" />
