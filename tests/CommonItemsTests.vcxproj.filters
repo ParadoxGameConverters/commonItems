@@ -45,6 +45,12 @@
     <ClCompile Include="..\ParserHelpers.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\Date.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="DateTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h">
@@ -66,6 +72,9 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\ParserHelpers.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Date.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
