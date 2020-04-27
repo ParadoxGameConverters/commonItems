@@ -12,6 +12,8 @@ build_script:
 test_script:
 - ps: >-
     cd tests/Release
+    pwd
+    ls
 
     CommonItemsTests.exe --gtest_output=xml:tests.xml
 
