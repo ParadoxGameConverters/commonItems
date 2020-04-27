@@ -57,7 +57,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 					break;
 			}
 			else
-				LOG(LogLevel::Warning) << "Unknown token while parsing stream: " << *token;
+				Log(LogLevel::Warning) << "Unknown token while parsing stream: " << *token;
 		}
 		else
 			break;
@@ -71,7 +71,7 @@ void commonItems::parser::parseFile(const std::string& filename)
 	std::ifstream theFile(fs::u8path(filename));
 	if (!theFile.is_open())
 	{
-		LOG(LogLevel::Error) << "Could not open " << filename << " for parsing.";
+		Log(LogLevel::Error) << "Could not open " << filename << " for parsing.";
 		return;
 	}
 

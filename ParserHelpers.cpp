@@ -155,7 +155,7 @@ singleInt::singleInt(std::istream& theStream)
 	}
 	catch (std::exception&)
 	{
-		LOG(LogLevel::Warning) << "Expected an int, but instead got " << token;
+		Log(LogLevel::Warning) << "Expected an int, but instead got " << token;
 		theInt = 0;
 	}
 }
@@ -253,7 +253,7 @@ singleDouble::singleDouble(std::istream& theStream)
 	}
 	catch (std::exception&)
 	{
-		LOG(LogLevel::Warning) << "Expected a double, but instead got " << token;
+		Log(LogLevel::Warning) << "Expected a double, but instead got " << token;
 		theDouble = 0.0;
 	}
 }

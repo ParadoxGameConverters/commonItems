@@ -28,7 +28,7 @@ bool TryCreateFolder(const std::string& path)
 	}
 	else
 	{
-		LOG(LogLevel::Warning) << "Could not create folder " << path << " - " << GetLastErrorString();
+		Log(LogLevel::Warning) << "Could not create folder " << path << " - " << GetLastErrorString();
 		return false;
 	}
 }
@@ -102,7 +102,7 @@ bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 	}
 	else
 	{
-		LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
+		Log(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
 		return false;
 	}
 }
@@ -130,11 +130,11 @@ bool copyFolder(const std::string& sourceFolder, const std::string& destFolder)
 	const int result = SHFileOperation(&fileOptStruct);
 	if (result != 0)
 	{
-		LOG(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Error code: " << result;
+		Log(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Error code: " << result;
 	}
 	else if (fileOptStruct.fAnyOperationsAborted)
 	{
-		LOG(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Operation aborted";
+		Log(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Operation aborted";
 	}
 
 	delete[] from;
@@ -165,12 +165,12 @@ bool renameFolder(const std::string& sourceFolder, const std::string& destFolder
 	int result = SHFileOperation(&fileOptStruct);
 	if (result != 0)
 	{
-		LOG(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Error code: " << result;
+		Log(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Error code: " << result;
 		return false;
 	}
 	else if (fileOptStruct.fAnyOperationsAborted)
 	{
-		LOG(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Operation aborted.";
+		Log(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Operation aborted.";
 		return false;
 	}
 
@@ -235,12 +235,12 @@ bool deleteFolder(const std::string& folder)
 	const int result = SHFileOperation(&fileOptStruct);
 	if (result != 0)
 	{
-		LOG(LogLevel::Error) << "Could not delete " << folder << ". Error code: " << result;
+		Log(LogLevel::Error) << "Could not delete " << folder << ". Error code: " << result;
 		return false;
 	}
 	else if (fileOptStruct.fAnyOperationsAborted)
 	{
-		LOG(LogLevel::Error) << "Could not delete " << folder << ". Operation aborted.";
+		Log(LogLevel::Error) << "Could not delete " << folder << ". Operation aborted.";
 		return false;
 	}
 
@@ -256,7 +256,7 @@ std::string convertUTF8ToASCII(const std::string& UTF8)
 
 	if (0 == WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", NULL))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -273,7 +273,7 @@ std::string convertUTF8To8859_15(const std::string& UTF8)
 
 	if (0 == WideCharToMultiByte(28605 /*8859-15*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", NULL))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -290,7 +290,7 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 
 	if (0 == WideCharToMultiByte(1252, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", NULL))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -307,7 +307,7 @@ std::string convertUTF16ToUTF8(const std::wstring& UTF16)
 
 	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, utf8array, requiredSize, NULL, NULL))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-8 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-8 - " << GetLastErrorString();
 	}
 	std::string returnable(utf8array);
 
@@ -336,7 +336,7 @@ std::wstring convert8859_15ToUTF16(const std::string& input)
 
 	if (0 == MultiByteToWideChar(28605 /* 8859-15*/, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
 	std::wstring returnable(wideKeyArray);
 
@@ -369,7 +369,7 @@ std::wstring convertWin1250ToUTF16(const std::string& input)
 
 	if (0 == MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
 	std::wstring returnable(wideKeyArray);
 
@@ -385,7 +385,7 @@ std::wstring convertWin1252ToUTF16(const std::string& input)
 
 	if (0 == MultiByteToWideChar(1252, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
 	std::wstring returnable(wideKeyArray);
 
@@ -400,13 +400,13 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 	const int requiredSize = MultiByteToWideChar(CP_UTF8, 0, UTF8.c_str(), -1, NULL, 0);
 	if (requiredSize == 0)
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
 	wchar_t* wideKeyArray = new wchar_t[requiredSize];
 
 	if (0 == MultiByteToWideChar(CP_UTF8, 0, UTF8.c_str(), -1, wideKeyArray, requiredSize))
 	{
-		LOG(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
 	std::wstring returnable(wideKeyArray);
 

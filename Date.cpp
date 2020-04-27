@@ -26,7 +26,7 @@ date::date(std::string init)
 	}
 	catch (const std::exception& e)
 	{
-		LOG(LogLevel::Warning) << "Problem inputting date: " << e.what();
+		Log(LogLevel::Warning) << "Problem inputting date: " << e.what();
 		year = 1;
 		month = 1;
 		day = 1;
