@@ -3,29 +3,6 @@
 #include <sstream>
 
 
-
-TEST(ParserHelper_Tests, AbsorbBOMAbsorbsBOM)
-{
-	std::stringstream input{"\xEF\xBB\xBFMore text"};
-	commonItems::absorbBOM(input);
-
-	char buffer[256];
-	input.getline(buffer, sizeof buffer);
-	ASSERT_EQ("More text", std::string{buffer});
-}
-
-
-TEST(ParserHelper_Tests, AbsorbBOMDoesNotAbsorbNonBOM)
-{
-	std::stringstream input{"More text"};
-	commonItems::absorbBOM(input);
-
-	char buffer[256];
-	input.getline(buffer, sizeof buffer);
-	ASSERT_EQ("More text", std::string{buffer});
-}
-
-
 TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleText)
 {
 	std::stringstream input{"ignore_me More text"};
@@ -241,7 +218,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[Warning] Expected an int, but instead got foo\n", log.str());
+	ASSERT_EQ("[WARNING] Expected an int, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -397,7 +374,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[Warning] Expected a double, but instead got foo\n", log.str());
+	ASSERT_EQ("[WARNING] Expected a double, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 

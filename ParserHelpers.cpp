@@ -12,17 +12,6 @@ std::string getNextLexeme(std::istream& theStream);
 std::string getNextLexemeWithNewlines(std::istream& theStream);
 
 
-void absorbBOM(std::istream& theStream)
-{
-	const char firstChar = theStream.peek();
-	if (firstChar == '\xEF')
-	{
-		char bitBucket[3];
-		theStream.read(bitBucket, sizeof bitBucket);
-	}
-}
-
-
 void ignoreItem(const std::string& unused, std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);

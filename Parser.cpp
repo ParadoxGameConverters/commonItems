@@ -15,6 +15,17 @@ std::string getNextLexemeWithNewlines(std::istream& theStream);
 } // namespace commonItems
 
 
+void commonItems::absorbBOM(std::istream& theStream)
+{
+	const char firstChar = theStream.peek();
+	if (firstChar == '\xEF')
+	{
+		char bitBucket[3];
+		theStream.read(bitBucket, sizeof bitBucket);
+	}
+}
+
+
 void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunction& function)
 {
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));

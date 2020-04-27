@@ -15,9 +15,6 @@ namespace commonItems
 const std::string catchallRegex{"[a-zA-Z0-9_]+"};
 
 
-void absorbBOM(std::istream& theStream);
-
-
 void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
