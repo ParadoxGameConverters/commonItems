@@ -16,9 +16,7 @@ test_script:
     pwd
     
     ls
-    
-    dir
 
-    CommonItemsTests.exe --gtest_output=xml:tests.xml
+    C:\projects\commonitems\tests\Release\CommonItemsTests.exe --gtest_output=xml:tests.xml
 
     (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
