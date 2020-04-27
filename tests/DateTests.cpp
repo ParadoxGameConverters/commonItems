@@ -45,7 +45,7 @@ TEST(Date_Tests, DateLogsBadInitialization)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("Problem inputting date: invalid stoi argument\n", log.str());
+	ASSERT_EQ("[WARNING] Problem inputting date: invalid stoi argument\n", log.str());
 }
 
 
