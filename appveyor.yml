@@ -1,0 +1,17 @@
+version: dev.{build}
+skip_tags: true
+image: Visual Studio 2019
+configuration: Release
+build_script:
+- cmd: >-
+    git submodule update --init --recursive
+
+    msbuild tests/CommonItemsTests.sln /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+test_script:
+- ps: >-
+    cd tests/Release
+
+    Vic2ToHoI4Tests.exe --gtest_output=xml:tests.xml
+
+    (new-object net.webclient).UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\tests.xml))
