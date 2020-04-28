@@ -1,66 +1,42 @@
 #include "Color.h"
+#include "ParserHelpers.h"
 #include <chrono>
 #include <random>
 #include <sstream>
-#include "Object.h"
-
-commonItems::Color::Color():
-	initialized(false),
-	c({ 0, 0, 0 })
-{}
 
 
-commonItems::Color::Color(const int r, const int g, const int b):
-	initialized(true),
-	c({ r, g, b })
-{}
 
-
-commonItems::Color::Color(std::shared_ptr<Object> colorObject):
-	initialized(false),
-	c({ 0, 0, 0 })
+commonItems::Color::Color(std::istream& theStream)
 {
-	std::stringstream colorStream;
-	colorStream << *colorObject;
-	auto unneeded = getNextToken(colorStream);
-	Color newColor(colorStream);
-	newColor.GetRGB(c[0], c[1], c[2]);
-}
-
-
-commonItems::Color::Color(std::istream& theStream):
-	initialized(false),
-	c({ 0, 0, 0 })
-{
-	unsigned int colorsInitialized = 0;
-
-	auto token = getNextToken(theStream);
-	while (token && (*token != "}"))
+	const intList rgbList(theStream);
+	const auto rgb = rgbList.getInts();
+	if (rgb.size() == 3)
 	{
-		if ((token->find('=') == std::string::npos) && (token->find('{') == std::string::npos))
-		{
-			if (token->substr(0,1) == "\"")
-			{
-				token = token->substr(1, token->length() - 2);
-			}
-			c[colorsInitialized] = std::stoi(*token);
-			colorsInitialized++;
-		}
-		token = getNextToken(theStream);
+		c[0] = rgb[0];
+		c[1] = rgb[1];
+		c[2] = rgb[2];
+		initialized = true;
 	}
-
-	initialized = (colorsInitialized > 2);
 }
 
 
-void commonItems::Color::RandomlyFlunctuate(const int stdDev)
+void commonItems::Color::GetRGB(int& r, int& g, int& b) const
 {
-	// All three color components will go up or down by the some amount (according to stdDev), 
-	// and then each is tweaked a bit more (with a much smaller standard deviation).
-	static std::mt19937 generator(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
-	const double allChange = std::normal_distribution<double>(0.0, stdDev)(generator);	// the amount the colors all change by
+	r = c[0];
+	g = c[1];
+	b = c[2];
+}
+
+
+void commonItems::Color::RandomlyFluctuate(const int stdDev)
+{
+	static std::mt19937 generator(
+		 static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
+	const auto allChange = std::normal_distribution<double>(0.0, stdDev)(generator);
+
 	std::normal_distribution<double> distribution(0.0, stdDev / 4.0);
-	for (auto& component : c)	// the component under consideration
+	for (auto& component: c)
 	{
 		component += lround(allChange + distribution(generator));
 		if (component < 0)
@@ -75,22 +51,21 @@ void commonItems::Color::RandomlyFlunctuate(const int stdDev)
 }
 
 
-std::ostream& commonItems::operator<<(std::ostream& out, const commonItems::Color& color)
+std::ostream& commonItems::operator<<(std::ostream& out, const Color& color)
 {
 	out << color.c[0] << ' ' << color.c[1] << ' ' << color.c[2];
 	return out;
 }
 
 
-void commonItems::Color::GetRGB(int& r, int& g, int& b) const
+commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream)
 {
-	r = c[0];
-	g = c[1];
-	b = c[2];
-}
+	const intList rgbList(theStream);
+	const auto rgb = rgbList.getInts();
+	if (rgb.size() == 3)
+	{
+		return Color(rgb[0], rgb[1], rgb[2]);
+	}
 
-
-commonItems::Color::operator bool() const
-{
-	return initialized;
+	return Color{};
 }

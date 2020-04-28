@@ -1,0 +1,17 @@
+Release/
+ReleaseIntermediate/
+Release-Linux/
+Debug/
+DebugIntermediate/
+Analysis
+AnalysisIntermediate
+testResults
+*testResults*
+changelog.txt
+*.opensdf
+*.opendb
+*.sdf
+*.VC.db
+*.cppcheck
+.vs/
+packages/
