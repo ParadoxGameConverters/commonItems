@@ -132,7 +132,7 @@ TEST(ParserHelper_Tests, SingleItemSkipsEquals)
 }
 
 
-TEST(ParserHelper_Tests, SingleReadsWholeBracedBlock)
+TEST(ParserHelper_Tests, SingleItemReadsWholeBracedBlock)
 {
 	std::stringstream input{"{ { read_me } } More text"};
 	input >> std::noskipws;

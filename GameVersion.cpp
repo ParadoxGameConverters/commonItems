@@ -1,43 +1,46 @@
-#include "Version.h"
+#include "GameVersion.h"
 #include "Log.h"
 #include "ParserHelpers.h"
 
 
 
-Version::Version(std::string version)
+GameVersion::GameVersion(std::string version)
 {
-	if (version.length() == 0)
+	if (version.empty())
 	{
 		return;
 	}
 
 	auto dot = version.find_first_of('.');
 	firstPart = std::stoi(version.substr(0, dot));
-
-	if (dot != std::string::npos)
+	if (dot == std::string::npos)
 	{
-		version = version.substr(dot + 1, version.size());
-		dot = version.find_first_of('.');
-		secondPart = std::stoi(version.substr(0, dot));
-
-		if (dot != std::string::npos)
-		{
-			version = version.substr(dot + 1, version.size());
-			dot = version.find_first_of('.');
-			thirdPart = std::stoi(version.substr(0, dot));
-
-			if (dot != std::string::npos)
-			{
-				version = version.substr(dot + 1, version.size());
-				dot = version.find_first_of('.');
-				fourthPart = std::stoi(version.substr(0, dot));
-			}
-		}
+		return;
 	}
+
+	version = version.substr(dot + 1, version.size());
+	dot = version.find_first_of('.');
+	secondPart = std::stoi(version.substr(0, dot));
+	if (dot == std::string::npos)
+	{
+		return;
+	}
+
+	version = version.substr(dot + 1, version.size());
+	dot = version.find_first_of('.');
+	thirdPart = std::stoi(version.substr(0, dot));
+	if (dot == std::string::npos)
+	{
+		return;
+	}
+
+	version = version.substr(dot + 1, version.size());
+	dot = version.find_first_of('.');
+	fourthPart = std::stoi(version.substr(0, dot));
 }
 
 
-Version::Version(std::istream& theStream)
+GameVersion::GameVersion(std::istream& theStream)
 {
 	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
 		const commonItems::singleInt firstString(theStream);
@@ -62,45 +65,80 @@ Version::Version(std::istream& theStream)
 }
 
 
-bool Version::operator>=(const Version& rhs) const
+bool GameVersion::operator>=(const GameVersion& rhs) const
 {
 	return (*this > rhs) || (*this == rhs);
 }
 
 
-bool Version::operator>(const Version& rhs) const
+bool GameVersion::operator>(const GameVersion& rhs) const
 {
-	return (firstPart > rhs.firstPart) || (firstPart == rhs.firstPart && secondPart > rhs.secondPart) ||
-			 (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart > rhs.thirdPart) ||
-			 (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart == rhs.thirdPart &&
-				  fourthPart > rhs.fourthPart);
+	if (firstPart > rhs.firstPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart > rhs.secondPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart > rhs.thirdPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart == rhs.thirdPart &&
+		 fourthPart > rhs.fourthPart)
+	{
+		return true;
+	}
+
+	return false;
 }
 
-bool Version::operator<(const Version& rhs) const
+
+bool GameVersion::operator<(const GameVersion& rhs) const
 {
-	return (firstPart < rhs.firstPart) || (firstPart == rhs.firstPart && secondPart < rhs.secondPart) ||
-			 (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart < rhs.thirdPart) ||
-			 (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart == rhs.thirdPart &&
-				  fourthPart < rhs.fourthPart);
+	if (firstPart < rhs.firstPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart < rhs.secondPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart < rhs.thirdPart)
+	{
+		return true;
+	}
+	if (firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart == rhs.thirdPart &&
+		 fourthPart < rhs.fourthPart)
+	{
+		return true;
+	}
+
+	return false;
 }
 
-bool Version::operator<=(const Version& rhs) const
+
+bool GameVersion::operator<=(const GameVersion& rhs) const
 {
 	return (*this < rhs) || (*this == rhs);
 }
 
-bool Version::operator==(const Version& rhs) const
+
+bool GameVersion::operator==(const GameVersion& rhs) const
 {
 	return firstPart == rhs.firstPart && secondPart == rhs.secondPart && thirdPart == rhs.thirdPart &&
 			 fourthPart == rhs.fourthPart;
 }
 
-bool Version::operator!=(const Version& rhs) const
+
+bool GameVersion::operator!=(const GameVersion& rhs) const
 {
 	return !(*this == rhs);
 }
 
-std::ostream& operator<<(std::ostream& out, const Version& version)
+
+std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 {
 	out << version.firstPart << '.';
 	out << version.secondPart << '.';
@@ -110,7 +148,7 @@ std::ostream& operator<<(std::ostream& out, const Version& version)
 }
 
 
-Version::Factory::Factory()
+GameVersion::Factory::Factory()
 {
 	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
 		const commonItems::singleInt firstString(theStream);
@@ -131,7 +169,7 @@ Version::Factory::Factory()
 }
 
 
-Version Version::Factory::getVersion(std::istream& theStream)
+GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
 {
 	firstPart = 0;
 	secondPart = 0;
@@ -140,5 +178,5 @@ Version Version::Factory::getVersion(std::istream& theStream)
 
 	parseStream(theStream);
 
-	return Version(firstPart, secondPart, thirdPart, fourthPart);
+	return GameVersion(firstPart, secondPart, thirdPart, fourthPart);
 }

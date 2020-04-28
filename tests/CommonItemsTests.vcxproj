@@ -155,7 +155,7 @@
     <ClCompile Include="..\Parser.cpp" />
     <ClCompile Include="..\ParserHelpers.cpp" />
     <ClCompile Include="..\StringUtils.cpp" />
-    <ClCompile Include="..\Version.cpp" />
+    <ClCompile Include="..\GameVersion.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CardinalToOrdinalTests.cpp" />
     <ClCompile Include="ColorTests.cpp" />
@@ -168,7 +168,7 @@
     <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
     <ClCompile Include="StringUtilsTests.cpp" />
-    <ClCompile Include="VersionTests.cpp" />
+    <ClCompile Include="GameVersionTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CardinalToOrdinal.h" />
@@ -180,7 +180,7 @@
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />
     <ClInclude Include="..\StringUtils.h" />
-    <ClInclude Include="..\Version.h" />
+    <ClInclude Include="..\GameVersion.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

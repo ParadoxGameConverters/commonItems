@@ -69,13 +69,13 @@
     <ClCompile Include="StringUtilsTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\Version.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="VersionTests.cpp">
+    <ClCompile Include="OSCompatibilityLayerTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="OSCompatibilityLayerTests.cpp">
+    <ClCompile Include="..\GameVersion.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="GameVersionTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,7 +107,7 @@
     <ClInclude Include="..\StringUtils.h">
       <Filter>commonItems</Filter>
     </ClInclude>
-    <ClInclude Include="..\Version.h">
+    <ClInclude Include="..\GameVersion.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
