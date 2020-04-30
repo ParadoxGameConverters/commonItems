@@ -268,3 +268,18 @@ TEST(GameVersion_Tests, LessThanOrEqualsFromEquals)
 
 	ASSERT_LE(versionTwo, version);
 }
+
+TEST(GameVersion_Tests, VersionEqual)
+{
+	const GameVersion version("1.3.3.0");
+	const GameVersion requiredVersion("1.3.3");
+	ASSERT_EQ(version, requiredVersion);
+	ASSERT_TRUE(version == requiredVersion);
+}
+
+TEST(GameVersion_Tests, VersionNotEqual)
+{
+	const GameVersion version("1.3.3.3");
+	const GameVersion requiredVersion("1.3.3");
+	ASSERT_TRUE(version != requiredVersion);
+}
