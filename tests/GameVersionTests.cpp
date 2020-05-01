@@ -269,17 +269,16 @@ TEST(GameVersion_Tests, LessThanOrEqualsFromEquals)
 	ASSERT_LE(versionTwo, version);
 }
 
-TEST(GameVersion_Tests, VersionEqual)
+TEST(GameVersion_Tests, GameVersionEqualMissingFourthPartIsSameAsZero)
 {
 	const GameVersion version("1.3.3.0");
 	const GameVersion requiredVersion("1.3.3");
 	ASSERT_EQ(version, requiredVersion);
-	ASSERT_TRUE(version == requiredVersion);
 }
 
-TEST(GameVersion_Tests, VersionNotEqual)
+TEST(GameVersion_Tests, GameVersionNotEqualMissingFourthPartIsNotSameAsThirdPart)
 {
 	const GameVersion version("1.3.3.3");
 	const GameVersion requiredVersion("1.3.3");
-	ASSERT_TRUE(version != requiredVersion);
+	ASSERT_NE(version, requiredVersion);
 }
