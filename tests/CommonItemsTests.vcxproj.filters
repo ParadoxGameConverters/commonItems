@@ -18,12 +18,6 @@
     <ClCompile Include="googletest\googletest\src\gtest-all.cc">
       <Filter>gtest</Filter>
     </ClCompile>
-    <ClCompile Include="CardinalToOrdinalTests.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CardinalToOrdinal.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
@@ -78,11 +72,20 @@
     <ClCompile Include="GameVersionTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\CommonFunctions.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonFunctionsTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OSCommonLayer.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonUtils.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CardinalToOrdinal.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
     <ClInclude Include="..\Color.h">
       <Filter>commonItems</Filter>
     </ClInclude>
@@ -108,6 +111,9 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\GameVersion.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonFunctions.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
