@@ -95,16 +95,10 @@ void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
-	BOOL success = ::CopyFileW(convertUTF8ToUTF16(sourcePath).c_str(), convertUTF8ToUTF16(destPath).c_str(), FALSE);
-	if (success)
-	{
-		return true;
-	}
-	else
-	{
-		Log(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
-		return false;
-	}
+    const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath));    
+    if (success) return true;
+        LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
+    return false;
 }
 
 
