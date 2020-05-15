@@ -91,7 +91,7 @@ bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder
 bool DoesFileExist(const std::string& path)
 {
 	const auto tempPath = fs::u8path(path);
-	if (fs::exists(tempPath) && !is_directory(tempPath))
+	if (fs::exists(tempPath) && !fs::is_directory(tempPath))
 		return true;
 	return false;
 }
@@ -100,7 +100,7 @@ bool DoesFileExist(const std::string& path)
 bool DoesFolderExist(const std::string& path)
 {
 	const auto tempPath = fs::u8path(path);
-	if (exists(tempPath) && is_directory(tempPath))
+	if (fs::exists(tempPath) && fs::is_directory(tempPath))
 		return true;
 	return false;
 }
