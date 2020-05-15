@@ -1,7 +1,6 @@
 #include "OSCompatibilityLayer.h"
 #include <Windows.h>
 #include <iostream>
-#include <Shellapi.h>
 #include <list>
 #include <algorithm>
 #include "Log.h"
@@ -14,9 +13,9 @@ namespace fs = std::filesystem;
 namespace Utils
 {
 
-
-void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames)
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
+	std::set<std::string> fileNames;
 	for (auto& p : fs::recursive_directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
@@ -26,12 +25,11 @@ void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>
 			lastSlash = tempDir.find_last_of(L'\\');
 			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
 			auto returnName = "/" + convertUTF16ToUTF8(dirName) + "/" + p.path().filename().string();
-			filenames.insert(returnName);
+			fileNames.insert(returnName);
 		}
 	}
+	return fileNames;
 }
-
-
 
 
 std::string GetLastErrorString()

@@ -149,7 +149,6 @@
   <ItemGroup>
     <ClCompile Include="..\Color.cpp" />
     <ClCompile Include="..\CommonFunctions.cpp" />
-    <ClCompile Include="..\CommonUtils.cpp" />
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\Log.cpp" />

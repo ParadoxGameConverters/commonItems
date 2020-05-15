@@ -23,16 +23,9 @@ std::string GetCurrentDirectory()
 	return fs::current_path().string();
 }
 
-/*
-Note: since the function signature did not allow for a return value, it clears the fileNames set when an error occurs to
-make sure no operations are done on an incomplete list of files
-*/
-
-void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
+std::set<std::string> GetAllFilesInFolder(const std::string& path)
 {
-	fileNames.clear();
-	if (!exists(fs::u8path(path)))
-		return; // Not sure if iterating over non-existent path would throw an error.
+	std::set<std::string> fileNames;
 	for (auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
@@ -40,26 +33,21 @@ void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNam
 			fileNames.insert(p.path().filename().string());
 		}
 	}
+	return fileNames;
 }
 
-/*
-Note: since the function signature did not allow for a return value, it clears the fileNames set when an error
-occurs to make sure no operations are done on an incomplete list of files
-*/
-void GetAllSubfolders(const std::string& unresolvedPath, std::set<std::string>& subFolders)
-{
-	subFolders.clear();
-	if (!fs::exists(fs::u8path(unresolvedPath)))
-		return; // Not sure if iterating over non-existent path would throw an error.
-	for (auto& p: fs::directory_iterator(fs::u8path(unresolvedPath)))
+std::set<std::string> GetAllSubfolders(const std::string& path)
+{	
+	std::set<std::string> subFolders;
+	for (auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (p.is_directory())
 		{
 			subFolders.insert(p.path().filename().string());
 		}
 	}
+	return subFolders;
 }
-
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {

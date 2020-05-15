@@ -6,6 +6,7 @@
 #include <cstring>
 #include <iostream>
 #include <set>
+#include <errno.h>
 
 #include <dirent.h>
 #include <errno.h>
@@ -255,8 +256,9 @@ bool IsDirectory(const std::string& path)
 	Note: since the function signature did not allow for a return value, it clears the fileNames set when an
 	error occurs to make sure no operations are done on an incomplete list of files
 */
-void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames)
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
+	std::set<std::string> fileNames;
 	for (auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
@@ -266,9 +268,10 @@ void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>
 			lastSlash = tempDir.find_last_of("/");
 			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
 			auto returnName = "/" + dirName + "/" + p.path().filename().string();
-			filenames.insert(returnName);
+			fileNames.insert(returnName);
 		}
 	}
+	return fileNames;
 }
 
 
@@ -285,36 +288,9 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 */
 std::string GetLastErrorString()
 {
-	using namespace std;
-	switch (errno)
-	{
-		case EEXIST:
-			return string("Error code: EEXIST");
-		case EACCES:
-			return string("Error code: EACCES");
-		case ENOENT:
-			return string("Error code: ENOENT");
-		case ENOTDIR:
-			return string("Error code: ENOTDIR");
-		case EPERM:
-			return string("Error code: EPERM");
-		case EBUSY:
-			return string("Error code: EBUSY");
-		case ENOTEMPTY:
-			return string("Error code: ENOTEMPTY");
-		case EINVAL:
-			return string("Error code: EINVAL");
-		case EISDIR:
-			return string("Error code: EISDIR");
-		case EROFS:
-			return string("Error code: EROFS");
-		case E2BIG:
-			return string("Error code: E2BIG");
-		case EILSEQ:
-			return string("Error code: EILSEQ");
-		default:
-			return string("Error code: unknown");
-	}
+	char sys_msg[300];
+	strerror_s(sys_msg, sizeof sys_msg, errno);
+	return std::string(sys_msg);
 }
 
 bool deleteFile(const std::string& unresolvedFile)

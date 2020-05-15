@@ -81,9 +81,6 @@
     <ClCompile Include="..\OSCommonLayer.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="..\CommonUtils.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Color.h">

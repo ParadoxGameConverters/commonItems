@@ -48,38 +48,40 @@ typedef int errno_t;
 namespace Utils
 {
 
-// Creates a new folder corresponding to the given path.
-// Returns true on success or if the folder already exists.
-// Returns false and logs a warning on failure.
-bool TryCreateFolder(const std::string& path);
-std::string GetCurrentDirectory();
-// Adds all files (just the file name) in the specified folder to the given collection.
-void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames);
-void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders);
+std::set<std::string> GetAllFilesInFolder(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void
+GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
+{
+	fileNames = GetAllFilesInFolder(path);
+}
+std::set<std::string> GetAllSubfolders(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void
+GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
+{
+	subFolders = GetAllSubfolders(path);
+}
 
-// For the specified folder and all subfolders, adds all files (just the subdirectory and file name)
-// to the given collection.
-void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames);
-// Copies the file specified by sourcePath as destPath.
-// Returns true on success.
-// Returns false and logs a warning on failure.
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void
+GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
+{
+	fileNames = GetAllFilesInFolderRecursive(path);
+}
+
+std::string GetCurrentDirectory();
+
+bool TryCreateFolder(const std::string& path);
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
 bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder);
 bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder);
-// Returns true if the specified file exists (and is a file rather than a folder).
 bool DoesFileExist(const std::string& path);
-// Returns true if the specified folder exists (and is a folder rather than a file).
 bool DoesFolderExist(const std::string& path);
 
 void WriteToConsole(LogLevel level, const std::string& logMessage);
 
-// Returns a formatted string describing the last error on the WinAPI.
 std::string GetLastErrorString();
 
 bool DeleteFolder(const std::string& folder);
-
-
-std::optional<std::string> GetFileFromTag(const std::string& directoryPath, const std::string& tag);
 
 std::string convertUTF8ToASCII(const std::string& UTF8);
 std::string convertUTF8To8859_15(const std::string& UTF8);

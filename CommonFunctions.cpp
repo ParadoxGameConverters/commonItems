@@ -1,8 +1,9 @@
 #include "CommonFunctions.h"
+#include <algorithm>
 
 std::string trimPath(const std::string& fileName)
 {
-	int lastSlash = fileName.find_last_of('\\');
+	auto lastSlash = fileName.find_last_of('\\');
 	auto trimmedFileName = fileName.substr(lastSlash + 1, fileName.length());
 	lastSlash = trimmedFileName.find_last_of('/');
 	trimmedFileName = trimmedFileName.substr(lastSlash + 1, trimmedFileName.length());
@@ -17,13 +18,7 @@ std::string trimExtension(const std::string& fileName)
 
 std::string replaceCharacter(std::string fileName, char character)
 {
-	auto position = fileName.find_first_of(character);
-	while (position != std::string::npos)
-	{
-		fileName.replace(position, 1, "_");
-		position = fileName.find_first_of(character);
-	}
-
+	std::replace(fileName.begin(), fileName.end(), character, '_');
 	return fileName;
 }
 
