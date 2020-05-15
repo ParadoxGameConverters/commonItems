@@ -26,6 +26,8 @@ std::string GetCurrentDirectory()
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
 {
 	std::set<std::string> fileNames;
+	if (!fs::exists(fs::u8path(path)))
+		return fileNames;
 	for (auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
@@ -39,6 +41,8 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 std::set<std::string> GetAllSubfolders(const std::string& path)
 {	
 	std::set<std::string> subFolders;
+	if (!fs::exists(fs::u8path(path)))
+		return subFolders;
 	for (auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (p.is_directory())
