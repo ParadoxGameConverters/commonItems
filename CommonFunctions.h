@@ -7,5 +7,6 @@ std::string trimExtension(const std::string& fileName);
 std::string replaceCharacter(std::string fileName, char character);
 std::string cardinalToOrdinal(int cardinal);
 [[deprecated("Use cardinalToOrdinal (lower case 'c')")]] inline std::string CardinalToOrdinal(const int cardinal) { return cardinalToOrdinal(cardinal); }
+std::string cardinalToRoman(int number);
 
 #endif // COMMON_FUNCTIONS_H
