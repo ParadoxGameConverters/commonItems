@@ -7,7 +7,7 @@
 #include <iostream>
 #include <set>
 #include <errno.h>
-
+#include <string.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
