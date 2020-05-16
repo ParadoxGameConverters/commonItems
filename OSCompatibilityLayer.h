@@ -1,37 +1,35 @@
 #ifndef OS_COMPATABILITY_LAYER_H
 #define OS_COMPATABILITY_LAYER_H
 
-
-
-#include <cstdio>
-#include <optional>
-#include <stdint.h>
-#include <set>
-#include <string>
 #include "Log.h"
 #include "iconvlite.h"
+#include <cstdio>
+#include <optional>
+#include <set>
+#include <stdint.h>
+#include <string>
 
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
-#endif //MAX_PATH
+#endif // MAX_PATH
 
 
 
-//Linux specific defines
+// Linux specific defines
 #ifdef __linux
 
-//sprintf_s is not implemented on Linux. It functions similarly to the function snprintf, but the return values are different.
-//Since return values are not used, they are directly translated for now. If return values will some day be used, the compiler
-//will give an error due to sprintf_s_Linux returning void.
+// sprintf_s is not implemented on Linux. It functions similarly to the function snprintf, but the return values are
+// different. Since return values are not used, they are directly translated for now. If return values will some day be
+// used, the compiler will give an error due to sprintf_s_Linux returning void.
 #define sprintf_s sprintf_s_Linux
-void sprintf_s_Linux (char *__restrict __s, size_t __maxlen, const char *__restrict __format, ...);
+void sprintf_s_Linux(char* __restrict __s, size_t __maxlen, const char* __restrict __format, ...);
 
-//See sprintf_s_LInux
+// See sprintf_s_LInux
 #define strcpy_s strcpy_s_Linux
-void strcpy_s_Linux(char *__restrict __dest, const char *__restrict __src);
+void strcpy_s_Linux(char* __restrict __dest, const char* __restrict __src);
 
-//Very basic implementation, simply returns 0 if FILE* is not NULL
+// Very basic implementation, simply returns 0 if FILE* is not NULL
 #define fopen_s fopen_s_Linux
 int fopen_s_Linux(FILE** file, const char* filename, const char* mode);
 
@@ -47,67 +45,67 @@ typedef int errno_t;
 
 #endif //__linux__
 
-
-
 namespace Utils
 {
 
-	// Creates a new folder corresponding to the given path.
-	// Returns true on success or if the folder already exists.
-	// Returns false and logs a warning on failure.
-	bool TryCreateFolder(const std::string& path);
-	std::string getCurrentDirectory();
-	// Adds all files (just the file name) in the specified folder to the given collection.
-	void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames);
-	void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders);
+std::set<std::string> GetAllFilesInFolder(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void
+GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
+{
+	fileNames = GetAllFilesInFolder(path);
+}
+std::set<std::string> GetAllSubfolders(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void
+GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
+{
+	subFolders = GetAllSubfolders(path);
+}
 
-	// For the specified folder and all subfolders, adds all files (just the subdirectory and file name)
-	// to the given collection.
-	void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames);
-	// Copies the file specified by sourcePath as destPath.
-	// Returns true on success.
-	// Returns false and logs a warning on failure.
-	bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
-	bool copyFolder(const std::string& sourceFolder, const std::string& destFolder);
-	bool renameFolder(const std::string& sourceFolder, const std::string& destFolder);
-	// Returns true if the specified file exists (and is a file rather than a folder).
-	bool DoesFileExist(const std::string& path);
-	// Returns true if the specified folder exists (and is a folder rather than a file).
-	bool doesFolderExist(const std::string& path);
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
+[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void
+GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
+{
+	fileNames = GetAllFilesInFolderRecursive(path);
+}
 
-	void WriteToConsole(LogLevel level, const std::string& logMessage);
+std::string GetCurrentDirectory();
 
-	// Returns a formatted string describing the last error on the WinAPI.
-	std::string GetLastErrorString();
+bool TryCreateFolder(const std::string& path);
+bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
+bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder);
+bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder);
+bool DoesFileExist(const std::string& path);
+bool DoesFolderExist(const std::string& path);
 
-	bool deleteFolder(const std::string& folder);
+void WriteToConsole(LogLevel level, const std::string& logMessage);
 
+std::string GetLastErrorString();
 
-	std::optional<std::string> GetFileFromTag(const std::string& directoryPath, const std::string& tag);
+bool DeleteFolder(const std::string& folder);
 
-	std::string convertUTF8ToASCII(const std::string& UTF8);
-	std::string convertUTF8To8859_15(const std::string& UTF8);
-	std::string convertUTF8ToWin1252(const std::string& UTF8);
-	std::string convertUTF16ToUTF8(const std::wstring& UTF16);
-	std::string convert8859_15ToASCII(const std::string& input);
-	std::string convert8859_15ToUTF8(const std::string& input);
-	std::wstring convert8859_15ToUTF16(const std::string& input);
-	std::string convertWin1252ToASCII(const std::string& Win1252);
-	std::string convertWin1252ToUTF8(const std::string& Win1252);
-	std::string convertWin1250ToUTF8(const std::string& Win1252);
-	std::wstring convertWin1252ToUTF16(const std::string& Win1252);
-	std::wstring convertWin1250ToUTF16(const std::string& Win1250);
-	std::wstring convertUTF8ToUTF16(const std::string& UTF8);
-	std::string convertWin1251ToUTF8(const std::string& Win1251);
-	std::string convertUTF8toWin1251(const std::string& UTF8);
+std::string convertUTF8ToASCII(const std::string& UTF8);
+std::string convertUTF8To8859_15(const std::string& UTF8);
+std::string convertUTF8ToWin1252(const std::string& UTF8);
+std::string convertUTF16ToUTF8(const std::wstring& UTF16);
+std::string convert8859_15ToASCII(const std::string& input);
+std::string convert8859_15ToUTF8(const std::string& input);
+std::wstring convert8859_15ToUTF16(const std::string& input);
+std::string convertWin1252ToASCII(const std::string& Win1252);
+std::string convertWin1252ToUTF8(const std::string& Win1252);
+std::string convertWin1250ToUTF8(const std::string& Win1252);
+std::wstring convertWin1252ToUTF16(const std::string& Win1252);
+std::wstring convertWin1250ToUTF16(const std::string& Win1250);
+std::wstring convertUTF8ToUTF16(const std::string& UTF8);
+std::string convertWin1251ToUTF8(const std::string& Win1251);
+std::string convertUTF8toWin1251(const std::string& UTF8);
 
-	// converts a string in the system dependent wchar_t encoding to UTF-8
-	std::string convertToUTF8(const std::wstring &input);
+// converts a string in the system dependent wchar_t encoding to UTF-8
+std::string convertToUTF8(const std::wstring& input);
 
-	//converts an UTF8 path to the system dependent filesystem path encoding
-	std::string normalizeUTF8Path(const std::string &utf_8_path);
+// converts an UTF8 path to the system dependent filesystem path encoding
+std::string normalizeUTF8Path(const std::string& utf_8_path);
 
 } // namespace Utils
 
 
-#endif //OS_COMPATABILITY_LAYER_H
+#endif // OS_COMPATABILITY_LAYER_H

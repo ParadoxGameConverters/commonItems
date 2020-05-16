@@ -1,192 +1,34 @@
 #include "OSCompatibilityLayer.h"
 #include <Windows.h>
 #include <iostream>
-#include <Shellapi.h>
 #include <list>
 #include <algorithm>
 #include "Log.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 
-
-
 #pragma warning(disable: 4996)	// supress warnings about wcscmp()
-
 
 
 namespace Utils
 {
 
-
-
-bool TryCreateFolder(const std::string& path)
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
-	BOOL success = ::CreateDirectoryW(convertUTF8ToUTF16(path).c_str(), NULL);
-	if (success || GetLastError() == 183)	// 183 is if the folder already exists
-	{
-		return true;
-	}
-	else
-	{
-		Log(LogLevel::Warning) << "Could not create folder " << path << " - " << GetLastErrorString();
-		return false;
-	}
-}
-
-
-std::string getCurrentDirectory()
-{
-	wchar_t curDir[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, curDir);
-	return Utils::convertUTF16ToUTF8(curDir);
-}
-
-
-void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
-{
-	if (!exists(fs::u8path(path))) return;
-	if (fs::is_empty(fs::u8path(path))) return;
-	for (auto& p : fs::directory_iterator(fs::u8path(path)))
-	{
-		if (!p.is_directory())
-		{
-			fileNames.insert(p.path().filename().string());
-		}
-			
-	}
-}
-
-
-void GetAllSubfolders(const std::string& path, std::set<std::string>& subfolders)
-{
-	WIN32_FIND_DATA findData;
-	HANDLE findHandle = FindFirstFileW(convertUTF8ToUTF16(path + "/*").c_str(), &findData);
-	if (findHandle == INVALID_HANDLE_VALUE)
-	{
-		return;
-	}
-	do
-	{
-		if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
-			subfolders.insert(convertUTF16ToUTF8(findData.cFileName));
-		}
-	} while (FindNextFileW(findHandle, &findData) != 0);
-	FindClose(findHandle);
-}
-
-
-void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& filenames)
-{
+	std::set<std::string> fileNames;
 	for (auto& p : fs::recursive_directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
 		{
-			auto lastSlash = p.path().native().find_last_of(L"\\");
+			auto lastSlash = p.path().native().find_last_of(L'\\');
 			auto tempDir = p.path().native().substr(0, lastSlash);
-			lastSlash = tempDir.find_last_of(L"\\");
+			lastSlash = tempDir.find_last_of(L'\\');
 			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
 			auto returnName = "/" + convertUTF16ToUTF8(dirName) + "/" + p.path().filename().string();
-			filenames.insert(returnName);
+			fileNames.insert(returnName);
 		}
 	}
-}
-
-
-bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
-{
-    const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath));    
-    if (success) return true;
-        LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
-    return false;
-}
-
-
-bool copyFolder(const std::string& sourceFolder, const std::string& destFolder)
-{
-	std::wstring wideSource = convertUTF8ToUTF16(sourceFolder);
-	wchar_t* from = new wchar_t[wideSource.size() + 2];
-	wcscpy(from, wideSource.c_str());
-	from[wideSource.size() + 1] = '\0';
-
-	std::wstring wideDest = convertUTF8ToUTF16(destFolder);
-	wchar_t* to = new wchar_t[wideDest.size() + 1];
-	wcscpy(to, wideDest.c_str());
-	to[wideDest.size() + 1] = '\0';
-
-	SHFILEOPSTRUCT fileOptStruct;
-	fileOptStruct.hwnd = NULL;
-	fileOptStruct.wFunc = FO_COPY;
-	fileOptStruct.pFrom = from;
-	fileOptStruct.pTo = to;
-	fileOptStruct.fFlags	= FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
-
-	const int result = SHFileOperation(&fileOptStruct);
-	if (result != 0)
-	{
-		Log(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Error code: " << result;
-	}
-	else if (fileOptStruct.fAnyOperationsAborted)
-	{
-		Log(LogLevel::Error) << "Could not copy " << sourceFolder << " to " << destFolder << ". Operation aborted";
-	}
-
-	delete[] from;
-	delete[] to;
-	return true;
-}
-
-
-bool renameFolder(const std::string& sourceFolder, const std::string& destFolder)
-{
-	std::wstring wideSource = convertUTF8ToUTF16(sourceFolder);
-	wchar_t* from = new wchar_t[wideSource.size() + 2];
-	wcscpy(from, wideSource.c_str());
-	from[wideSource.size() + 1] = '\0';
-
-	std::wstring wideDest = convertUTF8ToUTF16(destFolder);
-	wchar_t* to = new wchar_t[wideDest.size() + 1];
-	wcscpy(to, wideDest.c_str());
-	to[wideDest.size() + 1] = '\0';
-
-	SHFILEOPSTRUCT fileOptStruct;
-	fileOptStruct.hwnd = NULL;
-	fileOptStruct.wFunc = FO_MOVE;
-	fileOptStruct.pFrom = from;
-	fileOptStruct.pTo = to;
-	fileOptStruct.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI | FOF_SILENT;
-
-	int result = SHFileOperation(&fileOptStruct);
-	if (result != 0)
-	{
-		Log(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Error code: " << result;
-		return false;
-	}
-	else if (fileOptStruct.fAnyOperationsAborted)
-	{
-		Log(LogLevel::Error) << "Could not rename " << sourceFolder << " to " << destFolder << ". Operation aborted.";
-		return false;
-	}
-
-	delete[] from;
-	delete[] to;
-	return doesFolderExist(destFolder);
-}
-
-
-bool DoesFileExist(const std::string& path)
-{
-	const auto tempPath = fs::u8path(path);
-	if (exists(tempPath) && !is_directory(tempPath)) return true;
-	return false;
-}
-
-
-bool doesFolderExist(const std::string& path)
-{
-	const auto tempPath = fs::u8path(path);
-	if (exists(tempPath) && is_directory(tempPath)) return true;
-	return false;
+	return fileNames;
 }
 
 
@@ -211,37 +53,6 @@ std::string GetLastErrorString()
 		return "Unknown error";
 	}
 }
-
-
-bool deleteFolder(const std::string& folder)
-{
-	std::wstring wideFolder = convertUTF8ToUTF16(folder);
-	wchar_t* folderStr = new wchar_t[wideFolder.size() + 2];
-	wcscpy(folderStr, wideFolder.c_str());
-	folderStr[wideFolder.size() + 1] = '\0';
-
-	SHFILEOPSTRUCT fileOptStruct;
-	fileOptStruct.hwnd	= NULL;
-	fileOptStruct.wFunc	= FO_DELETE;
-	fileOptStruct.pFrom	= folderStr;
-	fileOptStruct.fFlags	= FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
-
-	const int result = SHFileOperation(&fileOptStruct);
-	if (result != 0)
-	{
-		Log(LogLevel::Error) << "Could not delete " << folder << ". Error code: " << result;
-		return false;
-	}
-	else if (fileOptStruct.fAnyOperationsAborted)
-	{
-		Log(LogLevel::Error) << "Could not delete " << folder << ". Operation aborted.";
-		return false;
-	}
-
-	delete[] folderStr;
-	return true;
-}
-
 
 std::string convertUTF8ToASCII(const std::string& UTF8)
 {
