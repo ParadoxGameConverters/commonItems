@@ -288,9 +288,7 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 */
 std::string GetLastErrorString()
 {
-	char sys_msg[300];
-	strerror_s(sys_msg, sizeof sys_msg, errno);
-	return std::string(sys_msg);
+	return strerror(errno);
 }
 
 bool deleteFile(const std::string& unresolvedFile)
