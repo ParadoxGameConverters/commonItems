@@ -1,5 +1,6 @@
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
+#include <codecvt>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -18,9 +19,9 @@ bool TryCreateFolder(const std::string& path)
 	return false;
 }
 
-std::string GetCurrentDirectoryString()
+std::wstring GetCurrentDirectoryWString()
 {
-	return fs::current_path().string();
+	return fs::current_path().wstring();
 }
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
@@ -39,7 +40,7 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 }
 
 std::set<std::string> GetAllSubfolders(const std::string& path)
-{	
+{
 	std::set<std::string> subFolders;
 	if (!fs::exists(fs::u8path(path)))
 		return subFolders;
@@ -136,5 +137,12 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 
 	return asciiPath;
 }
-	
+
+std::string UTF16ToUTF8(const std::wstring& UTF16)
+{
+	std::u16string u16str(UTF16.begin(), UTF16.end());
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+	return conversion.to_bytes(u16str);
+}
+
 } // namespace Utils
