@@ -18,7 +18,7 @@ bool TryCreateFolder(const std::string& path)
 	return false;
 }
 
-std::string GetCurrentDirectory()
+std::string GetCurrentDirectoryString()
 {
 	return fs::current_path().string();
 }
