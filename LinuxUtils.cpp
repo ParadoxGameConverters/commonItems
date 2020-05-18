@@ -543,16 +543,6 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 }
 
 
-/*
-	Warning: The input string should not be encoded in UTF-16 but in the system dependent wchar_t encoding
-	see convertUTF8ToUTF16 for full explanation
-*/
-std::string convertUTF16ToUTF8(const std::wstring& UTF16)
-{
-	using namespace std;
-	return ConvertString<wstring, string>("wchar_t", "UTF-8", UTF16);
-}
-
 std::string convert8859_15ToUTF8(const std::string& input)
 {
 	using namespace std;
@@ -611,6 +601,12 @@ std::string convertToUTF8(const std::wstring& input)
 {
 	using namespace std;
 	return ConvertString<wstring, string>("wchar_t", "UTF-8", input);
+}
+
+std::optional<std::string> getSteamInstallPath(const std::string& steamID)
+{
+	//TODO: Write some actual code for this when able.
+	return std::nullopt;
 }
 
 } // namespace Utils

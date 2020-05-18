@@ -49,26 +49,27 @@ namespace Utils
 {
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path);
-[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void
+[[deprecated("Use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void
 GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
 {
 	fileNames = GetAllFilesInFolder(path);
 }
 std::set<std::string> GetAllSubfolders(const std::string& path);
-[[deprecated("Depreciated; use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void
+[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void
 GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
 {
 	subFolders = GetAllSubfolders(path);
 }
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
-[[deprecated("Depreciated; use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void
+[[deprecated("Use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void
 GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
 {
 	fileNames = GetAllFilesInFolderRecursive(path);
 }
 
-std::string GetCurrentDirectoryString();
+std::wstring GetCurrentDirectoryWString();
+std::optional<std::wstring> getSteamInstallPath(const std::string& steamID);
 
 bool TryCreateFolder(const std::string& path);
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
@@ -86,7 +87,12 @@ bool DeleteFolder(const std::string& folder);
 std::string convertUTF8ToASCII(const std::string& UTF8);
 std::string convertUTF8To8859_15(const std::string& UTF8);
 std::string convertUTF8ToWin1252(const std::string& UTF8);
-std::string convertUTF16ToUTF8(const std::wstring& UTF16);
+std::string UTF16ToUTF8(const std::wstring& UTF16);
+[[deprecated("Use UTF16ToUTF8")]] inline std::string convertUTF16ToUTF8(const std::wstring& UTF16)
+{
+	return UTF16ToUTF8(UTF16);
+}
+
 std::string convert8859_15ToASCII(const std::string& input);
 std::string convert8859_15ToUTF8(const std::string& input);
 std::wstring convert8859_15ToUTF16(const std::string& input);
