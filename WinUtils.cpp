@@ -226,25 +226,6 @@ std::string convertToUTF8(const std::wstring& input)
 	return convertUTF16ToUTF8(input);
 }
 
-
-std::string normalizeUTF8Path(const std::string& utf_8_path)
-{
-	std::string asciiPath = convertUTF8ToASCII(utf_8_path);
-	std::replace(asciiPath.begin(), asciiPath.end(), '/', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '\\', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), ':', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '*', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '?', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '\"', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '<', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '>', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '|', '_');
-	asciiPath.erase(std::remove(asciiPath.begin(), asciiPath.end(), '\t'), asciiPath.end());
-
-	return asciiPath;
-};
-
-
 void WriteToConsole(LogLevel level, const std::string& logMessage)
 {
 	if (level == LogLevel::Debug)
