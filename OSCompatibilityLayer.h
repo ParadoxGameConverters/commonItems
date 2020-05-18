@@ -68,7 +68,7 @@ GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fil
 	fileNames = GetAllFilesInFolderRecursive(path);
 }
 
-std::string GetCurrentDirectory();
+std::string GetCurrentDirectoryString();
 
 bool TryCreateFolder(const std::string& path);
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
