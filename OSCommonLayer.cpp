@@ -23,7 +23,17 @@ bool TryCreateFolder(const std::string& path)
 
 std::wstring GetCurrentDirectoryWString()
 {
-	return fs::current_path().wstring();
+    // Tried straight returning wstring, but on Linux it will break if filesystem uses characters
+    // outside ascii, apparently inherent conversion is broken.
+    try {
+        auto path = fs::current_path().string();
+        return convertUTF8ToUTF16(path);
+    }
+    catch (std::exception& e)
+    {
+        Log(LogLevel::Error) << "Cannot determine current path; " << e.what();
+        return std::wstring();
+    }
 }
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
