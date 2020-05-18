@@ -603,7 +603,7 @@ std::string convertToUTF8(const std::wstring& input)
 	return ConvertString<wstring, string>("wchar_t", "UTF-8", input);
 }
 
-std::optional<std::string> getSteamInstallPath(const std::string& steamID)
+std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 {
 	//TODO: Write some actual code for this when able.
 	return std::nullopt;
