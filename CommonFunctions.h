@@ -8,5 +8,6 @@ std::string replaceCharacter(std::string fileName, char character);
 std::string cardinalToOrdinal(int cardinal);
 [[deprecated("Use cardinalToOrdinal (lower case 'c')")]] inline std::string CardinalToOrdinal(const int cardinal) { return cardinalToOrdinal(cardinal); }
 std::string cardinalToRoman(int number);
+std::string normalizeStringPath(const std::string& stringPath);
 
 #endif // COMMON_FUNCTIONS_H

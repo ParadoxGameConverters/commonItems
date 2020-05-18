@@ -120,4 +120,21 @@ bool DeleteFolder(const std::string& folder)
 	return false;
 }
 
+std::string normalizeUTF8Path(const std::string& utf_8_path)
+{
+	std::string asciiPath = convertUTF8ToASCII(utf_8_path);
+	std::replace(asciiPath.begin(), asciiPath.end(), '/', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '\\', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), ':', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '*', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '?', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '\"', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '<', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '>', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '|', '_');
+	asciiPath.erase(std::remove(asciiPath.begin(), asciiPath.end(), '\t'), asciiPath.end());
+
+	return asciiPath;
+}
+	
 } // namespace Utils

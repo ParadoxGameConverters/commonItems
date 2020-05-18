@@ -613,8 +613,4 @@ std::string convertToUTF8(const std::wstring& input)
 	return ConvertString<wstring, string>("wchar_t", "UTF-8", input);
 }
 
-std::string normalizeUTF8Path(const std::string& utf_8_path)
-{
-	return utf_8_path;
-};
 } // namespace Utils

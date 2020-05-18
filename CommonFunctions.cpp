@@ -1,5 +1,6 @@
 #include "CommonFunctions.h"
 #include <algorithm>
+#include "OSCompatibilityLayer.h"
 
 std::string trimPath(const std::string& fileName)
 {
@@ -60,5 +61,14 @@ std::string cardinalToRoman(int number)
 		}
 		i--;
 	}
+	return toReturn;
+}
+
+std::string normalizeStringPath(const std::string& stringPath)
+{
+	std::string toReturn = Utils::normalizeUTF8Path(stringPath);
+	toReturn = replaceCharacter(toReturn, '-');
+	toReturn = replaceCharacter(toReturn, ' ');
+
 	return toReturn;
 }
