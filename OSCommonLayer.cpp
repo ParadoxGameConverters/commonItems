@@ -2,6 +2,8 @@
 #include "OSCompatibilityLayer.h"
 #include <codecvt>
 #include <filesystem>
+#include <algorithm>
+
 namespace fs = std::filesystem;
 
 namespace Utils
