@@ -218,7 +218,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[WARNING] Expected an int, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected an int, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -374,7 +374,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[WARNING] Expected a double, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected a double, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 
