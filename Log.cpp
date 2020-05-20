@@ -35,7 +35,8 @@ static const std::map<LogLevel, std::string> logLevelStrings = {{LogLevel::Error
 	 {LogLevel::Warning, " [WARNING] "},
 	 {LogLevel::Info, "    [INFO] "},
 	 {LogLevel::Debug, "   [DEBUG]     "},
-    {LogLevel::Progress, "[PROGRESS] "}};
+	 {LogLevel::Progress, "[PROGRESS] "}};
+
 void Log::WriteToFile(const LogLevel level, const std::string& logMessage)
 {
 	std::ofstream logFile("log.txt", std::ofstream::app);
