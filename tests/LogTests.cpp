@@ -14,7 +14,7 @@ TEST(Log_Tests, ErrorMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("  [ERROR] Error message\n", log.str());
+	ASSERT_EQ("   [ERROR] Error message\n", log.str());
 }
 
 
@@ -28,7 +28,7 @@ TEST(Log_Tests, WarningMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[WARNING] Warning message\n", log.str());
+	ASSERT_EQ(" [WARNING] Warning message\n", log.str());
 }
 
 
@@ -42,7 +42,7 @@ TEST(Log_Tests, InfoMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("   [INFO] Info message\n", log.str());
+	ASSERT_EQ("    [INFO] Info message\n", log.str());
 }
 
 
@@ -56,5 +56,18 @@ TEST(Log_Tests, DebugMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("  [DEBUG]     Debug message\n", log.str());
+	ASSERT_EQ("   [DEBUG]     Debug message\n", log.str());
+}
+
+TEST(Log_Tests, ProgressMessagesLogged)
+{
+	const std::stringstream log;
+	const auto stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	Log(LogLevel::Progress) << "Progress message";
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ("[PROGRESS] Progress message\n", log.str());
 }
