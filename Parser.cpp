@@ -54,12 +54,12 @@ void commonItems::parser::parseStream(std::istream& theStream)
 
 	auto value = false; // tracker to indicate we we reached the value part of key=value pair
 	std::string tokensSoFar;
-	
+
 	while (true)
 	{
 		auto token = getNextToken(theStream);
 		if (token)
-		{			
+		{
 			tokensSoFar += *token;
 			if (*token == "=")
 			{
@@ -70,7 +70,8 @@ void commonItems::parser::parseStream(std::istream& theStream)
 				}
 				else // leaving else to be noticeable.
 				{
-					// value is positive, meaning we were at value, and now we're hitting an equal. This is bad. We need to manually fast-forward to brace-lvl 0 and die.
+					// value is positive, meaning we were at value, and now we're hitting an equal. This is bad. We need to
+					// manually fast-forward to brace-lvl 0 and die.
 					char inputChar;
 					while (braceDepth)
 					{
@@ -92,7 +93,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 			{
 				braceDepth--;
 				if (braceDepth == 0)
-					break;					
+					break;
 			}
 			else
 				Log(LogLevel::Warning) << "Unknown token while parsing stream: " << *token;
@@ -229,7 +230,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			if (!inQuotes)
 			{
 				if (!toReturn.empty())
-					break;					
+					break;
 			}
 			else
 			{
