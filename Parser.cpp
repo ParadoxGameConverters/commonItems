@@ -52,7 +52,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
 	}
 
-	auto value = false; // tracker to indicate we we reached the value part of key=value pair
+	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
 	std::string tokensSoFar;
 
 	while (true)

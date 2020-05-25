@@ -545,7 +545,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	class TestClass: commonItems::parser
 	{
 	public:
-		TestClass(std::istream& theStream)
+		explicit TestClass(std::istream& theStream)
 		{
 			registerKeyword("test", [this](const std::string& unused, std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
@@ -559,7 +559,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	class WrapperClass: commonItems::parser
 	{
 	  public:
-		WrapperClass(std::istream& theStream)
+		explicit WrapperClass(std::istream& theStream)
 		{
 			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
 				const TestClass newtest(theStream);
@@ -588,7 +588,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	class WrapperClass: commonItems::parser
 	{
 	  public:
-		WrapperClass(std::istream& theStream)
+		explicit WrapperClass(std::istream& theStream)
 		{
 			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
