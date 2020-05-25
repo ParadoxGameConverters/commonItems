@@ -539,3 +539,77 @@ TEST(ParserHelper_Tests, AssignmentItemsWithinBracesToKeyValuePairs)
 	const auto expectedAssignments = std::map<std::string, std::string>{{"id", "180"}, {"type", "46"}};
 	ASSERT_EQ(expectedAssignments, theAssignments.getAssignments());
 }
+
+TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
+{
+	class TestClass: commonItems::parser
+	{
+	public:
+		TestClass(std::istream& theStream)
+		{
+			registerKeyword("test", [this](const std::string& unused, std::istream& theStream) {
+				const commonItems::singleString testStr(theStream);
+				test = testStr.getString() == "yes";
+			});
+			parseStream(theStream);
+		}
+		bool test = false;
+	};
+	
+	class WrapperClass: commonItems::parser
+	{
+	  public:
+		WrapperClass(std::istream& theStream)
+		{
+			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
+				const TestClass newtest(theStream);
+				themap[thekey] = newtest.test;
+			});
+			parseStream(theStream);
+		}
+		std::map<std::string, bool> themap;
+	};
+
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "a = { test = yes }\n";
+	input << "b = { = yes }\n";
+	input << "c = { test = yes }";
+
+	auto wrapper = WrapperClass(input);
+	
+	ASSERT_TRUE(wrapper.themap["a"]);
+	ASSERT_FALSE(wrapper.themap["b"]);
+	ASSERT_TRUE(wrapper.themap["c"]);
+}
+
+TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
+{
+	class WrapperClass: commonItems::parser
+	{
+	  public:
+		WrapperClass(std::istream& theStream)
+		{
+			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
+				const commonItems::singleString testStr(theStream);
+				themap[thekey] = testStr.getString() == "yes";
+			});
+			parseStream(theStream);
+		}
+		std::map<std::string, bool> themap;
+	};
+
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "a = yes\n";
+	input << "= yes\n";
+	input << "c = yes\n";
+	input << "d = yes\n";
+
+	auto wrapper = WrapperClass(input);
+
+	ASSERT_TRUE(wrapper.themap["a"]);
+	ASSERT_FALSE(wrapper.themap["b"]);
+	ASSERT_TRUE(wrapper.themap["c"]);
+	ASSERT_TRUE(wrapper.themap["d"]);
+}
