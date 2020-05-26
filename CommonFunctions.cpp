@@ -13,7 +13,7 @@ std::string trimPath(const std::string& fileName)
 
 std::string trimExtension(const std::string& fileName)
 {
-	const int length = fileName.find_last_of('.');
+	const auto length = fileName.find_last_of('.');
 	return fileName.substr(0, length);
 }
 
