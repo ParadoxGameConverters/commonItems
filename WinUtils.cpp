@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <iostream>
 #include <list>
-#include <algorithm>
 #include "Log.h"
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -222,7 +221,7 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 		const BOOL success = GetConsoleScreenBufferInfo(console, &oldConsoleInfo);	// whether or not the console data could be retrieved
 		if (success)
 		{
-			WORD color = 0x0;
+			WORD color;
 			switch (level)
 			{
 				case LogLevel::Error:
@@ -244,7 +243,7 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 			}
 			SetConsoleTextAttribute(console, color);
 			DWORD bytesWritten = 0;
-			WriteConsoleW(console, Utils::convertUTF8ToUTF16(logMessage).c_str(), logMessage.size(), &bytesWritten, NULL);
+			WriteConsoleW(console, Utils::convertUTF8ToUTF16(logMessage).c_str(), static_cast<DWORD>(logMessage.size()), &bytesWritten, nullptr);
 
 			// Restore old console color.
 			SetConsoleTextAttribute(console, oldConsoleInfo.wAttributes);
