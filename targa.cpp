@@ -175,7 +175,7 @@ wchar_t * tga_conv_filename(const char * src)
             return 0;
         }
     }
-    return dst;
+    return dst_org;
 }
 #endif
 
