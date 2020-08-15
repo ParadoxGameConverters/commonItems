@@ -151,26 +151,27 @@ const char *tga_error(const tga_result errcode)
 wchar_t * tga_conv_filename(const char * src)
 {
     wchar_t * dst = (wchar_t *) calloc(strlen(src)+1, 2);
+    wchar_t * dst_org = dst;
     if (!dst)
         return 0;
     while (*src)
     {
         if (! (*src & 0x80))
             *dst++ = *src++;
-        else if (*src & 0xE0 == 0xC0)
+        else if ((*src & 0xE0) == 0xC0)
         {
             *dst = (wchar_t)(*src++ & 0x1F) << 6;
-            *dst++ = (wchar_t)(*src++ & 0x3F);
+            *dst++ |= (wchar_t)(*src++ & 0x3F);
         }
-        else if (*src & 0xF0 == 0xE0)
+        else if ((*src & 0xF0) == 0xE0)
         {
             *dst = (wchar_t)(*src++ & 0xF) << 12;
-            *dst = (wchar_t)(*src++ & 0x3F) << 6;
-            *dst++ = (wchar_t)(*src++ & 0x3F);
+            *dst |= (wchar_t)(*src++ & 0x3F) << 6;
+            *dst++ |= (wchar_t)(*src++ & 0x3F);
         }
         else
         {
-            free(dst);
+            free(dst_org);
             return 0;
         }
     }
