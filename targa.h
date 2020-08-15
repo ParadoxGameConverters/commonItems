@@ -133,7 +133,8 @@ typedef enum {
     TGAERR_NOT_CMAP,
     TGAERR_RLE,
     TGAERR_INDEX_RANGE,
-    TGAERR_MONO
+    TGAERR_MONO,
+    TGAERR_UTF
 } tga_result;
 
 const char *tga_error(const tga_result errcode);

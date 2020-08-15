@@ -132,10 +132,51 @@ const char *tga_error(const tga_result errcode)
         return "color map index out of range";
     case TGAERR_MONO:
         return "image is mono";
+    case TGAERR_UTF:
+        return "character in filename not supported";
     default:
         return "unknown error code";
     }
 }
+
+
+
+/* ---------------------------------------------------------------------------
+ * Convert a filename from UTF-8 to UTF-16 as used by Windows.
+ * Calling function is responsible for calling free() on returned string.
+ *
+ * Returns: pointer to UTF-16 string on success, null on failure.
+ */
+#ifdef _WIN32
+wchar_t * tga_conv_filename(const char * src)
+{
+    wchar_t * dst = (wchar_t *) calloc(strlen(src)+1, 2);
+    if (!dst)
+        return 0;
+    while (*src)
+    {
+        if (! (*src & 0x80))
+            *dst++ = *src++;
+        else if (*src & 0xE0 == 0xC0)
+        {
+            *dst = (wchar_t)(*src++ & 0x1F) << 6;
+            *dst++ = (wchar_t)(*src++ & 0x3F);
+        }
+        else if (*src & 0xF0 == 0xE0)
+        {
+            *dst = (wchar_t)(*src++ & 0xF) << 12;
+            *dst = (wchar_t)(*src++ & 0x3F) << 6;
+            *dst++ = (wchar_t)(*src++ & 0x3F);
+        }
+        else
+        {
+            free(dst);
+            return 0;
+        }
+    }
+    return dst;
+}
+#endif
 
 
 
@@ -148,7 +189,15 @@ const char *tga_error(const tga_result errcode)
 tga_result tga_read(tga_image *dest, const char *filename)
 {
     tga_result result;
+#ifdef _WIN32
+    wchar_t * convname = tga_conv_filename(filename);
+    if (! convname)
+        return TGAERR_UTF;
+    FILE *fp = _wfopen(convname, L"rb");
+    free(convname);
+#else
     FILE *fp = fopen(filename, "rb");
+#endif
     if (fp == NULL) return TGAERR_FOPEN;
     result = tga_read_from_FILE(dest, fp);
     fclose(fp);
@@ -342,7 +391,15 @@ static tga_result tga_read_rle(tga_image *dest, FILE *fp)
 tga_result tga_write(const char *filename, const tga_image *src)
 {
     tga_result result;
+#ifdef _WIN32
+    wchar_t * convname = tga_conv_filename(filename);
+    if (!convname)
+        return TGAERR_UTF;
+    FILE *fp = _wfopen(convname, L"wb");
+    free(convname);
+#else
     FILE *fp = fopen(filename, "wb");
+#endif
     if (fp == NULL) return TGAERR_FOPEN;
     result = tga_write_to_FILE(fp, src);
     fclose(fp);
