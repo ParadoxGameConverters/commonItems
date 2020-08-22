@@ -81,9 +81,17 @@ TEST(NewColor_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColors)
 {
 	std::stringstream input;
 	input << "= { 2 4 }";
-	const commonItems::newColor testColor(input);
 
-	ASSERT_FALSE(true);
+	ASSERT_THROW(commonItems::newColor{input}, std::runtime_error);
+}
+
+
+TEST(NewColor_Tests, ColorCanBeOnlyFactoryInitializedFromStreamWithAtLeastThreeColors)
+{
+	std::stringstream input;
+	input << "= { 2 4 }";
+
+	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
 }
 
 

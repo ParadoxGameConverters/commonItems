@@ -8,14 +8,15 @@
 
 commonItems::newColor::newColor(std::istream& theStream)
 {
-	const intList rgbList(theStream);
-	const auto rgb = rgbList.getInts();
-	if (rgb.size() == 3)
+	const auto rgb = intList{theStream}.getInts();
+	if (rgb.size() != 3)
 	{
-		components[0] = rgb[0];
-		components[1] = rgb[1];
-		components[2] = rgb[2];
+		throw std::runtime_error("Color has wrong number of components");
 	}
+
+	components[0] = rgb[0];
+	components[1] = rgb[1];
+	components[2] = rgb[2];
 }
 
 
@@ -51,12 +52,11 @@ std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 
 commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& theStream)
 {
-	const intList rgbList(theStream);
-	const auto rgb = rgbList.getInts();
-	if (rgb.size() == 3)
+	const auto rgb = intList{theStream}.getInts();
+	if (rgb.size() != 3)
 	{
-		return newColor(rgb[0], rgb[1], rgb[2]);
+		throw std::runtime_error("Color has wrong number of components");
 	}
 
-	return newColor{};
+	return newColor(rgb[0], rgb[1], rgb[2]);
 }
