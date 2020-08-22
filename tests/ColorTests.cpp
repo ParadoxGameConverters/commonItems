@@ -139,32 +139,6 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotesWithColorSpacePrefix)
 }
 
 
-TEST(Color_Tests, ColorCanBeFactoryInitializedFromStreamWithColorSpacePrefix)
-{
-	std::stringstream input;
-	input << "= rgb { 2 4 8 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input, true);
-
-	ASSERT_TRUE(testColor);
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
-}
-
-
-TEST(Color_Tests, ColorCanBeFactoryInitializedFromStreamWithQuotesWithColorSpacePrefix)
-{
-	std::stringstream input;
-	input << R"(= rgb { "2" "4" "8" })";
-	const auto testColor = commonItems::Color::Factory::getColor(input, true);
-
-	ASSERT_TRUE(testColor);
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
-}
-
-
 TEST(Color_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColorsWithColorSpacePrefix)
 {
 	std::stringstream input;
