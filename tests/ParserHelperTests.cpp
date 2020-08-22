@@ -613,3 +613,39 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	ASSERT_TRUE(wrapper.themap["c"]);
 	ASSERT_TRUE(wrapper.themap["d"]);
 }
+
+TEST(ParserHelper_Tests, singleRGBDefaultsToZeros)
+{
+	const commonItems::singleRGB theRGB;
+
+	const auto expectedDoubles = std::vector<double>{0, 0, 0};
+
+	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
+}
+
+TEST(ParserHelper_Tests, singleRGBAddsDoublesFromBracedBlock)
+{
+	std::stringstream input{" = rgb { 100 7 0.5 }"};
+
+	const commonItems::singleRGB theRGB(input);
+
+	const auto expectedDoubles = std::vector<double>{100, 7, 0.5};
+	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
+}
+
+TEST(ParserHelper_Tests, singleRGBAddsQuotedDoubles)
+{
+	std::stringstream input{R"( = rgb { "100" "7" "0.5" })"};
+
+	const commonItems::singleRGB theRGB(input);
+
+	const auto expectedDoubles = std::vector<double>{100, 7, 0.5};
+	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
+}
+
+TEST(ParserHelper_Tests, singleRGBThrowsLengthError)
+{
+	std::stringstream input{" = rgb { 100 7 }"};
+
+	ASSERT_THROW(const commonItems::singleRGB theRGB(input), std::length_error);
+}

@@ -270,6 +270,17 @@ singleString::singleString(std::istream& theStream)
 }
 
 
+singleRGB::singleRGB(std::istream& theStream)
+{
+	auto equals = getNextTokenWithoutMatching(theStream);
+	auto theRgbString = getNextTokenWithoutMatching(theStream);
+
+	commonItems::doubleList rgb(theStream);
+	doubles = rgb.getDoubles();
+	if (doubles.size() != 3) throw std::length_error("RGB must have 3 colors");
+}
+
+
 stringOfObject::stringOfObject(std::istream& theStream)
 {
 	auto braceDepth = 0;
