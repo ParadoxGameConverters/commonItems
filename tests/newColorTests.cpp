@@ -93,7 +93,7 @@ TEST(NewColor_Tests, ColorCanBeOutput)
 	std::stringstream output;
 	output << testColor;
 
-	ASSERT_EQ("2 4 8", output.str());
+	ASSERT_EQ("= { 2 4 8 }", output.str());
 }
 
 

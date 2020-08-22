@@ -31,7 +31,7 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 
 std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 {
-	out << color.components[0] << ' ' << color.components[1] << ' ' << color.components[2];
+	out << "= { " << color.components[0] << ' ' << color.components[1] << ' ' << color.components[2] << " }";
 	return out;
 }
 
