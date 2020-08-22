@@ -4,7 +4,7 @@
 
 
 
-TEST(ParserHelper_Tests, AbsorbBOMAbsorbsBOM)
+TEST(Parser_Tests, AbsorbBOMAbsorbsBOM)
 {
 	std::stringstream input{"\xEF\xBB\xBFMore text"};
 	commonItems::absorbBOM(input);
@@ -15,7 +15,7 @@ TEST(ParserHelper_Tests, AbsorbBOMAbsorbsBOM)
 }
 
 
-TEST(ParserHelper_Tests, AbsorbBOMDoesNotAbsorbNonBOM)
+TEST(Parser_Tests, AbsorbBOMDoesNotAbsorbNonBOM)
 {
 	std::stringstream input{"More text"};
 	commonItems::absorbBOM(input);

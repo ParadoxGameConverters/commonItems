@@ -52,13 +52,41 @@ void commonItems::parser::parseStream(std::istream& theStream)
 		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
 	}
 
+	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
+	std::string tokensSoFar;
+
 	while (true)
 	{
 		auto token = getNextToken(theStream);
 		if (token)
 		{
+			tokensSoFar += *token;
 			if (*token == "=")
-				continue;
+			{
+				if (!value)
+				{
+					value = true; // swapping to value part.
+					continue;
+				}
+				else // leaving else to be noticeable.
+				{
+					// value is positive, meaning we were at value, and now we're hitting an equal. This is bad. We need to
+					// manually fast-forward to brace-lvl 0 and die.
+					char inputChar;
+					while (braceDepth)
+					{
+						theStream >> inputChar;
+						if (inputChar == '{')
+							braceDepth++;
+						if (inputChar == '}')
+							braceDepth--;
+						if (!isspace(inputChar))
+							tokensSoFar += inputChar;
+					}
+					Log(LogLevel::Warning) << "Broken token syntax at " << tokensSoFar;
+					return;
+				}
+			}
 			if (*token == "{")
 				braceDepth++;
 			else if (*token == "}")
@@ -103,7 +131,6 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 std::optional<std::string> commonItems::parser::getNextToken(std::istream& theStream)
 {
 	theStream >> std::noskipws;
-
 	std::string toReturn;
 
 	auto gotToken = false;

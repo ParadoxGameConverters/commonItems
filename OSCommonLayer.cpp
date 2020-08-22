@@ -1,6 +1,9 @@
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
+#include <codecvt>
 #include <filesystem>
+#include <algorithm>
+
 namespace fs = std::filesystem;
 
 namespace Utils
@@ -18,9 +21,19 @@ bool TryCreateFolder(const std::string& path)
 	return false;
 }
 
-std::string GetCurrentDirectory()
+std::wstring GetCurrentDirectoryWString()
 {
-	return fs::current_path().string();
+    // Tried straight returning wstring, but on Linux it will break if filesystem uses characters
+    // outside ascii, apparently inherent conversion is broken.
+    try {
+        auto path = fs::current_path().string();
+        return convertUTF8ToUTF16(path);
+    }
+    catch (std::exception& e)
+    {
+        Log(LogLevel::Error) << "Cannot determine current path; " << e.what();
+        return std::wstring();
+    }
 }
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
@@ -39,7 +52,7 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 }
 
 std::set<std::string> GetAllSubfolders(const std::string& path)
-{	
+{
 	std::set<std::string> subFolders;
 	if (!fs::exists(fs::u8path(path)))
 		return subFolders;
@@ -55,7 +68,7 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
-	const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath));
+	const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
 	if (success)
 		return true;
 	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - "
@@ -118,6 +131,30 @@ bool DeleteFolder(const std::string& folder)
 		return true;
 	Log(LogLevel::Error) << "Could not delete folder: " << folder << " " << GetLastErrorString();
 	return false;
+}
+
+std::string normalizeUTF8Path(const std::string& utf_8_path)
+{
+	std::string asciiPath = convertUTF8ToASCII(utf_8_path);
+	std::replace(asciiPath.begin(), asciiPath.end(), '/', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '\\', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), ':', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '*', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '?', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '\"', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '<', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '>', '_');
+	std::replace(asciiPath.begin(), asciiPath.end(), '|', '_');
+	asciiPath.erase(std::remove(asciiPath.begin(), asciiPath.end(), '\t'), asciiPath.end());
+
+	return asciiPath;
+}
+
+std::string UTF16ToUTF8(const std::wstring& UTF16)
+{
+	std::u16string u16str(UTF16.begin(), UTF16.end());
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+	return conversion.to_bytes(u16str);
 }
 
 } // namespace Utils

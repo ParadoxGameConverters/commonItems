@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include <iostream>
 #include <list>
-#include <algorithm>
 #include "Log.h"
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -24,7 +23,7 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 			auto tempDir = p.path().native().substr(0, lastSlash);
 			lastSlash = tempDir.find_last_of(L'\\');
 			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
-			auto returnName = "/" + convertUTF16ToUTF8(dirName) + "/" + p.path().filename().string();
+			auto returnName = "/" + UTF16ToUTF8(dirName) + "/" + p.path().filename().string();
 			fileNames.insert(returnName);
 		}
 	}
@@ -46,7 +45,7 @@ std::string GetLastErrorString()
 		NULL);
 	if (success)
 	{
-		return convertUTF16ToUTF8(errorBuffer);
+		return UTF16ToUTF8(errorBuffer);
 	}
 	else
 	{
@@ -104,24 +103,6 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 	return returnable;
 }
 
-
-std::string convertUTF16ToUTF8(const std::wstring& UTF16)
-{
-	const int requiredSize = WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, NULL, 0, NULL, NULL);
-	char* utf8array = new char[requiredSize];
-
-	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, utf8array, requiredSize, NULL, NULL))
-	{
-		Log(LogLevel::Error) << "Could not translate string to UTF-8 - " << GetLastErrorString();
-	}
-	std::string returnable(utf8array);
-
-	delete[] utf8array;
-
-	return returnable;
-}
-
-
 std::string convert8859_15ToASCII(const std::string& input)
 {
 	return Utils::convertUTF8ToASCII(Utils::convert8859_15ToUTF8(input));
@@ -130,7 +111,7 @@ std::string convert8859_15ToASCII(const std::string& input)
 
 std::string convert8859_15ToUTF8(const std::string& input)
 {
-	return convertUTF16ToUTF8(convert8859_15ToUTF16(input));
+	return UTF16ToUTF8(convert8859_15ToUTF16(input));
 }
 
 
@@ -153,18 +134,18 @@ std::wstring convert8859_15ToUTF16(const std::string& input)
 
 std::string convertWin1252ToASCII(const std::string& input)
 {
-	return Utils::convertUTF8ToASCII(Utils::convertWin1252ToUTF8(input));
+	return convertUTF8ToASCII(convertWin1252ToUTF8(input));
 }
 
 
 std::string convertWin1252ToUTF8(const std::string& input)
 {
-	return convertUTF16ToUTF8(convertWin1252ToUTF16(input));
+	return UTF16ToUTF8(convertWin1252ToUTF16(input));
 }
 
 std::string convertWin1250ToUTF8(const std::string& input)
 {
-	return convertUTF16ToUTF8(convertWin1250ToUTF16(input));
+	return UTF16ToUTF8(convertWin1250ToUTF16(input));
 }
 
 std::wstring convertWin1250ToUTF16(const std::string& input)
@@ -223,27 +204,8 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 
 std::string convertToUTF8(const std::wstring& input)
 {
-	return convertUTF16ToUTF8(input);
+	return UTF16ToUTF8(input);
 }
-
-
-std::string normalizeUTF8Path(const std::string& utf_8_path)
-{
-	std::string asciiPath = convertUTF8ToASCII(utf_8_path);
-	std::replace(asciiPath.begin(), asciiPath.end(), '/', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '\\', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), ':', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '*', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '?', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '\"', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '<', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '>', '_');
-	std::replace(asciiPath.begin(), asciiPath.end(), '|', '_');
-	asciiPath.erase(std::remove(asciiPath.begin(), asciiPath.end(), '\t'), asciiPath.end());
-
-	return asciiPath;
-};
-
 
 void WriteToConsole(LogLevel level, const std::string& logMessage)
 {
@@ -259,7 +221,7 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 		const BOOL success = GetConsoleScreenBufferInfo(console, &oldConsoleInfo);	// whether or not the console data could be retrieved
 		if (success)
 		{
-			WORD color = 0x0;
+			WORD color;
 			switch (level)
 			{
 				case LogLevel::Error:
@@ -281,7 +243,7 @@ void WriteToConsole(LogLevel level, const std::string& logMessage)
 			}
 			SetConsoleTextAttribute(console, color);
 			DWORD bytesWritten = 0;
-			WriteConsoleW(console, Utils::convertUTF8ToUTF16(logMessage).c_str(), logMessage.size(), &bytesWritten, NULL);
+			WriteConsoleW(console, Utils::convertUTF8ToUTF16(logMessage).c_str(), static_cast<DWORD>(logMessage.size()), &bytesWritten, nullptr);
 
 			// Restore old console color.
 			SetConsoleTextAttribute(console, oldConsoleInfo.wAttributes);
@@ -301,6 +263,43 @@ std::string convertWin1251ToUTF8(const std::string& Win1251)
 std::string convertUTF8toWin1251(const std::string& UTF8)
 {
 	return utf2cp(UTF8);
+}
+
+std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
+{
+	if (steamID.empty())
+		return std::nullopt;
+
+	wchar_t value[255];
+	value[0] = 0;
+	DWORD BufferSize = 8192;
+	std::wstring registryPath = convertUTF8ToUTF16(R"(SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App )" + steamID);
+	const std::wstring installPath = convertUTF8ToUTF16(R"(InstallLocation)");
+
+	RegGetValue(HKEY_LOCAL_MACHINE, registryPath.c_str(), installPath.c_str(), RRF_RT_ANY, nullptr, (PVOID)&value, &BufferSize);
+
+	if (value[0] != 0)
+	{
+		auto result = std::wstring(value);
+		if (result.length() > 2)
+		{
+			return result;
+		}
+	}
+
+	registryPath = convertUTF8ToUTF16(R"(SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App )" + steamID);
+	RegGetValue(HKEY_LOCAL_MACHINE, registryPath.c_str(), installPath.c_str(), RRF_RT_ANY, nullptr, (PVOID)&value, &BufferSize);
+
+	if (value[0] != 0)
+	{
+		auto result = std::wstring(value);
+		if (result.length() > 2)
+		{
+			return result;
+		}
+	}
+
+	return std::nullopt;
 }
 
 } // namespace Utils
