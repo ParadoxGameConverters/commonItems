@@ -1,5 +1,5 @@
-#ifndef COLOR_H
-#define COLOR_H
+#ifndef NEW_COLOR_H
+#define NEW_COLOR_H
 
 
 
@@ -12,13 +12,13 @@
 namespace commonItems
 {
 
-class [[deprecated("Use the version in newColor.h")]] Color: parser
+class newColor: parser
 {
   public:
 	class Factory;
-	Color() = default;
-	Color(const int r, const int g, const int b): initialized(true), c({r, g, b}) {}
-	explicit Color(std::istream& theStream);
+	newColor() = default;
+	newColor(const int r, const int g, const int b): initialized(true), c({r, g, b}) {}
+	explicit newColor(std::istream& theStream);
 
 	void GetRGB(int& r, int& g, int& b) const;
 
@@ -36,7 +36,7 @@ class [[deprecated("Use the version in newColor.h")]] Color: parser
 	[[deprecated("Use RandomlyFluctuate()")]] void RandomlyFlunctuate(const int stdDev) { RandomlyFluctuate(stdDev); }
 	void RandomlyFluctuate(int stdDev);
 
-	friend std::ostream& operator<<(std::ostream&, const Color&);
+	friend std::ostream& operator<<(std::ostream&, const newColor&);
 
   private:
 	bool initialized = false;
@@ -44,17 +44,17 @@ class [[deprecated("Use the version in newColor.h")]] Color: parser
 };
 
 
-std::ostream& operator<<(std::ostream&, const Color&);
+std::ostream& operator<<(std::ostream&, const newColor&);
 
 
-class Color::Factory: parser
+class newColor::Factory: parser
 {
   public:
-	static Color getColor(std::istream& theStream);
+	static newColor getColor(std::istream& theStream);
 };
 
 } // namespace commonItems
 
 
 
-#endif
+#endif // NEW_COLOR_H
