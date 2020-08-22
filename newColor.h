@@ -28,7 +28,6 @@ class newColor: parser
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
 	// bit more (with a much smaller standard deviation).
-	[[deprecated("Use RandomlyFluctuate()")]] void RandomlyFlunctuate(const int stdDev) { RandomlyFluctuate(stdDev); }
 	void RandomlyFluctuate(int stdDev);
 
 	friend std::ostream& operator<<(std::ostream&, const newColor&);
