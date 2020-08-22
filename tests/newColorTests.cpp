@@ -7,9 +7,10 @@ TEST(NewColor_Tests, ColorDefaultsToUninitialized)
 {
 	const commonItems::newColor testColor;
 
-	ASSERT_EQ(0, testColor.r());
-	ASSERT_EQ(0, testColor.g());
-	ASSERT_EQ(0, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(0, r);
+	ASSERT_EQ(0, g);
+	ASSERT_EQ(0, b);
 }
 
 
@@ -17,9 +18,10 @@ TEST(NewColor_Tests, ColorCanBeInitializedWithRGB)
 {
 	const commonItems::newColor testColor(2, 4, 8);
 
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 }
 
 
@@ -29,9 +31,10 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStream)
 	input << "= { 2 4 8 }";
 	const commonItems::newColor testColor(input);
 
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 }
 
 
@@ -41,9 +44,10 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 	input << R"(= { "2" "4" "8" })";
 	const commonItems::newColor testColor(input);
 
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 }
 
 
@@ -53,9 +57,10 @@ TEST(NewColor_Tests, ColorCanBeFactoryInitializedFromStream)
 	input << "= { 2 4 8 }";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 }
 
 
@@ -65,9 +70,10 @@ TEST(NewColor_Tests, ColorCanBeFactoryInitializedFromStreamWithQuotes)
 	input << R"(= { "2" "4" "8" })";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 }
 
 
@@ -78,21 +84,6 @@ TEST(NewColor_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColors)
 	const commonItems::newColor testColor(input);
 
 	ASSERT_FALSE(true);
-}
-
-
-TEST(NewColor_Tests, RGBCanBeExtracted)
-{
-	const commonItems::newColor testColor(2, 4, 8);
-
-	auto r = 1;
-	auto g = 1;
-	auto b = 1;
-	testColor.GetRGB(r, g, b);
-
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
 }
 
 

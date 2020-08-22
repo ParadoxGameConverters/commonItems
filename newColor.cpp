@@ -12,18 +12,10 @@ commonItems::newColor::newColor(std::istream& theStream)
 	const auto rgb = rgbList.getInts();
 	if (rgb.size() == 3)
 	{
-		c[0] = rgb[0];
-		c[1] = rgb[1];
-		c[2] = rgb[2];
+		components[0] = rgb[0];
+		components[1] = rgb[1];
+		components[2] = rgb[2];
 	}
-}
-
-
-void commonItems::newColor::GetRGB(int& r, int& g, int& b) const
-{
-	r = c[0];
-	g = c[1];
-	b = c[2];
 }
 
 
@@ -35,7 +27,7 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 	const auto allChange = std::normal_distribution<double>(0.0, stdDev)(generator);
 
 	std::normal_distribution<double> distribution(0.0, stdDev / 4.0);
-	for (auto& component: c)
+	for (auto& component: components)
 	{
 		component += lround(allChange + distribution(generator));
 		if (component < 0)
@@ -52,7 +44,7 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 
 std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 {
-	out << color.c[0] << ' ' << color.c[1] << ' ' << color.c[2];
+	out << color.components[0] << ' ' << color.components[1] << ' ' << color.components[2];
 	return out;
 }
 
