@@ -15,7 +15,6 @@ commonItems::newColor::newColor(std::istream& theStream)
 		c[0] = rgb[0];
 		c[1] = rgb[1];
 		c[2] = rgb[2];
-		initialized = true;
 	}
 }
 
