@@ -6,6 +6,18 @@
 
 
 
+bool commonItems::newColor::operator==(const newColor& rhs) const
+{
+	return components == rhs.components && colorSpace == rhs.colorSpace;
+}
+
+
+bool commonItems::newColor::operator!=(const newColor& rhs) const
+{
+	return !(*this == rhs);
+}
+
+
 void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(

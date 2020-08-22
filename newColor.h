@@ -23,6 +23,9 @@ class newColor
 	newColor() = default;
 	newColor(const std::array<int, 3> components, ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED): components(components), colorSpace(colorSpace) {}
 
+	bool operator==(const newColor& rhs) const;
+	bool operator!=(const newColor& rhs) const;
+
 	[[nodiscard]] const auto& getComponents() const { return components; }
 	[[nodiscard]] const auto& getColorSpace() const { return colorSpace; }
 

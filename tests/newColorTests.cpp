@@ -170,4 +170,49 @@ TEST(NewColor_Tests, ColorCanBeOutputInHsvColorSpace)
 }
 
 
+TEST(NewColor_Tests, UnequalFromFirstComponent)
+{
+	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorTwo({3, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+
+	ASSERT_NE(colorOne, colorTwo);
+}
+
+
+TEST(NewColor_Tests, UnequalFromSecondComponent)
+{
+	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorTwo({2, 5, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+
+	ASSERT_NE(colorOne, colorTwo);
+}
+
+
+TEST(NewColor_Tests, UnequalFromThirdComponent)
+{
+	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorTwo({2, 4, 9}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+
+	ASSERT_NE(colorOne, colorTwo);
+}
+
+
+TEST(NewColor_Tests, UnequalFromColorspace)
+{
+	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorTwo({2, 4, 8}, commonItems::newColor::ColorSpaces::RGB);
+
+	ASSERT_NE(colorOne, colorTwo);
+}
+
+
+TEST(NewColor_Tests, Equality)
+{
+	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorTwo({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+
+	ASSERT_EQ(colorOne, colorTwo);
+}
+
+
 // RandomlyFluctuate() isn't easily testable, so skipped
