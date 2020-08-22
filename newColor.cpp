@@ -6,20 +6,6 @@
 
 
 
-commonItems::newColor::newColor(std::istream& theStream)
-{
-	const auto rgb = intList{theStream}.getInts();
-	if (rgb.size() != 3)
-	{
-		throw std::runtime_error("Color has wrong number of components");
-	}
-
-	components[0] = rgb[0];
-	components[1] = rgb[1];
-	components[2] = rgb[2];
-}
-
-
 void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(

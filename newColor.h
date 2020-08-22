@@ -12,13 +12,12 @@
 namespace commonItems
 {
 
-class newColor: parser
+class newColor
 {
   public:
 	class Factory;
 	newColor() = default;
 	newColor(const int r, const int g, const int b): components({r, g, b}) {}
-	explicit newColor(std::istream& theStream);
 
 	[[nodiscard]] const auto& getComponents() const { return components; }
 

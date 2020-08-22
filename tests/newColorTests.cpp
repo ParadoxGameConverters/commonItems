@@ -29,7 +29,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStream)
 {
 	std::stringstream input;
 	input << "= { 2 4 8 }";
-	const commonItems::newColor testColor(input);
+	const auto testColor = commonItems::newColor::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getComponents();
 	ASSERT_EQ(2, r);
@@ -42,7 +42,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 {
 	std::stringstream input;
 	input << R"(= { "2" "4" "8" })";
-	const commonItems::newColor testColor(input);
+	const auto testColor = commonItems::newColor::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getComponents();
 	ASSERT_EQ(2, r);
@@ -74,15 +74,6 @@ TEST(NewColor_Tests, ColorCanBeFactoryInitializedFromStreamWithQuotes)
 	ASSERT_EQ(2, r);
 	ASSERT_EQ(4, g);
 	ASSERT_EQ(8, b);
-}
-
-
-TEST(NewColor_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColors)
-{
-	std::stringstream input;
-	input << "= { 2 4 }";
-
-	ASSERT_THROW(commonItems::newColor{input}, std::runtime_error);
 }
 
 
