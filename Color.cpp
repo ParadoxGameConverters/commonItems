@@ -6,8 +6,9 @@
 
 
 
-commonItems::Color::Color(std::istream& theStream)
+commonItems::Color::Color(std::istream& theStream, bool ColorSpacePrefix)
 {
+	if (ColorSpacePrefix) auto ColorSpaceString = getNextTokenWithoutMatching(theStream); /// example of when it's needed: color2 = rgb { 100 7 0.5 }
 	const intList rgbList(theStream);
 	const auto rgb = rgbList.getInts();
 	if (rgb.size() == 3)

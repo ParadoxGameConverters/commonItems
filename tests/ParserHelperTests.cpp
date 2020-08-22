@@ -614,42 +614,6 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	ASSERT_TRUE(wrapper.themap["d"]);
 }
 
-TEST(ParserHelper_Tests, SingleRGBDefaultsToZeros)
-{
-	const commonItems::singleRGB theRGB;
-
-	const auto expectedDoubles = std::vector<double>{0, 0, 0};
-
-	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
-}
-
-TEST(ParserHelper_Tests, SingleRGBAddsDoublesFromBracedBlock)
-{
-	std::stringstream input{" = rgb { 100 7 0.5 }"};
-
-	const commonItems::singleRGB theRGB(input);
-
-	const auto expectedDoubles = std::vector<double>{100, 7, 0.5};
-	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
-}
-
-TEST(ParserHelper_Tests, SingleRGBAddsQuotedDoubles)
-{
-	std::stringstream input{R"( = rgb { "100" "7" "0.5" })"};
-
-	const commonItems::singleRGB theRGB(input);
-
-	const auto expectedDoubles = std::vector<double>{100, 7, 0.5};
-	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
-}
-
-TEST(ParserHelper_Tests, SingleRGBThrowsLengthError)
-{
-	std::stringstream input{" = rgb { 100 7 }"};
-
-	ASSERT_THROW(const commonItems::singleRGB theRGB(input), std::length_error);
-}
-
 TEST(ParserHelper_Tests, IgnoreRGBIgnoresSimpleRGB)
 {
 	std::stringstream input{"rgb {6 7 0.5} More text"};

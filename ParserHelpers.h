@@ -109,18 +109,6 @@ class singleString: parser
 	std::string theString;
 };
 
-class singleRGB: parser // example of when it's needed: color2 = rgb { 100 7 0.5 }
-{
-  public:
-  	singleRGB() = default;
-	explicit singleRGB(std::istream& theStream);
-
-	[[nodiscard]] std::vector<double> getDoubles() const { return doubles; }
-
-  private:
-	std::vector<double> doubles = {0, 0, 0};
-};
-
 
 class stringOfObject: parser
 {
