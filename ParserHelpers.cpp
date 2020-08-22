@@ -47,6 +47,45 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 }
 
 
+void ignoreRGB(const std::string& unused, std::istream& theStream)
+{
+	auto next = getNextLexeme(theStream);
+	if (next == "=")
+	{
+		next = getNextLexeme(theStream);
+	}
+	if (next == "rgb")
+	{
+		next = getNextLexeme(theStream);
+	}
+	if (next == "{")
+	{
+		auto braceDepth = 1;
+		while (true)
+		{
+			if (theStream.eof())
+			{
+				return;
+			}
+
+			auto token = getNextLexeme(theStream);
+			if (token == "{")
+			{
+				braceDepth++;
+			}
+			else if (token == "}")
+			{
+				braceDepth--;
+				if (braceDepth == 0)
+				{
+					return;
+				}
+			}
+		}
+	}
+}
+
+
 std::string singleItem(const std::string& unused, std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);

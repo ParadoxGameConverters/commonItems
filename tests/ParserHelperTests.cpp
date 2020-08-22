@@ -614,7 +614,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	ASSERT_TRUE(wrapper.themap["d"]);
 }
 
-TEST(ParserHelper_Tests, singleRGBDefaultsToZeros)
+TEST(ParserHelper_Tests, SingleRGBDefaultsToZeros)
 {
 	const commonItems::singleRGB theRGB;
 
@@ -623,7 +623,7 @@ TEST(ParserHelper_Tests, singleRGBDefaultsToZeros)
 	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
 }
 
-TEST(ParserHelper_Tests, singleRGBAddsDoublesFromBracedBlock)
+TEST(ParserHelper_Tests, SingleRGBAddsDoublesFromBracedBlock)
 {
 	std::stringstream input{" = rgb { 100 7 0.5 }"};
 
@@ -633,7 +633,7 @@ TEST(ParserHelper_Tests, singleRGBAddsDoublesFromBracedBlock)
 	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
 }
 
-TEST(ParserHelper_Tests, singleRGBAddsQuotedDoubles)
+TEST(ParserHelper_Tests, SingleRGBAddsQuotedDoubles)
 {
 	std::stringstream input{R"( = rgb { "100" "7" "0.5" })"};
 
@@ -643,9 +643,32 @@ TEST(ParserHelper_Tests, singleRGBAddsQuotedDoubles)
 	ASSERT_EQ(expectedDoubles, theRGB.getDoubles());
 }
 
-TEST(ParserHelper_Tests, singleRGBThrowsLengthError)
+TEST(ParserHelper_Tests, SingleRGBThrowsLengthError)
 {
 	std::stringstream input{" = rgb { 100 7 }"};
 
 	ASSERT_THROW(const commonItems::singleRGB theRGB(input), std::length_error);
+}
+
+TEST(ParserHelper_Tests, IgnoreRGBIgnoresSimpleRGB)
+{
+	std::stringstream input{"rgb {6 7 0.5} More text"};
+	input >> std::noskipws;
+	commonItems::ignoreRGB("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" More text", std::string{buffer});
+}
+
+
+TEST(ParserHelper_Tests, IgnoreRGBIgnoresAssignedRGB)
+{
+	std::stringstream input{"= rgb {6 7 0.5} More text"};
+	input >> std::noskipws;
+	commonItems::ignoreRGB("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" More text", std::string{buffer});
 }
