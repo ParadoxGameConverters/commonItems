@@ -17,7 +17,7 @@ class newColor
   public:
 	class Factory;
 	newColor() = default;
-	newColor(const int r, const int g, const int b): components({r, g, b}) {}
+	newColor(const std::array<int, 3> components): components(components) {}
 
 	[[nodiscard]] const auto& getComponents() const { return components; }
 

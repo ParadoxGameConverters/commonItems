@@ -16,7 +16,7 @@ TEST(NewColor_Tests, ColorDefaultsToUninitialized)
 
 TEST(NewColor_Tests, ColorCanBeInitializedWithRGB)
 {
-	const commonItems::newColor testColor(2, 4, 8);
+	const commonItems::newColor testColor({2, 4, 8});
 
 	auto [r, g, b] = testColor.getComponents();
 	ASSERT_EQ(2, r);
@@ -88,7 +88,7 @@ TEST(NewColor_Tests, ColorCanBeOnlyFactoryInitializedFromStreamWithAtLeastThreeC
 
 TEST(NewColor_Tests, ColorCanBeOutput)
 {
-	const commonItems::newColor testColor(2, 4, 8);
+	const commonItems::newColor testColor({2, 4, 8});
 
 	std::stringstream output;
 	output << testColor;

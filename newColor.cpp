@@ -44,5 +44,5 @@ commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& the
 		throw std::runtime_error("Color has wrong number of components");
 	}
 
-	return newColor(rgb[0], rgb[1], rgb[2]);
+	return newColor(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 }
