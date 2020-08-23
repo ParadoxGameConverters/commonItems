@@ -382,7 +382,7 @@ TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
 class foo: commonItems::parser
 {
   public:
-	foo(std::istream& theStream)
+	explicit foo(std::istream& theStream)
 	{
 		registerKeyword("color", [this](const std::string& unused, std::istream& theStream) {
 			color = commonItems::newColor::Factory::getColor(theStream);
