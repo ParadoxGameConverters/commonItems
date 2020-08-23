@@ -114,38 +114,4 @@ TEST(Color_Tests, ColorCanBeOutput)
 }
 
 
-TEST(Color_Tests, ColorCanBeInitializedFromStreamWithColorSpacePrefix)
-{
-	std::stringstream input;
-	input << "= rgb { 2 4 8 }";
-	const commonItems::Color testColor(input);
-
-	ASSERT_TRUE(testColor);
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
-}
-
-TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotesWithColorSpacePrefix)
-{
-	std::stringstream input;
-	input << R"(= rgb { "2" "4" "8" })";
-	const commonItems::Color testColor(input);
-
-	ASSERT_TRUE(testColor);
-	ASSERT_EQ(2, testColor.r());
-	ASSERT_EQ(4, testColor.g());
-	ASSERT_EQ(8, testColor.b());
-}
-
-
-TEST(Color_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColorsWithColorSpacePrefix)
-{
-	std::stringstream input;
-	input << "= rgb { 2 4 }";
-	const commonItems::Color testColor(input);
-
-	ASSERT_FALSE(testColor);
-}
-
 // RandomlyFluctuate() isn't easily testable, so skipped
