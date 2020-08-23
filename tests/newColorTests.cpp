@@ -50,10 +50,10 @@ TEST(NewColor_Tests, ColorCanBeInitializedWithComponentsInHsv)
 {
 	const commonItems::newColor testColor({0.1, 1.0, 0.4}, commonItems::newColor::ColorSpaces::HSV);
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(0.1, r);
-	ASSERT_EQ(1.0, g);
-	ASSERT_EQ(0.4, b);
+	auto [h, s, v] = testColor.getComponents();
+	ASSERT_EQ(0.1, h);
+	ASSERT_EQ(1.0, s);
+	ASSERT_EQ(0.4, v);
 	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, testColor.getColorSpace());
 }
 
