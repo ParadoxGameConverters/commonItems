@@ -62,7 +62,7 @@ std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 
 commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& theStream)
 {
-	const auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // equals sign
 	
 	ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED;
 	const auto token = getNextTokenWithoutMatching(theStream);
