@@ -56,6 +56,8 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 			component = 255;
 		}
 	}
+
+	deriveHsvFromRgb();
 }
 
 
