@@ -19,6 +19,10 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	{
 		next = getNextLexeme(theStream);
 	}
+	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
+	{
+		next = getNextLexeme(theStream);
+	}
 	if (next == "{")
 	{
 		auto braceDepth = 1;
@@ -265,7 +269,7 @@ stringList::stringList(std::istream& theStream)
 
 singleString::singleString(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // equals sign
 	theString = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
 }
 
