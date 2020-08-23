@@ -19,42 +19,7 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	{
 		next = getNextLexeme(theStream);
 	}
-	if (next == "{")
-	{
-		auto braceDepth = 1;
-		while (true)
-		{
-			if (theStream.eof())
-			{
-				return;
-			}
-
-			auto token = getNextLexeme(theStream);
-			if (token == "{")
-			{
-				braceDepth++;
-			}
-			else if (token == "}")
-			{
-				braceDepth--;
-				if (braceDepth == 0)
-				{
-					return;
-				}
-			}
-		}
-	}
-}
-
-
-void ignoreRGB(const std::string& unused, std::istream& theStream)
-{
-	auto next = getNextLexeme(theStream);
-	if (next == "=")
-	{
-		next = getNextLexeme(theStream);
-	}
-	if (next == "rgb")
+	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
 	{
 		next = getNextLexeme(theStream);
 	}

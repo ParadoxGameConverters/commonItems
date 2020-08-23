@@ -614,25 +614,54 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	ASSERT_TRUE(wrapper.themap["d"]);
 }
 
-TEST(ParserHelper_Tests, IgnoreRGBIgnoresSimpleRGB)
+TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleColorWithColorSpace)
 {
-	std::stringstream input{"rgb {6 7 0.5} More text"};
+	std::stringstream input{"rgb {6 7 15} More text"};
+	std::stringstream input2{"hsv {6 7 45} More text"};
 	input >> std::noskipws;
-	commonItems::ignoreRGB("unused", input);
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
 
 	char buffer[256];
+	char buffer2[256];
 	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
 	ASSERT_EQ(" More text", std::string{buffer});
+	ASSERT_EQ(" More text", std::string{buffer2});
 }
 
 
-TEST(ParserHelper_Tests, IgnoreRGBIgnoresAssignedRGB)
+TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedColorWithColorSpace)
 {
-	std::stringstream input{"= rgb {6 7 0.5} More text"};
+	std::stringstream input{"= rgb {6 7 15} More text"};
+	std::stringstream input2{"= hsv {6 7 45} More text"};
 	input >> std::noskipws;
-	commonItems::ignoreRGB("unused", input);
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
 
 	char buffer[256];
+	char buffer2[256];
 	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
 	ASSERT_EQ(" More text", std::string{buffer});
+	ASSERT_EQ(" More text", std::string{buffer2});
+}
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresRgbAndHsvStringsWithoutBreakingParsing)
+{
+	std::stringstream input{"= \"rgb\" next_parameter = 69 More text"};
+	std::stringstream input2{"= \"hsv\" next_parameter = 420 More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ(" next_parameter = 69 More text", std::string{buffer});
+	ASSERT_EQ(" next_parameter = 420 More text", std::string{buffer2});
 }
