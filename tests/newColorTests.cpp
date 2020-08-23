@@ -7,89 +7,207 @@ TEST(NewColor_Tests, ColorDefaultsToBlack)
 {
 	const commonItems::newColor testColor;
 
-	auto [r, g, b] = testColor.getComponents();
+	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(0, r);
 	ASSERT_EQ(0, g);
 	ASSERT_EQ(0, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, h, 0.01);
+	ASSERT_NEAR(0.0f, s, 0.01);
+	ASSERT_NEAR(0.0f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, ColorDefaultsToUnspecifiedColorspace)
+TEST(NewColor_Tests, ColorCanBeInitializedWithRgbComponents)
 {
-	const commonItems::newColor testColor;
+	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
 
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedWithComponents)
+TEST(NewColor_Tests, ColorCanBeInitializedWithHsvComponents)
 {
-	const commonItems::newColor testColor({2, 4, 8});
+	const commonItems::newColor testColor(std::array<float, 3>{0.5f, 0.5f, 0.5f});
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(63, r);
+	ASSERT_EQ(127, g);
+	ASSERT_EQ(127, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedWithComponentsInRgb)
+TEST(NewColor_Tests, HsvConversion_GreyHasZeroHue)
 {
-	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::RGB);
+	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 128});
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::RGB, testColor.getColorSpace());
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedWithComponentsInHsv)
+TEST(NewColor_Tests, HsvConversion_RedHasHueOfZero)
 {
-	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::HSV);
+	const commonItems::newColor testColor(std::array<int, 3>{128, 0, 0});
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, testColor.getColorSpace());
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_YelloHasHueOfOneSixth)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 64});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.167f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_GreenHasHueOfOneThird)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{0, 128, 0});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.333f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_CyanHasHueOfOneHalf)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_BlueHasHueOfTwoThirds)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 128});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.667f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_MagentaHasHueOfFiveSixths)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 128});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.833f, h, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_BlackHasZeroSaturation)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{0,0, 0});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, s, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_GreyHasZeroSaturation)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 128});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, s, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_ColorHasSaturation)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 64});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, s, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_BlackHasZeroValue)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 0});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.0f, v, 0.01);
+}
+
+
+TEST(NewColor_Tests, HsvConversion_ColorHasValue)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 64});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_ColorHasValue)
+{
+	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 64});
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
 TEST(NewColor_Tests, ColorCanBeInitializedFromStream)
 {
 	std::stringstream input;
-	input << "= { 2 4 8 }";
+	input << "= { 64 128 128 }";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
 TEST(NewColor_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 {
 	std::stringstream input;
-	input << R"(= { "2" "4" "8" })";
+	input << R"(= { "64" "128" "128" })";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, ColorInitializationRequiresThreeComponents)
+TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenUnspecified)
 {
 	std::stringstream input;
-	input << "= { 2 4 }";
+	input << "= { 64 128 }";
 
 	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
 }
@@ -98,28 +216,54 @@ TEST(NewColor_Tests, ColorInitializationRequiresThreeComponents)
 TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInRgb)
 {
 	std::stringstream input;
-	input << "= rgb { 2 4 8 }";
+	input << "= rgb { 64 128 128 }";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::RGB, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
+{
+	std::stringstream input;
+	input << "= rgb { 64 128 }";
+
+	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
 }
 
 
 TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
 {
 	std::stringstream input;
-	input << "= hsv { 2 4 8 }";
+	input << "= hsv { 0.5 0.5 0.5 }";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, testColor.getColorSpace());
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(63, r);
+	ASSERT_EQ(127, g);
+	ASSERT_EQ(127, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
+{
+	std::stringstream input;
+	input << "= hsv { 0.333 0.5 }";
+
+	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -140,15 +284,18 @@ class foo: commonItems::parser
 TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
 {
 	std::stringstream input;
-	input << "= { color = { 2 4 8 } } more text";
+	input << "= { color = { 64 128 128 } } more text";
 	const foo bar(input);
 
-	auto [r, g, b] = bar.color.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
+	auto [r, g, b] = bar.color.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
 
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, bar.color.getColorSpace());
+	auto [h, s, v] = bar.color.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -159,15 +306,18 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
 TEST(NewColor_Tests, ColorCanBeInitializedInRgbFromLongerStream)
 {
 	std::stringstream input;
-	input << "= { color = rgb { 2 4 8 } } more text";
+	input << "= { color = rgb { 64 128 128 } } more text";
 	const foo bar(input);
 
-	auto [r, g, b] = bar.color.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
+	auto [r, g, b] = bar.color.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
 
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::RGB, bar.color.getColorSpace());
+	auto [h, s, v] = bar.color.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -178,15 +328,18 @@ TEST(NewColor_Tests, ColorCanBeInitializedInRgbFromLongerStream)
 TEST(NewColor_Tests, ColorCanBeInitializedInHsvFromLongerStream)
 {
 	std::stringstream input;
-	input << "= { color = hsv { 2 4 8 } } more text";
+	input << "= { color = hsv { 0.5 0.5 0.5 } } more text";
 	const foo bar(input);
 
-	auto [r, g, b] = bar.color.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
+	auto [r, g, b] = bar.color.getRgbComponents();
+	ASSERT_EQ(63, r);
+	ASSERT_EQ(127, g);
+	ASSERT_EQ(127, b);
 
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, bar.color.getColorSpace());
+	auto [h, s, v] = bar.color.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -194,84 +347,52 @@ TEST(NewColor_Tests, ColorCanBeInitializedInHsvFromLongerStream)
 }
 
 
-TEST(NewColor_Tests, InitializationIgnoresTrailingText)
-{
-	std::stringstream input;
-	input << "= { 2 4 8 } moretext";
-	const auto testColor = commonItems::newColor::Factory::getColor(input);
-
-	auto [r, g, b] = testColor.getComponents();
-	ASSERT_EQ(2, r);
-	ASSERT_EQ(4, g);
-	ASSERT_EQ(8, b);
-	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, testColor.getColorSpace());
-}
-
-
 TEST(NewColor_Tests, ColorCanBeOutputInUnspecifiedColorSpace)
 {
-	const commonItems::newColor testColor({2, 4, 8});
+	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
 	output << testColor;
 
-	ASSERT_EQ("= { 2 4 8 }", output.str());
+	ASSERT_EQ("= { 64 128 128 }", output.str());
 }
 
 
 TEST(NewColor_Tests, ColorCanBeOutputInRgbColorSpace)
 {
-	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::RGB);
+	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
-	output << testColor;
+	output << testColor.outputRgb();
 
-	ASSERT_EQ("= rgb { 2 4 8 }", output.str());
+	ASSERT_EQ("= rgb { 64 128 128 }", output.str());
 }
 
 
 TEST(NewColor_Tests, ColorCanBeOutputInHsvColorSpace)
 {
-	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::HSV);
+	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
-	output << testColor;
+	output << testColor.outputHsv();
 
-	ASSERT_EQ("= hsv { 2 4 8 }", output.str());
+	ASSERT_EQ("= hsv { 0.5 0.5 0.5 }", output.str());
 }
 
 
-TEST(NewColor_Tests, UnequalFromFirstComponent)
+TEST(NewColor_Tests, UnequalFromDifferentRgb)
 {
-	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-	const commonItems::newColor colorTwo({3, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorOne(std::array<int, 3>{2, 4, 8});
+	const commonItems::newColor colorTwo(std::array<int, 3>{3, 4, 8});
 
 	ASSERT_NE(colorOne, colorTwo);
 }
 
 
-TEST(NewColor_Tests, UnequalFromSecondComponent)
+TEST(NewColor_Tests, UnequalFromDifferentHsv)
 {
-	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-	const commonItems::newColor colorTwo({2, 5, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-
-	ASSERT_NE(colorOne, colorTwo);
-}
-
-
-TEST(NewColor_Tests, UnequalFromThirdComponent)
-{
-	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-	const commonItems::newColor colorTwo({2, 4, 9}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-
-	ASSERT_NE(colorOne, colorTwo);
-}
-
-
-TEST(NewColor_Tests, UnequalFromColorspace)
-{
-	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-	const commonItems::newColor colorTwo({2, 4, 8}, commonItems::newColor::ColorSpaces::RGB);
+	const commonItems::newColor colorOne(std::array<float, 3>{0.333f, 0.50f, 0.50f});
+	const commonItems::newColor colorTwo(std::array<float, 3>{0.333f, 0.75f, 0.75f});
 
 	ASSERT_NE(colorOne, colorTwo);
 }
@@ -279,8 +400,8 @@ TEST(NewColor_Tests, UnequalFromColorspace)
 
 TEST(NewColor_Tests, Equality)
 {
-	const commonItems::newColor colorOne({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
-	const commonItems::newColor colorTwo({2, 4, 8}, commonItems::newColor::ColorSpaces::UNSPECIFIED);
+	const commonItems::newColor colorOne(std::array<int, 3>{2, 4, 8});
+	const commonItems::newColor colorTwo(std::array<int, 3>{2, 4, 8});
 
 	ASSERT_EQ(colorOne, colorTwo);
 }
