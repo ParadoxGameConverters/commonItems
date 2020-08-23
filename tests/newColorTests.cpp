@@ -125,7 +125,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
 
 class foo: commonItems::parser
 {
-public:
+  public:
 	foo(std::istream& theStream)
 	{
 		registerKeyword("color", [this](const std::string& unused, std::istream& theStream) {
@@ -147,7 +147,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
 	ASSERT_EQ(2, r);
 	ASSERT_EQ(4, g);
 	ASSERT_EQ(8, b);
-	
+
 	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, bar.color.getColorSpace());
 
 	char buffer[256];

@@ -18,10 +18,15 @@ class newColor
 	class Factory;
 	enum class ColorSpaces
 	{
-		UNSPECIFIED, RGB, HSV
+		UNSPECIFIED,
+		RGB,
+		HSV
 	};
 	newColor() = default;
-	newColor(const std::array<int, 3> components, ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED): components(components), colorSpace(colorSpace) {}
+	newColor(const std::array<int, 3> components, ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED):
+		 components(components), colorSpace(colorSpace)
+	{
+	}
 
 	bool operator==(const newColor& rhs) const;
 	bool operator!=(const newColor& rhs) const;
