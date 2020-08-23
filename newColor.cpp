@@ -110,12 +110,10 @@ void commonItems::newColor::deriveHsvFromRgb()
 
 void commonItems::newColor::deriveRgbFromHsv()
 {
-	int i;
-	float f, p, q, t;
+	float p, q, t;
 
 	float r, g, b;
 	auto [h, s, v] = hsvComponents;
-	h *= 360.0f;
 
 	if (s == 0) // achromatic (grey)
 	{
@@ -123,13 +121,12 @@ void commonItems::newColor::deriveRgbFromHsv()
 	}
 	else
 	{
-		h /= 60; // sector 0 to 5
-		i = floor(h);
-		f = h - i; // factorial part of h
+		const int sector = floor(h * 6.0f);
+		const float fraction = h * 6.0f - static_cast<float>(sector);
 		p = v * (1 - s);
-		q = v * (1 - s * f);
-		t = v * (1 - s * (1 - f));
-		switch (i)
+		q = v * (1 - s * fraction);
+		t = v * (1 - s * (1 - fraction));
+		switch (sector)
 		{
 			case 0:
 				r = v;
