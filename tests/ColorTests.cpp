@@ -118,7 +118,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithColorSpacePrefix)
 {
 	std::stringstream input;
 	input << "= rgb { 2 4 8 }";
-	const commonItems::Color testColor(input, true);
+	const commonItems::Color testColor(input);
 
 	ASSERT_TRUE(testColor);
 	ASSERT_EQ(2, testColor.r());
@@ -130,7 +130,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotesWithColorSpacePrefix)
 {
 	std::stringstream input;
 	input << R"(= rgb { "2" "4" "8" })";
-	const commonItems::Color testColor(input, true);
+	const commonItems::Color testColor(input);
 
 	ASSERT_TRUE(testColor);
 	ASSERT_EQ(2, testColor.r());
@@ -143,7 +143,7 @@ TEST(Color_Tests, ColorCanBeOnlyInitializedFromStreamWithAtLeastThreeColorsWithC
 {
 	std::stringstream input;
 	input << "= rgb { 2 4 }";
-	const commonItems::Color testColor(input, true);
+	const commonItems::Color testColor(input);
 
 	ASSERT_FALSE(testColor);
 }

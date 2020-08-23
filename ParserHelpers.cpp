@@ -304,7 +304,7 @@ stringList::stringList(std::istream& theStream)
 
 singleString::singleString(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // equals sign
 	theString = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
 }
 
