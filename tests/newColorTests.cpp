@@ -123,6 +123,77 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
 }
 
 
+class foo: commonItems::parser
+{
+public:
+	foo(std::istream& theStream)
+	{
+		registerKeyword("color", [this](const std::string& unused, std::istream& theStream) {
+			color = commonItems::newColor::Factory::getColor(theStream);
+		});
+		parseStream(theStream);
+	}
+
+	commonItems::newColor color;
+};
+
+TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
+{
+	std::stringstream input;
+	input << "= { color = { 2 4 8 } } more text";
+	const foo bar(input);
+
+	auto [r, g, b] = bar.color.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
+	
+	ASSERT_EQ(commonItems::newColor::ColorSpaces::UNSPECIFIED, bar.color.getColorSpace());
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" more text", std::string{buffer});
+}
+
+
+TEST(NewColor_Tests, ColorCanBeInitializedInRgbFromLongerStream)
+{
+	std::stringstream input;
+	input << "= { color = rgb { 2 4 8 } } more text";
+	const foo bar(input);
+
+	auto [r, g, b] = bar.color.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
+
+	ASSERT_EQ(commonItems::newColor::ColorSpaces::RGB, bar.color.getColorSpace());
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" more text", std::string{buffer});
+}
+
+
+TEST(NewColor_Tests, ColorCanBeInitializedInHsvFromLongerStream)
+{
+	std::stringstream input;
+	input << "= { color = hsv { 2 4 8 } } more text";
+	const foo bar(input);
+
+	auto [r, g, b] = bar.color.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
+
+	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, bar.color.getColorSpace());
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" more text", std::string{buffer});
+}
+
+
 TEST(NewColor_Tests, InitializationIgnoresTrailingText)
 {
 	std::stringstream input;
