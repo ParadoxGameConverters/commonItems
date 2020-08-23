@@ -617,7 +617,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleColorWithColorSpace)
 {
 	std::stringstream input{"rgb {6 7 15} More text"};
-	std::stringstream input2{"hsv {6 7 45} More text"};
+	std::stringstream input2{"hsv {0.1 1.0 0.6} More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
 	commonItems::ignoreItem("unused", input);
@@ -635,7 +635,7 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleColorWithColorSpace)
 TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedColorWithColorSpace)
 {
 	std::stringstream input{"= rgb {6 7 15} More text"};
-	std::stringstream input2{"= hsv {6 7 45} More text"};
+	std::stringstream input2{"= hsv {0.1 1.0 0.6} More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
 	commonItems::ignoreItem("unused", input);
@@ -649,7 +649,26 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedColorWithColorSpace)
 	ASSERT_EQ(" More text", std::string{buffer2});
 }
 
+
 TEST(ParserHelper_Tests, IgnoreItemIgnoresRgbAndHsvStringsWithoutBreakingParsing)
+{
+	std::stringstream input{"= rgb next_parameter = 69 More text"};
+	std::stringstream input2{"= hsv next_parameter = 420 More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ(" next_parameter = 69 More text", std::string{buffer});
+	ASSERT_EQ(" next_parameter = 420 More text", std::string{buffer2});
+}
+
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresQuotedRgbAndHsvStringsWithoutBreakingParsing)
 {
 	std::stringstream input{"= \"rgb\" next_parameter = 69 More text"};
 	std::stringstream input2{"= \"hsv\" next_parameter = 420 More text"};
