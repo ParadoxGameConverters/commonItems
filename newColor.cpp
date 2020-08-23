@@ -53,7 +53,7 @@ std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 			out << "hsv ";
 			break;
 		default:
-			break; //do nothing
+			break; // do nothing
 	}
 	out << "{ " << color.components[0] << ' ' << color.components[1] << ' ' << color.components[2] << " }";
 	return out;
@@ -63,7 +63,7 @@ std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
 commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& theStream)
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
-	
+
 	ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED;
 	const auto token = getNextTokenWithoutMatching(theStream);
 	if (token == "rgb")
@@ -73,6 +73,14 @@ commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& the
 	else if (token == "hsv")
 	{
 		colorSpace = ColorSpaces::HSV;
+	}
+	else
+	{
+		auto actualToken = *token;
+		for (auto i = actualToken.rbegin(); i != actualToken.rend(); ++i)
+		{
+			theStream.putback(*i);
+		}
 	}
 
 	const auto rgb = intList{theStream}.getInts();
