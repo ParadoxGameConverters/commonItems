@@ -48,12 +48,12 @@ TEST(NewColor_Tests, ColorCanBeInitializedWithComponentsInRgb)
 
 TEST(NewColor_Tests, ColorCanBeInitializedWithComponentsInHsv)
 {
-	const commonItems::newColor testColor({0.1, 1.0, 0.4}, commonItems::newColor::ColorSpaces::HSV);
+	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::HSV);
 
-	auto [h, s, v] = testColor.getComponents();
-	ASSERT_EQ(0.1, h);
-	ASSERT_EQ(1.0, s);
-	ASSERT_EQ(0.4, v);
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, testColor.getColorSpace());
 }
 
@@ -112,13 +112,13 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInRgb)
 TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
 {
 	std::stringstream input;
-	input << "= hsv { 0.1 1.0 0.4 }";
+	input << "= hsv { 2 4 8 }";
 	const auto testColor = commonItems::newColor::Factory::getColor(input);
 
-	auto [h, s, v] = testColor.getComponents();
-	ASSERT_EQ(0.1, h);
-	ASSERT_EQ(1.0, s);
-	ASSERT_EQ(0.4, v);
+	auto [r, g, b] = testColor.getComponents();
+	ASSERT_EQ(2, r);
+	ASSERT_EQ(4, g);
+	ASSERT_EQ(8, b);
 	ASSERT_EQ(commonItems::newColor::ColorSpaces::HSV, testColor.getColorSpace());
 }
 
@@ -161,12 +161,12 @@ TEST(NewColor_Tests, ColorCanBeOutputInRgbColorSpace)
 
 TEST(NewColor_Tests, ColorCanBeOutputInHsvColorSpace)
 {
-	const commonItems::newColor testColor({0.1, 1.0, 0.4}, commonItems::newColor::ColorSpaces::HSV);
+	const commonItems::newColor testColor({2, 4, 8}, commonItems::newColor::ColorSpaces::HSV);
 
 	std::stringstream output;
 	output << testColor;
 
-	ASSERT_EQ("= hsv { 0.1 1.0 0.4 }", output.str());
+	ASSERT_EQ("= hsv { 2 4 8 }", output.str());
 }
 
 
