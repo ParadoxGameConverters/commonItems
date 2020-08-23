@@ -12,7 +12,7 @@
 namespace commonItems
 {
 
-class Color: parser
+class [[deprecated("Use the version in newColor.h")]] Color: parser
 {
   public:
 	class Factory;
