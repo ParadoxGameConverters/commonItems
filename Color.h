@@ -18,7 +18,7 @@ class [[deprecated("Use the version in newColor.h")]] Color: parser
 	class Factory;
 	Color() = default;
 	Color(const int r, const int g, const int b): initialized(true), c({r, g, b}) {}
-	explicit Color(std::istream& theStream, bool hasColorSpacePrefix = false);
+	explicit Color(std::istream& theStream);
 
 	void GetRGB(int& r, int& g, int& b) const;
 
