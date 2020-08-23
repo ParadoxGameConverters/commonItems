@@ -116,9 +116,9 @@ void commonItems::newColor::deriveRgbFromHsv()
 	float r, g, b;
 	auto [h, s, v] = hsvComponents;
 	h *= 360.0f;
-	if (s == 0)
+
+	if (s == 0) // achromatic (grey)
 	{
-		// achromatic (grey)
 		r = g = b = v;
 	}
 	else
