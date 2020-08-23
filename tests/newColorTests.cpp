@@ -69,7 +69,7 @@ TEST(NewColor_Tests, HsvConversion_RedHasHueOfZero)
 }
 
 
-TEST(NewColor_Tests, HsvConversion_YelloHasHueOfOneSixth)
+TEST(NewColor_Tests, HsvConversion_YellowHasHueOfOneSixth)
 {
 	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 64});
 
@@ -159,12 +159,124 @@ TEST(NewColor_Tests, HsvConversion_ColorHasValue)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_ColorHasValue)
+TEST(NewColor_Tests, RgbConversion_ZeroHueGivesRed)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 64});
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
 
-	auto [h, s, v] = testColor.getHsvComponents();
-	ASSERT_NEAR(0.5f, v, 0.01);
+	auto [r,g,b] = testColor.getRgbComponents();
+	ASSERT_NEAR(255, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(0, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_OneSixthHueGivesYellow)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.167f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(254, r, 1);
+	ASSERT_NEAR(254, g, 1);
+	ASSERT_NEAR(0, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_OneThirdHueGivesGreen)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.333f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(0, r, 1);
+	ASSERT_NEAR(255, g, 1);
+	ASSERT_NEAR(0, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_OneHalfHueGivesCyan)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.5f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(0, r, 1);
+	ASSERT_NEAR(255, g, 1);
+	ASSERT_NEAR(255, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_TwoThirdHueGivesBlue)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.667f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(0, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(255, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_FiveSixthsHueGivesMagenta)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.833f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(254, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(254, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_ZeroSaturationIsGreyscale)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 0.0f, 0.5f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(127, r, 1);
+	ASSERT_NEAR(127, g, 1);
+	ASSERT_NEAR(127, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_FullSaturationisPureColor)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(255, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(0, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_SaturationWhitensColor)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 0.5f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(255, r, 1);
+	ASSERT_NEAR(127, g, 1);
+	ASSERT_NEAR(127, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_ZeroValueIsBlack)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 0.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(0, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(0, b, 1);
+}
+
+
+TEST(NewColor_Tests, RgbConversion_ValueDarkensColor)
+{
+	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 0.5f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_NEAR(127, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(0, b, 1);
 }
 
 
