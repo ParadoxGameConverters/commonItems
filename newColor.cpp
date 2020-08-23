@@ -111,9 +111,9 @@ void commonItems::newColor::deriveHsvFromRgb()
 
 void commonItems::newColor::deriveRgbFromHsv()
 {
-	float r, g, b;
-	auto [h, s, v] = hsvComponents;
+	const auto [h, s, v] = hsvComponents;
 
+	float r, g, b;
 	if (s == 0) // achromatic (grey)
 	{
 		r = g = b = v;
