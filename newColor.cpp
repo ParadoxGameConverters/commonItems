@@ -4,6 +4,7 @@
 #include <chrono>
 #include <iomanip>
 #include <random>
+#include <cmath>
 #include <sstream>
 
 
@@ -110,8 +111,6 @@ void commonItems::newColor::deriveHsvFromRgb()
 
 void commonItems::newColor::deriveRgbFromHsv()
 {
-	float p, q, t;
-
 	float r, g, b;
 	auto [h, s, v] = hsvComponents;
 
@@ -121,11 +120,11 @@ void commonItems::newColor::deriveRgbFromHsv()
 	}
 	else
 	{
-		const int sector = floor(h * 6.0f);
+		const int sector = static_cast<int>(floor(h * 6.0f));
 		const float fraction = h * 6.0f - static_cast<float>(sector);
-		p = v * (1 - s);
-		q = v * (1 - s * fraction);
-		t = v * (1 - s * (1 - fraction));
+		const float p = v * (1 - s);
+		const float q = v * (1 - s * fraction);
+		const float t = v * (1 - s * (1 - fraction));
 		switch (sector)
 		{
 			case 0:
@@ -153,17 +152,20 @@ void commonItems::newColor::deriveRgbFromHsv()
 				g = p;
 				b = v;
 				break;
-			default: // case 5:
+			case 5:
 				r = v;
 				g = p;
 				b = q;
 				break;
+			default:
+				throw std::exception("Hue greater than 1.0");
 		}
 	}
 
 	r *= 255;
 	g *= 255;
 	b *= 255;
+
 	rgbComponents = std::array<int, 3>{static_cast<int>(r), static_cast<int>(g), static_cast<int>(b)};
 }
 
