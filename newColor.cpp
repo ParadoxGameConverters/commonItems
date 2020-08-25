@@ -158,7 +158,7 @@ void commonItems::newColor::deriveRgbFromHsv()
 				b = q;
 				break;
 			default:
-				throw std::exception("Hue greater than 1.0");
+				throw std::runtime_error("Hue greater than 1.0");
 		}
 	}
 
