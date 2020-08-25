@@ -2,9 +2,9 @@
 #include "ParserHelpers.h"
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <iomanip>
 #include <random>
-#include <cmath>
 #include <sstream>
 
 
