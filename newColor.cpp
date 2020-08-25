@@ -1,9 +1,10 @@
 #include "newColor.h"
 #include "ParserHelpers.h"
 #include <algorithm>
-#include <cmath>
+#include <chrono>
 #include <iomanip>
 #include <random>
+#include <cmath>
 #include <sstream>
 
 
@@ -33,6 +34,31 @@ std::string commonItems::newColor::outputHsv() const
 	output << std::setprecision(2);
 	output << "= hsv { " << hsvComponents[0] << ' ' << hsvComponents[1] << ' ' << hsvComponents[2] << " }";
 	return output.str();
+}
+
+
+void commonItems::newColor::RandomlyFluctuate(const int stdDev)
+{
+	static std::mt19937 generator(
+		 static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
+	const auto allChange = std::normal_distribution<float>(0.0f, static_cast<float>(stdDev))(generator);
+
+	std::normal_distribution<float> distribution(0.0f, stdDev / 4.0f);
+	for (auto& component: rgbComponents)
+	{
+		component += lround(allChange + distribution(generator));
+		if (component < 0)
+		{
+			component = 0;
+		}
+		else if (component > 255)
+		{
+			component = 255;
+		}
+	}
+
+	deriveHsvFromRgb();
 }
 
 

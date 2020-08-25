@@ -116,7 +116,7 @@ TEST(NewColor_Tests, HsvConversion_MagentaHasHueOfFiveSixths)
 
 TEST(NewColor_Tests, HsvConversion_BlackHasZeroSaturation)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 0});
+	const commonItems::newColor testColor(std::array<int, 3>{0,0, 0});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, s, 0.01);
@@ -163,7 +163,7 @@ TEST(NewColor_Tests, RgbConversion_ZeroHueGivesRed)
 {
 	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
 
-	auto [r, g, b] = testColor.getRgbComponents();
+	auto [r,g,b] = testColor.getRgbComponents();
 	ASSERT_NEAR(255, r, 1);
 	ASSERT_NEAR(0, g, 1);
 	ASSERT_NEAR(0, b, 1);
@@ -517,3 +517,6 @@ TEST(NewColor_Tests, Equality)
 
 	ASSERT_EQ(colorOne, colorTwo);
 }
+
+
+// RandomlyFluctuate() isn't easily testable, so skipped

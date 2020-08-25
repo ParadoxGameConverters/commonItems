@@ -29,6 +29,10 @@ class newColor
 	[[nodiscard]] std::string outputRgb() const;
 	[[nodiscard]] std::string outputHsv() const;
 
+	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
+	// bit more (with a much smaller standard deviation).
+	void RandomlyFluctuate(int stdDev);
+
 	friend std::ostream& operator<<(std::ostream&, const newColor&);
 
   private:
