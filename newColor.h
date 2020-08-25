@@ -16,18 +16,18 @@ class newColor
 {
   public:
 	class Factory;
-	enum class ColorSpaces
-	{
-		UNSPECIFIED, RGB, HSV
-	};
 	newColor() = default;
-	newColor(const std::array<int, 3> components, ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED): components(components), colorSpace(colorSpace) {}
+	newColor(const std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
+	newColor(const std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
 
 	bool operator==(const newColor& rhs) const;
 	bool operator!=(const newColor& rhs) const;
 
-	[[nodiscard]] const auto& getComponents() const { return components; }
-	[[nodiscard]] const auto& getColorSpace() const { return colorSpace; }
+	[[nodiscard]] const auto& getRgbComponents() const { return rgbComponents; }
+	[[nodiscard]] const auto& getHsvComponents() const { return hsvComponents; }
+
+	[[nodiscard]] std::string outputRgb() const;
+	[[nodiscard]] std::string outputHsv() const;
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
 	// bit more (with a much smaller standard deviation).
@@ -36,8 +36,11 @@ class newColor
 	friend std::ostream& operator<<(std::ostream&, const newColor&);
 
   private:
-	std::array<int, 3> components{0, 0, 0};
-	ColorSpaces colorSpace = ColorSpaces::UNSPECIFIED;
+	void deriveHsvFromRgb();
+	void deriveRgbFromHsv();
+
+	std::array<int, 3> rgbComponents{0, 0, 0};
+	std::array<float, 3> hsvComponents{0.0f, 0.0f, 0.0f};
 };
 
 
