@@ -25,6 +25,12 @@ class newColor
 
 	[[nodiscard]] const auto& getRgbComponents() const { return rgbComponents; }
 	[[nodiscard]] const auto& getHsvComponents() const { return hsvComponents; }
+	[[nodiscard]] const auto& r() const { return rgbComponents[0]; }
+	[[nodiscard]] const auto& g() const { return rgbComponents[1]; }
+	[[nodiscard]] const auto& b() const { return rgbComponents[2]; }
+	[[nodiscard]] const auto& h() const { return hsvComponents[0]; }
+	[[nodiscard]] const auto& s() const { return hsvComponents[1]; }
+	[[nodiscard]] const auto& v() const { return hsvComponents[2]; }
 
 	[[nodiscard]] std::string outputRgb() const;
 	[[nodiscard]] std::string outputHsv() const;
