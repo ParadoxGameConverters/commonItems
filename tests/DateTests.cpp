@@ -38,7 +38,7 @@ TEST(Date_Tests, DateCanBeInputFromString)
 TEST(Date_Tests, DateLogsBadInitialization)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const date testDate("2020.4");
@@ -52,7 +52,7 @@ TEST(Date_Tests, DateLogsBadInitialization)
 TEST(Date_Tests, DateIsNotSetOnBadInitialization)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const date testDate("2020.4");
@@ -66,7 +66,7 @@ TEST(Date_Tests, DateIsNotSetOnBadInitialization)
 TEST(Date_Tests, DateIsOneJanuaryFirstOnBadInitialization)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const date testDate("2020.4");

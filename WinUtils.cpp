@@ -15,7 +15,7 @@ namespace Utils
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
 	std::set<std::string> fileNames;
-	for (auto& p : fs::recursive_directory_iterator(fs::u8path(path)))
+	for (const auto& p : fs::recursive_directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
 		{
@@ -118,7 +118,7 @@ std::string convert8859_15ToUTF8(const std::string& input)
 std::wstring convert8859_15ToUTF16(const std::string& input)
 {
 	const int requiredSize = MultiByteToWideChar(28605 /* 8859-15*/, MB_PRECOMPOSED, input.c_str(), -1, NULL, 0);
-	wchar_t* wideKeyArray = new wchar_t[requiredSize];
+	auto* wideKeyArray = new wchar_t[requiredSize];
 
 	if (0 == MultiByteToWideChar(28605 /* 8859-15*/, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
@@ -151,7 +151,7 @@ std::string convertWin1250ToUTF8(const std::string& input)
 std::wstring convertWin1250ToUTF16(const std::string& input)
 {
 	const int requiredSize = MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, NULL, 0);
-	wchar_t* wideKeyArray = new wchar_t[requiredSize];
+	auto* wideKeyArray = new wchar_t[requiredSize];
 
 	if (0 == MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
@@ -167,7 +167,7 @@ std::wstring convertWin1250ToUTF16(const std::string& input)
 std::wstring convertWin1252ToUTF16(const std::string& input)
 {
 	const int requiredSize = MultiByteToWideChar(1252, MB_PRECOMPOSED, input.c_str(), -1, NULL, 0);
-	wchar_t* wideKeyArray = new wchar_t[requiredSize];
+	auto* wideKeyArray = new wchar_t[requiredSize];
 
 	if (0 == MultiByteToWideChar(1252, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
 	{
@@ -188,7 +188,7 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 	{
 		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
-	wchar_t* wideKeyArray = new wchar_t[requiredSize];
+	auto* wideKeyArray = new wchar_t[requiredSize];
 
 	if (0 == MultiByteToWideChar(CP_UTF8, 0, UTF8.c_str(), -1, wideKeyArray, requiredSize))
 	{

@@ -44,7 +44,7 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 
 	const auto allChange = std::normal_distribution<float>(0.0f, static_cast<float>(stdDev))(generator);
 
-	std::normal_distribution<float> distribution(0.0f, stdDev / 4.0f);
+	std::normal_distribution<float> distribution(0.0f, static_cast<float>(stdDev) / 4.0f);
 	for (auto& component: rgbComponents)
 	{
 		component += lround(allChange + distribution(generator));

@@ -211,7 +211,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleInt theInteger(input);
@@ -367,7 +367,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleDouble theDouble(input);
