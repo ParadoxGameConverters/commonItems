@@ -18,9 +18,9 @@ class newColor: public Color
   public:
 	class Factory;
 	newColor() = default;
-	newColor(std::array<int, 3> rgbComponents): Color(rgbComponents) {}
-	newColor(std::array<float, 3> hsvComponents): Color(hsvComponents) {}
-	newColor(Color rhs)
+	explicit newColor(std::array<int, 3> rgbComponents): Color(rgbComponents) {}
+	explicit newColor(std::array<float, 3> hsvComponents): Color(hsvComponents) {}
+	explicit newColor(Color rhs)
 	{
 		rgbComponents = rhs.getRgbComponents();
 		hsvComponents = rhs.getHsvComponents();
