@@ -12,35 +12,41 @@
 namespace commonItems
 {
 
-class [[deprecated("Use the version in newColor.h")]] Color: parser
+class Color
 {
   public:
 	class Factory;
 	Color() = default;
-	Color(const int r, const int g, const int b): initialized(true), c({r, g, b}) {}
-	explicit Color(std::istream& theStream);
+	explicit Color(std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
+	explicit Color(std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
 
-	void GetRGB(int& r, int& g, int& b) const;
+	bool operator==(const Color& rhs) const;
+	bool operator!=(const Color& rhs) const;
 
-	[[nodiscard]] int r() const { return c[0]; }
-	[[nodiscard]] int g() const { return c[1]; }
-	[[nodiscard]] int b() const { return c[2]; }
+	[[nodiscard]] const auto& getRgbComponents() const { return rgbComponents; }
+	[[nodiscard]] const auto& getHsvComponents() const { return hsvComponents; }
+	[[nodiscard]] const auto& r() const { return rgbComponents[0]; }
+	[[nodiscard]] const auto& g() const { return rgbComponents[1]; }
+	[[nodiscard]] const auto& b() const { return rgbComponents[2]; }
+	[[nodiscard]] const auto& h() const { return hsvComponents[0]; }
+	[[nodiscard]] const auto& s() const { return hsvComponents[1]; }
+	[[nodiscard]] const auto& v() const { return hsvComponents[2]; }
 
-	explicit operator bool() const
-	{
-		return initialized;
-	} // Returns true if the color has been initialized with an RGB triplet.
+	[[nodiscard]] std::string outputRgb() const;
+	[[nodiscard]] std::string outputHsv() const;
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
 	// bit more (with a much smaller standard deviation).
-	[[deprecated("Use RandomlyFluctuate()")]] void RandomlyFlunctuate(const int stdDev) { RandomlyFluctuate(stdDev); }
 	void RandomlyFluctuate(int stdDev);
 
 	friend std::ostream& operator<<(std::ostream&, const Color&);
 
-  private:
-	bool initialized = false;
-	std::array<int, 3> c{0, 0, 0};
+  protected: // Todo: turn this to private once newColor is removed
+	void deriveHsvFromRgb();
+	void deriveRgbFromHsv();
+
+	std::array<int, 3> rgbComponents{0, 0, 0};
+	std::array<float, 3> hsvComponents{0.0f, 0.0f, 0.0f};
 };
 
 
@@ -57,4 +63,4 @@ class Color::Factory: parser
 
 
 
-#endif
+#endif // COLOR_H
