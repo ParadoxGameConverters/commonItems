@@ -1,5 +1,5 @@
-#ifndef NEW_COLOR_H
-#define NEW_COLOR_H
+#ifndef COLOR_H
+#define COLOR_H
 
 
 
@@ -41,7 +41,7 @@ class Color
 
 	friend std::ostream& operator<<(std::ostream&, const Color&);
 
-  private:
+  protected: // Todo: turn this to private once newColor is removed
 	void deriveHsvFromRgb();
 	void deriveRgbFromHsv();
 
@@ -63,4 +63,4 @@ class Color::Factory: parser
 
 
 
-#endif // NEW_COLOR_H
+#endif // COLOR_H
