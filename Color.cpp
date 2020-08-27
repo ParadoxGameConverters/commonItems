@@ -1,4 +1,4 @@
-#include "newColor.h"
+#include "Color.h"
 #include "ParserHelpers.h"
 #include <algorithm>
 #include <chrono>
@@ -9,26 +9,26 @@
 
 
 
-bool commonItems::newColor::operator==(const newColor& rhs) const
+bool commonItems::Color::operator==(const Color& rhs) const
 {
 	return rgbComponents == rhs.rgbComponents;
 }
 
 
-bool commonItems::newColor::operator!=(const newColor& rhs) const
+bool commonItems::Color::operator!=(const Color& rhs) const
 {
 	return !(*this == rhs);
 }
 
 
-std::string commonItems::newColor::outputRgb() const
+std::string commonItems::Color::outputRgb() const
 {
 	return "= rgb { " + std::to_string(rgbComponents[0]) + ' ' + std::to_string(rgbComponents[1]) + ' ' +
 			 std::to_string(rgbComponents[2]) + " }";
 }
 
 
-std::string commonItems::newColor::outputHsv() const
+std::string commonItems::Color::outputHsv() const
 {
 	std::stringstream output;
 	output << std::setprecision(2);
@@ -37,7 +37,7 @@ std::string commonItems::newColor::outputHsv() const
 }
 
 
-void commonItems::newColor::RandomlyFluctuate(const int stdDev)
+void commonItems::Color::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(
 		 static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
@@ -62,7 +62,7 @@ void commonItems::newColor::RandomlyFluctuate(const int stdDev)
 }
 
 
-void commonItems::newColor::deriveHsvFromRgb()
+void commonItems::Color::deriveHsvFromRgb()
 {
 	const auto r = static_cast<float>(rgbComponents[0]) / 255.0f;
 	const auto g = static_cast<float>(rgbComponents[1]) / 255.0f;
@@ -109,7 +109,7 @@ void commonItems::newColor::deriveHsvFromRgb()
 }
 
 
-void commonItems::newColor::deriveRgbFromHsv()
+void commonItems::Color::deriveRgbFromHsv()
 {
 	const auto [h, s, v] = hsvComponents;
 
@@ -170,14 +170,14 @@ void commonItems::newColor::deriveRgbFromHsv()
 }
 
 
-std::ostream& commonItems::operator<<(std::ostream& out, const newColor& color)
+std::ostream& commonItems::operator<<(std::ostream& out, const Color& color)
 {
 	out << "= { " << color.rgbComponents[0] << ' ' << color.rgbComponents[1] << ' ' << color.rgbComponents[2] << " }";
 	return out;
 }
 
 
-commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& theStream)
+commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream)
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
 
@@ -189,7 +189,7 @@ commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& the
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return newColor(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
 	else if (token == "hsv")
 	{
@@ -198,7 +198,7 @@ commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& the
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return newColor(
+		return Color(
 			 std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
 	}
 	else
@@ -213,6 +213,6 @@ commonItems::newColor commonItems::newColor::Factory::getColor(std::istream& the
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return newColor(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
 }

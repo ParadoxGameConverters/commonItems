@@ -75,10 +75,10 @@
     <ClCompile Include="..\OSCommonLayer.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="..\newColor.cpp">
+    <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="newColorTests.cpp">
+    <ClCompile Include="ColorTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,7 +110,7 @@
     <ClInclude Include="..\CommonFunctions.h">
       <Filter>commonItems</Filter>
     </ClInclude>
-    <ClInclude Include="..\newColor.h">
+    <ClInclude Include="..\Color.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>

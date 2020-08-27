@@ -1,11 +1,11 @@
-#include "../newColor.h"
+#include "../Color.h"
 #include "gtest/gtest.h"
 
 
 
-TEST(NewColor_Tests, ColorDefaultsToBlack)
+TEST(Color_Tests, ColorDefaultsToBlack)
 {
-	const commonItems::newColor testColor;
+	const commonItems::Color testColor;
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(0, r);
@@ -19,9 +19,9 @@ TEST(NewColor_Tests, ColorDefaultsToBlack)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedWithRgbComponents)
+TEST(Color_Tests, ColorCanBeInitializedWithRgbComponents)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -35,9 +35,9 @@ TEST(NewColor_Tests, ColorCanBeInitializedWithRgbComponents)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedWithHsvComponents)
+TEST(Color_Tests, ColorCanBeInitializedWithHsvComponents)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.5f, 0.5f, 0.5f});
+	const commonItems::Color testColor(std::array<float, 3>{0.5f, 0.5f, 0.5f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(63, r);
@@ -51,117 +51,117 @@ TEST(NewColor_Tests, ColorCanBeInitializedWithHsvComponents)
 }
 
 
-TEST(NewColor_Tests, HsvConversion_GreyHasZeroHue)
+TEST(Color_Tests, HsvConversion_GreyHasZeroHue)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{128, 128, 128});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_RedHasHueOfZero)
+TEST(Color_Tests, HsvConversion_RedHasHueOfZero)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 0, 0});
+	const commonItems::Color testColor(std::array<int, 3>{128, 0, 0});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_YellowHasHueOfOneSixth)
+TEST(Color_Tests, HsvConversion_YellowHasHueOfOneSixth)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 64});
+	const commonItems::Color testColor(std::array<int, 3>{128, 128, 64});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.167f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_GreenHasHueOfOneThird)
+TEST(Color_Tests, HsvConversion_GreenHasHueOfOneThird)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{0, 128, 0});
+	const commonItems::Color testColor(std::array<int, 3>{0, 128, 0});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.333f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_CyanHasHueOfOneHalf)
+TEST(Color_Tests, HsvConversion_CyanHasHueOfOneHalf)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.5f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_BlueHasHueOfTwoThirds)
+TEST(Color_Tests, HsvConversion_BlueHasHueOfTwoThirds)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 128});
+	const commonItems::Color testColor(std::array<int, 3>{0, 0, 128});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.667f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_MagentaHasHueOfFiveSixths)
+TEST(Color_Tests, HsvConversion_MagentaHasHueOfFiveSixths)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 128});
+	const commonItems::Color testColor(std::array<int, 3>{128, 64, 128});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.833f, h, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_BlackHasZeroSaturation)
+TEST(Color_Tests, HsvConversion_BlackHasZeroSaturation)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 0});
+	const commonItems::Color testColor(std::array<int, 3>{0, 0, 0});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, s, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_GreyHasZeroSaturation)
+TEST(Color_Tests, HsvConversion_GreyHasZeroSaturation)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{128, 128, 128});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, s, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_ColorHasSaturation)
+TEST(Color_Tests, HsvConversion_ColorHasSaturation)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 128, 64});
+	const commonItems::Color testColor(std::array<int, 3>{128, 128, 64});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.5f, s, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_BlackHasZeroValue)
+TEST(Color_Tests, HsvConversion_BlackHasZeroValue)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{0, 0, 0});
+	const commonItems::Color testColor(std::array<int, 3>{0, 0, 0});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.0f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, HsvConversion_ColorHasValue)
+TEST(Color_Tests, HsvConversion_ColorHasValue)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{128, 64, 64});
+	const commonItems::Color testColor(std::array<int, 3>{128, 64, 64});
 
 	auto [h, s, v] = testColor.getHsvComponents();
 	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
 
-TEST(NewColor_Tests, RgbConversion_ZeroHueGivesRed)
+TEST(Color_Tests, RgbConversion_ZeroHueGivesRed)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(255, r, 1);
@@ -170,9 +170,9 @@ TEST(NewColor_Tests, RgbConversion_ZeroHueGivesRed)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_OneSixthHueGivesYellow)
+TEST(Color_Tests, RgbConversion_OneSixthHueGivesYellow)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.167f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.167f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(254, r, 1);
@@ -181,9 +181,9 @@ TEST(NewColor_Tests, RgbConversion_OneSixthHueGivesYellow)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_OneThirdHueGivesGreen)
+TEST(Color_Tests, RgbConversion_OneThirdHueGivesGreen)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.333f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.333f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(0, r, 1);
@@ -192,9 +192,9 @@ TEST(NewColor_Tests, RgbConversion_OneThirdHueGivesGreen)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_OneHalfHueGivesCyan)
+TEST(Color_Tests, RgbConversion_OneHalfHueGivesCyan)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.5f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.5f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(0, r, 1);
@@ -203,9 +203,9 @@ TEST(NewColor_Tests, RgbConversion_OneHalfHueGivesCyan)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_TwoThirdHueGivesBlue)
+TEST(Color_Tests, RgbConversion_TwoThirdHueGivesBlue)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.667f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.667f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(0, r, 1);
@@ -214,9 +214,9 @@ TEST(NewColor_Tests, RgbConversion_TwoThirdHueGivesBlue)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_FiveSixthsHueGivesMagenta)
+TEST(Color_Tests, RgbConversion_FiveSixthsHueGivesMagenta)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.833f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.833f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(254, r, 1);
@@ -225,9 +225,9 @@ TEST(NewColor_Tests, RgbConversion_FiveSixthsHueGivesMagenta)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_ZeroSaturationIsGreyscale)
+TEST(Color_Tests, RgbConversion_ZeroSaturationIsGreyscale)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 0.0f, 0.5f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 0.0f, 0.5f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(127, r, 1);
@@ -236,9 +236,9 @@ TEST(NewColor_Tests, RgbConversion_ZeroSaturationIsGreyscale)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_FullSaturationisPureColor)
+TEST(Color_Tests, RgbConversion_FullSaturationisPureColor)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 1.0f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(255, r, 1);
@@ -247,9 +247,9 @@ TEST(NewColor_Tests, RgbConversion_FullSaturationisPureColor)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_SaturationWhitensColor)
+TEST(Color_Tests, RgbConversion_SaturationWhitensColor)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 0.5f, 1.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 0.5f, 1.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(255, r, 1);
@@ -258,9 +258,9 @@ TEST(NewColor_Tests, RgbConversion_SaturationWhitensColor)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_ZeroValueIsBlack)
+TEST(Color_Tests, RgbConversion_ZeroValueIsBlack)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 0.0f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 1.0f, 0.0f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(0, r, 1);
@@ -269,9 +269,9 @@ TEST(NewColor_Tests, RgbConversion_ZeroValueIsBlack)
 }
 
 
-TEST(NewColor_Tests, RgbConversion_ValueDarkensColor)
+TEST(Color_Tests, RgbConversion_ValueDarkensColor)
 {
-	const commonItems::newColor testColor(std::array<float, 3>{0.0f, 1.0f, 0.5f});
+	const commonItems::Color testColor(std::array<float, 3>{0.0f, 1.0f, 0.5f});
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_NEAR(127, r, 1);
@@ -280,11 +280,11 @@ TEST(NewColor_Tests, RgbConversion_ValueDarkensColor)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedFromStream)
+TEST(Color_Tests, ColorCanBeInitializedFromStream)
 {
 	std::stringstream input;
 	input << "= { 64 128 128 }";
-	const auto testColor = commonItems::newColor::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory::getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -298,11 +298,11 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStream)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedFromStreamWithQuotes)
+TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 {
 	std::stringstream input;
 	input << R"(= { "64" "128" "128" })";
-	const auto testColor = commonItems::newColor::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory::getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -316,20 +316,20 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 }
 
 
-TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenUnspecified)
+TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenUnspecified)
 {
 	std::stringstream input;
 	input << "= { 64 128 }";
 
-	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInRgb)
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInRgb)
 {
 	std::stringstream input;
 	input << "= rgb { 64 128 128 }";
-	const auto testColor = commonItems::newColor::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory::getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -343,20 +343,20 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInRgb)
 }
 
 
-TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
+TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
 {
 	std::stringstream input;
 	input << "= rgb { 64 128 }";
 
-	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv)
 {
 	std::stringstream input;
 	input << "= hsv { 0.5 0.5 0.5 }";
-	const auto testColor = commonItems::newColor::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory::getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(63, r);
@@ -370,12 +370,12 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromStreamInHsv)
 }
 
 
-TEST(NewColor_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
+TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
 {
 	std::stringstream input;
 	input << "= hsv { 0.333 0.5 }";
 
-	ASSERT_THROW(commonItems::newColor::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -385,15 +385,15 @@ class foo: commonItems::parser
 	explicit foo(std::istream& theStream)
 	{
 		registerKeyword("color", [this](const std::string& unused, std::istream& theStream) {
-			color = commonItems::newColor::Factory::getColor(theStream);
+			color = commonItems::Color::Factory::getColor(theStream);
 		});
 		parseStream(theStream);
 	}
 
-	commonItems::newColor color;
+	commonItems::Color color;
 };
 
-TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
+TEST(Color_Tests, ColorCanBeInitializedFromLongerStream)
 {
 	std::stringstream input;
 	input << "= { color = { 64 128 128 } } more text";
@@ -415,7 +415,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedFromLongerStream)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedInRgbFromLongerStream)
+TEST(Color_Tests, ColorCanBeInitializedInRgbFromLongerStream)
 {
 	std::stringstream input;
 	input << "= { color = rgb { 64 128 128 } } more text";
@@ -437,7 +437,7 @@ TEST(NewColor_Tests, ColorCanBeInitializedInRgbFromLongerStream)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeInitializedInHsvFromLongerStream)
+TEST(Color_Tests, ColorCanBeInitializedInHsvFromLongerStream)
 {
 	std::stringstream input;
 	input << "= { color = hsv { 0.5 0.5 0.5 } } more text";
@@ -459,9 +459,9 @@ TEST(NewColor_Tests, ColorCanBeInitializedInHsvFromLongerStream)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeOutputInUnspecifiedColorSpace)
+TEST(Color_Tests, ColorCanBeOutputInUnspecifiedColorSpace)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
 	output << testColor;
@@ -470,9 +470,9 @@ TEST(NewColor_Tests, ColorCanBeOutputInUnspecifiedColorSpace)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeOutputInRgbColorSpace)
+TEST(Color_Tests, ColorCanBeOutputInRgbColorSpace)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
 	output << testColor.outputRgb();
@@ -481,9 +481,9 @@ TEST(NewColor_Tests, ColorCanBeOutputInRgbColorSpace)
 }
 
 
-TEST(NewColor_Tests, ColorCanBeOutputInHsvColorSpace)
+TEST(Color_Tests, ColorCanBeOutputInHsvColorSpace)
 {
-	const commonItems::newColor testColor(std::array<int, 3>{64, 128, 128});
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
 
 	std::stringstream output;
 	output << testColor.outputHsv();
@@ -492,28 +492,28 @@ TEST(NewColor_Tests, ColorCanBeOutputInHsvColorSpace)
 }
 
 
-TEST(NewColor_Tests, UnequalFromDifferentRgb)
+TEST(Color_Tests, UnequalFromDifferentRgb)
 {
-	const commonItems::newColor colorOne(std::array<int, 3>{2, 4, 8});
-	const commonItems::newColor colorTwo(std::array<int, 3>{3, 4, 8});
+	const commonItems::Color colorOne(std::array<int, 3>{2, 4, 8});
+	const commonItems::Color colorTwo(std::array<int, 3>{3, 4, 8});
 
 	ASSERT_NE(colorOne, colorTwo);
 }
 
 
-TEST(NewColor_Tests, UnequalFromDifferentHsv)
+TEST(Color_Tests, UnequalFromDifferentHsv)
 {
-	const commonItems::newColor colorOne(std::array<float, 3>{0.333f, 0.50f, 0.50f});
-	const commonItems::newColor colorTwo(std::array<float, 3>{0.333f, 0.75f, 0.75f});
+	const commonItems::Color colorOne(std::array<float, 3>{0.333f, 0.50f, 0.50f});
+	const commonItems::Color colorTwo(std::array<float, 3>{0.333f, 0.75f, 0.75f});
 
 	ASSERT_NE(colorOne, colorTwo);
 }
 
 
-TEST(NewColor_Tests, Equality)
+TEST(Color_Tests, Equality)
 {
-	const commonItems::newColor colorOne(std::array<int, 3>{2, 4, 8});
-	const commonItems::newColor colorTwo(std::array<int, 3>{2, 4, 8});
+	const commonItems::Color colorOne(std::array<int, 3>{2, 4, 8});
+	const commonItems::Color colorTwo(std::array<int, 3>{2, 4, 8});
 
 	ASSERT_EQ(colorOne, colorTwo);
 }

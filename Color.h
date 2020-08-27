@@ -12,16 +12,16 @@
 namespace commonItems
 {
 
-class newColor
+class Color
 {
   public:
 	class Factory;
-	newColor() = default;
-	newColor(const std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
-	newColor(const std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
+	Color() = default;
+	Color(const std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
+	Color(const std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
 
-	bool operator==(const newColor& rhs) const;
-	bool operator!=(const newColor& rhs) const;
+	bool operator==(const Color& rhs) const;
+	bool operator!=(const Color& rhs) const;
 
 	[[nodiscard]] const auto& getRgbComponents() const { return rgbComponents; }
 	[[nodiscard]] const auto& getHsvComponents() const { return hsvComponents; }
@@ -39,7 +39,7 @@ class newColor
 	// bit more (with a much smaller standard deviation).
 	void RandomlyFluctuate(int stdDev);
 
-	friend std::ostream& operator<<(std::ostream&, const newColor&);
+	friend std::ostream& operator<<(std::ostream&, const Color&);
 
   private:
 	void deriveHsvFromRgb();
@@ -50,13 +50,13 @@ class newColor
 };
 
 
-std::ostream& operator<<(std::ostream&, const newColor&);
+std::ostream& operator<<(std::ostream&, const Color&);
 
 
-class newColor::Factory: parser
+class Color::Factory: parser
 {
   public:
-	static newColor getColor(std::istream& theStream);
+	static Color getColor(std::istream& theStream);
 };
 
 } // namespace commonItems
