@@ -25,6 +25,12 @@ class newColor: public Color
 		rgbComponents = rhs.getRgbComponents();
 		hsvComponents = rhs.getHsvComponents();
 	}
+	newColor& operator=(Color rhs)
+	{
+		rgbComponents = rhs.getRgbComponents();
+		hsvComponents = rhs.getHsvComponents();
+		return *this;
+	}
 };
 
 class newColor::Factory: public Color::Factory
