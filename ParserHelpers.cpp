@@ -21,7 +21,10 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	}
 	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
 	{
-		next = getNextLexeme(theStream);
+		if (theStream.peek() == '{')
+			next = getNextLexeme(theStream);
+		else // don't go further in cases like "type = rgb"
+			return;
 	}
 	if (next == "{")
 	{
