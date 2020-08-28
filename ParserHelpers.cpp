@@ -21,7 +21,10 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	}
 	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
 	{
-		next = getNextLexeme(theStream);
+		if (theStream.peek() == '{')
+			next = getNextLexeme(theStream);
+		else // don't go further in cases like "type = rgb"
+			return;
 	}
 	if (next == "{")
 	{
@@ -224,11 +227,11 @@ int simpleObject::getValueAsInt(const std::string& key) const
 doubleList::doubleList(std::istream& theStream)
 {
 	registerRegex(R"(-?\d+(.\d+)?)", [this](const std::string& theDouble, std::istream& theStream) {
-		doubles.push_back(std::stof(theDouble));
+		doubles.push_back(std::stod(theDouble));
 	});
 	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
 		const auto newDouble = stringutils::remQuotes(theDouble);
-		doubles.push_back(std::stof(newDouble));
+		doubles.push_back(std::stod(newDouble));
 	});
 
 	parseStream(theStream);
@@ -242,7 +245,7 @@ singleDouble::singleDouble(std::istream& theStream)
 
 	try
 	{
-		theDouble = stof(token);
+		theDouble = stod(token);
 	}
 	catch (std::exception&)
 	{

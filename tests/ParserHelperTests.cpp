@@ -211,7 +211,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleInt theInteger(input);
@@ -367,7 +367,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleDouble theDouble(input);
@@ -663,8 +663,8 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresRgbAndHsvStringsWithoutBreakingParsing
 	char buffer2[256];
 	input.getline(buffer, sizeof buffer);
 	input2.getline(buffer2, sizeof buffer2);
-	ASSERT_EQ(" next_parameter = 69 More text", std::string{buffer});
-	ASSERT_EQ(" next_parameter = 420 More text", std::string{buffer2});
+	ASSERT_EQ("next_parameter = 69 More text", std::string{buffer});
+	ASSERT_EQ("next_parameter = 420 More text", std::string{buffer2});
 }
 
 

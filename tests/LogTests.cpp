@@ -7,7 +7,7 @@
 TEST(Log_Tests, ErrorMessagesLogged)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	Log(LogLevel::Error) << "Error message";
@@ -21,7 +21,7 @@ TEST(Log_Tests, ErrorMessagesLogged)
 TEST(Log_Tests, WarningMessagesLogged)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	Log(LogLevel::Warning) << "Warning message";
@@ -35,7 +35,7 @@ TEST(Log_Tests, WarningMessagesLogged)
 TEST(Log_Tests, InfoMessagesLogged)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	Log(LogLevel::Info) << "Info message";
@@ -49,7 +49,7 @@ TEST(Log_Tests, InfoMessagesLogged)
 TEST(Log_Tests, DebugMessagesLogged)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	Log(LogLevel::Debug) << "Debug message";
@@ -62,7 +62,7 @@ TEST(Log_Tests, DebugMessagesLogged)
 TEST(Log_Tests, ProgressMessagesLogged)
 {
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	Log(LogLevel::Progress) << "Progress message";

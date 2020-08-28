@@ -26,8 +26,8 @@ std::wstring GetCurrentDirectoryWString()
     // Tried straight returning wstring, but on Linux it will break if filesystem uses characters
     // outside ascii, apparently inherent conversion is broken.
     try {
-        auto path = fs::current_path().string();
-        return convertUTF8ToUTF16(path);
+		const auto path = fs::current_path().string();
+		return convertUTF8ToUTF16(path);
     }
     catch (std::exception& e)
     {
@@ -41,7 +41,7 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 	std::set<std::string> fileNames;
 	if (!fs::exists(fs::u8path(path)))
 		return fileNames;
-	for (auto& p: fs::directory_iterator(fs::u8path(path)))
+	for (const auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
 		{
@@ -56,7 +56,7 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 	std::set<std::string> subFolders;
 	if (!fs::exists(fs::u8path(path)))
 		return subFolders;
-	for (auto& p: fs::directory_iterator(fs::u8path(path)))
+	for (const auto& p: fs::directory_iterator(fs::u8path(path)))
 	{
 		if (p.is_directory())
 		{

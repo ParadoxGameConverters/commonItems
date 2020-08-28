@@ -17,7 +17,7 @@ std::string trimExtension(const std::string& fileName)
 	return fileName.substr(0, length);
 }
 
-std::string replaceCharacter(std::string fileName, char character)
+std::string replaceCharacter(std::string fileName, const char character)
 {
 	std::replace(fileName.begin(), fileName.end(), character, '_');
 	return fileName;
