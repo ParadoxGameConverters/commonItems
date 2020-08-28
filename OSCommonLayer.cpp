@@ -150,7 +150,7 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 	return asciiPath;
 }
 
-#if _MSC_VER >= 1900
+#if _MSC_VER >= 1900 && _MSC_VER < 1920
 std::string utf16_to_utf8(std::u16string utf16_string)
 {
     std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> conversion;
