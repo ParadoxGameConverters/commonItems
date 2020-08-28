@@ -171,7 +171,6 @@
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
     <ClCompile Include="ColorTests.cpp" />
-    <ClCompile Include="newColorTests.cpp" />
     <ClCompile Include="OSCompatibilityLayerTests.cpp" />
     <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
@@ -184,7 +183,6 @@
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
     <ClInclude Include="..\Color.h" />
-    <ClInclude Include="..\newColor.h" />
     <ClInclude Include="..\Parser.h" />
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />

@@ -81,9 +81,6 @@
     <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="newColorTests.cpp">
-      <Filter>tests</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -114,9 +111,6 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\Color.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\newColor.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
