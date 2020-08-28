@@ -150,11 +150,26 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 	return asciiPath;
 }
 
+#if _MSC_VER >= 1900 && _MSC_VER < 1920
+std::string utf16_to_utf8(std::u16string utf16_string)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> conversion;
+    auto p = reinterpret_cast<const int16_t *>(utf16_string.data());
+    return conversion.to_bytes(p, p + utf16_string.size());
+}
+#else
+std::string utf16_to_utf8(std::u16string utf16_string)
+{
+    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+    return conversion.to_bytes(utf16_string);
+}
+#endif
+
+
 std::string UTF16ToUTF8(const std::wstring& UTF16)
 {
 	std::u16string u16str(UTF16.begin(), UTF16.end());
-	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
-	return conversion.to_bytes(u16str);
+        return utf16_to_utf8(u16str);
 }
 
 } // namespace Utils
