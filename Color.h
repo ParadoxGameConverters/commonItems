@@ -41,7 +41,7 @@ class Color
 
 	friend std::ostream& operator<<(std::ostream&, const Color&);
 
-  protected: // Todo: turn this to private once newColor is removed
+  private:
 	void deriveHsvFromRgb();
 	void deriveRgbFromHsv();
 
