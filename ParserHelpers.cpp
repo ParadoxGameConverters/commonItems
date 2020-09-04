@@ -2,7 +2,7 @@
 #include "Log.h"
 #include "StringUtils.h"
 #include <cctype>
-#include <iostream>
+#include <sstream>
 
 
 namespace commonItems
