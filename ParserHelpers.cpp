@@ -2,7 +2,6 @@
 #include "Log.h"
 #include "StringUtils.h"
 #include <cctype>
-#include <sstream>
 #include <iostream>
 
 
@@ -307,7 +306,6 @@ blobList::blobList(std::istream& theStream)
 		}
 		else
 		{
-			std::cout << next;
 			break;
 		}
 	}
