@@ -691,9 +691,8 @@ TEST(ParserHelper_Tests, BlobListDefaultsToEmpty)
 
 	const commonItems::blobList theBlobs(input);
 
-	ASSERT_EQ(std::vector<std::string>{}, theBlobs.getBlobs());
+	ASSERT_TRUE(theBlobs.getBlobs().empty());
 }
-
 
 TEST(ParserHelper_Tests, BlobListAddsBlobs)
 {
@@ -737,6 +736,16 @@ TEST(ParserHelper_Tests, BlobListIgnoresEverythingOutsideBlobs)
 
 	const auto expectedBlobs = std::vector<std::string>{"foo", "bar", "baz"};
 	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListIsEmptyOnTrivialWrongUsage)
+{
+	std::stringstream input{"= value\n"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	ASSERT_TRUE(theBlobs.getBlobs().empty());
 }
 
 TEST(ParserHelper_Tests, BlobListIsEmptyOnSimpleWrongUsage)
