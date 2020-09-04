@@ -3,6 +3,7 @@
 #include "StringUtils.h"
 #include <cctype>
 #include <sstream>
+#include <iostream>
 
 
 namespace commonItems
@@ -254,6 +255,63 @@ singleDouble::singleDouble(std::istream& theStream)
 	}
 }
 
+blobList::blobList(std::istream& theStream)
+{
+	auto next = getNextLexeme(theStream);
+	if (next == "=")
+	{
+		next = getNextLexeme(theStream);
+	}
+	while (true)
+	{
+		if (next == "{")
+		{
+			auto braceDepth = 0;
+			std::string toReturn;
+			while (true)
+			{
+				if (theStream.eof())
+					return;
+				char inputChar;
+				theStream >> inputChar;
+				if (inputChar == '{')
+				{
+					if (braceDepth > 0)
+					{
+						toReturn += inputChar;
+					}
+					braceDepth++;
+				}
+				else if (inputChar == '}')
+				{
+					braceDepth--;
+					if (braceDepth > 0)
+						toReturn += inputChar;
+					else if (braceDepth == 0)
+					{
+						blobs.emplace_back(toReturn);
+						toReturn.clear();
+					}
+					else if (braceDepth == -1)
+						return;
+				}
+				else if (braceDepth == 0)
+				{
+					// Ignore this character. Only look for blobs.
+				}
+				else
+				{
+					toReturn += inputChar;
+				}
+			}
+		}
+		else
+		{
+			std::cout << next;
+			break;
+		}
+	}
+}
 
 stringList::stringList(std::istream& theStream)
 {

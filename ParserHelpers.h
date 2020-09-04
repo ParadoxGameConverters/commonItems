@@ -72,6 +72,17 @@ class doubleList: parser
 	std::vector<double> doubles;
 };
 
+class blobList: parser
+{
+  public:
+	explicit blobList(std::istream& theStream);
+
+	[[nodiscard]] std::vector<std::string> getBlobs() const { return blobs; }
+
+  private:
+	std::vector<std::string> blobs;
+};
+
 
 class singleDouble: parser
 {
