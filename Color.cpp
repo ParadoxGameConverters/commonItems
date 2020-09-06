@@ -47,6 +47,17 @@ std::string commonItems::Color::outputHsv() const
 }
 
 
+std::string commonItems::Color::outputHsv360() const
+{
+	std::stringstream output;
+	output << std::setprecision(3);
+	output << "= hsv360 { " << hsvComponents[0] * 360;
+	output << std::setprecision(2);
+	output << ' ' << hsvComponents[1] * 100 << ' ' << hsvComponents[2] * 100 << " }";
+	return output.str();
+}
+
+
 void commonItems::Color::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(
@@ -211,7 +222,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		const auto r = std::stoi(hex.substr(0, 2), nullptr, 16);
 		const auto g = std::stoi(hex.substr(2, 2), nullptr, 16);
 		const auto b = std::stoi(hex.substr(4, 2), nullptr, 16);
-		return Color(std::array<int, 3>{r,g,b});
+		return Color(std::array<int, 3>{r, g, b});
 	}
 	else if (token == "hsv")
 	{
@@ -222,6 +233,17 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(
 			 std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+	}
+	else if (token == "hsv360")
+	{
+		const auto hsv = doubleList{theStream}.getDoubles();
+		if (hsv.size() != 3)
+		{
+			throw std::runtime_error("Color has wrong number of components");
+		}
+		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0),
+			 static_cast<float>(hsv[1] / 100.0),
+			 static_cast<float>(hsv[2] / 100.0)});
 	}
 	else
 	{

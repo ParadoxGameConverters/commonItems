@@ -35,6 +35,7 @@ class Color
 	[[nodiscard]] std::string outputRgb() const;
 	[[nodiscard]] std::string outputHex() const;
 	[[nodiscard]] std::string outputHsv() const;
+	[[nodiscard]] std::string outputHsv360() const;
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a
 	// bit more (with a much smaller standard deviation).

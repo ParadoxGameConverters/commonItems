@@ -406,6 +406,33 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv360)
+{
+	std::stringstream input;
+	input << "= hsv360 { 180 50 50 }";
+	const auto testColor = commonItems::Color::Factory::getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(63, r);
+	ASSERT_EQ(127, g);
+	ASSERT_EQ(127, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv360)
+{
+	std::stringstream input;
+	input << "= hsv360 { 120 50 }";
+
+	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+}
+
+
 class foo: commonItems::parser
 {
   public:
@@ -527,6 +554,17 @@ TEST(Color_Tests, ColorCanBeOutputInHsvColorSpace)
 	output << testColor.outputHsv();
 
 	ASSERT_EQ("= hsv { 0.5 0.5 0.5 }", output.str());
+}
+
+
+TEST(Color_Tests, ColorCanBeOutputInHsv360ColorSpace)
+{
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
+
+	std::stringstream output;
+	output << testColor.outputHsv360();
+
+	ASSERT_EQ("= hsv360 { 180 50 50 }", output.str());
 }
 
 
