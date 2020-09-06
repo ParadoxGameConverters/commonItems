@@ -135,7 +135,7 @@ void commonItems::Color::deriveRgbFromHsv()
 	const auto [h, s, v] = hsvComponents;
 
 	float r, g, b;
-	if (s == 0) // achromatic (grey)
+	if (s == 0.0f) // achromatic (grey)
 	{
 		r = g = b = v;
 	}
@@ -198,7 +198,7 @@ std::ostream& commonItems::operator<<(std::ostream& out, const Color& color)
 }
 
 
-commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream)
+commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream) const
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
 
