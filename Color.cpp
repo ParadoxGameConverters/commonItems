@@ -28,11 +28,32 @@ std::string commonItems::Color::outputRgb() const
 }
 
 
+std::string commonItems::Color::outputHex() const
+{
+	std::stringstream output;
+	output << "= hex { ";
+	output << std::hex << rgbComponents[0] << rgbComponents[1] << rgbComponents[2];
+	output << " }";
+	return output.str();
+}
+
+
 std::string commonItems::Color::outputHsv() const
 {
 	std::stringstream output;
 	output << std::setprecision(2);
 	output << "= hsv { " << hsvComponents[0] << ' ' << hsvComponents[1] << ' ' << hsvComponents[2] << " }";
+	return output.str();
+}
+
+
+std::string commonItems::Color::outputHsv360() const
+{
+	std::stringstream output;
+	output << std::setprecision(3);
+	output << "= hsv360 { " << hsvComponents[0] * 360;
+	output << std::setprecision(2);
+	output << ' ' << hsvComponents[1] * 100 << ' ' << hsvComponents[2] * 100 << " }";
 	return output.str();
 }
 
@@ -191,6 +212,18 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
+	else if (token == "hex")
+	{
+		const auto hex = singleString{theStream}.getString();
+		if (hex.size() != 6)
+		{
+			throw std::runtime_error("Color has wrong number of digits");
+		}
+		const auto r = std::stoi(hex.substr(0, 2), nullptr, 16);
+		const auto g = std::stoi(hex.substr(2, 2), nullptr, 16);
+		const auto b = std::stoi(hex.substr(4, 2), nullptr, 16);
+		return Color(std::array<int, 3>{r, g, b});
+	}
 	else if (token == "hsv")
 	{
 		const auto hsv = doubleList{theStream}.getDoubles();
@@ -200,6 +233,17 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(
 			 std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+	}
+	else if (token == "hsv360")
+	{
+		const auto hsv = doubleList{theStream}.getDoubles();
+		if (hsv.size() != 3)
+		{
+			throw std::runtime_error("Color has wrong number of components");
+		}
+		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0),
+			 static_cast<float>(hsv[1] / 100.0),
+			 static_cast<float>(hsv[2] / 100.0)});
 	}
 	else
 	{
