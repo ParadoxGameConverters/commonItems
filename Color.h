@@ -33,6 +33,7 @@ class Color
 	[[nodiscard]] const auto& v() const { return hsvComponents[2]; }
 
 	[[nodiscard]] std::string outputRgb() const;
+	[[nodiscard]] std::string outputHex() const;
 	[[nodiscard]] std::string outputHsv() const;
 
 	// All three color components will go up or down by the some amount (according to stdDev), and then each is tweaked a

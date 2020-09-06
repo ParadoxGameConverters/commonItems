@@ -352,6 +352,33 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInHex)
+{
+	std::stringstream input;
+	input << "= hex { 408080 }";
+	const auto testColor = commonItems::Color::Factory::getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(Color_Tests, ColorInitializationRequiresSixDigitsWhenHex)
+{
+	std::stringstream input;
+	input << "= hex { 12345 }";
+
+	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+}
+
+
 TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv)
 {
 	std::stringstream input;
@@ -478,6 +505,17 @@ TEST(Color_Tests, ColorCanBeOutputInRgbColorSpace)
 	output << testColor.outputRgb();
 
 	ASSERT_EQ("= rgb { 64 128 128 }", output.str());
+}
+
+
+TEST(Color_Tests, ColorCanBeOutputInHexColorSpace)
+{
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128});
+
+	std::stringstream output;
+	output << testColor.outputHex();
+
+	ASSERT_EQ("= hex { 408080 }", output.str());
 }
 
 
