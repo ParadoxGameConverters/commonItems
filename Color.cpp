@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <random>
 #include <sstream>
+#include <regex>
 
 
 
@@ -245,6 +246,17 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			 static_cast<float>(hsv[1] / 100.0),
 			 static_cast<float>(hsv[2] / 100.0)});
 	}
+	else if (std::smatch match; std::regex_match(*token, match, std::regex(catchallRegex)))
+	{
+		if (const auto color = namedColors.find(*token); color != namedColors.end())
+		{
+			return color->second;
+		}
+		else
+		{
+			throw std::runtime_error(*token + " was not a cached color");
+		}
+	}
 	else
 	{
 		auto actualToken = *token;
@@ -259,4 +271,16 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
+}
+
+
+void commonItems::Color::Factory::addNamedColor(std::string name, Color color)
+{
+	namedColors.insert(std::make_pair(std::move(name), color));
+}
+
+
+void commonItems::Color::Factory::addNamedColor(std::string name, std::istream& theStream)
+{
+	namedColors.insert(std::make_pair(std::move(name), getColor(theStream)));
 }
