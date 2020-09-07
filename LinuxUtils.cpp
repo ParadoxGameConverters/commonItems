@@ -465,7 +465,7 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 				case EILSEQ:
 					LOG(LogLevel::Error) << "invalid input sequence encountered during conversion of "
 								<< from.data << " from " << fromCode << " to " << toCode
-								<< " : " << std::hex << *reinterpret_cast<unsigned int *>(from.in_buffer);
+								<< " : " << std::hex << *reinterpret_cast<uint16_t *>(from.in_buffer);
 					return false;
 				case EINVAL:
 					LOG(LogLevel::Error) << "incomplete input sequence encountered during conversion from " << fromCode
