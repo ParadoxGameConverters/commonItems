@@ -284,7 +284,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStream)
 {
 	std::stringstream input;
 	input << "= { 64 128 128 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -302,7 +302,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 {
 	std::stringstream input;
 	input << R"(= { "64" "128" "128" })";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -329,7 +329,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInRgb)
 {
 	std::stringstream input;
 	input << "= rgb { 64 128 128 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -356,7 +356,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInHex)
 {
 	std::stringstream input;
 	input << "= hex { 408080 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(64, r);
@@ -383,7 +383,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv)
 {
 	std::stringstream input;
 	input << "= hsv { 0.5 0.5 0.5 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(63, r);
@@ -410,7 +410,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv360)
 {
 	std::stringstream input;
 	input << "= hsv360 { 180 50 50 }";
-	const auto testColor = commonItems::Color::Factory::getColor(input);
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
 	ASSERT_EQ(63, r);
@@ -433,13 +433,87 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv360)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedFromStreamWithName)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColor("dark_moderate_cyan", commonItems::Color(std::array<int, 3>{64, 128, 128}));
+	
+	std::stringstream input;
+	input << "= dark_moderate_cyan";
+	const auto testColor = colorFactory.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(Color_Tests, ColorInitializingRequiresCachedColorWhenUsingName)
+{
+	const auto colorFactory = commonItems::Color::Factory();
+	
+	std::stringstream input;
+	input << "= dark_moderate_cyan";
+	ASSERT_THROW(colorFactory.getColor(input), std::runtime_error);
+}
+
+
+TEST(Color_Tests, ColorCanBeCachedFromStream)
+{
+	auto colorFactory = commonItems::Color::Factory();
+
+	std::stringstream cacheInput;
+	cacheInput << "= rgb { 64 128 128 }";
+	colorFactory.addNamedColor("dark_moderate_cyan", cacheInput);
+
+	std::stringstream input;
+	input << "= dark_moderate_cyan";
+	const auto testColor = colorFactory.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(Color_Tests, ColorCanBeInitializedWithName)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColor("dark_moderate_cyan", commonItems::Color(std::array<int, 3>{64, 128, 128}));
+
+	const auto testColor = colorFactory.getColor("dark_moderate_cyan");
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
 class foo: commonItems::parser
 {
   public:
 	explicit foo(std::istream& theStream)
 	{
 		registerKeyword("color", [this](const std::string& unused, std::istream& theStream) {
-			color = commonItems::Color::Factory::getColor(theStream);
+			color = commonItems::Color::Factory{}.getColor(theStream);
 		});
 		parseStream(theStream);
 	}

@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iomanip>
 #include <random>
+#include <regex>
 #include <sstream>
 
 
@@ -135,7 +136,7 @@ void commonItems::Color::deriveRgbFromHsv()
 	const auto [h, s, v] = hsvComponents;
 
 	float r, g, b;
-	if (s == 0) // achromatic (grey)
+	if (s == 0.0f) // achromatic (grey)
 	{
 		r = g = b = v;
 	}
@@ -198,7 +199,7 @@ std::ostream& commonItems::operator<<(std::ostream& out, const Color& color)
 }
 
 
-commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream)
+commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream) const
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
 
@@ -245,6 +246,17 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			 static_cast<float>(hsv[1] / 100.0),
 			 static_cast<float>(hsv[2] / 100.0)});
 	}
+	else if (std::smatch match; std::regex_match(*token, match, std::regex(catchallRegex)))
+	{
+		if (const auto color = namedColors.find(*token); color != namedColors.end())
+		{
+			return color->second;
+		}
+		else
+		{
+			throw std::runtime_error(*token + " was not a cached color");
+		}
+	}
 	else
 	{
 		auto actualToken = *token;
@@ -259,4 +271,29 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
+}
+
+
+commonItems::Color commonItems::Color::Factory::getColor(const std::string& colorName) const
+{
+	if (const auto color = namedColors.find(colorName); color != namedColors.end())
+	{
+		return color->second;
+	}
+	else
+	{
+		throw std::runtime_error(colorName + " was not a cached color");
+	}
+}
+
+
+void commonItems::Color::Factory::addNamedColor(std::string name, Color color)
+{
+	namedColors.insert(std::make_pair(std::move(name), color));
+}
+
+
+void commonItems::Color::Factory::addNamedColor(std::string name, std::istream& theStream)
+{
+	namedColors.insert(std::make_pair(std::move(name), getColor(theStream)));
 }

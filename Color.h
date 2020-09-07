@@ -58,7 +58,14 @@ std::ostream& operator<<(std::ostream&, const Color&);
 class Color::Factory: parser
 {
   public:
-	static Color getColor(std::istream& theStream);
+	[[nodiscard]] Color getColor(std::istream& theStream) const;
+	[[nodiscard]] Color getColor(const std::string& colorName) const;
+
+	void addNamedColor(std::string name, Color color);
+	void addNamedColor(std::string name, std::istream& theStream);
+
+  private:
+	std::unordered_map<std::string, Color> namedColors;
 };
 
 } // namespace commonItems
