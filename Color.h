@@ -66,6 +66,8 @@ class Color::Factory: parser
 	void addNamedColor(const std::string& name, std::istream& theStream);
 	void addNamedColorMap(const std::map<std::string, Color>& colorMap);
 
+	void clear() { namedColors.clear(); }
+
   private:
 	std::unordered_map<std::string, Color> namedColors;
 };

@@ -790,4 +790,21 @@ TEST(Color_Tests, ColorPaletteCanBeAlteredByMap)
 	ASSERT_NEAR(1.0f, v2, 0.01);
 }
 
+TEST(Color_Tests, ColorPaletteCanBeCleared)
+{
+	std::map<std::string, commonItems::Color> colorMap;
+	colorMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{0, 0, 0})));
+	colorMap.insert(std::pair("red", commonItems::Color(std::array<int, 3>{255, 255, 19})));
+	
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColorMap(colorMap);
+
+	ASSERT_EQ(2, colorFactory.getRegisteredColors().size());
+
+	colorFactory.clear();
+
+	ASSERT_TRUE(colorFactory.getRegisteredColors().empty());
+}
+
+
 // RandomlyFluctuate() isn't easily testable, so skipped
