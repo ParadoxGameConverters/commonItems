@@ -668,5 +668,126 @@ TEST(Color_Tests, Equality)
 	ASSERT_EQ(colorOne, colorTwo);
 }
 
+TEST(Color_Tests, ColorPaletteCanBeInitializedByMap)
+{
+	std::map<std::string, commonItems::Color> theMap;
+	theMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{255, 255, 255})));
+	theMap.insert(std::pair("gray", commonItems::Color(std::array<int, 3>{50, 50, 50})));
+	
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColorMap(theMap);
+
+	std::stringstream input;
+	input << "= white";
+	const auto white = colorFactory.getColor(input);
+	std::stringstream input2;
+	input2 << "= gray";
+	const auto gray = colorFactory.getColor(input2);
+
+	auto [r, g, b] = white.getRgbComponents();
+	ASSERT_EQ(255, r);
+	ASSERT_EQ(255, g);
+	ASSERT_EQ(255, b);
+
+	auto [h, s, v] = white.getHsvComponents();
+	ASSERT_NEAR(0.0f, h, 0.01);
+	ASSERT_NEAR(0.0f, s, 0.01);
+	ASSERT_NEAR(1.0f, v, 0.01);
+
+	auto [r2, g2, b2] = gray.getRgbComponents();
+	ASSERT_EQ(50, r2);
+	ASSERT_EQ(50, g2);
+	ASSERT_EQ(50, b2);
+
+	auto [h2, s2, v2] = gray.getHsvComponents();
+	ASSERT_NEAR(0.0f, h2, 0.01);
+	ASSERT_NEAR(0.0f, s2, 0.01);
+	ASSERT_NEAR(0.196f, v2, 0.01);
+}
+
+TEST(Color_Tests, ColorPaletteCanBeAlteredByStream)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	std::stringstream input;
+	input << "= { 255 0 0 }";
+	colorFactory.addNamedColor("gold", input);
+	
+	std::stringstream input2;
+	input2 << "= hex { FFD700 }";
+	colorFactory.addNamedColor("gold", input2);
+	
+	const auto gold = colorFactory.getColor("gold");
+
+	auto [r, g, b] = gold.getRgbComponents();
+	ASSERT_EQ(255, r);
+	ASSERT_EQ(215, g);
+	ASSERT_EQ(0, b);
+
+	auto [h, s, v] = gold.getHsvComponents();
+	ASSERT_NEAR(0.142f, h, 0.01);
+	ASSERT_NEAR(1.0f, s, 0.01);
+	ASSERT_NEAR(1.0f, v, 0.01);
+}
+
+TEST(Color_Tests, ColorPaletteCanBeAlteredDirectly)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColor("gold", commonItems::Color(std::array<int, 3>{255, 0, 0}));
+	colorFactory.addNamedColor("gold", commonItems::Color(std::array<int, 3>{255, 215, 0}));
+
+	const auto gray = colorFactory.getColor("gold");
+
+	auto [r, g, b] = gray.getRgbComponents();
+	ASSERT_EQ(255, r);
+	ASSERT_EQ(215, g);
+	ASSERT_EQ(0, b);
+
+	auto [h, s, v] = gray.getHsvComponents();
+	ASSERT_NEAR(0.142f, h, 0.01);
+	ASSERT_NEAR(1.0f, s, 0.01);
+	ASSERT_NEAR(1.0f, v, 0.01);
+}
+
+TEST(Color_Tests, ColorPaletteCanBeAlteredByMap)
+{
+	std::map<std::string, commonItems::Color> wrongMap;
+	wrongMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{0, 0, 0})));
+	wrongMap.insert(std::pair("red", commonItems::Color(std::array<int, 3>{255, 255, 19})));
+
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColorMap(wrongMap);
+
+	std::map<std::string, commonItems::Color> correctMap;
+	correctMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{255, 255, 255})));
+	correctMap.insert(std::pair("red", commonItems::Color(std::array<int, 3>{255, 0, 0})));
+	colorFactory.addNamedColorMap(correctMap);
+
+	std::stringstream input;
+	input << "= white";
+	const auto white = colorFactory.getColor(input);
+	std::stringstream input2;
+	input2 << "= red";
+	const auto red = colorFactory.getColor(input2);
+
+	auto [r, g, b] = white.getRgbComponents();
+	ASSERT_EQ(255, r);
+	ASSERT_EQ(255, g);
+	ASSERT_EQ(255, b);
+
+	auto [h, s, v] = white.getHsvComponents();
+	ASSERT_NEAR(0.0f, h, 0.01);
+	ASSERT_NEAR(0.0f, s, 0.01);
+	ASSERT_NEAR(1.0f, v, 0.01);
+
+	auto [r2, g2, b2] = red.getRgbComponents();
+	ASSERT_EQ(255, r2);
+	ASSERT_EQ(0, g2);
+	ASSERT_EQ(0, b2);
+
+	auto [h2, s2, v2] = red.getHsvComponents();
+	ASSERT_NEAR(0.0f, h2, 0.01);
+	ASSERT_NEAR(1.0f, s2, 0.01);
+	ASSERT_NEAR(1.0f, v2, 0.01);
+}
 
 // RandomlyFluctuate() isn't easily testable, so skipped

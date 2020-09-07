@@ -286,14 +286,18 @@ commonItems::Color commonItems::Color::Factory::getColor(const std::string& colo
 	}
 }
 
-
-void commonItems::Color::Factory::addNamedColor(std::string name, Color color)
+void commonItems::Color::Factory::addNamedColor(const std::string& name, const Color& color)
 {
-	namedColors.insert(std::make_pair(std::move(name), color));
+	namedColors[name] = color;
 }
 
-
-void commonItems::Color::Factory::addNamedColor(std::string name, std::istream& theStream)
+void commonItems::Color::Factory::addNamedColor(const std::string& name, std::istream& theStream)
 {
-	namedColors.insert(std::make_pair(std::move(name), getColor(theStream)));
+	namedColors[name] = getColor(theStream);
+}
+
+void commonItems::Color::Factory::addNamedColorMap(const std::map<std::string, Color>& colorMap)
+{
+	for (const auto& color: colorMap)
+		namedColors[color.first] = color.second;
 }
