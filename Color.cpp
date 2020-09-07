@@ -5,8 +5,8 @@
 #include <cmath>
 #include <iomanip>
 #include <random>
-#include <sstream>
 #include <regex>
+#include <sstream>
 
 
 
@@ -270,6 +270,19 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			throw std::runtime_error("Color has wrong number of components");
 		}
 		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+	}
+}
+
+
+commonItems::Color commonItems::Color::Factory::getColor(const std::string& colorName) const
+{
+	if (const auto color = namedColors.find(colorName); color != namedColors.end())
+	{
+		return color->second;
+	}
+	else
+	{
+		throw std::runtime_error(colorName + " was not a cached color");
 	}
 }
 

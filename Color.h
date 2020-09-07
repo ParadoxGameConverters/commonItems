@@ -59,6 +59,7 @@ class Color::Factory: parser
 {
   public:
 	Color getColor(std::istream& theStream) const;
+	Color getColor(const std::string& colorName) const;
 
 	void addNamedColor(std::string name, Color color);
 	void addNamedColor(std::string name, std::istream& theStream);

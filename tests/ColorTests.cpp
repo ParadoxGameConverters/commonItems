@@ -488,6 +488,25 @@ TEST(Color_Tests, ColorCanBeCachedFromStream)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedWithName)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColor("dark_moderate_cyan", commonItems::Color(std::array<int, 3>{64, 128, 128}));
+
+	const auto testColor = colorFactory.getColor("dark_moderate_cyan");
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
 class foo: commonItems::parser
 {
   public:
