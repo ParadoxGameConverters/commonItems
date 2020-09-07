@@ -7,8 +7,7 @@
 #include <random>
 #include <regex>
 #include <sstream>
-
-
+#include "StringUtils.h"
 
 bool commonItems::Color::operator==(const Color& rhs) const
 {
@@ -33,7 +32,9 @@ std::string commonItems::Color::outputHex() const
 {
 	std::stringstream output;
 	output << "= hex { ";
-	output << std::hex << rgbComponents[0] << rgbComponents[1] << rgbComponents[2];
+	output << std::setw(2) << std::setfill('0') << std::hex << rgbComponents[0];
+	output << std::setw(2) << std::setfill('0') << std::hex << rgbComponents[1];
+	output << std::setw(2) << std::setfill('0') << std::hex << rgbComponents[2];
 	output << " }";
 	return output.str();
 }
@@ -203,7 +204,9 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
 
-	const auto token = getNextTokenWithoutMatching(theStream);
+	auto token = getNextTokenWithoutMatching(theStream);
+	if (token)
+		token = stringutils::remQuotes(*token);
 	if (token == "rgb")
 	{
 		const auto rgb = intList{theStream}.getInts();
