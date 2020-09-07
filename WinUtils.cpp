@@ -87,12 +87,12 @@ std::string convertUTF8To8859_15(const std::string& UTF8)
 }
 
 
-std::string convertUTF8ToWin1252(const std::string& UTF8)
+std::string convertUTF8ToWin125_(const std::string& UTF8, int codepage)
 {
-	int requiredSize = WideCharToMultiByte(1252, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, NULL, 0, "0", NULL);
+	int requiredSize = WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, NULL, 0, "0", NULL);
 	char* asciiArray = new char[requiredSize];
 
-	if (0 == WideCharToMultiByte(1252, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", NULL))
+	if (0 == WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", NULL))
 	{
 		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
@@ -101,6 +101,21 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 	delete[] asciiArray;
 
 	return returnable;
+}
+
+std::string convertUTF8ToWin1252(const std::string& UTF8)
+{
+	return convertUTF8ToWin125_(UTF8, 1252);
+}
+
+std::string convertUTF8ToWin1251(const std::string& UTF8)
+{
+	return convertUTF8ToWin125_(UTF8, 1251);
+}
+
+std::string convertUTF8ToWin1250(const std::string& UTF8)
+{
+	return convertUTF8ToWin125_(UTF8, 1250);
 }
 
 std::string convert8859_15ToASCII(const std::string& input)

@@ -463,8 +463,9 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 					to.grow();
 					break;
 				case EILSEQ:
-					LOG(LogLevel::Error) << "invalid input sequence encountered during conversion from " << fromCode
-												<< " to " << toCode;
+					LOG(LogLevel::Error) << "invalid input sequence encountered during conversion of "
+								<< from.data << " from " << fromCode << " to " << toCode
+								<< " : " << std::hex << *reinterpret_cast<unsigned int *>(from.in_buffer);
 					return false;
 				case EINVAL:
 					LOG(LogLevel::Error) << "incomplete input sequence encountered during conversion from " << fromCode
@@ -542,6 +543,17 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 	return ConvertString<string, string>("UTF−8", "CP1252", UTF8);
 }
 
+std::string convertUTF8ToWin1251(const std::string& UTF8)
+{
+	using namespace std;
+	return ConvertString<string, string>("UTF−8", "CP1251", UTF8);
+}
+
+std::string convertUTF8ToWin1250(const std::string& UTF8)
+{
+	using namespace std;
+	return ConvertString<string, string>("UTF−8", "CP1250", UTF8);
+}
 
 std::string convert8859_15ToUTF8(const std::string& input)
 {
