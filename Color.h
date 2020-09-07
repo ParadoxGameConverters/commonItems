@@ -60,9 +60,11 @@ class Color::Factory: parser
   public:
 	[[nodiscard]] Color getColor(std::istream& theStream) const;
 	[[nodiscard]] Color getColor(const std::string& colorName) const;
+	[[nodiscard]] const auto& getRegisteredColors() const { return namedColors; }
 
-	void addNamedColor(std::string name, Color color);
-	void addNamedColor(std::string name, std::istream& theStream);
+	void addNamedColor(const std::string& name, const Color& color);
+	void addNamedColor(const std::string& name, std::istream& theStream);
+	void addNamedColorMap(const std::map<std::string, Color>& colorMap);
 
   private:
 	std::unordered_map<std::string, Color> namedColors;
