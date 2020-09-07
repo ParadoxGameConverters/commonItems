@@ -104,6 +104,8 @@ std::wstring convertWin1250ToUTF16(const std::string& Win1250);
 std::wstring convertUTF8ToUTF16(const std::string& UTF8);
 std::string convertWin1251ToUTF8(const std::string& Win1251);
 std::string convertUTF8toWin1251(const std::string& UTF8);
+std::string convertUTF8ToWin1251(const std::string& UTF8);
+std::string convertUTF8ToWin1250(const std::string& UTF8);
 
 // converts a string in the system dependent wchar_t encoding to UTF-8
 std::string convertToUTF8(const std::wstring& input);
