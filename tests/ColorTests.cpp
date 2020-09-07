@@ -453,6 +453,26 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithName)
 	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
+TEST(Color_Tests, ColorCanBeInitializedFromQuotedStreamWithName)
+{
+	auto colorFactory = commonItems::Color::Factory();
+	colorFactory.addNamedColor("dark_moderate_cyan", commonItems::Color(std::array<int, 3>{64, 128, 128}));
+
+	std::stringstream input;
+	input << "= \"dark_moderate_cyan\"";
+	const auto testColor = colorFactory.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
 
 TEST(Color_Tests, ColorInitializingRequiresCachedColorWhenUsingName)
 {
@@ -619,6 +639,15 @@ TEST(Color_Tests, ColorCanBeOutputInHexColorSpace)
 	ASSERT_EQ("= hex { 408080 }", output.str());
 }
 
+TEST(Color_Tests, ColorCanBeOutputInHexColorSpacePreservingZeroes)
+{
+	const commonItems::Color testColor(std::array<int, 3>{0, 0, 0});
+
+	std::stringstream output;
+	output << testColor.outputHex();
+
+	ASSERT_EQ("= hex { 000000 }", output.str());
+}
 
 TEST(Color_Tests, ColorCanBeOutputInHsvColorSpace)
 {
