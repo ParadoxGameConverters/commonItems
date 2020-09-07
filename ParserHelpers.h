@@ -12,7 +12,7 @@
 namespace commonItems
 {
 
-const std::string catchallRegex{R"([a-zA-Z0-9_\.]+)"};
+const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@]+)"};
 
 
 void ignoreItem(const std::string& unused, std::istream& theStream);
@@ -70,6 +70,17 @@ class doubleList: parser
 
   private:
 	std::vector<double> doubles;
+};
+
+class blobList: parser
+{
+  public:
+	explicit blobList(std::istream& theStream);
+
+	[[nodiscard]] std::vector<std::string> getBlobs() const { return blobs; }
+
+  private:
+	std::vector<std::string> blobs;
 };
 
 

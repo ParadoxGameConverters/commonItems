@@ -165,12 +165,12 @@
     <ClCompile Include="..\GameVersion.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CommonFunctionsTests.cpp" />
-    <ClCompile Include="ColorTests.cpp" />
     <ClCompile Include="DateTests.cpp" />
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
+    <ClCompile Include="ColorTests.cpp" />
     <ClCompile Include="OSCompatibilityLayerTests.cpp" />
     <ClCompile Include="ParserHelperTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
@@ -178,11 +178,11 @@
     <ClCompile Include="GameVersionTests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Color.h" />
     <ClInclude Include="..\CommonFunctions.h" />
     <ClInclude Include="..\Date.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
+    <ClInclude Include="..\Color.h" />
     <ClInclude Include="..\Parser.h" />
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />

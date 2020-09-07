@@ -1,5 +1,5 @@
-#ifndef OS_COMPATABILITY_LAYER_H
-#define OS_COMPATABILITY_LAYER_H
+#ifndef OS_COMPATIBILITY_LAYER_H
+#define OS_COMPATIBILITY_LAYER_H
 
 #include "Log.h"
 #include "iconvlite.h"
@@ -114,4 +114,4 @@ std::string normalizeUTF8Path(const std::string& utf_8_path);
 } // namespace Utils
 
 
-#endif // OS_COMPATABILITY_LAYER_H
+#endif // OS_COMPATIBILITY_LAYER_H

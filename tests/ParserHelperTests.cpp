@@ -211,7 +211,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleInt theInteger(input);
@@ -367,7 +367,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 	std::stringstream input{"= foo"};
 
 	const std::stringstream log;
-	const auto stdOutBuf = std::cout.rdbuf();
+	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
 	const commonItems::singleDouble theDouble(input);
@@ -612,4 +612,159 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	ASSERT_FALSE(wrapper.themap["b"]);
 	ASSERT_TRUE(wrapper.themap["c"]);
 	ASSERT_TRUE(wrapper.themap["d"]);
+}
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleColorWithColorSpace)
+{
+	std::stringstream input{"rgb {6 7 15} More text"};
+	std::stringstream input2{"hsv {0.1 1.0 0.6} More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ(" More text", std::string{buffer});
+	ASSERT_EQ(" More text", std::string{buffer2});
+}
+
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedColorWithColorSpace)
+{
+	std::stringstream input{"= rgb {6 7 15} More text"};
+	std::stringstream input2{"= hsv {0.1 1.0 0.6} More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ(" More text", std::string{buffer});
+	ASSERT_EQ(" More text", std::string{buffer2});
+}
+
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresRgbAndHsvStringsWithoutBreakingParsing)
+{
+	std::stringstream input{"= rgb next_parameter = 69 More text"};
+	std::stringstream input2{"= hsv next_parameter = 420 More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ("next_parameter = 69 More text", std::string{buffer});
+	ASSERT_EQ("next_parameter = 420 More text", std::string{buffer2});
+}
+
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresQuotedRgbAndHsvStringsWithoutBreakingParsing)
+{
+	std::stringstream input{"= \"rgb\" next_parameter = 69 More text"};
+	std::stringstream input2{"= \"hsv\" next_parameter = 420 More text"};
+	input >> std::noskipws;
+	input2 >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem("unused", input2);
+
+	char buffer[256];
+	char buffer2[256];
+	input.getline(buffer, sizeof buffer);
+	input2.getline(buffer2, sizeof buffer2);
+	ASSERT_EQ(" next_parameter = 69 More text", std::string{buffer});
+	ASSERT_EQ(" next_parameter = 420 More text", std::string{buffer2});
+}
+
+TEST(ParserHelper_Tests, BlobListDefaultsToEmpty)
+{
+	std::stringstream input;
+
+	const commonItems::blobList theBlobs(input);
+
+	ASSERT_TRUE(theBlobs.getBlobs().empty());
+}
+
+TEST(ParserHelper_Tests, BlobListAddsBlobs)
+{
+	std::stringstream input{"= { {foo} {bar} {baz} }"};
+
+	const commonItems::blobList theBlobs(input);
+	input >> std::noskipws;
+
+	const auto expectedBlobs = std::vector<std::string>{"foo", "bar", "baz"};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListAddsComplicatedBlobs)
+{
+	std::stringstream input{"= { {foo=bar bar=baz} {bar=baz baz=foo} {baz=foo foo=bar} }"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	const auto expectedBlobs = std::vector<std::string>{"foo=bar bar=baz", "bar=baz baz=foo", "baz=foo foo=bar"};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListPreservesEverythingWithinBlobs)
+{
+	std::stringstream input{"= { {foo\t=\nbar\n \n{bar\t=\tbaz\n\n}} {BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t} {\t\nbaz\n\t=\t\n\tfoo\n {} \n\tfoo\t=\tbar\t} }"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	const auto expectedBlobs = std::vector<std::string>{"foo\t=\nbar\n \n{bar\t=\tbaz\n\n}", "BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t", "\t\nbaz\n\t=\t\n\tfoo\n {} \n\tfoo\t=\tbar\t"};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListIgnoresEverythingOutsideBlobs)
+{
+	std::stringstream input{"= {\n\n\t\t{foo}\nkey=value\n\t {bar}\t\nsome=value\t\n{baz}\t\n  randomLooseText   }"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	const auto expectedBlobs = std::vector<std::string>{"foo", "bar", "baz"};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListIsEmptyOnTrivialWrongUsage)
+{
+	std::stringstream input{"= value\n"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	ASSERT_TRUE(theBlobs.getBlobs().empty());
+}
+
+TEST(ParserHelper_Tests, BlobListIsEmptyOnSimpleWrongUsage)
+{
+	std::stringstream input{"= { key=value\n key2=value2 }"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	ASSERT_TRUE(theBlobs.getBlobs().empty());
+}
+
+TEST(ParserHelper_Tests, BlobListIsNotAtFaultYouAreOnComplexWrongUsage)
+{
+	std::stringstream input{"= { key=value\n key2={ key3 = value2 }}"};
+	input >> std::noskipws;
+
+	const commonItems::blobList theBlobs(input);
+
+	const auto expectedBlobs = std::vector<std::string>{" key3 = value2 "};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
 }

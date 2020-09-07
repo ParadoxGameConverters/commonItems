@@ -19,6 +19,13 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	{
 		next = getNextLexeme(theStream);
 	}
+	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
+	{
+		if (theStream.peek() == '{')
+			next = getNextLexeme(theStream);
+		else // don't go further in cases like "type = rgb"
+			return;
+	}
 	if (next == "{")
 	{
 		auto braceDepth = 1;
@@ -220,11 +227,11 @@ int simpleObject::getValueAsInt(const std::string& key) const
 doubleList::doubleList(std::istream& theStream)
 {
 	registerRegex(R"(-?\d+(.\d+)?)", [this](const std::string& theDouble, std::istream& theStream) {
-		doubles.push_back(std::stof(theDouble));
+		doubles.push_back(std::stod(theDouble));
 	});
 	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
 		const auto newDouble = stringutils::remQuotes(theDouble);
-		doubles.push_back(std::stof(newDouble));
+		doubles.push_back(std::stod(newDouble));
 	});
 
 	parseStream(theStream);
@@ -238,7 +245,7 @@ singleDouble::singleDouble(std::istream& theStream)
 
 	try
 	{
-		theDouble = stof(token);
+		theDouble = stod(token);
 	}
 	catch (std::exception&)
 	{
@@ -247,6 +254,62 @@ singleDouble::singleDouble(std::istream& theStream)
 	}
 }
 
+blobList::blobList(std::istream& theStream)
+{
+	auto next = getNextLexeme(theStream);
+	if (next == "=")
+	{
+		next = getNextLexeme(theStream);
+	}
+	while (true)
+	{
+		if (next == "{")
+		{
+			auto braceDepth = 0;
+			std::string toReturn;
+			while (true)
+			{
+				if (theStream.eof())
+					return;
+				char inputChar;
+				theStream >> inputChar;
+				if (inputChar == '{')
+				{
+					if (braceDepth > 0)
+					{
+						toReturn += inputChar;
+					}
+					braceDepth++;
+				}
+				else if (inputChar == '}')
+				{
+					braceDepth--;
+					if (braceDepth > 0)
+						toReturn += inputChar;
+					else if (braceDepth == 0)
+					{
+						blobs.emplace_back(toReturn);
+						toReturn.clear();
+					}
+					else if (braceDepth == -1)
+						return;
+				}
+				else if (braceDepth == 0)
+				{
+					// Ignore this character. Only look for blobs.
+				}
+				else
+				{
+					toReturn += inputChar;
+				}
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+}
 
 stringList::stringList(std::istream& theStream)
 {
@@ -265,7 +328,7 @@ stringList::stringList(std::istream& theStream)
 
 singleString::singleString(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // equals sign
 	theString = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
 }
 
