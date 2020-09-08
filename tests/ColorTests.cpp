@@ -280,7 +280,7 @@ TEST(Color_Tests, RgbConversion_ValueDarkensColor)
 }
 
 
-TEST(Color_Tests, RgbConversion_ExcessiveHueIsIgnored)
+TEST(Color_Tests, RgbConversion_ExcessiveHueIsDiscarded)
 {
 	const commonItems::Color testColor(std::array<float, 3>{1.0f, 1.0f, 1.0f});
 	const commonItems::Color testColor2(std::array<float, 3>{1.1f, 1.0f, 1.0f});
