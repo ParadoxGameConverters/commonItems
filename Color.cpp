@@ -134,7 +134,7 @@ void commonItems::Color::deriveHsvFromRgb()
 
 void commonItems::Color::deriveRgbFromHsv()
 {
-	const auto [h, s, v] = hsvComponents;
+	auto [h, s, v] = hsvComponents;
 
 	float r, g, b;
 	if (s == 0.0f) // achromatic (grey)
@@ -143,6 +143,8 @@ void commonItems::Color::deriveRgbFromHsv()
 	}
 	else
 	{
+		if (h >= 1.0f)
+			h = 0.0f;
 		const int sector = static_cast<int>(floor(h * 6.0f));
 		const float fraction = h * 6.0f - static_cast<float>(sector);
 		const float p = v * (1 - s);
