@@ -280,6 +280,22 @@ TEST(Color_Tests, RgbConversion_ValueDarkensColor)
 }
 
 
+TEST(Color_Tests, RgbConversion_ExcessiveHueIsIgnored)
+{
+	const commonItems::Color testColor(std::array<float, 3>{1.0f, 1.0f, 1.0f});
+	const commonItems::Color testColor2(std::array<float, 3>{1.1f, 1.0f, 1.0f});
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	auto [r2, g2, b2] = testColor2.getRgbComponents();
+	ASSERT_NEAR(255, r, 1);
+	ASSERT_NEAR(0, g, 1);
+	ASSERT_NEAR(0, b, 1);
+	ASSERT_NEAR(255, r2, 1);
+	ASSERT_NEAR(0, g2, 1);
+	ASSERT_NEAR(0, b2, 1);
+}
+
+
 TEST(Color_Tests, ColorCanBeInitializedFromStream)
 {
 	std::stringstream input;
