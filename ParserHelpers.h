@@ -12,7 +12,7 @@
 namespace commonItems
 {
 
-const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@]+)"};
+const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@\']+)"};
 
 
 void ignoreItem(const std::string& unused, std::istream& theStream);
