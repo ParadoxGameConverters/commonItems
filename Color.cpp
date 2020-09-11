@@ -303,6 +303,6 @@ void commonItems::Color::Factory::addNamedColor(const std::string& name, std::is
 
 void commonItems::Color::Factory::addNamedColorMap(const std::map<std::string, Color>& colorMap)
 {
-	for (const auto& color: colorMap)
-		namedColors[color.first] = color.second;
+	for (const auto& [first, second]: colorMap)
+		namedColors[first] = second;
 }
