@@ -269,12 +269,29 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			theStream.putback(*i);
 		}
-		const auto rgb = intList{theStream}.getInts();
-		if (rgb.size() != 3)
+		const auto questionableList = singleItem("", theStream);
+		if (questionableList.find('.') != std::string::npos)
 		{
-			throw std::runtime_error("Color has wrong number of components");
+			// This is a double list.
+			auto doubleStream = std::stringstream(questionableList);
+			auto hsv = doubleList(doubleStream).getDoubles();
+			if (hsv.size() != 3)
+			{
+				throw std::runtime_error("Color has wrong number of components");
+			}
+			return Color(std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
 		}
-		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+		else
+		{
+			// integer list
+			auto integerStream = std::stringstream(questionableList);
+			auto rgb = intList(integerStream).getInts();
+			if (rgb.size() != 3)
+			{
+				throw std::runtime_error("Color has wrong number of components");
+			}
+			return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});			
+		}
 	}
 }
 
