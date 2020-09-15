@@ -279,7 +279,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			{
 				throw std::runtime_error("Color has wrong number of components");
 			}
-			return Color(std::array<int, 3>{lround(hsv[0] * 100), lround(hsv[1] * 100), lround(hsv[2] * 100)});
+			return Color(std::array<int, 3>{lround(hsv[0] * 256.0), lround(hsv[1] * 256.0), lround(hsv[2] * 256.0)});
 		}
 		else
 		{
