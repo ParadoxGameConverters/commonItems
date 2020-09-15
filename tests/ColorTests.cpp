@@ -313,21 +313,21 @@ TEST(Color_Tests, ColorCanBeInitializedFromStream)
 	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
-TEST(Color_Tests, ColorHSVCanBeInitializedFromStream)
+TEST(Color_Tests, ColorRGBDoublesCanBeInitializedFromStream) // Yes, this is a thing.
 {
 	std::stringstream input;
-	input << "= { 0.9 0.9 0.9 }";
+	input << "= { 0.5 0.9 0.1 }";
 	const auto testColor = commonItems::Color::Factory{}.getColor(input);
 
 	auto [r, g, b] = testColor.getRgbComponents();
-	ASSERT_EQ(229, r);
-	ASSERT_EQ(22, g);
-	ASSERT_EQ(146, b);
+	ASSERT_EQ(128, r);
+	ASSERT_EQ(230, g);
+	ASSERT_EQ(26, b);
 
 	auto [h, s, v] = testColor.getHsvComponents();
-	ASSERT_NEAR(0.9f, h, 0.01);
-	ASSERT_NEAR(0.9f, s, 0.01);
-	ASSERT_NEAR(0.9f, v, 0.01);
+	ASSERT_NEAR(0.25f, h, 0.01);
+	ASSERT_NEAR(0.89f, s, 0.01);
+	ASSERT_NEAR(0.90f, v, 0.01);
 }
 
 
