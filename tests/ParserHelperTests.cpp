@@ -222,6 +222,42 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
+TEST(ParserHelper_Tests, SingleLlongGetsIntAfterEquals)
+{
+	std::stringstream input{" = 123456789012345"};
+
+	const commonItems::singleLlong theLlong(input);
+
+	ASSERT_EQ(123456789012345, theLlong.getLlong());
+}
+
+
+TEST(ParserHelper_Tests, SingleLlongGetsQuotedIntAfterEquals)
+{
+	std::stringstream input{R"(= "123456789012345")"};
+
+	const commonItems::singleLlong theLlong(input);
+
+	ASSERT_EQ(123456789012345, theLlong.getLlong());
+}
+
+
+TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
+{
+	std::stringstream input{"= foo"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const commonItems::singleLlong theLlong(input);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] Expected a long long, but instead got foo\n", log.str());
+	ASSERT_EQ(0, theLlong.getLlong());
+}
+
 
 TEST(ParserHelper_Tests, SimpleObjectGetsKeyValuePairs)
 {
