@@ -145,8 +145,8 @@ llongList::llongList(std::istream& theStream)
 		llongs.push_back(std::stoll(theLongLong));
 	});
 	registerRegex(R"(\"\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
-		const auto newInt = theLongLong.substr(1, theLongLong.size() - 2);
-		llongs.push_back(std::stoll(newInt));
+		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
+		llongs.push_back(std::stoll(newLlong));
 	});
 
 	parseStream(theStream);
