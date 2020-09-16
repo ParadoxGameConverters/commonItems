@@ -139,6 +139,19 @@ intList::intList(std::istream& theStream)
 	parseStream(theStream);
 }
 
+llongList::llongList(std::istream& theStream)
+{
+	registerRegex(R"(\d+)", [this](const std::string& theLongLong, std::istream& theStream) {
+		llongs.push_back(std::stoll(theLongLong));
+	});
+	registerRegex(R"(\"\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
+		const auto newInt = theLongLong.substr(1, theLongLong.size() - 2);
+		llongs.push_back(std::stoll(newInt));
+	});
+
+	parseStream(theStream);
+}
+
 
 singleInt::singleInt(std::istream& theStream)
 {

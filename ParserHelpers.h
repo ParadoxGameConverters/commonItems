@@ -34,6 +34,17 @@ class intList: parser
 	std::vector<int> integers;
 };
 
+class llongList: parser
+{
+  public:
+	explicit llongList(std::istream& theStream);
+
+	[[nodiscard]] std::vector<long long> getLlongs() const { return llongs; }
+
+  private:
+	std::vector<long long> llongs;
+};
+
 
 class singleInt: parser
 {
