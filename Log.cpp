@@ -6,9 +6,9 @@
 #include <map>
 
 
-
+#ifdef _WIN32
 #pragma warning(disable : 4996) // suppress warning about localtime, as the alternative is windows-specific
-
+#endif
 
 
 Log::Log(const LogLevel level): logLevel(level)
