@@ -47,6 +47,17 @@ class singleInt: parser
 };
 
 
+class singleLlong: parser
+{
+  public:
+	explicit singleLlong(std::istream& theStream);
+
+	[[nodiscard]] long long getLlong() const noexcept { return theLongLong; }
+
+  private:
+	long long theLongLong = 0;
+};
+
 // Parses an object where each entry is a simple assignment, key = value.
 // Nested objects, key = { ... }, are ignored.
 class simpleObject: parser

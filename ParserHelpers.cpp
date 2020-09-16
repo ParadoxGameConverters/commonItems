@@ -156,6 +156,22 @@ singleInt::singleInt(std::istream& theStream)
 	}
 }
 
+singleLlong::singleLlong(std::istream& theStream)
+{
+	auto equals = getNextTokenWithoutMatching(theStream);
+	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+
+	try
+	{
+		theLongLong = std::stoll(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected a long long, but instead got " << token;
+		theLongLong = 0;
+	}
+}
+
 
 simpleObject::simpleObject(std::istream& theStream)
 {
