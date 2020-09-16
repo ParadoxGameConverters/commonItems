@@ -357,8 +357,8 @@ class ConversionInputBuffer
 class ConversionOutputBuffer
 {
 	std::size_t size;
-	std::size_t block_size;
 	std::size_t remainder;
+	std::size_t block_size;
 	char* data = nullptr;
 	char* out_buffer = nullptr;
 
