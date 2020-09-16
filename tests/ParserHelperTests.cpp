@@ -186,6 +186,48 @@ TEST(ParserHelper_Tests, IntListAddsIntsFromBracedBlock)
 }
 
 
+TEST(ParserHelper_Tests, LlongListDefaultsToEmpty)
+{
+	std::stringstream input;
+
+	const commonItems::llongList theLlongs(input);
+
+	ASSERT_EQ(std::vector<long long>{}, theLlongs.getLlongs());
+}
+
+
+TEST(ParserHelper_Tests, LlongListAddsLlongs)
+{
+	std::stringstream input{"123456789012345 234567890123456 345678901234567"};
+
+	const commonItems::llongList theLlongs(input);
+
+	const auto expectedLlongs = std::vector<long long>{123456789012345, 234567890123456, 345678901234567};
+	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
+
+TEST(ParserHelper_Tests, LlongListAddsQuotedLLongs)
+{
+	std::stringstream input{R"("123456789012345" "234567890123456" "345678901234567")"};
+
+	const commonItems::llongList theLlongs(input);
+
+	const auto expectedLlongs = std::vector<long long>{123456789012345, 234567890123456, 345678901234567};
+	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
+
+TEST(ParserHelper_Tests, LlongListAddsLlongsFromBracedBlock)
+{
+	std::stringstream input{" = {123456789012345 234567890123456 345678901234567} 456789012345678"};
+
+	const commonItems::llongList theLlongs(input);
+
+	const auto expectedLlongs = std::vector<long long>{123456789012345, 234567890123456, 345678901234567};
+	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
 TEST(ParserHelper_Tests, SingleIntGetsIntAfterEquals)
 {
 	std::stringstream input{" = 1"};
