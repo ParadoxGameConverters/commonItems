@@ -6,7 +6,7 @@
 TEST(StringUtils_Tests, RemQuotesRemovesQuotes)
 {
 	const std::string quotedString{R"("Quoted string")"};
-	const auto unquotedString = stringutils::remQuotes(quotedString);
+	const auto unquotedString = commonItems::remQuotes(quotedString);
 
 	ASSERT_EQ("Quoted string", unquotedString);
 }
@@ -15,7 +15,7 @@ TEST(StringUtils_Tests, RemQuotesRemovesQuotes)
 TEST(StringUtils_Tests, RemQuotesRequiresStartingQuotes)
 {
 	const std::string quotedString{R"(Quoted string")"};
-	const auto unquotedString = stringutils::remQuotes(quotedString);
+	const auto unquotedString = commonItems::remQuotes(quotedString);
 
 	ASSERT_EQ(R"(Quoted string")", unquotedString);
 }
@@ -24,7 +24,7 @@ TEST(StringUtils_Tests, RemQuotesRequiresStartingQuotes)
 TEST(StringUtils_Tests, RemQuotesRequiresEndingQuotes)
 {
 	const std::string quotedString{R"("Quoted string)"};
-	const auto unquotedString = stringutils::remQuotes(quotedString);
+	const auto unquotedString = commonItems::remQuotes(quotedString);
 
 	ASSERT_EQ(R"("Quoted string)", unquotedString);
 }
@@ -33,7 +33,7 @@ TEST(StringUtils_Tests, RemQuotesRequiresEndingQuotes)
 TEST(StringUtils_Tests, RemQuotesLeavesSingleQuote)
 {
 	const std::string quotedString{R"(")"};
-	const auto unquotedString = stringutils::remQuotes(quotedString);
+	const auto unquotedString = commonItems::remQuotes(quotedString);
 
 	ASSERT_EQ(R"(")", unquotedString);
 }
@@ -42,7 +42,7 @@ TEST(StringUtils_Tests, RemQuotesLeavesSingleQuote)
 TEST(StringUtils_Tests, AddQuotesTurnsEmptyStringIntoQuoted)
 {
 	const std::string unquotedString;
-	const auto quotedString = stringutils::addQuotes(unquotedString);
+	const auto quotedString = commonItems::addQuotes(unquotedString);
 
 	ASSERT_EQ(R"("")", quotedString);
 }
@@ -51,7 +51,7 @@ TEST(StringUtils_Tests, AddQuotesTurnsEmptyStringIntoQuoted)
 TEST(StringUtils_Tests, AddQuotesLeavesAlreadyQuotedStringAlone)
 {
 	const std::string alreadyQuotedString{R"("already quoted")"};
-	const auto quotedString = stringutils::addQuotes(alreadyQuotedString);
+	const auto quotedString = commonItems::addQuotes(alreadyQuotedString);
 
 	ASSERT_EQ(R"("already quoted")", quotedString);
 }
@@ -60,7 +60,7 @@ TEST(StringUtils_Tests, AddQuotesLeavesAlreadyQuotedStringAlone)
 TEST(StringUtils_Tests, AddQuotesAddsQuotesToUnquotedString)
 {
 	const std::string unqQuotedString{R"(not quoted)"};
-	const auto quotedString = stringutils::addQuotes(unqQuotedString);
+	const auto quotedString = commonItems::addQuotes(unqQuotedString);
 
 	ASSERT_EQ(R"("not quoted")", quotedString);
 }

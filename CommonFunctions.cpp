@@ -66,7 +66,7 @@ std::string cardinalToRoman(int number)
 
 std::string normalizeStringPath(const std::string& stringPath)
 {
-	std::string toReturn = Utils::normalizeUTF8Path(stringPath);
+	std::string toReturn = commonItems::normalizeUTF8Path(stringPath);
 	toReturn = replaceCharacter(toReturn, '-');
 	toReturn = replaceCharacter(toReturn, ' ');
 

@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 #pragma warning(disable : 4996) // suppress warnings about wcscmp()
 
 
-namespace Utils
+namespace commonItems
 {
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
@@ -141,7 +141,7 @@ std::string convertUTF8ToWin1250(const std::string& UTF8)
 
 std::string convert8859_15ToASCII(const std::string& input)
 {
-	return Utils::convertUTF8ToASCII(Utils::convert8859_15ToUTF8(input));
+	return commonItems::convertUTF8ToASCII(commonItems::convert8859_15ToUTF8(input));
 }
 
 
@@ -281,7 +281,7 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 			SetConsoleTextAttribute(console, color);
 			DWORD bytesWritten = 0;
 			WriteConsoleW(console,
-				 Utils::convertUTF8ToUTF16(logMessage).c_str(),
+				 commonItems::convertUTF8ToUTF16(logMessage).c_str(),
 				 static_cast<DWORD>(logMessage.size()),
 				 &bytesWritten,
 				 nullptr);
@@ -356,4 +356,4 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 	return std::nullopt;
 }
 
-} // namespace Utils
+} // namespace commonItems

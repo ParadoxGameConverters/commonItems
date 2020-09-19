@@ -6,7 +6,7 @@
 
 namespace fs = std::filesystem;
 
-namespace Utils
+namespace commonItems
 {
 
 bool TryCreateFolder(const std::string& path)
@@ -172,4 +172,4 @@ std::string UTF16ToUTF8(const std::wstring& UTF16)
         return utf16_to_utf8(u16str);
 }
 
-} // namespace Utils
+} // namespace commonItems

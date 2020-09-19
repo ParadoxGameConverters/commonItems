@@ -2,7 +2,7 @@
 
 
 
-namespace stringutils
+namespace commonItems
 {
 
 std::string remQuotes(const std::string& in)
@@ -40,4 +40,4 @@ std::string addQuotes(const std::string& in)
 	return std::string{'"' + in + '"'};
 }
 
-} // namespace stringutils
+} // namespace commonItems
