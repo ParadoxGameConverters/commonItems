@@ -150,12 +150,12 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (const auto& registration: generatedRegexes)
+			for (const auto& [regex, parsingFunction]: generatedRegexes)
 			{
 				std::smatch match;
-				if (std::regex_match(toReturn, match, registration.first))
+				if (std::regex_match(toReturn, match, regex))
 				{
-					registration.second(toReturn, theStream);
+					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
 				}
@@ -164,12 +164,12 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 		{
-			for (const auto& registration: registeredRegexes)
+			for (const auto& [regex, parsingFunction]: registeredRegexes)
 			{
 				std::smatch match;
-				if (std::regex_match(toReturn, match, registration.first))
+				if (std::regex_match(toReturn, match, regex))
 				{
-					registration.second(toReturn, theStream);
+					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
 				}

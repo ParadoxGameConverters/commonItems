@@ -208,7 +208,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 
 	auto token = getNextTokenWithoutMatching(theStream);
 	if (token)
-		token = stringutils::remQuotes(*token);
+		token = remQuotes(*token);
 	if (token == "rgb")
 	{
 		const auto rgb = intList{theStream}.getInts();

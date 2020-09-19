@@ -2,6 +2,11 @@
 #define COMMON_FUNCTIONS_H
 #include <string>
 
+namespace commonItems
+{
+const std::string utf8BOM = "\xEF\xBB\xBF";
+}
+
 std::string trimPath(const std::string& fileName);
 std::string trimExtension(const std::string& fileName);
 std::string replaceCharacter(std::string fileName, char character);

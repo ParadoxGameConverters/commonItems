@@ -6,7 +6,7 @@
 
 namespace fs = std::filesystem;
 
-namespace Utils
+namespace commonItems
 {
 
 bool TryCreateFolder(const std::string& path)
@@ -158,7 +158,7 @@ std::string utf16_to_utf8(std::u16string utf16_string)
     return conversion.to_bytes(p, p + utf16_string.size());
 }
 #else
-std::string utf16_to_utf8(std::u16string utf16_string)
+std::string utf16_to_utf8(const std::u16string& utf16_string)
 {
     std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
     return conversion.to_bytes(utf16_string);
@@ -168,8 +168,8 @@ std::string utf16_to_utf8(std::u16string utf16_string)
 
 std::string UTF16ToUTF8(const std::wstring& UTF16)
 {
-	std::u16string u16str(UTF16.begin(), UTF16.end());
+	const std::u16string u16str(UTF16.begin(), UTF16.end());
         return utf16_to_utf8(u16str);
 }
 
-} // namespace Utils
+} // namespace commonItems

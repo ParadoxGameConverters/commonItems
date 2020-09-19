@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 #pragma warning(disable : 4996) // suppress warnings about wcscmp()
 
 
-namespace Utils
+namespace commonItems
 {
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
@@ -45,10 +45,7 @@ std::string GetLastErrorString()
 	{
 		return UTF16ToUTF8(errorBuffer);
 	}
-	else
-	{
-		return "Unknown error";
-	}
+	return "Unknown error";
 }
 
 std::string convertUTF8ToASCII(const std::string& UTF8)
@@ -107,9 +104,9 @@ std::string convertUTF8To8859_15(const std::string& UTF8)
 }
 
 
-std::string convertUTF8ToWin125_(const std::string& UTF8, int codepage)
+std::string convertUTF8ToWin125_(const std::string& UTF8, const int codepage)
 {
-	int requiredSize = WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
+	const int requiredSize = WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
 	char* asciiArray = new char[requiredSize];
 
 	if (0 ==
@@ -141,7 +138,7 @@ std::string convertUTF8ToWin1250(const std::string& UTF8)
 
 std::string convert8859_15ToASCII(const std::string& input)
 {
-	return Utils::convertUTF8ToASCII(Utils::convert8859_15ToUTF8(input));
+	return convertUTF8ToASCII(convert8859_15ToUTF8(input));
 }
 
 
@@ -250,7 +247,7 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 		return;
 	}
 
-	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // a handle to the console window
+	const HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // a handle to the console window
 	if (console != INVALID_HANDLE_VALUE)
 	{
 		CONSOLE_SCREEN_BUFFER_INFO oldConsoleInfo; // the current (soon to be outdated) console data
@@ -281,7 +278,7 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 			SetConsoleTextAttribute(console, color);
 			DWORD bytesWritten = 0;
 			WriteConsoleW(console,
-				 Utils::convertUTF8ToUTF16(logMessage).c_str(),
+				 convertUTF8ToUTF16(logMessage).c_str(),
 				 static_cast<DWORD>(logMessage.size()),
 				 &bytesWritten,
 				 nullptr);
@@ -356,4 +353,4 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 	return std::nullopt;
 }
 
-} // namespace Utils
+} // namespace commonItems

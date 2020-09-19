@@ -45,7 +45,7 @@ typedef int errno_t;
 
 #endif //__linux__
 
-namespace Utils
+namespace commonItems
 {
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path);
@@ -113,7 +113,7 @@ std::string convertToUTF8(const std::wstring& input);
 // converts an UTF8 path to the system dependent filesystem path encoding
 std::string normalizeUTF8Path(const std::string& utf_8_path);
 
-} // namespace Utils
+} // namespace commonItems
 
 
 #endif // OS_COMPATIBILITY_LAYER_H

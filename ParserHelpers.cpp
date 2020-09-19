@@ -89,7 +89,7 @@ std::string singleItem(const std::string& unused, std::istream& theStream)
 		}
 	}
 
-	return stringutils::remQuotes(toReturn);
+	return remQuotes(toReturn);
 }
 
 
@@ -156,7 +156,7 @@ llongList::llongList(std::istream& theStream)
 singleInt::singleInt(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
 	{
@@ -172,7 +172,7 @@ singleInt::singleInt(std::istream& theStream)
 singleLlong::singleLlong(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
 	{
@@ -259,7 +259,7 @@ doubleList::doubleList(std::istream& theStream)
 		doubles.push_back(std::stod(theDouble));
 	});
 	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
-		const auto newDouble = stringutils::remQuotes(theDouble);
+		const auto newDouble = remQuotes(theDouble);
 		doubles.push_back(std::stod(newDouble));
 	});
 
@@ -270,7 +270,7 @@ doubleList::doubleList(std::istream& theStream)
 singleDouble::singleDouble(std::istream& theStream)
 {
 	auto equals = getNextTokenWithoutMatching(theStream);
-	const auto token = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
 	{
@@ -348,7 +348,7 @@ stringList::stringList(std::istream& theStream)
 		strings.push_back(theString);
 	});
 	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")", [this](const std::string& theString, std::istream& theStream) {
-		strings.emplace_back(stringutils::remQuotes(theString));
+		strings.emplace_back(remQuotes(theString));
 	});
 
 	parseStream(theStream);
@@ -358,7 +358,7 @@ stringList::stringList(std::istream& theStream)
 singleString::singleString(std::istream& theStream)
 {
 	getNextTokenWithoutMatching(theStream); // equals sign
-	theString = stringutils::remQuotes(*getNextTokenWithoutMatching(theStream));
+	theString = remQuotes(*getNextTokenWithoutMatching(theStream));
 }
 
 
