@@ -65,7 +65,7 @@ HANDLE GetStdHandle(int nothing)
 }
 #endif
 
-namespace Utils
+namespace commonItems
 {
 
 /*
@@ -621,4 +621,4 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 	return std::nullopt;
 }
 
-} // namespace Utils
+} // namespace commonItems
