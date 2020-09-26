@@ -2,4 +2,4 @@
 Common items for the different game converters. Including parsers, OS utilities, and some common classes.
 
 ## Current Status
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/43f9d79252ec475fb9d2df926f2eccf8)](https://app.codacy.com/app/Idhrendur/commonItems?utm_source=github.com&utm_medium=referral&utm_content=ParadoxGameConverters/commonItems&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/54be2f027eb040448b8bf89410c7ff3d)](https://www.codacy.com/gh/ParadoxGameConverters/commonItems/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ParadoxGameConverters/commonItems&amp;utm_campaign=Badge_Grade)
