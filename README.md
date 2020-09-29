@@ -48,4 +48,4 @@ Given a cardinal number (1, 2, 15), returns the equivalent ordinal word ending (
 Given a number (3, 12, 2020), returns the number in roman numerals ('III', 'XII', 'MMXX')
 
 ##### normalizeStringPath
-Given a path, normalizes it in a standard way for all converters that all supported Paradox games will recognize (by replacing all spaces and dashes with underscores)
+Given a path, normalizes it in a standard way for all converters that all supported Paradox games will recognize (by replacing all spaces, dashes, and other weird characters (<, >, :, ?...) with underscores, and by converting entire string into ASCI)
