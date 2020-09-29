@@ -13,9 +13,12 @@ namespace commonItems
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
-	const auto origPathStr = fs::u8path(path).native();
+	auto validatedPath = path;
+	if (!validatedPath.empty() && validatedPath[validatedPath.size() - 1] == '/')
+		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
+	const auto origPathStr = fs::u8path(validatedPath).native();
 	std::set<std::string> fileNames;
-	for (const auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
+	for (const auto& p: fs::recursive_directory_iterator(fs::u8path(validatedPath)))
 	{
 		if (!p.is_directory())
 		{
