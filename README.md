@@ -28,3 +28,24 @@ Can be output in:
 * HSV360 - "= hsv360 { 180 50 50 }"
 
 The individual components can be accessed in both RGB and HSV color spaces, equality and inequality can be checked, the color cache can be reviewed and modified, and colors can have a random fluctuation be applied automatically.
+
+### CommonFunctions.h
+A handful of helpful commonly-used functions.
+
+##### trimPath
+Given a file with path included (such as '/this/is/a/path.txt' or 'c:\this\is\a\path.txt'), returns the part that's just the filename ('path.txt')
+
+##### trimExtension
+Given a filename with an extension (such as 'file.extension' or 'file.name.with.extension'), returns the extension ('extension')
+
+##### replaceCharacter
+Given a string (such as 'a file name.eu4'), replaces all instances of the specified character (such as ' ') with underscores (resulting in 'a_file_name.eu4')
+
+##### cardinalToOrdinal
+Given a cardinal number (1, 2, 15), returns the equivalent ordinal word ending ('st', 'nd', 'th') for appending to the numbers ('1st', '2nd', '15th')
+
+##### cardinalToRoman
+Given a number (3, 12, 2020), returns the number in roman numerals ('III', 'XII', 'MMXX')
+
+##### normalizeStringPath
+Given a path, normalizes it in a standard way for all converters that all supported Paradox games will recognize (by replacing all spaces and dashes with underscores)
