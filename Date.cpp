@@ -4,7 +4,7 @@
 
 
 
-date::date(std::string init, bool AUC)
+date::date(std::string init, const bool AUC)
 {
 	if (init.length() < 1)
 	{
