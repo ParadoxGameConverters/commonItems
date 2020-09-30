@@ -4,7 +4,7 @@
 
 
 
-date::date(std::string init)
+date::date(std::string init, bool AUC)
 {
 	if (init.length() < 1)
 	{
@@ -21,6 +21,8 @@ date::date(std::string init)
 	try
 	{
 		year = stoi(init.substr(0, first_dot));
+		if (AUC)
+			year = convertAUCtoAD(year);
 		month = stoi(init.substr(first_dot + 1, last_dot - first_dot));
 		day = stoi(init.substr(last_dot + 1, 2));
 	}
@@ -49,6 +51,16 @@ void date::increaseByMonths(const int months)
 void date::subtractYears(const int years)
 {
 	year -= years;
+}
+
+int date::convertAUCtoAD(const int yearAUC)
+{
+	auto yearAD = yearAUC - 753;
+	if (yearAD <= 0)
+	{
+		--yearAD;
+	}
+	return yearAD;
 }
 
 

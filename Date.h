@@ -13,8 +13,8 @@ class date
 {
   public:
 	date() = default;
-	explicit date(int year, int month, int day): year(year), month(month), day(day) {}
-	explicit date(std::string init);
+	explicit date(int year, int month, int day, bool AUC = false): year(AUC ? convertAUCtoAD(year) : year), month(month), day(day) {}
+	explicit date(std::string init, bool AUC = false);
 
 	void increaseByMonths(int months);
 	void subtractYears(int years);
@@ -34,6 +34,7 @@ class date
 
   private:
 	[[nodiscard]] int calculateDayInYear() const;
+	[[nodiscard]] static int convertAUCtoAD(int yearAUC);
 
 	int year = 1;
 	int month = 1;

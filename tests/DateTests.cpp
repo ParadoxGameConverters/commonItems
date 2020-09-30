@@ -275,3 +275,13 @@ TEST(Date_Tests, YearsCanBeDecreased)
 
 	ASSERT_EQ("2016.4.25", testDate.toString());
 }
+
+
+TEST(Date_Tests, AUCcanBeConvertedToAD)
+{
+	const date testDate(450, 10, 1, true);
+	const date testDate2(1306, 10, 1, true);
+
+	ASSERT_EQ("-304.10.1", testDate.toString());
+	ASSERT_EQ("553.10.1", testDate2.toString());
+}
