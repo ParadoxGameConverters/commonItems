@@ -280,8 +280,12 @@ TEST(Date_Tests, YearsCanBeDecreased)
 TEST(Date_Tests, AUCcanBeConvertedToAD)
 {
 	const date testDate(450, 10, 1, true);
-	const date testDate2(1306, 10, 1, true);
+	const date testDate2(1306, 3, 1, true);
+	const date testDate3("450.10.1", true);
+	const date testDate4("1306.3.1", true);
 
 	ASSERT_EQ("-304.10.1", testDate.toString());
-	ASSERT_EQ("553.10.1", testDate2.toString());
+	ASSERT_EQ("553.3.1", testDate2.toString());
+	ASSERT_EQ("-304.10.1", testDate3.toString());
+	ASSERT_EQ("553.3.1", testDate4.toString());
 }
