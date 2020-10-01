@@ -269,7 +269,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			theStream.putback(*i);
 		}
-		const auto questionableList = singleItem("", theStream);
+		const auto questionableList = stringOfItem(theStream).getString();
 		if (questionableList.find('.') != std::string::npos)
 		{
 			// This is a double list.

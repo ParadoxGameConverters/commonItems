@@ -9,8 +9,6 @@ namespace commonItems
 {
 
 std::string getNextLexeme(std::istream& theStream);
-std::string getNextLexemeWithNewlines(std::istream& theStream);
-
 
 void ignoreItem(const std::string& unused, std::istream& theStream)
 {
@@ -52,46 +50,6 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 		}
 	}
 }
-
-
-std::string singleItem(const std::string& unused, std::istream& theStream)
-{
-	auto next = getNextLexeme(theStream);
-	if (next == "=")
-	{
-		next = getNextLexeme(theStream);
-	}
-	auto toReturn = next;
-	if (next == "{")
-	{
-		auto braceDepth = 1;
-		while (true)
-		{
-			if (theStream.eof())
-			{
-				return toReturn;
-			}
-
-			auto token = getNextLexemeWithNewlines(theStream);
-			toReturn += token;
-			if (token == "{")
-			{
-				braceDepth++;
-			}
-			else if (token == "}")
-			{
-				braceDepth--;
-				if (braceDepth == 0)
-				{
-					return toReturn;
-				}
-			}
-		}
-	}
-
-	return remQuotes(toReturn);
-}
-
 
 void ignoreObject(const std::string& unused, std::istream& theStream)
 {
@@ -395,9 +353,13 @@ stringOfObject::stringOfObject(std::istream& theStream)
 
 stringOfItem::stringOfItem(std::istream& theStream)
 {
-	const auto equals = getNextLexeme(theStream);
-	const auto next = getNextLexeme(theStream);
-	theString = equals + " " + next;
+	auto next = getNextLexeme(theStream);
+	if (next == "=")
+	{
+		theString += next + " ";
+		next = getNextLexeme(theStream);
+	}
+	theString += next;
 
 	if (next == "{")
 	{

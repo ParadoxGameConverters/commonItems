@@ -98,51 +98,6 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 	ASSERT_EQ(" text", std::string{buffer});
 }
 
-
-TEST(ParserHelper_Tests, SingleItemReadsNextItem)
-{
-	std::stringstream input{"read_me More text"};
-	input >> std::noskipws;
-
-	const auto output = commonItems::singleItem("unused", input);
-
-	ASSERT_EQ("read_me", output);
-}
-
-
-TEST(ParserHelper_Tests, SingleItemStripsQuotes)
-{
-	std::stringstream input{R"("read_me" More text)"};
-	input >> std::noskipws;
-
-	const auto output = commonItems::singleItem("unused", input);
-
-	ASSERT_EQ("read_me", output);
-}
-
-
-TEST(ParserHelper_Tests, SingleItemSkipsEquals)
-{
-	std::stringstream input{"= read_me More text"};
-	input >> std::noskipws;
-
-	const auto output = commonItems::singleItem("unused", input);
-
-	ASSERT_EQ("read_me", output);
-}
-
-
-TEST(ParserHelper_Tests, SingleItemReadsWholeBracedBlock)
-{
-	std::stringstream input{"{ { read_me } } More text"};
-	input >> std::noskipws;
-
-	const auto output = commonItems::singleItem("unused", input);
-
-	ASSERT_EQ("{{read_me }}", output);
-}
-
-
 TEST(ParserHelper_Tests, IntListDefaultsToEmpty)
 {
 	std::stringstream input;

@@ -11,13 +11,12 @@ namespace fs = std::filesystem;
 namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
-std::string getNextLexemeWithNewlines(std::istream& theStream);
 } // namespace commonItems
 
 
 void commonItems::absorbBOM(std::istream& theStream)
 {
-	const char firstChar = theStream.peek();
+	const auto firstChar = static_cast<char>(theStream.peek());
 	if (firstChar == '\xEF')
 	{
 		char bitBucket[3];
@@ -180,7 +179,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 	}
 
 	if (!toReturn.empty())
-		return toReturn;
+		return std::move(toReturn);
 	return std::nullopt;
 }
 
@@ -202,7 +201,7 @@ std::optional<std::string> commonItems::parser::getNextTokenWithoutMatching(std:
 	}
 
 	if (!toReturn.empty())
-		return toReturn;
+		return std::move(toReturn);
 	return std::nullopt;
 }
 
@@ -252,112 +251,6 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		{
 			if (!toReturn.empty())
 				break;
-		}
-		else if (!inQuotes && inputChar == '{')
-		{
-			if (toReturn.empty())
-			{
-				toReturn += inputChar;
-			}
-			else
-			{
-				theStream.putback('{');
-			}
-			break;
-		}
-		else if (!inQuotes && inputChar == '}')
-		{
-			if (toReturn.empty())
-			{
-				toReturn += inputChar;
-			}
-			else
-			{
-				theStream.putback('}');
-			}
-			break;
-		}
-		else if (!inQuotes && inputChar == '=')
-		{
-			if (toReturn.empty())
-			{
-				toReturn += inputChar;
-			}
-			else
-			{
-				theStream.putback('=');
-			}
-			break;
-		}
-		else
-		{
-			toReturn += inputChar;
-		}
-	}
-	return toReturn;
-}
-
-
-std::string commonItems::getNextLexemeWithNewlines(std::istream& theStream)
-{
-	std::string toReturn;
-
-	auto inQuotes = false;
-	while (true)
-	{
-		char inputChar;
-		theStream >> inputChar;
-		if (theStream.eof())
-			break;
-		if (!inQuotes && inputChar == '#')
-		{
-			std::string bitBucket;
-			std::getline(theStream, bitBucket);
-			if (!toReturn.empty())
-				break;
-		}
-		else if (inputChar == '\n')
-		{
-			if (!inQuotes)
-			{
-				if (!toReturn.empty())
-				{
-					toReturn += inputChar;
-					break;
-				}
-			}
-			else
-			{
-				// fix paradox' mistake and don't break proper names in half
-				toReturn += " ";
-			}
-		}
-		else if (inputChar == '\"' && !inQuotes && toReturn.empty())
-		{
-			inQuotes = true;
-			toReturn += inputChar;
-		}
-		else if (inputChar == '\"' && inQuotes)
-		{
-			toReturn += inputChar;
-			toReturn += '\n';
-			break;
-		}
-		else if (!inQuotes && inputChar == '\t')
-		{
-			if (!toReturn.empty())
-			{
-				toReturn += "\n";
-				break;
-			}
-		}
-		else if (!inQuotes && std::isspace(inputChar))
-		{
-			if (!toReturn.empty())
-			{
-				toReturn += inputChar;
-				break;
-			}
 		}
 		else if (!inQuotes && inputChar == '{')
 		{
