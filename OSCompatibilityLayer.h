@@ -25,7 +25,7 @@
 #define sprintf_s sprintf_s_Linux
 void sprintf_s_Linux(char* __restrict __s, size_t __maxlen, const char* __restrict __format, ...);
 
-// See sprintf_s_LInux
+// See sprintf_s_Linux
 #define strcpy_s strcpy_s_Linux
 void strcpy_s_Linux(char* __restrict __dest, const char* __restrict __src);
 
@@ -98,7 +98,7 @@ std::string convert8859_15ToUTF8(const std::string& input);
 std::wstring convert8859_15ToUTF16(const std::string& input);
 std::string convertWin1252ToASCII(const std::string& Win1252);
 std::string convertWin1252ToUTF8(const std::string& Win1252);
-std::string convertWin1250ToUTF8(const std::string& Win1252);
+std::string convertWin1250ToUTF8(const std::string& Win1250);
 std::wstring convertWin1252ToUTF16(const std::string& Win1252);
 std::wstring convertWin1250ToUTF16(const std::string& Win1250);
 std::wstring convertUTF8ToUTF16(const std::string& UTF8);
