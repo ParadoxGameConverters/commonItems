@@ -168,28 +168,28 @@ std::wstring convert8859_15ToUTF16(const std::string& input)
 }
 
 
-std::string convertWin1252ToASCII(const std::string& input)
+std::string convertWin1252ToASCII(const std::string& Win1252)
 {
-	return convertUTF8ToASCII(convertWin1252ToUTF8(input));
+	return convertUTF8ToASCII(convertWin1252ToUTF8(Win1252));
 }
 
 
-std::string convertWin1252ToUTF8(const std::string& input)
+std::string convertWin1252ToUTF8(const std::string& Win1252)
 {
-	return UTF16ToUTF8(convertWin1252ToUTF16(input));
+	return UTF16ToUTF8(convertWin1252ToUTF16(Win1252));
 }
 
-std::string convertWin1250ToUTF8(const std::string& input)
+std::string convertWin1250ToUTF8(const std::string& Win1250)
 {
-	return UTF16ToUTF8(convertWin1250ToUTF16(input));
+	return UTF16ToUTF8(convertWin1250ToUTF16(Win1250));
 }
 
-std::wstring convertWin1250ToUTF16(const std::string& input)
+std::wstring convertWin1250ToUTF16(const std::string& Win1250)
 {
-	const int requiredSize = MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, nullptr, 0);
+	const int requiredSize = MultiByteToWideChar(1250, MB_PRECOMPOSED, Win1250.c_str(), -1, nullptr, 0);
 	auto* wideKeyArray = new wchar_t[requiredSize];
 
-	if (0 == MultiByteToWideChar(1250, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
+	if (0 == MultiByteToWideChar(1250, MB_PRECOMPOSED, Win1250.c_str(), -1, wideKeyArray, requiredSize))
 	{
 		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
@@ -200,12 +200,12 @@ std::wstring convertWin1250ToUTF16(const std::string& input)
 	return returnable;
 }
 
-std::wstring convertWin1252ToUTF16(const std::string& input)
+std::wstring convertWin1252ToUTF16(const std::string& Win1252)
 {
-	const int requiredSize = MultiByteToWideChar(1252, MB_PRECOMPOSED, input.c_str(), -1, nullptr, 0);
+	const int requiredSize = MultiByteToWideChar(1252, MB_PRECOMPOSED, Win1252.c_str(), -1, nullptr, 0);
 	auto* wideKeyArray = new wchar_t[requiredSize];
 
-	if (0 == MultiByteToWideChar(1252, MB_PRECOMPOSED, input.c_str(), -1, wideKeyArray, requiredSize))
+	if (0 == MultiByteToWideChar(1252, MB_PRECOMPOSED, Win1252.c_str(), -1, wideKeyArray, requiredSize))
 	{
 		Log(LogLevel::Error) << "Could not translate string to UTF-16 - " << GetLastErrorString();
 	}
