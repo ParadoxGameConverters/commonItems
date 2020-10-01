@@ -19,10 +19,6 @@ void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
-
-std::string singleItem(const std::string& unused, std::istream& theStream);
-
-
 class intList: parser
 {
   public:
