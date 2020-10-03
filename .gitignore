@@ -19,3 +19,4 @@ packages/
 #OpenCppCoverage stuff
 *.log
 tests/.opencppcov/
+tests/log.txt
