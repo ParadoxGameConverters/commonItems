@@ -19,7 +19,7 @@ class date
 	explicit date(const std::string& init) : date(init, false) {}
 
 	void increaseByMonths(int months);
-	void addYears(const int years) { year += years }
+	void addYears(const int years) { year += years; }
 	void subtractYears(int years);
 
 	bool operator==(const date& rhs) const;
