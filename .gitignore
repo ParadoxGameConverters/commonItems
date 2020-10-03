@@ -15,3 +15,7 @@ changelog.txt
 *.cppcheck
 .vs/
 packages/
+
+#OpenCppCoverage stuff
+*.log
+tests/.opencppcov/
