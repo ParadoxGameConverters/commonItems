@@ -28,6 +28,10 @@ class date
 	bool operator<=(const date& rhs) const;
 	bool operator>=(const date& rhs) const;
 
+	[[nodiscard]] auto getYear() const { return year; }
+	[[nodiscard]] auto getMonth() const { return month; }
+	[[nodiscard]] auto getDay() const { return day; }
+
 	[[nodiscard]] float diffInYears(const date& rhs) const;
 	[[nodiscard]] bool isSet() const;
 	[[nodiscard]] std::string toString() const;
