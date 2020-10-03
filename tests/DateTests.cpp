@@ -268,6 +268,13 @@ TEST(Date_Tests, MonthsCanBeIncreasedAndWrapAround)
 }
 
 
+TEST(Date_Tests, YearsCanBeIncreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.addYears(4);
+
+	ASSERT_EQ("2024.4.25", testDate.toString());
+}
 TEST(Date_Tests, YearsCanBeDecreased)
 {
 	date testDate(2020, 4, 25);
