@@ -19,6 +19,7 @@ class date
 	explicit date(const std::string& init) : date(init, false) {}
 
 	void increaseByMonths(int months);
+	void addYears(const int years) { year += years; }
 	void subtractYears(int years);
 
 	bool operator==(const date& rhs) const;
@@ -27,6 +28,10 @@ class date
 	bool operator>(const date& rhs) const;
 	bool operator<=(const date& rhs) const;
 	bool operator>=(const date& rhs) const;
+
+	[[nodiscard]] auto getYear() const { return year; }
+	[[nodiscard]] auto getMonth() const { return month; }
+	[[nodiscard]] auto getDay() const { return day; }
 
 	[[nodiscard]] float diffInYears(const date& rhs) const;
 	[[nodiscard]] bool isSet() const;

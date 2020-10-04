@@ -268,6 +268,13 @@ TEST(Date_Tests, MonthsCanBeIncreasedAndWrapAround)
 }
 
 
+TEST(Date_Tests, YearsCanBeIncreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.addYears(4);
+
+	ASSERT_EQ("2024.4.25", testDate.toString());
+}
 TEST(Date_Tests, YearsCanBeDecreased)
 {
 	date testDate(2020, 4, 25);
@@ -288,4 +295,21 @@ TEST(Date_Tests, AUCcanBeConvertedToAD)
 	ASSERT_EQ("553.3.1", testDate2.toString());
 	ASSERT_EQ("-304.10.1", testDate3.toString());
 	ASSERT_EQ("553.3.1", testDate4.toString());
+}
+
+TEST(Date_Tests, separateComponentsCanBeGotten)
+{
+	const date testDate("450.10.7");
+
+	ASSERT_EQ(450, testDate.getYear());
+	ASSERT_EQ(10, testDate.getMonth());
+	ASSERT_EQ(7, testDate.getDay());
+}
+TEST(Date_Tests, negativeYearComponentsCanBeGotten)
+{
+	const date testDate("-450.10.7");
+
+	ASSERT_EQ(-450, testDate.getYear());
+	ASSERT_EQ(10, testDate.getMonth());
+	ASSERT_EQ(7, testDate.getDay());
 }
