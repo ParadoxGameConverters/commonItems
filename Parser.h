@@ -40,6 +40,9 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
+  protected:
+	void generateRegexes();
+
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::string, parsingFunction>> registeredKeywordRegexes;
