@@ -45,12 +45,9 @@ void commonItems::parser::registerKeyword(const std::regex& keyword, const parsi
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
-	auto braceDepth = 0;
-	for (const auto& keywordItr: registeredKeywordRegexes)
-	{
-		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
-	}
+	generateRegexes();
 
+	auto braceDepth = 0;
 	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
 	std::string tokensSoFar;
 
@@ -294,4 +291,13 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		}
 	}
 	return toReturn;
+}
+
+
+void commonItems::parser::generateRegexes()
+{
+	for (const auto& keywordItr: registeredKeywordRegexes)
+	{
+		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
+	}
 }
