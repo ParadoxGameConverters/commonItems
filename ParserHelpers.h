@@ -41,6 +41,17 @@ class llongList: parser
 	std::vector<long long> llongs;
 };
 
+class ullongList: parser
+{
+  public:
+	explicit ullongList(std::istream& theStream);
+
+	[[nodiscard]] std::vector<unsigned long long> getULlongs() const { return ullongs; }
+
+  private:
+	std::vector<unsigned long long> ullongs;
+};
+
 
 class singleInt: parser
 {
@@ -63,6 +74,17 @@ class singleLlong: parser
 
   private:
 	long long theLongLong = 0;
+};
+
+class singleULlong: parser
+{
+  public:
+	explicit singleULlong(std::istream& theStream);
+
+	[[nodiscard]] unsigned long long getULlong() const noexcept { return theUnsignedLongLong; }
+
+  private:
+	unsigned long long theUnsignedLongLong = 0;
 };
 
 // Parses an object where each entry is a simple assignment, key = value.

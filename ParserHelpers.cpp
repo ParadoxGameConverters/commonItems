@@ -110,6 +110,19 @@ llongList::llongList(std::istream& theStream)
 	parseStream(theStream);
 }
 
+ullongList::ullongList(std::istream& theStream)
+{
+	registerRegex(R"(\d+)", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+		ullongs.push_back(std::stoull(theUnsignedLongLong));
+	});
+	registerRegex(R"(\"\d+\")", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
+		ullongs.push_back(std::stoull(newULlong));
+	});
+
+	parseStream(theStream);
+}
+
 
 singleInt::singleInt(std::istream& theStream)
 {
@@ -140,6 +153,22 @@ singleLlong::singleLlong(std::istream& theStream)
 	{
 		Log(LogLevel::Warning) << "Expected a long long, but instead got " << token;
 		theLongLong = 0;
+	}
+}
+
+singleULlong::singleULlong(std::istream& theStream)
+{
+	getNextTokenWithoutMatching(theStream); // equals
+	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
+
+	try
+	{
+		theUnsignedLongLong = std::stoull(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected an unsigned long long, but instead got " << token;
+		theUnsignedLongLong = 0;
 	}
 }
 

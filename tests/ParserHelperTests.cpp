@@ -150,6 +150,15 @@ TEST(ParserHelper_Tests, LlongListDefaultsToEmpty)
 	ASSERT_EQ(std::vector<long long>{}, theLlongs.getLlongs());
 }
 
+TEST(ParserHelper_Tests, ULlongListDefaultsToEmpty)
+{
+	std::stringstream input;
+
+	const commonItems::ullongList theULlongs(input);
+
+	ASSERT_EQ(std::vector<unsigned long long>{}, theULlongs.getULlongs());
+}
+
 
 TEST(ParserHelper_Tests, LlongListAddsLlongs)
 {
@@ -159,6 +168,16 @@ TEST(ParserHelper_Tests, LlongListAddsLlongs)
 
 	const auto expectedLlongs = std::vector<long long>{123456789012345, 234567890123456, 345678901234567};
 	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
+TEST(ParserHelper_Tests, ULlongListAddsLlongs)
+{
+	std::stringstream input{"299792458000000000 299792458000000304 256792458000000304"};
+
+	const commonItems::ullongList theULlongs(input);
+
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
 
@@ -172,6 +191,16 @@ TEST(ParserHelper_Tests, LlongListAddsQuotedLLongs)
 	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
 }
 
+TEST(ParserHelper_Tests, ULlongListAddsQuotedLLongs)
+{
+	std::stringstream input{R"("299792458000000000" "299792458000000304" "256792458000000304")"};
+
+	const commonItems::ullongList theULlongs(input);
+
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
+}
+
 
 TEST(ParserHelper_Tests, LlongListAddsLlongsFromBracedBlock)
 {
@@ -181,6 +210,16 @@ TEST(ParserHelper_Tests, LlongListAddsLlongsFromBracedBlock)
 
 	const auto expectedLlongs = std::vector<long long>{123456789012345, 234567890123456, 345678901234567};
 	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
+TEST(ParserHelper_Tests, ULlongListAddsULlongsFromBracedBlock)
+{
+	std::stringstream input{" = {299792458000000000 299792458000000304 256792458000000304} 256796558000000304"};
+
+	const commonItems::ullongList theULlongs(input);
+
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
 TEST(ParserHelper_Tests, SingleIntGetsIntAfterEquals)
@@ -228,6 +267,15 @@ TEST(ParserHelper_Tests, SingleLlongGetsIntAfterEquals)
 	ASSERT_EQ(123456789012345, theLlong.getLlong());
 }
 
+TEST(ParserHelper_Tests, SingleULlongGetsIntAfterEquals)
+{
+	std::stringstream input{" = 299792458000000000"};
+
+	const commonItems::singleULlong theULlong(input);
+
+	ASSERT_EQ(299792458000000000, theULlong.getULlong());
+}
+
 
 TEST(ParserHelper_Tests, SingleLlongGetsQuotedIntAfterEquals)
 {
@@ -238,6 +286,14 @@ TEST(ParserHelper_Tests, SingleLlongGetsQuotedIntAfterEquals)
 	ASSERT_EQ(123456789012345, theLlong.getLlong());
 }
 
+TEST(ParserHelper_Tests, SingleULlongGetsQuotedIntAfterEquals)
+{
+	std::stringstream input{R"(= "123456789012345")"};
+
+	const commonItems::singleULlong theULlong(input);
+
+	ASSERT_EQ(123456789012345, theULlong.getULlong());
+}
 
 TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 {
@@ -253,6 +309,22 @@ TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 
 	ASSERT_EQ(" [WARNING] Expected a long long, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theLlong.getLlong());
+}
+
+TEST(ParserHelper_Tests, SingleULlongLogsInvalidInput)
+{
+	std::stringstream input{"= foo"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const commonItems::singleULlong theULlong(input);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] Expected an unsigned long long, but instead got foo\n", log.str());
+	ASSERT_EQ(0, theULlong.getULlong());
 }
 
 

@@ -354,7 +354,7 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenUnspecified)
 	std::stringstream input;
 	input << "= { 64 128 }";
 
-	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -381,7 +381,7 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
 	std::stringstream input;
 	input << "= rgb { 64 128 }";
 
-	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -408,7 +408,7 @@ TEST(Color_Tests, ColorInitializationRequiresSixDigitsWhenHex)
 	std::stringstream input;
 	input << "= hex { 12345 }";
 
-	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -435,7 +435,7 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
 	std::stringstream input;
 	input << "= hsv { 0.333 0.5 }";
 
-	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -462,7 +462,7 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv360)
 	std::stringstream input;
 	input << "= hsv360 { 120 50 }";
 
-	ASSERT_THROW(commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
@@ -513,7 +513,7 @@ TEST(Color_Tests, ColorInitializingRequiresCachedColorWhenUsingName)
 	
 	std::stringstream input;
 	input << "= dark_moderate_cyan";
-	ASSERT_THROW(colorFactory.getColor(input), std::runtime_error);
+	ASSERT_THROW( auto color = colorFactory.getColor(input), std::runtime_error);
 }
 
 
