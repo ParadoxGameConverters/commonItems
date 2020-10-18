@@ -49,3 +49,46 @@ Given a number (3, 12, 2020), returns the number in roman numerals ('III', 'XII'
 
 ##### normalizeStringPath
 Given a path, normalizes it in a standard way for all converters that all supported Paradox games will recognize (by replacing all spaces, dashes, and other weird characters (<, >, :, ?...) with underscores, and by converting entire string into ASCII)
+
+### Date.h
+A class representing a Paradox-style date.
+
+##### Construction
+ * Default construction gives a date of 0001-01-01
+ * Can directly specify year, month, day
+ * Can directly specify year, month, day, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
+ * Can pass a paradox-style string specifying the date
+ * Can pass a paradox-style string specifying the date, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
+ 
+##### Comparison
+Dates can be compared using all the standard comperators. Additionally, the difference between two dates (in years) can be found.
+
+##### Modification
+Dates can be increased by months or years, and can be decreased by years. In all cases thse must be whole-number changes to months or years.
+
+##### Output
+Dates can be output to a stream or converted to a string.
+
+### GameVersion.h
+Description coming soon.
+
+### Log.h
+Description coming soon.
+
+### OSCompatibilityLayer.h
+Description coming soon.
+
+### Parser.h
+Description coming soon.
+
+### ParserHelpers.h
+Description coming soon.
+
+### StringUtils.h
+Description coming soon.
+
+### iconvlite.h
+Description coming soon.
+
+### targa.h
+Description coming soon.
