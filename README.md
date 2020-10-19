@@ -61,7 +61,7 @@ A class representing a Paradox-style date.
  * Can pass a paradox-style string specifying the date, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
  
 ##### Comparison
-Dates can be compared using all the standard comperators. Additionally, the difference between two dates (in years) can be found.
+Dates can be compared using all the standard comparators. Additionally, the difference between two dates (in years) can be found.
 
 ##### Modification
 Dates can be increased by months or years, and can be decreased by years. In all cases thse must be whole-number changes to months or years.
