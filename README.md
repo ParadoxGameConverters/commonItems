@@ -70,7 +70,27 @@ Dates can be increased by months or years, and can be decreased by years. In all
 Dates can be output to a stream or converted to a string.
 
 ### GameVersion.h
-Description coming soon.
+A class and some helpers representing the version of a Paradox game.  Assumes the version consists of four integers (1.12.4.5), but versions with fewer parts will work seamlessly.
+
+#### GameVersion
+The version class itself.
+
+##### Construction
+ * Default construction gives a version of 0.0.0.0
+ * Can directly specify all four parts
+ * Can construct via string - "1.2.3.4", "1.6.7", ""
+ * Can construct via stream - "version = { first = 1 second = 2 third = 3 forth = 4 }"
+   * The misspelling of 'fourth' is Paradox's
+   
+##### Comparison
+GameVersions can be compared using all the standard comparators. It is a simple lexicographic comparison in order of the parts.
+
+#### GameVersion::Factory
+A factory is provided for an alternate constuction method. It only provides for construction via a stream.
+
+#### Output
+A freestanding output function allows writing a GameVersion to output streams.
+ 
 
 ### Log.h
 Description coming soon.
