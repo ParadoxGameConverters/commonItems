@@ -70,7 +70,7 @@ Dates can be increased by months or years, and can be decreased by years. In all
 Dates can be output to a stream or converted to a string.
 
 ### GameVersion.h
-A class and some helpers representing the version of a Paradox game.  Assumes the version consists of four integers (1.12.4.5), but versions with fewer parts will work seamlessly.
+A class and some helpers representing the version of a Paradox game. Assumes the version consists of four integers (1.12.4.5), but versions with fewer parts will work seamlessly.
 
 #### GameVersion
 The version class itself.
