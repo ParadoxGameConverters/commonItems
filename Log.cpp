@@ -6,10 +6,6 @@
 #include <map>
 
 
-#ifdef _WIN32
-#pragma warning(disable : 4996) // suppress warning about localtime, as the alternative is windows-specific
-#endif
-
 
 Log::Log(const LogLevel level): logLevel(level)
 {
@@ -52,7 +48,14 @@ void Log::WriteTheTime(std::ostream& logFile)
 {
 	time_t rawTime;
 	time(&rawTime);
-	const tm* timeInfo = localtime(&rawTime);
+
+	auto* timeInfo = new tm;
+	#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
+	localtime_s(timeInfo, &rawTime);
+	#else
+	localtime_r(&rawTime, timeInfo); // POSIX
+	#endif
+	
 
 	char timeBuffer[64];
 	const auto bytesWritten = strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", timeInfo);
