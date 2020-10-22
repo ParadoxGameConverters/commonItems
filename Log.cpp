@@ -63,4 +63,6 @@ void Log::WriteTheTime(std::ostream& logFile)
 	{
 		logFile << timeBuffer;
 	}
+
+	delete timeInfo;
 }
