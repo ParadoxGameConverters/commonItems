@@ -49,20 +49,18 @@ void Log::WriteTheTime(std::ostream& logFile)
 	time_t rawTime;
 	time(&rawTime);
 
-	auto* timeInfo = new tm;
+	tm timeInfo{};
 	#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
-	localtime_s(timeInfo, &rawTime);
+	localtime_s(&timeInfo, &rawTime);
 	#else
-	localtime_r(&rawTime, timeInfo); // POSIX
+	localtime_r(&rawTime, &timeInfo); // POSIX
 	#endif
 	
 
 	char timeBuffer[64];
-	const auto bytesWritten = strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", timeInfo);
+	const auto bytesWritten = strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", &timeInfo);
 	if (bytesWritten != 0)
 	{
 		logFile << timeBuffer;
 	}
-
-	delete timeInfo;
 }
