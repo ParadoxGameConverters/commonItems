@@ -13,6 +13,8 @@ namespace commonItems
 {
 
 // const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@\'\"]+)"}; Leaving this here in case we need to revert.
+// We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already drop
+// in the parser.
 const std::string catchallRegex{R"([^=^{^}]+|\".+\")"};
 
 void ignoreItem(const std::string& unused, std::istream& theStream);
