@@ -29,7 +29,7 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	class Test: commonItems::parser
 	{
 	public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -52,7 +52,7 @@ TEST(Parser_Tests, QuotedKeywordsAreMatched)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -75,7 +75,7 @@ TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerKeyword("\"key\"", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -98,7 +98,7 @@ TEST(Parser_Tests, WrongKeywordsAreIgnored)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -121,7 +121,7 @@ TEST(Parser_Tests, RegexesAreMatched)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -144,7 +144,7 @@ TEST(Parser_Tests, WrongRegexesAreIgnored)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -167,7 +167,7 @@ TEST(Parser_Tests, QuotedRegexesAreMatched)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
@@ -190,7 +190,7 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	class Test: commonItems::parser
 	{
 	  public:
-		Test(std::istream& stream)
+		explicit Test(std::istream& stream)
 		{
 			registerRegex("[k\"ey]+", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
