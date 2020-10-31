@@ -1,8 +1,8 @@
 #include "Parser.h"
 #include "Log.h"
+#include "StringUtils.h"
 #include <filesystem>
 #include <fstream>
-
 
 
 namespace fs = std::filesystem;
@@ -143,6 +143,16 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			match->second(toReturn, theStream);
 			matched = true;
 		}
+		else if (toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+		{
+			auto strippedLexeme = remQuotes(toReturn);
+			if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
+				 strippedMatch != registeredKeywordStrings.end())
+			{
+				strippedMatch->second(toReturn, theStream);
+				matched = true;
+			}
+		}
 
 		if (!matched)
 		{
@@ -154,6 +164,20 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
+				}
+			}
+			if (!matched && toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+			{
+				auto strippedLexeme = remQuotes(toReturn);
+				for (const auto& [regex, parsingFunction]: generatedRegexes)
+				{
+					std::smatch match;
+					if (std::regex_match(strippedLexeme, match, regex))
+					{
+						parsingFunction(toReturn, theStream);
+						matched = true;
+						break;
+					}
 				}
 			}
 		}
@@ -168,6 +192,20 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
+				}
+			}
+			if (!matched && toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+			{
+				auto strippedLexeme = remQuotes(toReturn);
+				for (const auto& [regex, parsingFunction]: registeredRegexes)
+				{
+					std::smatch match;
+					if (std::regex_match(strippedLexeme, match, regex))
+					{
+						parsingFunction(toReturn, theStream);
+						matched = true;
+						break;
+					}
 				}
 			}
 		}
