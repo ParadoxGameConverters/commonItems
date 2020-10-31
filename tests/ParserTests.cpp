@@ -206,3 +206,26 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	ASSERT_EQ("\"key\"", test.key);
 	ASSERT_EQ("value", test.value);
 }
+
+TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
+{
+	std::stringstream input{"\"key\" = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex(commonItems::catchallRegex, [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("\"key\"", test.key);
+	ASSERT_EQ("value", test.value);
+}
