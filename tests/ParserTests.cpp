@@ -229,3 +229,55 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 	ASSERT_EQ("\"key\"", test.key);
 	ASSERT_EQ("value", test.value);
 }
+
+TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "\"this\tis a\nkey\n\" = value";
+	
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex(commonItems::catchallRegex, [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("\"this\tis a key \"", test.key); // newlines have been replaced with spaces. This is WAD.
+	ASSERT_EQ("value", test.value);
+}
+
+TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "\"this = is a silly { key\t} \" = value";
+
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex(commonItems::catchallRegex, [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("\"this = is a silly { key\t} \"", test.key);
+	ASSERT_EQ("value", test.value);
+}
