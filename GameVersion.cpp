@@ -2,8 +2,6 @@
 #include "Log.h"
 #include "ParserHelpers.h"
 
-
-
 GameVersion::GameVersion(std::string version)
 {
 	if (version.empty())
@@ -39,37 +37,34 @@ GameVersion::GameVersion(std::string version)
 	fourthPart = std::stoi(version.substr(0, dot));
 }
 
-
 GameVersion::GameVersion(std::istream& theStream)
 {
-	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		firstPart = firstString.getInt();
-	});
-	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		secondPart = firstString.getInt();
-	});
-	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		thirdPart = firstString.getInt();
-	});
-	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		fourthPart = firstString.getInt();
-	});
-	registerRegex("[a-zA-Z0-9_\\.:]+", commonItems::ignoreItem);
-
+	registerKeys();
 	parseStream(theStream);
 	clearRegisteredKeywords();
 }
 
+void GameVersion::registerKeys()
+{
+	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
+		firstPart = commonItems::singleInt(theStream).getInt();
+	});
+	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
+		secondPart = commonItems::singleInt(theStream).getInt();
+	});
+	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
+		thirdPart = commonItems::singleInt(theStream).getInt();
+	});
+	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
+		fourthPart = commonItems::singleInt(theStream).getInt();
+	});
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+}
 
 bool GameVersion::operator>=(const GameVersion& rhs) const
 {
 	return (*this > rhs) || (*this == rhs);
 }
-
 
 bool GameVersion::operator>(const GameVersion& rhs) const
 {
@@ -94,7 +89,6 @@ bool GameVersion::operator>(const GameVersion& rhs) const
 	return false;
 }
 
-
 bool GameVersion::operator<(const GameVersion& rhs) const
 {
 	if (firstPart < rhs.firstPart)
@@ -118,12 +112,10 @@ bool GameVersion::operator<(const GameVersion& rhs) const
 	return false;
 }
 
-
 bool GameVersion::operator<=(const GameVersion& rhs) const
 {
 	return (*this < rhs) || (*this == rhs);
 }
-
 
 bool GameVersion::operator==(const GameVersion& rhs) const
 {
@@ -131,12 +123,10 @@ bool GameVersion::operator==(const GameVersion& rhs) const
 			 fourthPart == rhs.fourthPart;
 }
 
-
 bool GameVersion::operator!=(const GameVersion& rhs) const
 {
 	return !(*this == rhs);
 }
-
 
 std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 {
@@ -147,27 +137,22 @@ std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 	return out;
 }
 
-
 GameVersion::Factory::Factory()
 {
 	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		firstPart = firstString.getInt();
+		firstPart = commonItems::singleInt(theStream).getInt();
 	});
 	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		secondPart = firstString.getInt();
+		secondPart = commonItems::singleInt(theStream).getInt();
 	});
 	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		thirdPart = firstString.getInt();
+		thirdPart = commonItems::singleInt(theStream).getInt();
 	});
 	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
-		const commonItems::singleInt firstString(theStream);
-		fourthPart = firstString.getInt();
+		fourthPart = commonItems::singleInt(theStream).getInt();
 	});
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
-
 
 GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
 {
