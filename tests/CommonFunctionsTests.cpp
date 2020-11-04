@@ -69,6 +69,48 @@ TEST(TrimPath_Tests, TrimPathTrimsReversedMixedSlashes)
 	ASSERT_EQ(trimPath(input), "path.txt");
 }
 
+TEST(TrimPath_Tests, TrimPathDoesNotAffectRawFiles)
+{
+	const std::string input = R"(path.txt)";
+
+	ASSERT_EQ(trimPath(input), "path.txt");
+}
+
+TEST(GetPath_Tests, GetPathGetsSlashedPath)
+{
+	const std::string input = R"(/this/is/a/path.txt)";
+
+	ASSERT_EQ("/this/is/a/", getPath(input));
+}
+
+TEST(GetPath_Tests, GetPathGetsBackslashedPath)
+{
+	const std::string input = R"(c:\this\is\a\path.txt)";
+
+	ASSERT_EQ(R"(c:\this\is\a\)", getPath(input));
+}
+
+TEST(GetPath_Tests, GetPathGetsMixedSlashedPath)
+{
+	const std::string input = R"(c:\this\is/a/path.txt)";
+
+	ASSERT_EQ(R"(c:\this\is/a/)", getPath(input));
+}
+
+TEST(GetPath_Tests, GetPathGetsReversedMixedSlashedPath)
+{
+	const std::string input = R"(/this/is\a\path.txt)";
+
+	ASSERT_EQ(R"(/this/is\a\)", getPath(input));
+}
+
+TEST(GetPath_Tests, GetReturnsBlankStringForRawFiles)
+{
+	const std::string input = R"(path.txt)";
+
+	ASSERT_TRUE(getPath(input).empty());
+}
+
 TEST(TrimExtension_Tests, TrimExtensionTrimsDot)
 {
 	const std::string input = R"(file.extension)";
@@ -81,6 +123,41 @@ TEST(TrimExtension_Tests, TrimExtensionTrimsLastDot)
 	const std::string input = R"(file.name.with.extension)";
 
 	ASSERT_EQ(trimExtension(input), "file.name.with");
+}
+
+TEST(TrimExtension_Tests, TrimExtensionDoesNotAffectDirectories)
+{
+	const std::string input = R"(/path/with.extension/filename)";
+
+	ASSERT_EQ(trimExtension(input), "/path/with.extension/filename");
+}
+
+TEST(GetExtension_Tests, GetExtensionGetsPostDot)
+{
+	const std::string input = R"(file.extension)";
+
+	ASSERT_EQ("extension", getExtension(input));
+}
+
+TEST(GetExtension_Tests, GetExtensionGetsPostLastDot)
+{
+	const std::string input = R"(file.name.with.extension)";
+
+	ASSERT_EQ("extension", getExtension(input));
+}
+
+TEST(GetExtension_Tests, GetExtensionReturnsEmptyStringForNoExtension)
+{
+	const std::string input = R"(filename)";
+
+	ASSERT_TRUE(getExtension(input).empty());
+}
+
+TEST(GetExtension_Tests, GetExtensionDoesNotAffectDirectories)
+{
+	const std::string input = R"(/path/with.extension/filename)";
+
+	ASSERT_TRUE(getExtension(input).empty());
 }
 
 TEST(ReplaceCharacter_Tests, ReplaceCharacterCanReplaceSpaces)
