@@ -11,10 +11,31 @@ std::string trimPath(const std::string& fileName)
 	return trimmedFileName;
 }
 
+std::string getPath(const std::string& fileName)
+{
+	const auto rawFile = trimPath(fileName);
+	const auto filePos = fileName.find(rawFile);
+	return fileName.substr(0, filePos);
+}
+
 std::string trimExtension(const std::string& fileName)
 {
-	const auto length = fileName.find_last_of('.');
-	return fileName.substr(0, length);
+	const auto rawFile = trimPath(fileName);
+	const auto dotPos = rawFile.find_last_of('.');
+	if (dotPos == std::string::npos)
+		return fileName;
+	else
+		return fileName.substr(0, fileName.find(rawFile) + dotPos);
+}
+
+std::string getExtension(const std::string& fileName)
+{
+	const auto rawFile = trimPath(fileName);
+	const auto dotPos = rawFile.find_last_of('.');
+	if (dotPos == std::string::npos)
+		return std::string();
+	else
+		return fileName.substr(dotPos + 1);
 }
 
 std::string replaceCharacter(std::string fileName, const char character)
