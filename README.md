@@ -93,7 +93,17 @@ A freestanding output function allows writing a GameVersion to output streams.
  
 
 ### Log.h
-Description coming soon.
+A class to log information during conversion. Everything is logged to log.txt in the directory used to run the program. No configuration or setup is required, just include the header and build the .cpp file, then start logging.
+
+The logger uses C++ stream semantics:  
+```Log(LogLevel::Info) << "Message: " << variable;```
+
+Log level specifies a message at the beginning of the logged line, and can be set to any of the following:  
+ * LogLevel::Error  
+ * LogLevel::Warning  
+ * LogLevel::Info  
+ * LogLevel::Debug  
+ * LogLevel::Progress - this is used to set the progress bar in the Fronter
 
 ### OSCompatibilityLayer.h
 Description coming soon.
