@@ -12,20 +12,20 @@ Represents a Paradox-defined color.
 Can be directly created in either the RGB or HSV color spaces.
 
 Can be imported in:  
-* Unspecified with ints (becomes RGB) - "= { 64 128 128 }"
-* Unspecified with floats (becomes RGB) - "= { 0.5 0.9 0.1 }"
-* RGB - "= rgb { 64 128 128 }"
-* Hex - "= hex { 408080 }"
-* HSV - "= hsv { 0.5 0.5 0.5 }"
-* HSV360 - "= hsv360 { 180 50 50 }"
-* Name (requires caching definitions for the named colors in advance) - "= dark_moderate_cyan"
+*   Unspecified with ints (becomes RGB) - "= { 64 128 128 }"
+*   Unspecified with floats (becomes RGB) - "= { 0.5 0.9 0.1 }"
+*   RGB - "= rgb { 64 128 128 }"
+*   Hex - "= hex { 408080 }"
+*   HSV - "= hsv { 0.5 0.5 0.5 }"
+*   HSV360 - "= hsv360 { 180 50 50 }"
+*   Name (requires caching definitions for the named colors in advance) - "= dark_moderate_cyan"
 
 Can be output in:  
-* unspecified (rgb) - "= { 64 128 128 }"
-* RGB - "= rgb { 64 128 128 }"
-* hex - "= hex { 408080 }"
-* HSV - "= hsv { 0.5 0.5 0.5 }"
-* HSV360 - "= hsv360 { 180 50 50 }"
+*   unspecified (rgb) - "= { 64 128 128 }"
+*   RGB - "= rgb { 64 128 128 }"
+*   hex - "= hex { 408080 }"
+*   HSV - "= hsv { 0.5 0.5 0.5 }"
+*   HSV360 - "= hsv360 { 180 50 50 }"
 
 The individual components can be accessed in both RGB and HSV color spaces, equality and inequality can be checked, the color cache can be reviewed and modified, and colors can have a random fluctuation be applied automatically.
 
@@ -54,11 +54,11 @@ Given a path, normalizes it in a standard way for all converters that all suppor
 A class representing a Paradox-style date.
 
 ##### Construction
- * Default construction gives a date of 0001-01-01
- * Can directly specify year, month, day
- * Can directly specify year, month, day, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
- * Can pass a paradox-style string specifying the date
- * Can pass a paradox-style string specifying the date, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
+*   Default construction gives a date of 0001-01-01
+*   Can directly specify year, month, day
+*   Can directly specify year, month, day, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
+*   Can pass a paradox-style string specifying the date
+*   Can pass a paradox-style string specifying the date, and if this is an AUC (years after the founding of Rome, used in Imperator) format date or not
  
 ##### Comparison
 Dates can be compared using all the standard comparators. Additionally, the difference between two dates (in years) can be found.
@@ -76,11 +76,11 @@ A class and some helpers representing the version of a Paradox game. Assumes the
 The version class itself.
 
 ##### Construction
- * Default construction gives a version of 0.0.0.0
- * Can directly specify all four parts
- * Can construct via string - "1.2.3.4", "1.6.7", ""
- * Can construct via stream - "version = { first = 1 second = 2 third = 3 forth = 4 }"
-   * The misspelling of 'fourth' is Paradox's
+*   Default construction gives a version of 0.0.0.0
+*   Can directly specify all four parts
+*   Can construct via string - "1.2.3.4", "1.6.7", ""
+*   Can construct via stream - "version = { first = 1 second = 2 third = 3 forth = 4 }"
+    *   The misspelling of 'fourth' is Paradox's
    
 ##### Comparison
 GameVersions can be compared using all the standard comparators. It is a simple lexicographic comparison in order of the parts.
@@ -90,10 +90,23 @@ A factory is provided for an alternate constuction method. It only provides for 
 
 #### Output
 A freestanding output function allows writing a GameVersion to output streams.
- 
 
 ### Log.h
-Description coming soon.
+A class to log information during conversion. Everything is logged to log.txt in the directory used to run the program. No configuration or setup is required, just include the header and build the .cpp file, then start logging.
+
+The logger uses C++ stream semantics:  
+```Log(LogLevel::Info) << "Message: " << variable;```
+
+When logging decimals, standard cout modifiers apply, like Log(LogLevel::Info) << std::fixed << std::setprecision(2) << doubleVariable;
+
+Log level specifies a message at the beginning of the logged line, and can be set to any of the following:  
+*   LogLevel::Error  
+*   LogLevel::Warning  
+*   LogLevel::Info  
+*   LogLevel::Debug  
+*   LogLevel::Progress - this is used to set the progress bar in the Fronter by passing an integer specifying the percentage. Unnecessary in programs without Fronter.
+ 
+Note that Log will clear log.txt file not on program startup but on first use within a program. To prevent confusion, clear log.txt manually in main.cpp or just export converter version or a similar log to clear it.
 
 ### OSCompatibilityLayer.h
 Description coming soon.
