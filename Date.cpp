@@ -11,7 +11,7 @@ date::date(std::string init, const bool AUC)
 		return;
 	}
 
-	if (init[0] == '\"')
+	if (init.at(0) == '\"')
 	{
 		init = init.substr(1, init.length() - 2);
 	}
@@ -149,7 +149,7 @@ const std::array<int, 12> daysByMonth{
 int date::calculateDayInYear() const
 {
 	if (month >= 1 && month <= 12)
-		return day + daysByMonth[static_cast<size_t>(month) - 1];
+		return day + daysByMonth.at(static_cast<size_t>(month) - 1);
 	else
 		return day;	
 }

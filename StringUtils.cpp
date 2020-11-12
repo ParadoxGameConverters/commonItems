@@ -14,7 +14,7 @@ std::string remQuotes(const std::string& in)
 		return in;
 	}
 
-	if (in[0] != '"' || in[length - 1] != '"')
+	if (in.at(0) != '"' || in.at(length - 1) != '"')
 	{
 		return in;
 	}
@@ -32,7 +32,7 @@ std::string addQuotes(const std::string& in)
 		return "\"\"";
 	}
 
-	if (in[0] == '"' && in[length - 1] == '"')
+	if (in.at(0) == '"' && in.at(length - 1) == '"')
 	{
 		return in;
 	}
