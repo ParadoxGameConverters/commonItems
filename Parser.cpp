@@ -143,7 +143,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			match->second(toReturn, theStream);
 			matched = true;
 		}
-		else if (toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+		else if (toReturn.size() > 2 && toReturn.starts_with('\"') && toReturn.ends_with('\"'))
 		{
 			auto strippedLexeme = remQuotes(toReturn);
 			if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
@@ -166,7 +166,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 					break;
 				}
 			}
-			if (!matched && toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+			if (!matched && toReturn.size() > 2 && toReturn.starts_with('\"') && toReturn.ends_with('\"'))
 			{
 				auto strippedLexeme = remQuotes(toReturn);
 				for (const auto& [regex, parsingFunction]: generatedRegexes)
@@ -194,7 +194,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 					break;
 				}
 			}
-			if (!matched && toReturn.size() > 2 && toReturn[0] == '\"' && toReturn[toReturn.size() - 1] == '\"')
+			if (!matched && toReturn.size() > 2 && toReturn.starts_with('\"') && toReturn.ends_with('\"'))
 			{
 				auto strippedLexeme = remQuotes(toReturn);
 				for (const auto& [regex, parsingFunction]: registeredRegexes)

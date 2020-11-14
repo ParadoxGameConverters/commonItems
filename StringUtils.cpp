@@ -25,14 +25,12 @@ std::string remQuotes(const std::string& in)
 
 std::string addQuotes(const std::string& in)
 {
-	const auto length = in.size();
-
-	if (length == 0)
+	if (in.empty())
 	{
 		return "\"\"";
 	}
 
-	if (in[0] == '"' && in[length - 1] == '"')
+	if (in.starts_with('"') && in.ends_with('"'))
 	{
 		return in;
 	}

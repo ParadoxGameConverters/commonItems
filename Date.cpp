@@ -11,7 +11,7 @@ date::date(std::string init, const bool AUC)
 		return;
 	}
 
-	if (init[0] == '\"')
+	if (init.starts_with('\"'))
 	{
 		init = init.substr(1, init.length() - 2);
 	}
