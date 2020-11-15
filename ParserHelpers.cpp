@@ -221,9 +221,9 @@ simpleObject::simpleObject(std::istream& theStream)
 
 std::string simpleObject::getValue(const std::string& key) const
 {
-	if (const auto value = values.find(key); value != values.end())
+	if (const auto valueItr = values.find(key); valueItr != values.end())
 	{
-		return value->second;
+		return valueItr->second;
 	}
 	return std::string();
 }
