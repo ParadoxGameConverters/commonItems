@@ -14,7 +14,7 @@ std::string remQuotes(const std::string& in)
 		return in;
 	}
 
-	if (in[0] != '"' || in[length - 1] != '"')
+	if (!in.starts_with('"') || !in.ends_with('"'))
 	{
 		return in;
 	}

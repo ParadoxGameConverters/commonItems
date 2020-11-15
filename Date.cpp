@@ -1,5 +1,6 @@
 #include "Date.h"
 #include "OSCompatibilityLayer.h"
+#include "StringUtils.h"
 #include <array>
 
 
@@ -11,10 +12,8 @@ date::date(std::string init, const bool AUC)
 		return;
 	}
 
-	if (init.starts_with('\"'))
-	{
-		init = init.substr(1, init.length() - 2);
-	}
+	init = commonItems::remQuotes(init);
+
 	const auto first_dot = init.find_first_of('.');
 	const auto last_dot = init.find_last_of('.');
 
