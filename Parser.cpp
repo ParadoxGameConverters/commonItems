@@ -248,7 +248,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 	auto inQuotes = false;
 	while (true)
 	{
-		char inputChar;
+		unsigned char inputChar;
 		theStream >> inputChar;
 		if (theStream.eof())
 			break;
