@@ -225,7 +225,7 @@ std::string simpleObject::getValue(const std::string& key) const
 	{
 		return value->second;
 	}
-	return "";
+	return std::string();
 }
 
 

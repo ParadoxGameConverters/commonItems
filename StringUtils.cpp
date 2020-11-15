@@ -25,17 +25,15 @@ std::string remQuotes(const std::string& in)
 
 std::string addQuotes(const std::string& in)
 {
-	if (in.empty())
-	{
-		return "\"\"";
-	}
-
-	if (in.starts_with('"') && in.ends_with('"'))
+	if (in.size() > 2 && in.starts_with('"') && in.ends_with('"'))
 	{
 		return in;
 	}
-
-	return std::string{'"' + in + '"'};
+	if (!in.starts_with('"') && !in.ends_with('"'))
+	{
+		return std::string{'"' + in + '"'};
+	}
+	return in;
 }
 
 } // namespace commonItems
