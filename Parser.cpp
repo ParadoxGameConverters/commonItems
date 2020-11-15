@@ -138,7 +138,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		toReturn = getNextLexeme(theStream);
 
 		const auto strippedLexeme = remQuotes(toReturn);
-		bool isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
+		const bool isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
 
 		auto matched = false;
 		if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
