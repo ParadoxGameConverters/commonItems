@@ -31,7 +31,6 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
-	[[deprecated]] void registerKeyword(const std::regex& keyword, const parsingFunction& function);
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
@@ -40,13 +39,9 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-  protected:
-	void generateRegexes();
 
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
-	std::vector<std::pair<std::string, parsingFunction>> registeredKeywordRegexes;
-	std::vector<std::pair<std::regex, parsingFunction>> registeredRegexes;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
 

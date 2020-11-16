@@ -33,20 +33,12 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	registeredKeywordRegexes.emplace_back(std::make_pair(keyword, function));
-}
-
-
-void commonItems::parser::registerKeyword(const std::regex& keyword, const parsingFunction& function)
-{
-	registeredRegexes.emplace_back(std::make_pair(keyword, function));
+	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
 
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
-	generateRegexes();
-
 	auto braceDepth = 0;
 	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
 	std::string tokensSoFar;
@@ -119,8 +111,7 @@ void commonItems::parser::parseFile(const std::string& filename)
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
-	std::vector<std::pair<std::string, parsingFunction>>().swap(registeredKeywordRegexes);
-	std::vector<std::pair<std::regex, parsingFunction>>().swap(registeredRegexes);
+	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
 
@@ -183,32 +174,6 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			}
 		}
 
-		if (!matched)
-		{
-			for (const auto& [regex, parsingFunction]: registeredRegexes)
-			{
-				std::smatch match;
-				if (std::regex_match(toReturn, match, regex))
-				{
-					parsingFunction(toReturn, theStream);
-					matched = true;
-					break;
-				}
-			}
-			if (!matched && isLexemeQuoted)
-			{
-				for (const auto& [regex, parsingFunction]: registeredRegexes)
-				{
-					std::smatch match;
-					if (std::regex_match(strippedLexeme, match, regex))
-					{
-						parsingFunction(toReturn, theStream);
-						matched = true;
-						break;
-					}
-				}
-			}
-		}
 		if (!matched)
 			gotToken = true;
 	}
@@ -329,13 +294,4 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		}
 	}
 	return toReturn;
-}
-
-
-void commonItems::parser::generateRegexes()
-{
-	for (const auto& keywordItr: registeredKeywordRegexes)
-	{
-		generatedRegexes.emplace_back(std::make_pair(std::regex(keywordItr.first), keywordItr.second));
-	}
 }
