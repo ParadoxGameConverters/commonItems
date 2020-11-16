@@ -221,11 +221,11 @@ simpleObject::simpleObject(std::istream& theStream)
 
 std::string simpleObject::getValue(const std::string& key) const
 {
-	if (values.find(key) == values.end())
+	if (const auto valueItr = values.find(key); valueItr != values.end())
 	{
-		return "";
+		return valueItr->second;
 	}
-	return values.at(key);
+	return std::string();
 }
 
 

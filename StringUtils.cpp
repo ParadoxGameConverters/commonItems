@@ -14,7 +14,7 @@ std::string remQuotes(const std::string& in)
 		return in;
 	}
 
-	if (in[0] != '"' || in[length - 1] != '"')
+	if (!in.starts_with('"') || !in.ends_with('"'))
 	{
 		return in;
 	}
@@ -25,19 +25,15 @@ std::string remQuotes(const std::string& in)
 
 std::string addQuotes(const std::string& in)
 {
-	const auto length = in.size();
-
-	if (length == 0)
-	{
-		return "\"\"";
-	}
-
-	if (in[0] == '"' && in[length - 1] == '"')
+	if (in.size() > 2 && in.starts_with('"') && in.ends_with('"'))
 	{
 		return in;
 	}
-
-	return std::string{'"' + in + '"'};
+	if (!in.starts_with('"') && !in.ends_with('"'))
+	{
+		return std::string{'"' + in + '"'};
+	}
+	return in;
 }
 
 } // namespace commonItems

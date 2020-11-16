@@ -64,3 +64,19 @@ TEST(StringUtils_Tests, AddQuotesAddsQuotesToUnquotedString)
 
 	ASSERT_EQ(R"("not quoted")", quotedString);
 }
+
+TEST(StringUtils_Tests, AddQuotesLeavesSingleQuote)
+{
+	const std::string singleQuoteString{R"(")"};
+	const auto quotedString = commonItems::addQuotes(singleQuoteString);
+
+	ASSERT_EQ(R"(")", quotedString);
+}
+
+TEST(StringUtils_Tests, AddQuotesLeavesImproperlyQuotedStringAsIs)
+{
+	const std::string improperlyQuotedString{R"("c)"};
+	const auto quotedString = commonItems::addQuotes(improperlyQuotedString);
+
+	ASSERT_EQ(R"("c)", quotedString);
+}
