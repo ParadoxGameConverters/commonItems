@@ -89,7 +89,6 @@ void commonItems::parser::parseStream(std::istream& theStream)
 		else
 			break;
 	}
-	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
 
@@ -129,7 +128,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		toReturn = getNextLexeme(theStream);
 
 		const auto strippedLexeme = remQuotes(toReturn);
-		const bool isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
+		const auto isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
 
 		auto matched = false;
 		if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
