@@ -90,7 +90,7 @@ intList::intList(std::istream& theStream)
 		integers.push_back(std::stoi(theInt));
 	});
 	registerRegex(R"(\"\d+\")", [this](const std::string& theInt, std::istream& theStream) {
-		const auto newInt = theInt.substr(1, theInt.size() - 2);
+		const auto newInt = remQuotes(theInt);
 		integers.push_back(std::stoi(newInt));
 	});
 
@@ -103,7 +103,7 @@ llongList::llongList(std::istream& theStream)
 		llongs.push_back(std::stoll(theLongLong));
 	});
 	registerRegex(R"(\"\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
-		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
+		const auto newLlong = remQuotes(theLongLong);
 		llongs.push_back(std::stoll(newLlong));
 	});
 
@@ -116,7 +116,7 @@ ullongList::ullongList(std::istream& theStream)
 		ullongs.push_back(std::stoull(theUnsignedLongLong));
 	});
 	registerRegex(R"(\"\d+\")", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
-		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
+		const auto newULlong = remQuotes(theUnsignedLongLong);
 		ullongs.push_back(std::stoull(newULlong));
 	});
 
