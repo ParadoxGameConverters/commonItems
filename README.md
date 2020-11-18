@@ -109,7 +109,74 @@ Log level specifies a message at the beginning of the logged line, and can be se
 Note that Log will clear log.txt file not on program startup but on first use within a program. To prevent confusion, clear log.txt manually in main.cpp or just export converter version or a similar log to clear it.
 
 ### OSCompatibilityLayer.h
-Description coming soon.
+A module to abstract many Operating System dependent functions. To use it, link OSCommonLayer.cpp and either WinUtils.cpp or LinuxUtils.cpp, depending on your system (MacUtils.cpp is waiting on a friendly Apple developer to write it).
+
+#### GetAllFilesInFolder
+Returns the filenames of all files in the specified folder.
+
+#### GetAllSubfolders
+Returns the filenames of all subfolders in the specified folder.
+
+#### GetAllFilesInFolderRecursive
+Returns the filenames of all files in the specified folder and all its subfolders.
+
+#### GetCurrentDirectoryWString
+Returns the current directory in UTF-16.
+
+#### getSteamInstallPath
+Given a Steam AppId, returns the install path for the corresponding game.
+
+#### TryCreateFolder
+Attempts to create the specified directory.
+
+#### TryCopyFile
+Attempts to copy the specified file to the specified location, overwriting any existing file.
+
+#### CopyFolder
+Attempts to recursively copy to specified folder to the specified location.
+
+#### RenameFolder
+Attempts to rename the specified folder to the specified name.
+
+#### DoesFileExist
+Confirms the specified file exists (and is not a folder).
+
+#### DoesFolderExist
+Confirms the specified folder exists (and is actually a folder).
+
+#### WriteToConsole
+Writes the specified message to the console at the specified log level. On Windows this colors the message appropriately.
+
+#### GetLastErrorString
+Get the latest global error as a message.
+
+#### DeleteFolder
+Attempt to delete the specified folder (and everything in it).
+
+#### convertUTF8ToASCII
+#### convertUTF8To8859_15
+#### convertUTF8ToWin1252
+#### UTF16ToUTF8
+#### convert8859_15ToASCII
+#### convert8859_15ToUTF8
+#### convert8859_15ToUTF16
+#### convertWin1252ToASCII
+#### convertWin1252ToUTF8
+#### convertWin1250ToUTF8
+#### convertWin1252ToUTF16
+#### convertWin1250ToUTF16
+#### convertUTF8ToUTF16
+#### convertWin1251ToUTF8
+#### convertUTF8toWin1251
+#### convertUTF8ToWin1251
+#### convertUTF8ToWin1250
+Attempt to convert the specified text from the first encoding to the second encoding.
+
+#### convertToUTF8
+Attempt to convert the specified text from the system dependent wchar_t encoding to UTF-8.
+
+#### normalizeUTF8Path
+Converts an UTF8 path to the system dependent filesystem path encoding and removes non-allowed characters.
 
 ### Parser.h
 Description coming soon.
