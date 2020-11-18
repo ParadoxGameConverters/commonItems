@@ -58,7 +58,7 @@ void GameVersion::registerKeys()
 	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
 		fourthPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+	registerCTRegex(ctRegex::CATCHALL, commonItems::ignoreItem);
 }
 
 bool GameVersion::operator>=(const GameVersion& rhs) const
@@ -151,7 +151,7 @@ GameVersion::Factory::Factory()
 	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
 		fourthPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+	registerCTRegex(ctRegex::CATCHALL, commonItems::ignoreItem);
 }
 
 GameVersion GameVersion::Factory::getVersion(std::istream& theStream)

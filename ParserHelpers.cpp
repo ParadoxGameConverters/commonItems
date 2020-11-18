@@ -424,7 +424,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
+	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
 		const stringOfItem theItem(theStream);
 		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
@@ -435,7 +435,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
+	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
 		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
@@ -446,7 +446,7 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 assignments::assignments(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
+	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& assignmentName, std::istream& theStream) {
 		auto equals = getNextTokenWithoutMatching(theStream);
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));

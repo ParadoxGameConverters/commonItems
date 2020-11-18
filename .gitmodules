@@ -4,3 +4,6 @@
 [submodule "re2"]
 	path = re2
 	url = https://github.com/google/re2
+[submodule "compile-time-regular-expressions"]
+	path = compile-time-regular-expressions
+	url = https://github.com/hanickadot/compile-time-regular-expressions

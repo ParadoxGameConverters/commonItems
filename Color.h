@@ -55,7 +55,7 @@ class Color
 std::ostream& operator<<(std::ostream&, const Color&);
 
 
-class Color::Factory: parser
+class Color::Factory: public parser
 {
   public:
 	[[nodiscard]] Color getColor(std::istream& theStream) const;

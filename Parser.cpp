@@ -5,13 +5,28 @@
 #include <fstream>
 
 
+
+
 namespace fs = std::filesystem;
 
 
 namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
+
+
+
+
 } // namespace commonItems
+
+bool commonItems::parser::matchCTRegex(const ctRegex regex, const std::string_view subject)
+{
+	switch (regex)
+	{
+		case ctRegex::CATCHALL: return catchallRegexMatch(subject);
+		default: return false;
+	}
+}
 
 
 void commonItems::absorbBOM(std::istream& theStream)
@@ -33,12 +48,24 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
+	//const std::string constStr = keyword;
+	//static constexpr ctll::fixed_string pattern{keyword.};
+
+	
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
+}
+
+void commonItems::parser::registerCTRegex(ctRegex regexEnum, const parsingFunction& function)
+{
+	registeredCompileTimeRegexes.emplace_back(std::make_pair(regexEnum, function));
 }
 
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
+
+
+	
 	auto braceDepth = 0;
 	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
 	std::string tokensSoFar;
@@ -172,7 +199,30 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				}
 			}
 		}
-
+		if (!matched)
+		{
+			for (const auto& [regexEnum, parsingFunction]: registeredCompileTimeRegexes)
+			{
+				if (matchCTRegex(regexEnum, toReturn))
+				{
+					parsingFunction(toReturn, theStream);
+					matched = true;
+					break;
+				}
+			}
+			if (!matched && isLexemeQuoted)
+			{
+				for (const auto& [regexEnum, parsingFunction]: registeredCompileTimeRegexes)
+				{
+					if (matchCTRegex(regexEnum, strippedLexeme))
+					{
+						parsingFunction(toReturn, theStream);
+						matched = true;
+						break;
+					}
+				}
+			}
+		}
 		if (!matched)
 			gotToken = true;
 	}
