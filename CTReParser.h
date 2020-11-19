@@ -6,51 +6,39 @@
 namespace commonItems
 {
 // compile time regexes, cool stuff
-static constexpr ctll::fixed_string number{R"([0-9]+)"};
-constexpr bool numberMatch(std::string_view sv) noexcept
-{
-	return ctre::match<number>(sv);
-}
-static constexpr ctll::fixed_string quotedNumber{R"("\d+")"};
-constexpr bool quotedNumberMatch(std::string_view sv) noexcept
-{
-	return ctre::match<quotedNumber>(sv);
-}
 
+	// numbers
+	static constexpr ctll::fixed_string integerRe{R"([0-9]+)"};
+	constexpr bool integerMatch(std::string_view sv) noexcept {return ctre::match<integerRe>(sv);}
+	static constexpr ctll::fixed_string quotedIntegerRe{R"("\d+")"};
+	constexpr bool quotedIntegerMatch(std::string_view sv) noexcept{return ctre::match<quotedIntegerRe>(sv);}
+	static constexpr ctll::fixed_string floatRe {R"(-?\d+(.\d+)?)"};
+	constexpr bool floatMatch(std::string_view sv) noexcept{return ctre::match<floatRe>(sv);}
+	static constexpr ctll::fixed_string quotedFloatRe{R"("-?\d+(.\d+)?")"};
+	constexpr bool quotedFloatMatch(std::string_view sv) noexcept{return ctre::match<quotedFloatRe>(sv);}
 
-
-
-	
 class CTReParser: public parser
 {
   public:
 	enum class ctRegex
 	{
-		CATCHALL, NUMBER, QUOTED_NUMBER
+		CATCHALL, INTEGER, QUOTED_INTEGER, FLOAT, QUOTED_FLOAT
 	};
 
-	void registerCTRegex(ctRegex regexEnum, const parsingFunction& function){
-		
-		addCTRegex(static_cast<int>(regexEnum), &numberMatch);
-		registerRegex(static_cast<int>(regexEnum), function);
-		
+	void registerRegex(ctRegex regexEnum, const parsingFunction& function){
+		const auto regexID = static_cast<int>(regexEnum);
+		addCTRegex(regexID, ctreMatchers[regexEnum]);
+		parser::registerRegex(regexID, function);
 	}
-	/*auto matchCTRegex(const ctRegex regexId, const std::string_view subject)
-	{
-		switch (regexId)
-		{
-			case ctRegex::CATCHALL:
-				return catchallRegexMatch(subject);
-			case ctRegex::NUMBER:
-				return numberMatch(subject);
-			case ctRegex::QUOTED_NUMBER:
-				return quotedNumberMatch(subject);
-			//default:
-				//return false;
-		}
-	}*/
 
   protected:
+	std::map<ctRegex, bool (*)(std::string_view)> ctreMatchers = {
+		 {ctRegex::CATCHALL, &catchallRegexMatch},
+		 {ctRegex::INTEGER, &integerMatch},
+		 {ctRegex::QUOTED_INTEGER, &quotedIntegerMatch},
+		 {ctRegex::FLOAT, &floatMatch},
+		 {ctRegex::QUOTED_FLOAT, &quotedFloatMatch}
+	};
 
 };
 } // namespace commonItems

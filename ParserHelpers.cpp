@@ -86,10 +86,10 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 intList::intList(std::istream& theStream)
 {
-	registerCTRegex(ctRegex::NUMBER, [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(ctRegex::INTEGER, [this](const std::string& theInt, std::istream& theStream) {
 		integers.push_back(std::stoi(theInt));
 	});
-	registerCTRegex(ctRegex::QUOTED_NUMBER, [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_INTEGER, [this](const std::string& theInt, std::istream& theStream) {
 		const auto newInt = remQuotes(theInt);
 		integers.push_back(std::stoi(newInt));
 	});
@@ -99,10 +99,10 @@ intList::intList(std::istream& theStream)
 
 llongList::llongList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(ctRegex::INTEGER, [this](const std::string& theLongLong, std::istream& theStream) {
 		llongs.push_back(std::stoll(theLongLong));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_INTEGER, [this](const std::string& theLongLong, std::istream& theStream) {
 		const auto newLlong = remQuotes(theLongLong);
 		llongs.push_back(std::stoll(newLlong));
 	});
@@ -112,10 +112,10 @@ llongList::llongList(std::istream& theStream)
 
 ullongList::ullongList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+	registerRegex(ctRegex::INTEGER, [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
 		ullongs.push_back(std::stoull(theUnsignedLongLong));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_INTEGER, [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
 		const auto newULlong = remQuotes(theUnsignedLongLong);
 		ullongs.push_back(std::stoull(newULlong));
 	});
@@ -242,10 +242,10 @@ int simpleObject::getValueAsInt(const std::string& key) const
 
 doubleList::doubleList(std::istream& theStream)
 {
-	registerRegex(R"(-?\d+(.\d+)?)", [this](const std::string& theDouble, std::istream& theStream) {
+	registerRegex(ctRegex::FLOAT, [this](const std::string& theDouble, std::istream& theStream) {
 		doubles.push_back(std::stod(theDouble));
 	});
-	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_FLOAT, [this](const std::string& theDouble, std::istream& theStream) {
 		const auto newDouble = remQuotes(theDouble);
 		doubles.push_back(std::stod(newDouble));
 	});

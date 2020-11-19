@@ -19,15 +19,6 @@ std::string getNextLexeme(std::istream& theStream);
 
 } // namespace commonItems
 
-bool commonItems::parser::matchCTRegex(const int regexId, const std::string_view subject) const
-{
-	switch (regexId)
-	{
-		case CATCHALL: return catchallRegexMatch(subject);
-		default: return false;
-	}
-}
-
 
 void commonItems::absorbBOM(std::istream& theStream)
 {
@@ -200,10 +191,13 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		}
 		if (!matched)
 		{
+			LOG(LogLevel::Debug) << "size of matchers " << registeredCompileTimeRegexes.size();
 			for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
 			{
 				if (matcher(toReturn))
 				{
+					LOG(LogLevel::Debug) << "matched " << toReturn << " normaly";
+									
 					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
@@ -215,6 +209,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				{
 					if (matcher(strippedLexeme))
 					{
+						LOG(LogLevel::Debug) << "matched " << toReturn << " abnormally";
 						parsingFunction(toReturn, theStream);
 						matched = true;
 						break;

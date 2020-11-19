@@ -25,7 +25,7 @@ typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
 //		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already
 //		drop
 //		in the parser.
-static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
+static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+ ")"};
 [[nodiscard]] constexpr bool catchallRegexMatch(std::string_view sv) noexcept
 {
 	return ctre::match<catchall>(sv);
@@ -52,11 +52,12 @@ class parser
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
 
-	static const int CATCHALL = 0; // can't replace it with enum, wouldn't work with CTReParser
+	// compile time regex stuff
+	static const int CATCHALL = 0;
 	void addCTRegex(int regexId, bool (*matcherFunction)(std::string_view));
 	void registerRegex(int regexId, const parsingFunction& function);
-	[[nodiscard]] bool matchCTRegex(int regexId, std::string_view subject) const;
 
+	
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
@@ -65,22 +66,12 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-  protected:
-	
-
   private:
-	
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 
-	
-	// bool (*matcherPtr)(std::string_view);
-	std::map<int, bool (*)(std::string_view)> ctreMatchers = { {CATCHALL, &catchallRegexMatch} };
-	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>
-		 registeredCompileTimeRegexes;
-
-	
-	
+	std::map<int, bool (*)(std::string_view)> ctreMatchers = { {CATCHALL, &catchallRegexMatch} }; // initialized with CATCHALL, doesn't mean CATCHALL is registered
+	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredCompileTimeRegexes;
 };
 
 } // namespace commonItems

@@ -24,7 +24,7 @@ class intList: CTReParser
 	std::vector<int> integers;
 };
 
-class llongList: parser
+class llongList: CTReParser
 {
   public:
 	explicit llongList(std::istream& theStream);
@@ -35,7 +35,7 @@ class llongList: parser
 	std::vector<long long> llongs;
 };
 
-class ullongList: parser
+class ullongList: CTReParser
 {
   public:
 	explicit ullongList(std::istream& theStream);
@@ -95,7 +95,7 @@ class simpleObject: parser
 	std::map<std::string, std::string> values;
 };
 
-class doubleList: parser
+class doubleList: CTReParser
 {
   public:
 	explicit doubleList(std::istream& theStream);
