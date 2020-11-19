@@ -43,7 +43,7 @@ void commonItems::parser::addCTRegex(const int regexId, bool (*matcherFunction)(
 
 void commonItems::parser::registerRegex(const int regexId, const parsingFunction& function)
 {
-	registeredCompileTimeRegexes.emplace_back(std::make_pair(ctreMatchers.at(regexId), function));
+	registeredCompileTimeRegexes.emplace_back(ctreMatchers[regexId], function);
 }
 
 void commonItems::parser::parseStream(std::istream& theStream)
