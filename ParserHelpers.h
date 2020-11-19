@@ -178,7 +178,7 @@ class stringOfItem: parser
 };
 
 
-class stringsOfItems: CTReParser
+class stringsOfItems: parser
 {
   public:
 	explicit stringsOfItems(std::istream& theStream);

@@ -51,9 +51,14 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
 
+void commonItems::parser::addCTRegex(const int regexId, bool (*matcherFunction)(std::string_view))
+{
+	ctreMatchers[regexId] = matcherFunction;
+}
+
 void commonItems::parser::registerRegex(const int regexId, const parsingFunction& function)
 {
-	registeredCompileTimeRegexes.emplace_back(std::make_pair(regexId, function));
+	registeredCompileTimeRegexes.emplace_back(std::make_pair(ctreMatchers.at(regexId), function));
 	Log(LogLevel::Debug) << regexId;
 }
 
@@ -131,6 +136,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
+	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredCompileTimeRegexes);
 }
 
 
@@ -194,9 +200,9 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		}
 		if (!matched)
 		{
-			for (const auto& [regexEnum, parsingFunction]: registeredCompileTimeRegexes)
+			for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
 			{
-				if (matchCTRegex(regexEnum, toReturn))
+				if (matcher(toReturn))
 				{
 					parsingFunction(toReturn, theStream);
 					matched = true;
@@ -205,9 +211,9 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			}
 			if (!matched && isLexemeQuoted)
 			{
-				for (const auto& [regexEnum, parsingFunction]: registeredCompileTimeRegexes)
+				for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
 				{
-					if (matchCTRegex(regexEnum, strippedLexeme))
+					if (matcher(strippedLexeme))
 					{
 						parsingFunction(toReturn, theStream);
 						matched = true;
