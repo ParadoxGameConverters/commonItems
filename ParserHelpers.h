@@ -9,11 +9,6 @@
 namespace commonItems
 {
 
-// const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@\'\"]+)"}; Leaving this here in case we need to revert.
-// We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already drop
-// in the parser.
-constexpr char catchallRegex[] = R"([^=^{^}]+|\".+\")";
-
 void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
@@ -183,7 +178,7 @@ class stringOfItem: parser
 };
 
 
-class stringsOfItems: parser
+class stringsOfItems: CTReParser
 {
   public:
 	explicit stringsOfItems(std::istream& theStream);

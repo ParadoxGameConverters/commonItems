@@ -81,9 +81,6 @@
     <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
-    <ClCompile Include="..\CTReParser.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">

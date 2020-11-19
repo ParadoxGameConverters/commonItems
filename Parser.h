@@ -32,7 +32,7 @@ class parser
 	
 	parser() = default;
 
-	~parser() = default;
+	virtual ~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
 	parser& operator=(const parser&) = default;
@@ -41,8 +41,9 @@ class parser
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
 
-	static const unsigned short CATCHALL = 0;
-	void registerRegex(const unsigned short regexId, const parsingFunction& function);
+	static const int CATCHALL = 0; // can't replace it with enum, wouldn't work with CTReParser
+	void registerRegex(int regexId, const parsingFunction& function);
+	[[nodiscard]] bool matchCTRegex(int regexId, std::string_view subject) const;
 
 	void clearRegisteredKeywords() noexcept;
 
@@ -52,22 +53,23 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-
-	[[nodiscard]] bool matchCTRegex(unsigned short regexId, std::string_view subject) const;
-
   protected:
-	// compile time regexes, cool stuff
 	[[nodiscard]] constexpr bool catchallRegexMatch(std::string_view sv) const noexcept { return ctre::match<catchall>(sv); }
-
+	// compile time regexes, cool stuff
+	// catchall:
+	//		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already
+	//		drop
+	//		in the parser.
+	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
 
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 
+	std::vector<std::pair<const int, parsingFunction>> registeredCompileTimeRegexes;
+
 	
-	// compile time regexes
-	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
-	std::vector<std::pair<const unsigned short, parsingFunction>> registeredCompileTimeRegexes;
+	
 };
 
 } // namespace commonItems

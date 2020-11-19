@@ -19,7 +19,7 @@ std::string getNextLexeme(std::istream& theStream);
 
 } // namespace commonItems
 
-bool commonItems::parser::matchCTRegex(const unsigned short regexId, const std::string_view subject) const
+bool commonItems::parser::matchCTRegex(const int regexId, const std::string_view subject) const
 {
 	switch (regexId)
 	{
@@ -51,16 +51,14 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
 
-void commonItems::parser::registerRegex(const unsigned short regexId, const parsingFunction& function)
+void commonItems::parser::registerRegex(const int regexId, const parsingFunction& function)
 {
 	registeredCompileTimeRegexes.emplace_back(std::make_pair(regexId, function));
+	Log(LogLevel::Debug) << regexId;
 }
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
-
-
-	
 	auto braceDepth = 0;
 	auto value = false; // tracker to indicate whether we reached the value part of key=value pair
 	std::string tokensSoFar;

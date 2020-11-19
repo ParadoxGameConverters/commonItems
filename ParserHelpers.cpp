@@ -86,10 +86,10 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 intList::intList(std::istream& theStream)
 {
-	registerRegex(ctRegex::NUMBER, [this](const std::string& theInt, std::istream& theStream) {
+	registerCTRegex(ctRegex::NUMBER, [this](const std::string& theInt, std::istream& theStream) {
 		integers.push_back(std::stoi(theInt));
 	});
-	registerRegex(ctRegex::QUOTED_NUMBER, [this](const std::string& theInt, std::istream& theStream) {
+	registerCTRegex(ctRegex::QUOTED_NUMBER, [this](const std::string& theInt, std::istream& theStream) {
 		const auto newInt = remQuotes(theInt);
 		integers.push_back(std::stoi(newInt));
 	});
@@ -424,7 +424,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
+	registerRegex(CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
 		const stringOfItem theItem(theStream);
 		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
@@ -435,7 +435,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
+	registerRegex(CATCHALL, [this](const std::string& itemName, std::istream& theStream) {
 		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
@@ -446,7 +446,7 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 assignments::assignments(std::istream& theStream)
 {
-	registerCTRegex(ctRegex::CATCHALL, [this](const std::string& assignmentName, std::istream& theStream) {
+	registerRegex(CATCHALL, [this](const std::string& assignmentName, std::istream& theStream) {
 		auto equals = getNextTokenWithoutMatching(theStream);
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));
