@@ -5,18 +5,12 @@
 #include <fstream>
 
 
-
-
 namespace fs = std::filesystem;
 
 
 namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
-
-
-
-
 } // namespace commonItems
 
 

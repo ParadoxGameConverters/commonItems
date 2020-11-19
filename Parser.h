@@ -9,6 +9,8 @@
 #include <regex>
 #include "ctre.hpp"
 
+
+
 namespace commonItems
 {
 
@@ -34,10 +36,7 @@ void absorbBOM(std::istream& theStream);
 class parser
 {
   public:
-
-	
 	parser() = default;
-
 	~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
@@ -61,6 +60,7 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
+	
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
