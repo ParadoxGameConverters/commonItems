@@ -86,10 +86,10 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 intList::intList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(ctRegex::NUMBER, [this](const std::string& theInt, std::istream& theStream) {
 		integers.push_back(std::stoi(theInt));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_NUMBER, [this](const std::string& theInt, std::istream& theStream) {
 		const auto newInt = remQuotes(theInt);
 		integers.push_back(std::stoi(newInt));
 	});

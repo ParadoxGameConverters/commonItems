@@ -28,8 +28,10 @@ void absorbBOM(std::istream& theStream);
 class parser
 {
   public:
+
 	
 	parser() = default;
+
 	~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
@@ -39,8 +41,8 @@ class parser
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
 
-	enum class ctRegex{CATCHALL};
-	void registerCTRegex(ctRegex regexEnum, const parsingFunction& function);
+	static const unsigned short CATCHALL = 0;
+	void registerRegex(const unsigned short regexId, const parsingFunction& function);
 
 	void clearRegisteredKeywords() noexcept;
 
@@ -50,13 +52,12 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-	
-	bool matchCTRegex(ctRegex regex, std::string_view subject);
+
+	[[nodiscard]] bool matchCTRegex(unsigned short regexId, std::string_view subject) const;
 
   protected:
-	
-	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
-	constexpr auto catchallRegexMatch(std::string_view sv) const noexcept { return ctre::match<catchall>(sv); }
+	// compile time regexes, cool stuff
+	[[nodiscard]] constexpr bool catchallRegexMatch(std::string_view sv) const noexcept { return ctre::match<catchall>(sv); }
 
 
   private:
@@ -65,16 +66,8 @@ class parser
 
 	
 	// compile time regexes
-	
-	std::vector<std::pair<ctRegex, parsingFunction>> registeredCompileTimeRegexes;
-
-	
-	//static constexpr ctll::fixed_string date{R"(\d+)"};
-	//constexpr auto dateMatch(std::string_view sv) noexcept { return ctre::match<date>(sv); }
-	//static constexpr ctll::fixed_string quotedDate{R"("\d+")"};
-	//constexpr auto quotedDateMatch(std::string_view sv) noexcept { return ctre::match<quotedDate>(sv); }
-	//static constexpr ctll::fixed_string number{R"([0-9]+)"};
-	//constexpr auto numberMatch(std::string_view sv) noexcept { return ctre::match<number>(sv); }
+	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
+	std::vector<std::pair<const unsigned short, parsingFunction>> registeredCompileTimeRegexes;
 };
 
 } // namespace commonItems

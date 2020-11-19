@@ -19,11 +19,11 @@ std::string getNextLexeme(std::istream& theStream);
 
 } // namespace commonItems
 
-bool commonItems::parser::matchCTRegex(const ctRegex regex, const std::string_view subject)
+bool commonItems::parser::matchCTRegex(const unsigned short regexId, const std::string_view subject) const
 {
-	switch (regex)
+	switch (regexId)
 	{
-		case ctRegex::CATCHALL: return catchallRegexMatch(subject);
+		case CATCHALL: return catchallRegexMatch(subject);
 		default: return false;
 	}
 }
@@ -48,18 +48,13 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	//const std::string constStr = keyword;
-	//static constexpr ctll::fixed_string pattern{keyword.};
-
-	
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
 
-void commonItems::parser::registerCTRegex(ctRegex regexEnum, const parsingFunction& function)
+void commonItems::parser::registerRegex(const unsigned short regexId, const parsingFunction& function)
 {
-	registeredCompileTimeRegexes.emplace_back(std::make_pair(regexEnum, function));
+	registeredCompileTimeRegexes.emplace_back(std::make_pair(regexId, function));
 }
-
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
