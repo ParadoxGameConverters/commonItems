@@ -44,7 +44,6 @@ void commonItems::parser::addCTRegex(const int regexId, bool (*matcherFunction)(
 void commonItems::parser::registerRegex(const int regexId, const parsingFunction& function)
 {
 	registeredCompileTimeRegexes.emplace_back(std::make_pair(ctreMatchers.at(regexId), function));
-	Log(LogLevel::Debug) << regexId;
 }
 
 void commonItems::parser::parseStream(std::istream& theStream)
@@ -185,13 +184,10 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		}
 		if (!matched)
 		{
-			LOG(LogLevel::Debug) << "size of matchers " << registeredCompileTimeRegexes.size();
 			for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
 			{
 				if (matcher(toReturn))
 				{
-					LOG(LogLevel::Debug) << "matched " << toReturn << " normaly";
-									
 					parsingFunction(toReturn, theStream);
 					matched = true;
 					break;
@@ -203,7 +199,6 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				{
 					if (matcher(strippedLexeme))
 					{
-						LOG(LogLevel::Debug) << "matched " << toReturn << " abnormally";
 						parsingFunction(toReturn, theStream);
 						matched = true;
 						break;
