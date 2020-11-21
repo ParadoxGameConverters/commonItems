@@ -331,12 +331,16 @@ stringList::stringList(std::istream& theStream)
 {
 	registerKeyword(R"("")", [](const std::string& unused, std::istream& theStream) {
 	});
-	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
-		strings.push_back(theString);
-	});
-	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")", [this](const std::string& theString, std::istream& theStream) {
-		strings.emplace_back(remQuotes(theString));
-	});
+	registerRegex(R"([^[:space:]^=^\{^\}^\"]+)",
+		 [this](const std::string& theString, std::istream& theStream) {
+			 strings.push_back(theString);
+		 },
+		 RE2::Latin1);
+	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")",
+		 [this](const std::string& theString, std::istream& theStream) {
+			 strings.emplace_back(remQuotes(theString));
+		 },
+		 RE2::Latin1);
 
 	parseStream(theStream);
 }
