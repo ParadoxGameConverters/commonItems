@@ -113,7 +113,7 @@
     <ClInclude Include="..\Color.h">
       <Filter>commonItems</Filter>
     </ClInclude>
-    <ClInclude Include="..\CTReParser.h">
+    <ClInclude Include="..\CommonRegexes.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
