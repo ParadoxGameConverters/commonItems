@@ -10,6 +10,9 @@
     <Filter Include="commonItems">
       <UniqueIdentifier>{d6b616bc-070f-4813-8376-a00f5f4e6b0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="re2">
+      <UniqueIdentifier>{c2b1274b-e375-4f38-9d5c-dc661d4d8439}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -81,6 +84,72 @@
     <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\re2\re2\bitstate.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\compile.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\dfa.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\filtered_re2.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\mimics_pcre.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\nfa.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\onepass.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\parse.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\perl_groups.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\prefilter.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\prefilter_tree.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\prog.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\re2.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\regexp.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\set.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\simplify.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\stringpiece.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\tostring.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\unicode_casefold.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\re2\unicode_groups.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\util\rune.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\re2\util\strutil.cc">
+      <Filter>re2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -112,6 +181,69 @@
     </ClInclude>
     <ClInclude Include="..\Color.h">
       <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\bitmap256.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\filtered_re2.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\pod_array.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\prefilter.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\prefilter_tree.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\prog.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\re2.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\regexp.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\set.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\sparse_array.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\sparse_set.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\stringpiece.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\unicode_casefold.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\unicode_groups.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\re2\walker-inl.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\logging.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\mix.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\mutex.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\strutil.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\utf.h">
+      <Filter>re2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\re2\util\util.h">
+      <Filter>re2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

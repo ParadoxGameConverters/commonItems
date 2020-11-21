@@ -109,6 +109,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)../re2</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +145,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <OmitFramePointers>false</OmitFramePointers>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(SolutionDir)../re2</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +163,28 @@
     <ClCompile Include="..\OSCommonLayer.cpp" />
     <ClCompile Include="..\Parser.cpp" />
     <ClCompile Include="..\ParserHelpers.cpp" />
+    <ClCompile Include="..\re2\re2\bitstate.cc" />
+    <ClCompile Include="..\re2\re2\compile.cc" />
+    <ClCompile Include="..\re2\re2\dfa.cc" />
+    <ClCompile Include="..\re2\re2\filtered_re2.cc" />
+    <ClCompile Include="..\re2\re2\mimics_pcre.cc" />
+    <ClCompile Include="..\re2\re2\nfa.cc" />
+    <ClCompile Include="..\re2\re2\onepass.cc" />
+    <ClCompile Include="..\re2\re2\parse.cc" />
+    <ClCompile Include="..\re2\re2\perl_groups.cc" />
+    <ClCompile Include="..\re2\re2\prefilter.cc" />
+    <ClCompile Include="..\re2\re2\prefilter_tree.cc" />
+    <ClCompile Include="..\re2\re2\prog.cc" />
+    <ClCompile Include="..\re2\re2\re2.cc" />
+    <ClCompile Include="..\re2\re2\regexp.cc" />
+    <ClCompile Include="..\re2\re2\set.cc" />
+    <ClCompile Include="..\re2\re2\simplify.cc" />
+    <ClCompile Include="..\re2\re2\stringpiece.cc" />
+    <ClCompile Include="..\re2\re2\tostring.cc" />
+    <ClCompile Include="..\re2\re2\unicode_casefold.cc" />
+    <ClCompile Include="..\re2\re2\unicode_groups.cc" />
+    <ClCompile Include="..\re2\util\rune.cc" />
+    <ClCompile Include="..\re2\util\strutil.cc" />
     <ClCompile Include="..\StringUtils.cpp" />
     <ClCompile Include="..\GameVersion.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
@@ -186,6 +210,27 @@
     <ClInclude Include="..\Parser.h" />
     <ClInclude Include="..\OSCompatibilityLayer.h" />
     <ClInclude Include="..\ParserHelpers.h" />
+    <ClInclude Include="..\re2\re2\bitmap256.h" />
+    <ClInclude Include="..\re2\re2\filtered_re2.h" />
+    <ClInclude Include="..\re2\re2\pod_array.h" />
+    <ClInclude Include="..\re2\re2\prefilter.h" />
+    <ClInclude Include="..\re2\re2\prefilter_tree.h" />
+    <ClInclude Include="..\re2\re2\prog.h" />
+    <ClInclude Include="..\re2\re2\re2.h" />
+    <ClInclude Include="..\re2\re2\regexp.h" />
+    <ClInclude Include="..\re2\re2\set.h" />
+    <ClInclude Include="..\re2\re2\sparse_array.h" />
+    <ClInclude Include="..\re2\re2\sparse_set.h" />
+    <ClInclude Include="..\re2\re2\stringpiece.h" />
+    <ClInclude Include="..\re2\re2\unicode_casefold.h" />
+    <ClInclude Include="..\re2\re2\unicode_groups.h" />
+    <ClInclude Include="..\re2\re2\walker-inl.h" />
+    <ClInclude Include="..\re2\util\logging.h" />
+    <ClInclude Include="..\re2\util\mix.h" />
+    <ClInclude Include="..\re2\util\mutex.h" />
+    <ClInclude Include="..\re2\util\strutil.h" />
+    <ClInclude Include="..\re2\util\utf.h" />
+    <ClInclude Include="..\re2\util\util.h" />
     <ClInclude Include="..\StringUtils.h" />
     <ClInclude Include="..\GameVersion.h" />
   </ItemGroup>
