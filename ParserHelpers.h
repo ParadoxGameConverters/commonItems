@@ -1,7 +1,7 @@
 #ifndef PARSER_HELPERS_H
 #define PARSER_HELPERS_H
 #include <map>
-#include "CTReParser.h"
+#include "CommonRegexes.h"
 #include "Parser.h"
 
 
