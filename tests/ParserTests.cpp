@@ -215,7 +215,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex(CATCHALL, [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
@@ -241,7 +241,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex(CATCHALL, [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
@@ -267,7 +267,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex(CATCHALL, [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});

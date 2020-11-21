@@ -12,7 +12,7 @@ void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
-class intList: CTReParser
+class intList: parser
 {
   public:
 	explicit intList(std::istream& theStream);
@@ -23,7 +23,7 @@ class intList: CTReParser
 	std::vector<int> integers;
 };
 
-class llongList: CTReParser
+class llongList: parser
 {
   public:
 	explicit llongList(std::istream& theStream);
@@ -34,7 +34,7 @@ class llongList: CTReParser
 	std::vector<long long> llongs;
 };
 
-class ullongList: CTReParser
+class ullongList: parser
 {
   public:
 	explicit ullongList(std::istream& theStream);
@@ -94,7 +94,7 @@ class simpleObject: parser
 	std::map<std::string, std::string> values;
 };
 
-class doubleList: CTReParser
+class doubleList: parser
 {
   public:
 	explicit doubleList(std::istream& theStream);
@@ -140,27 +140,14 @@ constexpr bool quotedStringMatch(std::string_view sv) noexcept
 	return ctre::match<quotedStringRe>(sv);
 }
 	
-class stringList final : CTReParser
+class stringList : parser
 {
   public:
 	explicit stringList(std::istream& theStream);
 
 	[[nodiscard]] std::vector<std::string> getStrings() const { return strings; }
 
-	enum class ctRegex { CATCHALL, STRING, QUOTED_STRING };
-	void registerRegex(ctRegex regexEnum, const parsingFunction& function)
-	{
-		const auto regexID = static_cast<int>(regexEnum);
-		addCTRegex(regexID, ctreMatchers[regexEnum]);
-		parser::registerRegex(regexID, function);
-	}
   private:
-	std::map<ctRegex, bool (*)(std::string_view)> ctreMatchers = {
-		 {ctRegex::CATCHALL, &catchallRegexMatch},
-		 {ctRegex::STRING, &stringMatch},
-		 {ctRegex::QUOTED_STRING, &quotedStringMatch},
-	};
-	
 	std::vector<std::string> strings;
 };
 

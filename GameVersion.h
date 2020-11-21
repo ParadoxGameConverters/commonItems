@@ -4,7 +4,7 @@
 #include <string>
 #include "CTReParser.h"
 
-class GameVersion: commonItems::CTReParser
+class GameVersion: commonItems::parser
 {
   public:
 	class Factory;
@@ -43,7 +43,7 @@ class GameVersion: commonItems::CTReParser
 	int fourthPart = 0;
 };
 
-class GameVersion::Factory: commonItems::CTReParser
+class GameVersion::Factory: commonItems::parser
 {
   public:
 	Factory();

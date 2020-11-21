@@ -36,14 +36,9 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
 
-void commonItems::parser::addCTRegex(const int regexId, bool (*matcherFunction)(std::string_view))
+void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
 {
-	ctreMatchers[regexId] = matcherFunction;
-}
-
-void commonItems::parser::registerRegex(const int regexId, const parsingFunction& function)
-{
-	registeredCompileTimeRegexes.emplace_back(ctreMatchers[regexId], function);
+	registeredCompileTimeRegexes.emplace_back(matcher, function);
 }
 
 void commonItems::parser::parseStream(std::istream& theStream)

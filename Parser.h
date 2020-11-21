@@ -37,7 +37,7 @@ class parser
 {
   public:
 	parser() = default;
-	virtual ~parser() = default;
+	~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
 	parser& operator=(const parser&) = default;
@@ -45,12 +45,8 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
-
-	// compile time regex stuff
-	static const int CATCHALL = 0;
-	void addCTRegex(int regexId, bool (*matcherFunction)(std::string_view));
-	void registerRegex(int regexId, const parsingFunction& function);
-
+	// for compile time regex metchers, but will work with any function that matches the return and argument type
+	void registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function);
 	
 	void clearRegisteredKeywords() noexcept;
 
@@ -65,7 +61,6 @@ class parser
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 
-	std::map<int, bool (*)(std::string_view)> ctreMatchers = { {CATCHALL, &catchallRegexMatch} }; // initialized with CATCHALL, doesn't mean CATCHALL is registered
 	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredCompileTimeRegexes;
 };
 
