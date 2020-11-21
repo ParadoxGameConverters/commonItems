@@ -331,10 +331,10 @@ stringList::stringList(std::istream& theStream)
 {
 	registerKeyword(R"("")", [](const std::string& unused, std::istream& theStream) {
 	});
-	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
+	registerRegex(ctRegex::STRING, [this](const std::string& theString, std::istream& theStream) {
 		strings.push_back(theString);
 	});
-	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")", [this](const std::string& theString, std::istream& theStream) {
+	registerRegex(ctRegex::QUOTED_STRING, [this](const std::string& theString, std::istream& theStream) {
 		strings.emplace_back(remQuotes(theString));
 	});
 

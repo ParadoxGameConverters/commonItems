@@ -128,15 +128,39 @@ class singleDouble: parser
 	double theDouble = 0.0;
 };
 
-
-class stringList: parser
+	
+static constexpr ctll::fixed_string stringRe{R"([^\n^=^{^}^"]+)"};
+constexpr bool stringMatch(std::string_view sv) noexcept
+{
+	return ctre::match<stringRe>(sv);
+}
+static constexpr ctll::fixed_string quotedStringRe{R"("[^\n^=^{^}^"]+")"};
+constexpr bool quotedStringMatch(std::string_view sv) noexcept
+{
+	return ctre::match<quotedStringRe>(sv);
+}
+	
+class stringList final : CTReParser
 {
   public:
 	explicit stringList(std::istream& theStream);
 
 	[[nodiscard]] std::vector<std::string> getStrings() const { return strings; }
 
+	enum class ctRegex { CATCHALL, STRING, QUOTED_STRING };
+	void registerRegex(ctRegex regexEnum, const parsingFunction& function)
+	{
+		const auto regexID = static_cast<int>(regexEnum);
+		addCTRegex(regexID, ctreMatchers[regexEnum]);
+		parser::registerRegex(regexID, function);
+	}
   private:
+	std::map<ctRegex, bool (*)(std::string_view)> ctreMatchers = {
+		 {ctRegex::CATCHALL, &catchallRegexMatch},
+		 {ctRegex::STRING, &stringMatch},
+		 {ctRegex::QUOTED_STRING, &quotedStringMatch},
+	};
+	
 	std::vector<std::string> strings;
 };
 

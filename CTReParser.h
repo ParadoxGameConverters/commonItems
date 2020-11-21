@@ -17,7 +17,7 @@ namespace commonItems
 	static constexpr ctll::fixed_string quotedFloatRe{R"("-?\d+(.\d+)?")"};
 	constexpr bool quotedFloatMatch(std::string_view sv) noexcept{return ctre::match<quotedFloatRe>(sv);}
 
-class CTReParser: public parser
+class CTReParser: protected parser
 {
   public:
 	enum class ctRegex
@@ -25,7 +25,8 @@ class CTReParser: public parser
 		CATCHALL, INTEGER, QUOTED_INTEGER, FLOAT, QUOTED_FLOAT
 	};
 
-	void registerRegex(ctRegex regexEnum, const parsingFunction& function){
+	virtual void registerRegex(ctRegex regexEnum, const parsingFunction& function)
+	{
 		const auto regexID = static_cast<int>(regexEnum);
 		addCTRegex(regexID, ctreMatchers[regexEnum]);
 		parser::registerRegex(regexID, function);

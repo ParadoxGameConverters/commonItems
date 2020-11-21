@@ -37,7 +37,7 @@ class parser
 {
   public:
 	parser() = default;
-	~parser() = default;
+	virtual ~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
 	parser& operator=(const parser&) = default;
