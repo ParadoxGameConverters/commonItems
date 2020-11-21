@@ -30,7 +30,7 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
-	// for compile time regex metchers, but will work with any function that matches the return and argument type
+	// for compile time regex matchers, but will work with any function that matches the return and argument type
 	void registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function);
 	
 	void clearRegisteredKeywords() noexcept;
