@@ -10,7 +10,7 @@ namespace commonItems
 	// catchall:
 	//		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already
 	//		drop in the parser.
-	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+ ")"};
+	static constexpr ctll::fixed_string catchall{R"([^=^{^}]+|".+")"};
 	[[nodiscard]] constexpr bool catchallRegexMatch(std::string_view sv) noexcept { return ctre::match<catchall>(sv); }
 	
 	// numbers
