@@ -6,7 +6,10 @@
 #include <functional>
 #include <map>
 #include <optional>
-#include <regex>
+#include <memory>
+#include <string>
+#include <vector>
+#include "re2/re2.h"
 
 
 
@@ -30,7 +33,7 @@ class parser
 	parser& operator=(parser&&) = default;
 
 	void registerKeyword(const std::string& keyword, const parsingFunction& function);
-	void registerRegex(const std::string& keyword, const parsingFunction& function);
+	void registerRegex(const std::string& regex, const parsingFunction& function, RE2::Options options = {});
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
@@ -42,7 +45,7 @@ class parser
 
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
-	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
+	std::vector<std::pair<std::shared_ptr<RE2>, parsingFunction>> generatedRegexes;
 };
 
 } // namespace commonItems

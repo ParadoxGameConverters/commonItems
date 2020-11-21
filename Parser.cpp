@@ -31,9 +31,9 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 }
 
 
-void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
+void commonItems::parser::registerRegex(const std::string& regex, const parsingFunction& function, RE2::Options options)
 {
-	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
+	generatedRegexes.emplace_back(std::make_pair(std::make_shared<RE2>(regex, options), function));
 }
 
 
@@ -110,7 +110,7 @@ void commonItems::parser::parseFile(const std::string& filename)
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
-	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
+	std::vector<std::pair<std::shared_ptr<RE2>, parsingFunction>>().swap(generatedRegexes);
 }
 
 
@@ -150,8 +150,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		{
 			for (const auto& [regex, parsingFunction]: generatedRegexes)
 			{
-				std::smatch match;
-				if (std::regex_match(toReturn, match, regex))
+				if (RE2::FullMatch(toReturn, *regex))
 				{
 					parsingFunction(toReturn, theStream);
 					matched = true;
@@ -162,8 +161,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			{
 				for (const auto& [regex, parsingFunction]: generatedRegexes)
 				{
-					std::smatch match;
-					if (std::regex_match(strippedLexeme, match, regex))
+					if (RE2::FullMatch(strippedLexeme, *regex))
 					{
 						parsingFunction(toReturn, theStream);
 						matched = true;
