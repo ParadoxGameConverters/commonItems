@@ -527,6 +527,18 @@ TEST(ParserHelper_Tests, StringListAddsStringsFromBracedBlock)
 }
 
 
+TEST(ParserHelper_Tests, StringListHandles1252)
+{
+	std::stringstream input;
+	input << "Géorge Bob";
+	const commonItems::stringList theStrings(input);
+
+	ASSERT_EQ(2, theStrings.getStrings().size());
+	ASSERT_EQ("Géorge", theStrings.getStrings()[0]);
+	ASSERT_EQ("Bob", theStrings.getStrings()[1]);
+}
+
+
 TEST(ParserHelper_Tests, SingleStringGetsStringAfterEquals)
 {
 	std::stringstream input{" = foo"};
