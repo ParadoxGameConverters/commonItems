@@ -2,7 +2,7 @@
 #define GAME_VERSION_H
 #include <ostream>
 #include <string>
-#include "CTReParser.h"
+#include "Parser.h"
 
 class GameVersion: commonItems::parser
 {
