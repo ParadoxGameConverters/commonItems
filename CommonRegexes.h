@@ -1,7 +1,7 @@
 #ifndef COMMON_REGEXES_H
 #define COMMON_REGEXES_H
 
-#include "Parser.h"
+#include "ctre.hpp"
 
 namespace commonItems
 {
@@ -27,10 +27,10 @@ namespace commonItems
 	constexpr bool quotedFloatMatch(std::string_view sv) noexcept { return ctre::match<quotedFloatRe>(sv); }
 
 	//strings
-	static constexpr ctll::fixed_string stringRe{R"([^\n^=^{^}^"]+)"};
+	static constexpr ctll::fixed_string stringRe{R"([^[:space:]^=^\{^\}^"]+)"};
 	constexpr bool stringMatch(std::string_view sv) noexcept { return ctre::match<stringRe>(sv); }
 	
-	static constexpr ctll::fixed_string quotedStringRe{R"("[^\n^=^{^}^"]+")"};
+	static constexpr ctll::fixed_string quotedStringRe{R"("[^\n^=^\{^\}^"]+")"};
 	constexpr bool quotedStringMatch(std::string_view sv) noexcept { return ctre::match<quotedStringRe>(sv); }
 	} // namespace commonItems
 
