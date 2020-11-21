@@ -1,8 +1,8 @@
 #ifndef GAME_VERSION_H
 #define GAME_VERSION_H
+#include "Parser.h"
 #include <ostream>
 #include <string>
-#include "Parser.h"
 
 class GameVersion: commonItems::parser
 {

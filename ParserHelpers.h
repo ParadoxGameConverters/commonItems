@@ -128,8 +128,8 @@ class singleDouble: parser
 	double theDouble = 0.0;
 };
 
-	
-class stringList : parser
+
+class stringList: parser
 {
   public:
 	explicit stringList(std::istream& theStream);

@@ -7,7 +7,6 @@
 #include <map>
 #include <optional>
 #include <regex>
-#include "ctre.hpp"
 
 
 
@@ -46,8 +45,7 @@ class parser
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
-
-	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredCompileTimeRegexes;
+	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredMatchers;
 };
 
 } // namespace commonItems

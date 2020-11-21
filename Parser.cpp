@@ -38,7 +38,7 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 
 void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
 {
-	registeredCompileTimeRegexes.emplace_back(matcher, function);
+	registeredMatchers.emplace_back(matcher, function);
 }
 
 void commonItems::parser::parseStream(std::istream& theStream)
@@ -115,7 +115,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
-	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredCompileTimeRegexes);
+	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredMatchers);
 }
 
 
@@ -179,7 +179,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		}
 		if (!matched)
 		{
-			for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
+			for (const auto& [matcher, parsingFunction]: registeredMatchers)
 			{
 				if (matcher(toReturn))
 				{
@@ -190,7 +190,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			}
 			if (!matched && isLexemeQuoted)
 			{
-				for (const auto& [matcher, parsingFunction]: registeredCompileTimeRegexes)
+				for (const auto& [matcher, parsingFunction]: registeredMatchers)
 				{
 					if (matcher(strippedLexeme))
 					{
