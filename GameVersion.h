@@ -43,7 +43,7 @@ class GameVersion: commonItems::parser
 	int fourthPart = 0;
 };
 
-class GameVersion::Factory: commonItems::parser
+class GameVersion::Factory: parser
 {
   public:
 	Factory();
