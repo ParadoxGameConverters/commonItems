@@ -30,16 +30,11 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
 }
 
-
-void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
-{
-	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
-}
-
 void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
 {
 	registeredMatchers.emplace_back(matcher, function);
 }
+
 
 void commonItems::parser::parseStream(std::istream& theStream)
 {
@@ -151,32 +146,6 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			}
 		}
 
-		if (!matched)
-		{
-			for (const auto& [regex, parsingFunction]: generatedRegexes)
-			{
-				std::smatch match;
-				if (std::regex_match(toReturn, match, regex))
-				{
-					parsingFunction(toReturn, theStream);
-					matched = true;
-					break;
-				}
-			}
-			if (!matched && isLexemeQuoted)
-			{
-				for (const auto& [regex, parsingFunction]: generatedRegexes)
-				{
-					std::smatch match;
-					if (std::regex_match(strippedLexeme, match, regex))
-					{
-						parsingFunction(toReturn, theStream);
-						matched = true;
-						break;
-					}
-				}
-			}
-		}
 		if (!matched)
 		{
 			for (const auto& [matcher, parsingFunction]: registeredMatchers)

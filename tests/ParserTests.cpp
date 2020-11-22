@@ -115,6 +115,9 @@ TEST(Parser_Tests, WrongKeywordsAreIgnored)
 	ASSERT_TRUE(test.value.empty());
 }
 
+
+static constexpr ctll::fixed_string keyRe{"[key]+"};
+constexpr bool keyMatch(std::string_view sv) noexcept { return ctre::match<keyRe>(sv); }
 TEST(Parser_Tests, RegexesAreMatched)
 {
 	std::stringstream input{"key = value"};
@@ -123,7 +126,7 @@ TEST(Parser_Tests, RegexesAreMatched)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
@@ -146,7 +149,7 @@ TEST(Parser_Tests, WrongRegexesAreIgnored)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
@@ -169,7 +172,7 @@ TEST(Parser_Tests, QuotedRegexesAreMatched)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
@@ -184,6 +187,10 @@ TEST(Parser_Tests, QuotedRegexesAreMatched)
 	ASSERT_EQ("value", test.value);
 }
 
+
+static constexpr ctll::fixed_string quotedKeyRe{"[k\"ey]+"};
+constexpr bool quotedKeyMatch(std::string_view sv) noexcept { return ctre::match<quotedKeyRe>(sv); }
+
 TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 {
 	std::stringstream input{"\"key\" = value"};
@@ -192,7 +199,7 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	  public:
 		explicit Test(std::istream& stream)
 		{
-			registerRegex("[k\"ey]+", [this](const std::string& keyword, std::istream& theStream) {
+			registerMatcher(quotedKeyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
 				value = commonItems::singleString(theStream).getString();
 			});
