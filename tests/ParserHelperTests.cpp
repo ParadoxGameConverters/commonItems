@@ -118,6 +118,16 @@ TEST(ParserHelper_Tests, IntListAddsInts)
 	ASSERT_EQ(expectedIntegers, theIntegers.getInts());
 }
 
+TEST(ParserHelper_Tests, IntListAddsNegativeInts)
+{
+	std::stringstream input{"-1 -2 -3"};
+
+	const commonItems::intList theIntegers(input);
+
+	const auto expectedIntegers = std::vector<int>{-1, -2, -3};
+	ASSERT_EQ(expectedIntegers, theIntegers.getInts());
+}
+
 
 TEST(ParserHelper_Tests, IntListAddsQuotedInts)
 {
@@ -129,6 +139,15 @@ TEST(ParserHelper_Tests, IntListAddsQuotedInts)
 	ASSERT_EQ(expectedIntegers, theIntegers.getInts());
 }
 
+TEST(ParserHelper_Tests, IntListAddsQuotedNegativeInts)
+{
+	std::stringstream input{R"("-1" "-2" "-3")"};
+
+	const commonItems::intList theIntegers(input);
+
+	const auto expectedIntegers = std::vector<int>{-1, -2, -3};
+	ASSERT_EQ(expectedIntegers, theIntegers.getInts());
+}
 
 TEST(ParserHelper_Tests, IntListAddsIntsFromBracedBlock)
 {
@@ -170,13 +189,24 @@ TEST(ParserHelper_Tests, LlongListAddsLlongs)
 	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
 }
 
+TEST(ParserHelper_Tests, LlongListAddsNegativeLlongs)
+{
+	std::stringstream input{"-123456789012345 -234567890123456 -345678901234567"};
+
+	const commonItems::llongList theLlongs(input);
+
+	const auto expectedLlongs = std::vector<long long>{-123456789012345, -234567890123456, -345678901234567};
+	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
 TEST(ParserHelper_Tests, ULlongListAddsLlongs)
 {
 	std::stringstream input{"299792458000000000 299792458000000304 256792458000000304"};
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs =
+		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -191,13 +221,24 @@ TEST(ParserHelper_Tests, LlongListAddsQuotedLLongs)
 	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
 }
 
+TEST(ParserHelper_Tests, LlongListAddsQuotedNegativeLLongs)
+{
+	std::stringstream input{R"("-123456789012345" "-234567890123456" "-345678901234567")"};
+
+	const commonItems::llongList theLlongs(input);
+
+	const auto expectedLlongs = std::vector<long long>{-123456789012345, -234567890123456, -345678901234567};
+	ASSERT_EQ(expectedLlongs, theLlongs.getLlongs());
+}
+
 TEST(ParserHelper_Tests, ULlongListAddsQuotedLLongs)
 {
 	std::stringstream input{R"("299792458000000000" "299792458000000304" "256792458000000304")"};
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs =
+		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -218,7 +259,8 @@ TEST(ParserHelper_Tests, ULlongListAddsULlongsFromBracedBlock)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs =
+		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -231,6 +273,15 @@ TEST(ParserHelper_Tests, SingleIntGetsIntAfterEquals)
 	ASSERT_EQ(1, theInteger.getInt());
 }
 
+TEST(ParserHelper_Tests, SingleIntGetsNegativeIntAfterEquals)
+{
+	std::stringstream input{" = -1"};
+
+	const commonItems::singleInt theInteger(input);
+
+	ASSERT_EQ(-1, theInteger.getInt());
+}
+
 
 TEST(ParserHelper_Tests, SingleIntGetsQuotedIntAfterEquals)
 {
@@ -241,6 +292,15 @@ TEST(ParserHelper_Tests, SingleIntGetsQuotedIntAfterEquals)
 	ASSERT_EQ(1, theInteger.getInt());
 }
 
+
+TEST(ParserHelper_Tests, SingleIntGetsQuotedNegativeIntAfterEquals)
+{
+	std::stringstream input{R"(= "-1")"};
+
+	const commonItems::singleInt theInteger(input);
+
+	ASSERT_EQ(-1, theInteger.getInt());
+}
 
 TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 {
@@ -258,7 +318,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
-TEST(ParserHelper_Tests, SingleLlongGetsIntAfterEquals)
+TEST(ParserHelper_Tests, SingleLlongGetsLlongAfterEquals)
 {
 	std::stringstream input{" = 123456789012345"};
 
@@ -266,6 +326,16 @@ TEST(ParserHelper_Tests, SingleLlongGetsIntAfterEquals)
 
 	ASSERT_EQ(123456789012345, theLlong.getLlong());
 }
+
+TEST(ParserHelper_Tests, SingleLlongGetsNegativeLlongAfterEquals)
+{
+	std::stringstream input{" = -123456789012345"};
+
+	const commonItems::singleLlong theLlong(input);
+
+	ASSERT_EQ(-123456789012345, theLlong.getLlong());
+}
+
 
 TEST(ParserHelper_Tests, SingleULlongGetsIntAfterEquals)
 {
@@ -277,13 +347,22 @@ TEST(ParserHelper_Tests, SingleULlongGetsIntAfterEquals)
 }
 
 
-TEST(ParserHelper_Tests, SingleLlongGetsQuotedIntAfterEquals)
+TEST(ParserHelper_Tests, SingleLlongGetsQuotedLlongAfterEquals)
 {
 	std::stringstream input{R"(= "123456789012345")"};
 
 	const commonItems::singleLlong theLlong(input);
 
 	ASSERT_EQ(123456789012345, theLlong.getLlong());
+}
+
+TEST(ParserHelper_Tests, SingleLlongGetsQuotedNegativeLlongAfterEquals)
+{
+	std::stringstream input{R"(= "-123456789012345")"};
+
+	const commonItems::singleLlong theLlong(input);
+
+	ASSERT_EQ(-123456789012345, theLlong.getLlong());
 }
 
 TEST(ParserHelper_Tests, SingleULlongGetsQuotedIntAfterEquals)
@@ -649,7 +728,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 {
 	class TestClass: commonItems::parser
 	{
-	public:
+	  public:
 		explicit TestClass(std::istream& theStream)
 		{
 			registerKeyword("test", [this](const std::string& unused, std::istream& theStream) {
@@ -660,7 +739,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 		}
 		bool test = false;
 	};
-	
+
 	class WrapperClass: commonItems::parser
 	{
 	  public:
@@ -682,7 +761,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	input << "c = { test = yes }";
 
 	auto wrapper = WrapperClass(input);
-	
+
 	ASSERT_TRUE(wrapper.themap["a"]);
 	ASSERT_FALSE(wrapper.themap["b"]);
 	ASSERT_TRUE(wrapper.themap["c"]);
@@ -823,12 +902,16 @@ TEST(ParserHelper_Tests, BlobListAddsComplicatedBlobs)
 
 TEST(ParserHelper_Tests, BlobListPreservesEverythingWithinBlobs)
 {
-	std::stringstream input{"= { {foo\t=\nbar\n \n{bar\t=\tbaz\n\n}} {BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t} {\t\nbaz\n\t=\t\n\tfoo\n {} \n\tfoo\t=\tbar\t} }"};
+	std::stringstream input{
+		 "= { {foo\t=\nbar\n \n{bar\t=\tbaz\n\n}} {BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t} {\t\nbaz\n\t=\t\n\tfoo\n "
+		 "{} \n\tfoo\t=\tbar\t} }"};
 	input >> std::noskipws;
 
 	const commonItems::blobList theBlobs(input);
 
-	const auto expectedBlobs = std::vector<std::string>{"foo\t=\nbar\n \n{bar\t=\tbaz\n\n}", "BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t", "\t\nbaz\n\t=\t\n\tfoo\n {} \n\tfoo\t=\tbar\t"};
+	const auto expectedBlobs = std::vector<std::string>{"foo\t=\nbar\n \n{bar\t=\tbaz\n\n}",
+		 "BROKEN\t\t\tbar\n=\nbaz\n \t\tbaz\t=\nfoo\t",
+		 "\t\nbaz\n\t=\t\n\tfoo\n {} \n\tfoo\t=\tbar\t"};
 	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
 }
 
