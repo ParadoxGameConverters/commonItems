@@ -356,7 +356,7 @@ TEST(ParserHelper_Tests, SingleLlongGetsQuotedLlongAfterEquals)
 	ASSERT_EQ(123456789012345, theLlong.getLlong());
 }
 
-TEST(ParserHelper_Tests, SingleLlongGetsQuotedNegativeLlongntAfterEquals)
+TEST(ParserHelper_Tests, SingleLlongGetsQuotedNegativeLlongAfterEquals)
 {
 	std::stringstream input{R"(= "-123456789012345")"};
 
