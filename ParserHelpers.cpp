@@ -86,10 +86,10 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 intList::intList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(R"(-?\d+)", [this](const std::string& theInt, std::istream& theStream) {
 		integers.push_back(std::stoi(theInt));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(R"(\"-?\d+\")", [this](const std::string& theInt, std::istream& theStream) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
 		integers.push_back(std::stoi(newInt));
 	});
@@ -99,10 +99,10 @@ intList::intList(std::istream& theStream)
 
 llongList::llongList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(R"(-?\d+)", [this](const std::string& theLongLong, std::istream& theStream) {
 		llongs.push_back(std::stoll(theLongLong));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(R"(\"-?\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
 		llongs.push_back(std::stoll(newLlong));
 	});
