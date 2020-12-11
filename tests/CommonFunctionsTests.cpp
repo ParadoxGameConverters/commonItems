@@ -155,9 +155,16 @@ TEST(GetExtension_Tests, GetExtensionReturnsEmptyStringForNoExtension)
 
 TEST(GetExtension_Tests, GetExtensionDoesNotAffectDirectories)
 {
-	const std::string input = R"(/path/with.extension/filename)";
+	const std::string input = R"(/path/with.extension/directoryname)";
 
 	ASSERT_TRUE(getExtension(input).empty());
+}
+
+TEST(GetExtension_Tests, GetExtensionWorksOnAbsolutePaths)
+{
+	const std::string input = R"(c:\path/with.extension/filename.mod)";
+
+	ASSERT_EQ("mod", getExtension(input));
 }
 
 TEST(ReplaceCharacter_Tests, ReplaceCharacterCanReplaceSpaces)
