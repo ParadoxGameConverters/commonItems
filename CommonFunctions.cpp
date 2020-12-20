@@ -35,7 +35,7 @@ std::string getExtension(const std::string& fileName)
 	if (dotPos == std::string::npos)
 		return std::string();
 	else
-		return fileName.substr(dotPos + 1);
+		return rawFile.substr(dotPos + 1);
 }
 
 std::string replaceCharacter(std::string fileName, const char character)
