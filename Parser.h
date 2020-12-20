@@ -53,11 +53,11 @@ class parser
 		 bool isLexemeQuoted,
 		 std::istream& theStream);
 
-	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
+	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
-	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 	std::vector<std::pair<std::regex, parsingFunctionStreamOnly>> generatedRegexesStreamOnly;
+	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
 
 } // namespace commonItems

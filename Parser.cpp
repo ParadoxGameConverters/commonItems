@@ -29,6 +29,8 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 {
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
 }
+
+
 void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function)
 {
 	registeredKeywordStringsStreamOnly.insert(std::make_pair(keyword, function));
@@ -39,6 +41,8 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 {
 	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
 }
+
+
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function)
 {
 	generatedRegexesStreamOnly.emplace_back(std::make_pair(std::regex(keyword), function));
