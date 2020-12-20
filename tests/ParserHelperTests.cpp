@@ -768,9 +768,9 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 
 	auto wrapper = WrapperClass(input);
 
-	ASSERT_TRUE(wrapper.themap["a"]);
-	ASSERT_FALSE(wrapper.themap["b"]);
-	ASSERT_TRUE(wrapper.themap["c"]);
+	ASSERT_TRUE(wrapper.theMap["a"]);
+	ASSERT_FALSE(wrapper.theMap["b"]);
+	ASSERT_TRUE(wrapper.theMap["c"]);
 }
 
 TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
