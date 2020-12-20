@@ -14,10 +14,10 @@ namespace commonItems
 	[[nodiscard]] constexpr bool catchallRegexMatch(std::string_view sv) noexcept { return ctre::match<catchall>(sv); }
 	
 	// numbers
-	static constexpr ctll::fixed_string integerRe{R"(\d+)"};
+	static constexpr ctll::fixed_string integerRe{R"(-?\d+)"};
 	constexpr bool integerMatch(std::string_view sv) noexcept { return ctre::match<integerRe>(sv); }
 	
-	static constexpr ctll::fixed_string quotedIntegerRe{R"("\d+")"};
+	static constexpr ctll::fixed_string quotedIntegerRe{R"(\"-?\d+\")"};
 	constexpr bool quotedIntegerMatch(std::string_view sv) noexcept { return ctre::match<quotedIntegerRe>(sv); }
 	
 	static constexpr ctll::fixed_string floatRe {R"(-?\d+(.\d+)?)"};
