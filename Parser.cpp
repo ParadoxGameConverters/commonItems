@@ -109,7 +109,6 @@ void commonItems::parser::parseFile(const std::string& filename)
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
-	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredMatchers);
 }
 

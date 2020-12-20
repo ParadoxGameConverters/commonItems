@@ -15,6 +15,7 @@ namespace commonItems
 
 typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
 
+
 void absorbBOM(std::istream& theStream);
 
 
@@ -43,7 +44,6 @@ class parser
 	
   private:
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
-	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredMatchers;
 };
 
