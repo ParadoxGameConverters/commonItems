@@ -46,16 +46,16 @@ GameVersion::GameVersion(std::istream& theStream)
 
 void GameVersion::registerKeys()
 {
-	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("first", [this](std::istream& theStream) {
 		firstPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("second", [this](std::istream& theStream) {
 		secondPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("third", [this](std::istream& theStream) {
 		thirdPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("forth", [this](std::istream& theStream) {
 		fourthPart = commonItems::singleInt(theStream).getInt();
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
@@ -139,16 +139,16 @@ std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 
 GameVersion::Factory::Factory()
 {
-	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("first", [this](std::istream& theStream) {
 		firstPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("second", [this](std::istream& theStream) {
 		secondPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("third", [this](std::istream& theStream) {
 		thirdPart = commonItems::singleInt(theStream).getInt();
 	});
-	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
+	registerKeyword("forth", [this](std::istream& theStream) {
 		fourthPart = commonItems::singleInt(theStream).getInt();
 	});
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);

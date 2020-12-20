@@ -10,7 +10,7 @@ namespace commonItems
 
 std::string getNextLexeme(std::istream& theStream);
 
-void ignoreItem(const std::string& unused, std::istream& theStream)
+void ignoreItem(std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
 	if (next == "=")
@@ -51,7 +51,7 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	}
 }
 
-void ignoreObject(const std::string& unused, std::istream& theStream)
+void ignoreObject(std::istream& theStream)
 {
 	auto braceDepth = 0;
 	while (true)
@@ -78,7 +78,7 @@ void ignoreObject(const std::string& unused, std::istream& theStream)
 }
 
 
-void ignoreString(const std::string& unused, std::istream& theStream)
+void ignoreString(std::istream& theStream)
 {
 	singleString ignore(theStream);
 }
@@ -329,7 +329,7 @@ blobList::blobList(std::istream& theStream)
 
 stringList::stringList(std::istream& theStream)
 {
-	registerKeyword(R"("")", [](const std::string& unused, std::istream& theStream) {
+	registerKeyword(R"("")", [](std::istream& theStream) {
 	});
 	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
 		strings.push_back(theString);
@@ -436,7 +436,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
 	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
-		ignoreItem(itemName, theStream);
+		ignoreItem(theStream);
 		theStrings.push_back(itemName);
 	});
 
