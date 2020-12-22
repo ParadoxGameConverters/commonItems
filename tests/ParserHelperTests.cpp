@@ -731,7 +731,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit TestClass(std::istream& theStream)
 		{
-			registerKeyword("test", [this](const std::string& unused, std::istream& theStream) {
+			registerKeyword("test", [this](std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
 				test = testStr.getString() == "yes";
 			});

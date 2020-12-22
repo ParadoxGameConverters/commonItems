@@ -329,7 +329,7 @@ blobList::blobList(std::istream& theStream)
 
 stringList::stringList(std::istream& theStream)
 {
-	registerKeyword(R"("")", [](const std::string& unused, std::istream& theStream) {
+	registerKeyword(R"("")", [](std::istream& theStream) {
 	});
 	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
 		strings.push_back(theString);

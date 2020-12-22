@@ -14,6 +14,7 @@ namespace commonItems
 {
 
 typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
+typedef std::function<void(std::istream&)> parsingFunctionStreamOnly;
 
 
 void absorbBOM(std::istream& theStream);
@@ -29,7 +30,8 @@ class parser
 	parser& operator=(const parser&) = default;
 	parser& operator=(parser&&) = default;
 
-	void registerKeyword(const std::string& keyword, const parsingFunction& function);
+	void registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function);
+	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
 	void clearRegisteredKeywords() noexcept;
 
@@ -41,7 +43,18 @@ class parser
 
 
   private:
+	inline bool tryToMatchAgainstKeywords(const std::string& toReturn,
+		 const std::string& strippedLexeme,
+		 bool isLexemeQuoted,
+		 std::istream& theStream);
+	inline bool tryToMatchAgainstRegexes(const std::string& toReturn,
+		 const std::string& strippedLexeme,
+		 bool isLexemeQuoted,
+		 std::istream& theStream);
+
+	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
+
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
 
