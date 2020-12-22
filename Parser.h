@@ -32,7 +32,6 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function);
 	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
-	void registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function);
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
 	void clearRegisteredKeywords() noexcept;
 
@@ -56,7 +55,6 @@ class parser
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
-	std::vector<std::pair<std::regex, parsingFunctionStreamOnly>> generatedRegexesStreamOnly;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
 
