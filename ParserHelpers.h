@@ -1,20 +1,19 @@
 #ifndef PARSER_HELPERS_H
 #define PARSER_HELPERS_H
-#include <map>
+
+
+
 #include "Parser.h"
+#include <map>
 
 
 namespace commonItems
 {
 
-// const std::string catchallRegex{R"([a-zA-Z0-9_\.\-:@\'\"]+)"}; Leaving this here in case we need to revert.
-// We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already drop
-// in the parser.
-constexpr char catchallRegex[] = R"([^=^{^}]+|\".+\")";
-
 void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
+
 
 class intList: parser
 {
@@ -27,6 +26,7 @@ class intList: parser
 	std::vector<int> integers;
 };
 
+
 class llongList: parser
 {
   public:
@@ -37,6 +37,7 @@ class llongList: parser
   private:
 	std::vector<long long> llongs;
 };
+
 
 class ullongList: parser
 {
@@ -73,6 +74,7 @@ class singleLlong: parser
 	long long theLongLong = 0;
 };
 
+
 class singleULlong: parser
 {
   public:
@@ -83,6 +85,7 @@ class singleULlong: parser
   private:
 	unsigned long long theUnsignedLongLong = 0;
 };
+
 
 // Parses an object where each entry is a simple assignment, key = value.
 // Nested objects, key = { ... }, are ignored.
@@ -98,6 +101,7 @@ class simpleObject: parser
 	std::map<std::string, std::string> values;
 };
 
+
 class doubleList: parser
 {
   public:
@@ -108,6 +112,7 @@ class doubleList: parser
   private:
 	std::vector<double> doubles;
 };
+
 
 class blobList: parser
 {

@@ -1,7 +1,10 @@
+#include "../CommonRegexes.h"
 #include "../Parser.h"
+#include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
-#include "../ParserHelpers.h"
+
+
 
 TEST(Parser_Tests, AbsorbBOMAbsorbsBOM)
 {
@@ -28,12 +31,12 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	std::stringstream input{"key = value"};
 	class Test: commonItems::parser
 	{
-	public:
+	  public:
 		explicit Test(std::istream& stream)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();				
+				value = commonItems::singleString(theStream).getString();
 			});
 			parseStream(stream);
 		}
@@ -41,7 +44,7 @@ TEST(Parser_Tests, KeywordsAreMatched)
 		std::string value;
 	};
 	const auto test = Test(input);
-	
+
 	ASSERT_EQ("key", test.key);
 	ASSERT_EQ("value", test.value);
 }
@@ -235,7 +238,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
 	std::stringstream input;
 	input << std::noskipws;
 	input << "\"this\tis a\nkey\n\" = value";
-	
+
 	class Test: commonItems::parser
 	{
 	  public:

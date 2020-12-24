@@ -1,14 +1,17 @@
 #include "ParserHelpers.h"
+#include "CommonRegexes.h"
 #include "Log.h"
 #include "StringUtils.h"
-#include <cctype>
+#include <locale>
 #include <sstream>
+
 
 
 namespace commonItems
 {
 
 std::string getNextLexeme(std::istream& theStream);
+
 
 void ignoreItem(const std::string& unused, std::istream& theStream)
 {
@@ -20,9 +23,13 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	if (next == "rgb" || next == "hsv") // Needed for ignoring color. Example: "color2 = rgb { 2 4 8 }"
 	{
 		if (theStream.peek() == '{')
+		{
 			next = getNextLexeme(theStream);
+		}
 		else // don't go further in cases like "type = rgb"
+		{
 			return;
+		}
 	}
 	if (next == "{")
 	{
@@ -50,6 +57,7 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 		}
 	}
 }
+
 
 void ignoreObject(const std::string& unused, std::istream& theStream)
 {
@@ -86,10 +94,10 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 intList::intList(std::istream& theStream)
 {
-	registerRegex(R"(-?\d+)", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(integerRegex, [this](const std::string& theInt, std::istream& unused) {
 		integers.push_back(std::stoi(theInt));
 	});
-	registerRegex(R"(\"-?\d+\")", [this](const std::string& theInt, std::istream& theStream) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theInt, std::istream& unused) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
 		integers.push_back(std::stoi(newInt));
 	});
@@ -97,12 +105,13 @@ intList::intList(std::istream& theStream)
 	parseStream(theStream);
 }
 
+
 llongList::llongList(std::istream& theStream)
 {
-	registerRegex(R"(-?\d+)", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(integerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		llongs.push_back(std::stoll(theLongLong));
 	});
-	registerRegex(R"(\"-?\d+\")", [this](const std::string& theLongLong, std::istream& theStream) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
 		llongs.push_back(std::stoll(newLlong));
 	});
@@ -110,12 +119,13 @@ llongList::llongList(std::istream& theStream)
 	parseStream(theStream);
 }
 
+
 ullongList::ullongList(std::istream& theStream)
 {
-	registerRegex(R"(\d+)", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+	registerRegex(integerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		ullongs.push_back(std::stoull(theUnsignedLongLong));
 	});
-	registerRegex(R"(\"\d+\")", [this](const std::string& theUnsignedLongLong, std::istream& theStream) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
 		ullongs.push_back(std::stoull(newULlong));
 	});
@@ -126,7 +136,7 @@ ullongList::ullongList(std::istream& theStream)
 
 singleInt::singleInt(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
@@ -140,9 +150,10 @@ singleInt::singleInt(std::istream& theStream)
 	}
 }
 
+
 singleLlong::singleLlong(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
@@ -155,6 +166,7 @@ singleLlong::singleLlong(std::istream& theStream)
 		theLongLong = 0;
 	}
 }
+
 
 singleULlong::singleULlong(std::istream& theStream)
 {
@@ -175,7 +187,7 @@ singleULlong::singleULlong(std::istream& theStream)
 
 simpleObject::simpleObject(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // remove equals
 
 	auto braceDepth = 0;
 	std::string key;
@@ -211,7 +223,7 @@ simpleObject::simpleObject(std::istream& theStream)
 			values[key] = *value;
 			key.clear();
 		}
-		else if (!isspace(inputChar))
+		else if (!std::isspace(inputChar, std::locale("en_US.UTF8")))
 		{
 			key += inputChar;
 		}
@@ -242,10 +254,10 @@ int simpleObject::getValueAsInt(const std::string& key) const
 
 doubleList::doubleList(std::istream& theStream)
 {
-	registerRegex(R"(-?\d+(.\d+)?)", [this](const std::string& theDouble, std::istream& theStream) {
+	registerRegex(floatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		doubles.push_back(std::stod(theDouble));
 	});
-	registerRegex(R"(\"-?\d+(.\d+)?\")", [this](const std::string& theDouble, std::istream& theStream) {
+	registerRegex(quotedFloatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		const auto newDouble = remQuotes(theDouble);
 		doubles.push_back(std::stod(newDouble));
 	});
@@ -256,7 +268,7 @@ doubleList::doubleList(std::istream& theStream)
 
 singleDouble::singleDouble(std::istream& theStream)
 {
-	auto equals = getNextTokenWithoutMatching(theStream);
+	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
 	try
@@ -270,6 +282,7 @@ singleDouble::singleDouble(std::istream& theStream)
 	}
 }
 
+
 blobList::blobList(std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
@@ -279,62 +292,67 @@ blobList::blobList(std::istream& theStream)
 	}
 	while (true)
 	{
-		if (next == "{")
+		if (next != "{")
 		{
-			auto braceDepth = 0;
-			std::string toReturn;
-			while (true)
+			break;
+		}
+
+		auto braceDepth = 0;
+		std::string toReturn;
+		while (true)
+		{
+			if (theStream.eof())
 			{
-				if (theStream.eof())
-					return;
-				char inputChar;
-				theStream >> inputChar;
-				if (inputChar == '{')
-				{
-					if (braceDepth > 0)
-					{
-						toReturn += inputChar;
-					}
-					braceDepth++;
-				}
-				else if (inputChar == '}')
-				{
-					braceDepth--;
-					if (braceDepth > 0)
-						toReturn += inputChar;
-					else if (braceDepth == 0)
-					{
-						blobs.emplace_back(toReturn);
-						toReturn.clear();
-					}
-					else if (braceDepth == -1)
-						return;
-				}
-				else if (braceDepth == 0)
-				{
-					// Ignore this character. Only look for blobs.
-				}
-				else
+				return;
+			}
+			char inputChar;
+			theStream >> inputChar;
+			if (inputChar == '{')
+			{
+				if (braceDepth > 0)
 				{
 					toReturn += inputChar;
 				}
+				braceDepth++;
 			}
-		}
-		else
-		{
-			break;
+			else if (inputChar == '}')
+			{
+				braceDepth--;
+				if (braceDepth > 0)
+				{
+					toReturn += inputChar;
+				}
+				else if (braceDepth == 0)
+				{
+					blobs.emplace_back(toReturn);
+					toReturn.clear();
+				}
+				else if (braceDepth == -1)
+				{
+					return;
+				}
+			}
+			else if (braceDepth == 0)
+			{
+				// Ignore this character. Only look for blobs.
+			}
+			else
+			{
+				toReturn += inputChar;
+			}
 		}
 	}
 }
 
+
 stringList::stringList(std::istream& theStream)
 {
-	registerKeyword(R"("")", [](std::istream& theStream) {
+	registerKeyword(R"("")", [](std::istream& unused) {
 	});
-	registerRegex(R"([^[:s:]^=^\{^\}^\"]+)", [this](const std::string& theString, std::istream& theStream) {
+	registerRegex(stringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.push_back(theString);
 	});
-	registerRegex(R"(\"[^\n^=^\{^\}^\"]+\")", [this](const std::string& theString, std::istream& theStream) {
+	registerRegex(quotedStringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.emplace_back(remQuotes(theString));
 	});
 
@@ -447,7 +465,7 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 assignments::assignments(std::istream& theStream)
 {
 	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
-		auto equals = getNextTokenWithoutMatching(theStream);
+		getNextTokenWithoutMatching(theStream); // remove equals
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));
 	});
