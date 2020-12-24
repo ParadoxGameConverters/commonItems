@@ -179,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\CommonFunctions.h" />
+    <ClInclude Include="..\CommonRegexes.h" />
     <ClInclude Include="..\Date.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />

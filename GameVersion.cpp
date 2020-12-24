@@ -1,6 +1,8 @@
 #include "GameVersion.h"
+#include "CommonRegexes.h"
 #include "Log.h"
 #include "ParserHelpers.h"
+
 
 GameVersion::GameVersion(std::string version)
 {
