@@ -12,10 +12,10 @@ namespace commonItems
 static inline const char* catchallRegex = R"([^=^{^}]+|\".+\")";
 
 // numbers
-static inline const char* integerRegex = R"(\d+)";
-static inline const char* quotedIntegerRegex = R"(\"\d+\")";
+static inline const char* integerRegex = R"(-?\d+)";
+static inline const char* quotedIntegerRegex = R"(\"-?\d+\")";
 static inline const char* floatRegex = R"(-?\d+(.\d+)?)";
-static inline const char* quotedFloatRegex = R"("-?\d+(.\d+)?")";
+static inline const char* quotedFloatRegex = R"(\"-?\d+(.\d+)?\")";
 
 // strings
 static inline const char* stringRegex = R"([^[:s:]^=^\{^\}^\"]+)";
