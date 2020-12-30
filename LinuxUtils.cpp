@@ -527,38 +527,38 @@ OutputString ConvertString(const char* fromCode,
 std::string convertUTF8ToASCII(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, string>("UTF-8", "ASCII", UTF8);
+	return ConvertString<string, string>("UTF-8", "ASCII//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8To8859_15(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, string>("UTF−8", "ISO−8859−15", UTF8);
+	return ConvertString<string, string>("UTF−8", "ISO−8859−15//TRANSLIT", UTF8);
 }
 
 
 std::string convertUTF8ToWin1252(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1252", UTF8);
+	return ConvertString<string, string>("UTF−8", "CP1252//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8ToWin1251(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1251", UTF8);
+	return ConvertString<string, string>("UTF−8", "CP1251//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8ToWin1250(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1250", UTF8);
+	return ConvertString<string, string>("UTF−8", "CP1250//TRANSLIT", UTF8);
 }
 
 std::string convert8859_15ToUTF8(const std::string& input)
 {
 	using namespace std;
-	return ConvertString<string, string>("ISO−8859−15", "UTF-8", input);
+	return ConvertString<string, string>("ISO−8859−15", "UTF-8//TRANSLIT", input);
 }
 
 /*
@@ -569,32 +569,32 @@ std::string convert8859_15ToUTF8(const std::string& input)
 std::wstring convert8859_15ToUTF16(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, wstring>("ISO−8859−15", "wchar_t", UTF8);
+	return ConvertString<string, wstring>("ISO−8859−15", "wchar_t//TRANSLIT", UTF8);
 }
 
 std::string convertWin1250ToUTF8(const std::string& Win1252)
 {
 	using namespace std;
-	return ConvertString<string, string>("CP1250", "UTF-8", Win1252);
+	return ConvertString<string, string>("CP1250", "UTF-8//TRANSLIT", Win1252);
 }
 
 std::string convertWin1251ToUTF8(const std::string& Win1252)
 {
 	using namespace std;
-	return ConvertString<string, string>("CP1251", "UTF-8", Win1252);
+	return ConvertString<string, string>("CP1251", "UTF-8//TRANSLIT", Win1252);
 }
 
 std::string convertWin1252ToUTF8(const std::string& Win1252)
 {
 	using namespace std;
-	return ConvertString<string, string>("CP1252", "UTF-8", Win1252);
+	return ConvertString<string, string>("CP1252", "UTF-8//TRANSLIT", Win1252);
 }
 
 
 std::wstring convertWin1252ToUTF16(const std::string& Win1252)
 {
 	using namespace std;
-	return ConvertString<string, wstring>("CP1252", "wchar_t", Win1252);
+	return ConvertString<string, wstring>("CP1252", "wchar_t//TRANSLIT", Win1252);
 }
 
 /*
@@ -605,14 +605,14 @@ std::wstring convertWin1252ToUTF16(const std::string& Win1252)
 std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 {
 	using namespace std;
-	return ConvertString<string, wstring>("UTF-8", "wchar_t", UTF8);
+	return ConvertString<string, wstring>("UTF-8", "wchar_t//TRANSLIT", UTF8);
 }
 
 
 std::string convertToUTF8(const std::wstring& input)
 {
 	using namespace std;
-	return ConvertString<wstring, string>("wchar_t", "UTF-8", input);
+	return ConvertString<wstring, string>("wchar_t", "UTF-8//TRANSLIT", input);
 }
 
 std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
