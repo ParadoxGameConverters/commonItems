@@ -95,6 +95,79 @@ TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
 	ASSERT_EQ("value", test.value);
 }
 
+
+TEST(Parser_Tests, QuotedValuesAreParsed)
+{
+	std::stringstream input{R"(key = "value quote")"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ("value quote", test.value);
+}
+
+
+TEST(Parser_Tests, QuotedValuesWithEscapedQuotesAreParsed)
+{
+	std::stringstream input{R"(key = "value \"quote\" string")"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ(R"(value \"quote\" string)", test.value);
+}
+
+
+TEST(Parser_Tests, StringLiteralsAreParsed)
+{
+	std::stringstream input{"key = R\"(value \"quote\" string)\""};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::singleString(theStream).getString();
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ(R"(value "quote" string)", test.value);
+}
+
+
 TEST(Parser_Tests, WrongKeywordsAreIgnored)
 {
 	std::stringstream input{"wrongkey = value"};
