@@ -243,6 +243,9 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 	std::string toReturn;
 
 	auto inQuotes = false;
+	auto inLiteralQuote = false;
+	unsigned char previousCharacter = '\0';
+
 	while (true)
 	{
 		unsigned char inputChar;
@@ -274,17 +277,33 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			inQuotes = true;
 			toReturn += inputChar;
 		}
-		else if (inputChar == '\"' && inQuotes)
+		else if (inputChar == '\"' && !inQuotes && toReturn.size() == 1 && toReturn.back() == 'R')
+		{
+			inLiteralQuote = true;
+			toReturn.pop_back();
+			toReturn += inputChar;
+		}
+		else if (inputChar == '(' && inLiteralQuote && toReturn.size() == 1)
+		{
+			continue;
+		}
+		else if (inputChar == '\"' && inLiteralQuote && previousCharacter == ')')
+		{
+			toReturn.pop_back();
+			toReturn += inputChar;
+			break;
+		}
+		else if (inputChar == '\"' && inQuotes && previousCharacter != '\\')
 		{
 			toReturn += inputChar;
 			break;
 		}
-		else if (!inQuotes && std::isspace(inputChar))
+		else if (!inQuotes && !inLiteralQuote && std::isspace(inputChar))
 		{
 			if (!toReturn.empty())
 				break;
 		}
-		else if (!inQuotes && inputChar == '{')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '{')
 		{
 			if (toReturn.empty())
 			{
@@ -296,7 +315,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && inputChar == '}')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '}')
 		{
 			if (toReturn.empty())
 			{
@@ -308,7 +327,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && inputChar == '=')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '=')
 		{
 			if (toReturn.empty())
 			{
@@ -324,6 +343,8 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		{
 			toReturn += inputChar;
 		}
+
+		previousCharacter = inputChar;
 	}
 	return toReturn;
 }
