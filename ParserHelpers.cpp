@@ -92,6 +92,66 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 }
 
 
+[[nodiscard]] std::vector<int> getInts(std::istream& theStream)
+{
+	return intList{theStream}.getInts();
+}
+
+
+[[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream)
+{
+	return llongList{theStream}.getLlongs();
+}
+
+
+[[nodiscard]] std::vector<unsigned long long> getULlongs(std::istream& theStream)
+{
+	return ullongList{theStream}.getULlongs();
+}
+
+
+[[nodiscard]] std::vector<double> getDoubles(std::istream& theStream)
+{
+	return doubleList{theStream}.getDoubles();
+}
+
+
+[[nodiscard]] std::vector<std::string> getStrings(std::istream& theStream)
+{
+	return stringList{theStream}.getStrings();
+}
+
+
+[[nodiscard]] int getInt(std::istream& theStream)
+{
+	return singleInt{theStream}.getInt();
+}
+
+
+[[nodiscard]] long long getLlong(std::istream& theStream)
+{
+	return singleLlong{theStream}.getLlong();
+}
+
+
+[[nodiscard]] unsigned long long getULlong(std::istream& theStream)
+{
+	return singleULlong{theStream}.getULlong();
+}
+
+
+[[nodiscard]] double getDouble(std::istream& theStream)
+{
+	return singleDouble{theStream}.getDouble();
+}
+
+
+[[nodiscard]] std::string getString(std::istream& theStream)
+{
+	return singleString{theStream}.getString();
+}
+
+
 intList::intList(std::istream& theStream)
 {
 	registerRegex(integerRegex, [this](const std::string& theInt, std::istream& unused) {

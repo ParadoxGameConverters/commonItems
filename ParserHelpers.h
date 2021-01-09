@@ -14,6 +14,17 @@ void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
+[[nodiscard]] std::vector<int> getInts(std::istream& theStream);
+[[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
+[[nodiscard]] std::vector<unsigned long long> getULlongs(std::istream& theStream);
+[[nodiscard]] std::vector<double> getDoubles(std::istream& theStream);
+[[nodiscard]] std::vector<std::string> getStrings(std::istream& theStream);
+[[nodiscard]] int getInt(std::istream& theStream);
+[[nodiscard]] long long getLlong(std::istream& theStream);
+[[nodiscard]] unsigned long long getULlong(std::istream& theStream);
+[[nodiscard]] double getDouble(std::istream& theStream);
+[[nodiscard]] std::string getString(std::istream& theStream);
+
 
 class intList: parser
 {

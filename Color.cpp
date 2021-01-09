@@ -277,7 +277,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			// This is a double list.
 			auto doubleStream = std::stringstream(questionableList);
-			auto hsv = doubleList(doubleStream).getDoubles();
+			auto hsv = getDoubles(doubleStream);
 			if (hsv.size() != 3)
 			{
 				throw std::runtime_error("Color has wrong number of components");
@@ -288,7 +288,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			// integer list
 			auto integerStream = std::stringstream(questionableList);
-			auto rgb = intList(integerStream).getInts();
+			auto rgb = getInts(integerStream);
 			if (rgb.size() != 3)
 			{
 				throw std::runtime_error("Color has wrong number of components");

@@ -956,3 +956,74 @@ TEST(ParserHelper_Tests, BlobListIsNotAtFaultYouAreOnComplexWrongUsage)
 	const auto expectedBlobs = std::vector<std::string>{" key3 = value2 "};
 	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
 }
+
+
+TEST(ParserHelper_Tests, getIntsWrapperWorks)
+{
+	const auto str = " = -1 2 420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::intList(input).getInts(), commonItems::getInts(input2));
+}
+
+TEST(ParserHelper_Tests, getLlongsWrapperWorks)
+{
+	const auto str = "-123456789012345 123456789012320 -154256789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::llongList(input).getLlongs(), commonItems::getLlongs(input2));
+}
+
+TEST(ParserHelper_Tests, getULlongsWrapperWorks)
+{
+	const auto str = "123456789012345 123456789012320 154256789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::ullongList(input).getULlongs(), commonItems::getULlongs(input2));
+}
+
+TEST(ParserHelper_Tests, getDoublesWrapperWorks)
+{
+	const auto str = "69.420 1.2 -0.2";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::doubleList(input).getDoubles(), commonItems::getDoubles(input2));
+}
+
+TEST(ParserHelper_Tests, getStringsWrapperWorks)
+{
+	const auto str = "foo bar baz";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::stringList(input).getStrings(), commonItems::getStrings(input2));
+}
+
+TEST(ParserHelper_Tests, getIntWrapperWorks)
+{
+	const auto str = " = -1";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleInt(input).getInt(), commonItems::getInt(input2));
+}
+
+TEST(ParserHelper_Tests, getLlongWrapperWorks)
+{
+	const auto str = " = -123456789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleLlong(input).getLlong(), commonItems::getLlong(input2));
+}
+
+TEST(ParserHelper_Tests, getULlongWrapperWorks)
+{
+	const auto str = " = 123456789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleULlong(input).getULlong(), commonItems::getULlong(input2));
+}
+
+TEST(ParserHelper_Tests, getDoubleWrapperWorks)
+{
+	const auto str = " = 69.420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleDouble(input).getDouble(), commonItems::getDouble(input2));
+}
+
+TEST(ParserHelper_Tests, getStringWrapperWorks)
+{
+	const auto str = " = 69.420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleString(input).getString(), commonItems::getString(input2));
+}
