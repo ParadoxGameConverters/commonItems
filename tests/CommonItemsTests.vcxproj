@@ -155,6 +155,7 @@
   <ItemGroup>
     <ClCompile Include="..\Color.cpp" />
     <ClCompile Include="..\CommonFunctions.cpp" />
+    <ClCompile Include="..\ConvenientParser.cpp" />
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\Log.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="..\GameVersion.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CommonFunctionsTests.cpp" />
+    <ClCompile Include="ConvenientParserTests.cpp" />
     <ClCompile Include="DateTests.cpp" />
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
@@ -180,6 +182,7 @@
   <ItemGroup>
     <ClInclude Include="..\CommonFunctions.h" />
     <ClInclude Include="..\CommonRegexes.h" />
+    <ClInclude Include="..\ConvenientParser.h" />
     <ClInclude Include="..\Date.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
