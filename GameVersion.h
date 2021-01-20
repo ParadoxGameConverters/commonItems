@@ -1,10 +1,10 @@
 #ifndef GAME_VERSION_H
 #define GAME_VERSION_H
-#include "Parser.h"
+#include "ConvenientParser.h"
 #include <ostream>
 #include <string>
 
-class GameVersion: commonItems::parser
+class GameVersion: commonItems::convenientParser
 {
   public:
 	class Factory;
@@ -43,7 +43,7 @@ class GameVersion: commonItems::parser
 	int fourthPart = 0;
 };
 
-class GameVersion::Factory: parser
+class GameVersion::Factory: convenientParser
 {
   public:
 	Factory();

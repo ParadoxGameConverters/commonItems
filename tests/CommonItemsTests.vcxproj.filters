@@ -81,6 +81,12 @@
     <ClCompile Include="..\Color.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConvenientParser.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvenientParserTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -114,6 +120,9 @@
       <Filter>commonItems</Filter>
     </ClInclude>
     <ClInclude Include="..\CommonRegexes.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ConvenientParser.h">
       <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>

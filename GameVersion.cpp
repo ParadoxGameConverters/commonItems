@@ -1,7 +1,6 @@
 #include "GameVersion.h"
 #include "CommonRegexes.h"
 #include "Log.h"
-#include "ParserHelpers.h"
 
 
 GameVersion::GameVersion(std::string version)
@@ -48,18 +47,10 @@ GameVersion::GameVersion(std::istream& theStream)
 
 void GameVersion::registerKeys()
 {
-	registerKeyword("first", [this](std::istream& theStream) {
-		firstPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("second", [this](std::istream& theStream) {
-		secondPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("third", [this](std::istream& theStream) {
-		thirdPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("forth", [this](std::istream& theStream) {
-		fourthPart = commonItems::singleInt(theStream).getInt();
-	});
+	registerSetter("first", firstPart);
+	registerSetter("second", secondPart);
+	registerSetter("third", thirdPart);
+	registerSetter("forth", fourthPart);
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
@@ -141,18 +132,10 @@ std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 
 GameVersion::Factory::Factory()
 {
-	registerKeyword("first", [this](std::istream& theStream) {
-		firstPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("second", [this](std::istream& theStream) {
-		secondPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("third", [this](std::istream& theStream) {
-		thirdPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("forth", [this](std::istream& theStream) {
-		fourthPart = commonItems::singleInt(theStream).getInt();
-	});
+	registerSetter("first", firstPart);
+	registerSetter("second", secondPart);
+	registerSetter("third", thirdPart);
+	registerSetter("forth", fourthPart);
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
