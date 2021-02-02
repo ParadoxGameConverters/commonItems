@@ -10,6 +10,9 @@
     <Filter Include="commonItems">
       <UniqueIdentifier>{d6b616bc-070f-4813-8376-a00f5f4e6b0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestFiles">
+      <UniqueIdentifier>{4c7f9845-860d-462c-96fc-5f8db590be36}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -87,6 +90,12 @@
     <ClCompile Include="ConvenientParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\ConverterVersion.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
+    <ClCompile Include="ConverterVersionTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -125,5 +134,13 @@
     <ClInclude Include="..\ConvenientParser.h">
       <Filter>commonItems</Filter>
     </ClInclude>
+    <ClInclude Include="..\ConverterVersion.h">
+      <Filter>commonItems</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestFiles\version.txt">
+      <Filter>TestFiles</Filter>
+    </Text>
   </ItemGroup>
 </Project>

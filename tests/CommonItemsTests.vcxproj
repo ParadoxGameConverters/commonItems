@@ -156,6 +156,7 @@
     <ClCompile Include="..\Color.cpp" />
     <ClCompile Include="..\CommonFunctions.cpp" />
     <ClCompile Include="..\ConvenientParser.cpp" />
+    <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\Log.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CommonFunctionsTests.cpp" />
     <ClCompile Include="ConvenientParserTests.cpp" />
+    <ClCompile Include="ConverterVersionTests.cpp" />
     <ClCompile Include="DateTests.cpp" />
     <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
@@ -183,6 +185,7 @@
     <ClInclude Include="..\CommonFunctions.h" />
     <ClInclude Include="..\CommonRegexes.h" />
     <ClInclude Include="..\ConvenientParser.h" />
+    <ClInclude Include="..\ConverterVersion.h" />
     <ClInclude Include="..\Date.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
@@ -192,6 +195,14 @@
     <ClInclude Include="..\ParserHelpers.h" />
     <ClInclude Include="..\StringUtils.h" />
     <ClInclude Include="..\GameVersion.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\version.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)/..</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)/..</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/..</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/..</DestinationFolders>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
