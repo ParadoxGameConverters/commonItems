@@ -20,3 +20,4 @@ packages/
 *.log
 tests/.opencppcov/
 tests/log.txt
+tests/version.txt

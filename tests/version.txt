@@ -1,5 +1,0 @@
-# Version info
-
-version = "test-version"
-name = "test-name"
-descriptionLine = "test description"
