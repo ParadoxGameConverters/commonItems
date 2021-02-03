@@ -14,6 +14,8 @@ void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
+[[nodiscard]] inline double stringToDouble(const std::string& str);
+
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream);
 [[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
 [[nodiscard]] std::vector<unsigned long long> getULlongs(std::istream& theStream);

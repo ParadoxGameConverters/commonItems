@@ -2,8 +2,8 @@
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "StringUtils.h"
-#include <locale>
 #include <sstream>
+#include <charconv>
 
 
 
@@ -89,6 +89,18 @@ void ignoreObject(const std::string& unused, std::istream& theStream)
 void ignoreString(const std::string& unused, std::istream& theStream)
 {
 	singleString ignore(theStream);
+}
+
+double stringToDouble(const std::string& str)
+{
+	double theDouble{0.0};
+	const auto last = str.data() + str.size();
+	const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
+	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
+	{
+		Log(LogLevel::Warning) << "string to double: invalid argument! " << str;
+	}
+	return theDouble;
 }
 
 
@@ -315,11 +327,11 @@ int simpleObject::getValueAsInt(const std::string& key) const
 doubleList::doubleList(std::istream& theStream)
 {
 	registerRegex(floatRegex, [this](const std::string& theDouble, std::istream& unused) {
-		doubles.push_back(std::stod(theDouble));
+		doubles.push_back(stringToDouble(theDouble));
 	});
 	registerRegex(quotedFloatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		const auto newDouble = remQuotes(theDouble);
-		doubles.push_back(std::stod(newDouble));
+		doubles.push_back(stringToDouble(newDouble));
 	});
 
 	parseStream(theStream);
@@ -331,15 +343,7 @@ singleDouble::singleDouble(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	try
-	{
-		theDouble = stod(token);
-	}
-	catch (std::exception&)
-	{
-		Log(LogLevel::Warning) << "Expected a double, but instead got " << token;
-		theDouble = 0.0;
-	}
+	theDouble = stringToDouble(token);
 }
 
 

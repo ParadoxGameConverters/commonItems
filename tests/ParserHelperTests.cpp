@@ -98,6 +98,46 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 	ASSERT_EQ(" text", std::string{buffer});
 }
 
+TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
+{
+	std::string str{R"(345.69 foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const double theDouble = commonItems::stringToDouble(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.69 foo\n", log.str());
+	ASSERT_EQ(345.69, theDouble);
+}
+
+TEST(ParserHelper_Tests, stringToDoubleLogsInvalidInput)
+{
+	std::string str{R"(foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const double theDouble = commonItems::stringToDouble(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
+	ASSERT_EQ(0, theDouble);
+}
+
+TEST(ParserHelper_Tests, stringToDoubleWorksSucceedsWithValidInput)
+{
+	std::string str{R"(345.69)"};
+
+	const double theDouble = commonItems::stringToDouble(str);
+	ASSERT_EQ(345.69, theDouble);
+}
+
 TEST(ParserHelper_Tests, IntListDefaultsToEmpty)
 {
 	std::stringstream input;
@@ -545,6 +585,21 @@ TEST(ParserHelper_Tests, SingleDoubleGetsQuotedDoubleAfterEquals)
 	ASSERT_EQ(1.25, theDouble.getDouble());
 }
 
+TEST(ParserHelper_Tests, SingleDoubleLogsNotFullyMatchingInput)
+{
+	std::stringstream input{R"(= "345.345 foo")"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const commonItems::singleDouble theDouble(input);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.345 foo\n", log.str());
+	ASSERT_EQ(345.345, theDouble.getDouble());
+}
 
 TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 {
@@ -558,7 +613,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected a double, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 
