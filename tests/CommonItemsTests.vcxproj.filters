@@ -139,7 +139,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TestFiles\version.txt">
+    <CopyFileToFolders Include="TestFiles\version.txt">
+      <Filter>TestFiles</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestFiles\emptyVersion.txt">
       <Filter>TestFiles</Filter>
     </Text>
   </ItemGroup>

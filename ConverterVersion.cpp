@@ -14,9 +14,9 @@ commonItems::ConverterVersionParser::ConverterVersionParser()
 }
 
 
-commonItems::ConverterVersion commonItems::ConverterVersionParser::importVersion()
+commonItems::ConverterVersion commonItems::ConverterVersionParser::importVersion(std::string_view filename)
 {
-	parseFile("../version.txt");
+	parseFile(filename);
 	return converterVersion;
 }
 

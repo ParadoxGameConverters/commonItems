@@ -4,6 +4,7 @@
 
 
 #include "ConvenientParser.h"
+#include <string_view>
 
 
 
@@ -24,7 +25,7 @@ class ConverterVersionParser: convenientParser
 {
   public:
 	explicit ConverterVersionParser();
-	ConverterVersion importVersion();
+	ConverterVersion importVersion(std::string_view filename);
 
   private:
 	ConverterVersion converterVersion;

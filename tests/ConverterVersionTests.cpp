@@ -5,7 +5,7 @@
 
 TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 {
-	const commonItems::ConverterVersion converterVersion;
+	const auto converterVersion = commonItems::ConverterVersionParser().importVersion("emptyVersion.txt");
 
 	ASSERT_TRUE(converterVersion.name.empty());
 	ASSERT_TRUE(converterVersion.version.empty());
@@ -15,7 +15,7 @@ TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 
 TEST(ConverterVersion_Tests, ItemsCanBeImported)
 {
-	const auto converterVersion = commonItems::ConverterVersionParser().importVersion();
+	const auto converterVersion = commonItems::ConverterVersionParser().importVersion("version.txt");
 
 	ASSERT_EQ(converterVersion.name, "test-name");
 	ASSERT_EQ(converterVersion.version, "test-version");

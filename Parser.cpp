@@ -98,7 +98,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 }
 
 
-void commonItems::parser::parseFile(const std::string& filename)
+void commonItems::parser::parseFile(std::string_view filename)
 {
 	std::ifstream theFile(fs::u8path(filename));
 	if (!theFile.is_open())
