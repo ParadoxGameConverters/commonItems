@@ -17,7 +17,7 @@ TEST(ConverterVersion_Tests, ItemsCanBeImported)
 {
 	const auto converterVersion = commonItems::ConverterVersionParser().importVersion("version.txt");
 
-	ASSERT_EQ(converterVersion.name, "test-name");
-	ASSERT_EQ(converterVersion.version, "test-version");
-	ASSERT_EQ(converterVersion.descriptionLine, "test description");
+	ASSERT_EQ("test-name", converterVersion.name);
+	ASSERT_EQ("test-version", converterVersion.version);
+	ASSERT_EQ("test description", converterVersion.descriptionLine);
 }
