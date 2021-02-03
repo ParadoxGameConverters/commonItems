@@ -36,7 +36,7 @@ class parser
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
-	void parseFile(const std::string& filename);
+	void parseFile(std::string_view filename);
 
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
