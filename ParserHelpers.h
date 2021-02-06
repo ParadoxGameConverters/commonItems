@@ -16,7 +16,7 @@ void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
 template <typename T>
-[[nodiscard]] std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str);
+[[nodiscard]] std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning);
 [[nodiscard]] double stringToDouble(const std::string& str);
 
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream);
