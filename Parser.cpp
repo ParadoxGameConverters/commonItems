@@ -49,7 +49,6 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 }
 
 
-
 void commonItems::parser::parseStream(std::istream& theStream)
 {
 	auto braceDepth = 0;
@@ -173,6 +172,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		}
 		if (!matched)
 			matched = tryToMatchAgainstRegexes(toReturn, strippedLexeme, isLexemeQuoted, theStream);
+		
 		if (!matched)
 			gotToken = true;
 	}

@@ -290,6 +290,98 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	ASSERT_EQ("value", test.value);
 }
 
+TEST(Parser_Tests, registerRegexRegexesAreMatched)
+{
+	std::stringstream input{"key = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ("value", test.value);
+}
+
+TEST(Parser_Tests, registerRegexWrongRegexesAreIgnored)
+{
+	std::stringstream input{"nonsense = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_TRUE(test.key.empty());
+	ASSERT_TRUE(test.value.empty());
+}
+
+TEST(Parser_Tests, registerRegexQuotedRegexesAreMatched)
+{
+	std::stringstream input{"\"key\" = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("\"key\"", test.key);
+	ASSERT_EQ("value", test.value);
+}
+
+TEST(Parser_Tests, registerRegexQuotedRegexesAreQuotedlyMatched)
+{
+	std::stringstream input{"\"key\" = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex("[k\"ey]+", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("\"key\"", test.key);
+	ASSERT_EQ("value", test.value);
+}
+
 TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 {
 	std::stringstream input{"\"key\" = value"};
