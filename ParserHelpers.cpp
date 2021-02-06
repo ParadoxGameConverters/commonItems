@@ -181,10 +181,10 @@ double stringToDouble(const std::string& str)
 
 intList::intList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theInt, std::istream& theStream) {
+	registerMatcher(integerMatch, [this](const std::string& theInt, std::istream& unused) {
 		integers.push_back(stringToInteger<int>(theInt));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theInt, std::istream& theStream) {
+	registerMatcher(quotedIntegerMatch, [this](const std::string& theInt, std::istream& unused) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
 		integers.push_back(stringToInteger<int>(newInt));
 	});
@@ -195,10 +195,10 @@ intList::intList(std::istream& theStream)
 
 llongList::llongList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theLongLong, std::istream& theStream) {
+	registerMatcher(integerMatch, [this](const std::string& theLongLong, std::istream& unused) {
 		llongs.push_back(stringToInteger<long long>(theLongLong));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theLongLong, std::istream& theStream) {
+	registerMatcher(quotedIntegerMatch, [this](const std::string& theLongLong, std::istream& unused) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
 		llongs.push_back(stringToInteger<long long>(newLlong));
 	});

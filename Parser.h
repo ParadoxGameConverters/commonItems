@@ -34,6 +34,7 @@ class parser
 	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
 	// for compile time regex matchers, but will work with any function that has the same return and argument type
 	void registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function);
+	void registerRegex(const std::string& keyword, const parsingFunction& function);
 	
 	void clearRegisteredKeywords() noexcept;
 
@@ -57,6 +58,7 @@ class parser
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredMatchers;
+	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
 
 } // namespace commonItems

@@ -1,6 +1,7 @@
 #include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
+#include "ctre.hpp"
 
 
 TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleText)
