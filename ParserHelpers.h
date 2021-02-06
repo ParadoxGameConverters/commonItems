@@ -1,8 +1,11 @@
 #ifndef PARSER_HELPERS_H
 #define PARSER_HELPERS_H
-#include <map>
-#include "CommonRegexes.h"
+
+
+
 #include "Parser.h"
+#include <map>
+#include <type_traits>
 
 
 namespace commonItems
@@ -11,6 +14,22 @@ namespace commonItems
 void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
+
+template <typename T>
+[[nodiscard]] std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
+[[nodiscard]] double stringToDouble(const std::string& str);
+
+[[nodiscard]] std::vector<int> getInts(std::istream& theStream);
+[[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
+[[nodiscard]] std::vector<unsigned long long> getULlongs(std::istream& theStream);
+[[nodiscard]] std::vector<double> getDoubles(std::istream& theStream);
+[[nodiscard]] std::vector<std::string> getStrings(std::istream& theStream);
+[[nodiscard]] int getInt(std::istream& theStream);
+[[nodiscard]] long long getLlong(std::istream& theStream);
+[[nodiscard]] unsigned long long getULlong(std::istream& theStream);
+[[nodiscard]] double getDouble(std::istream& theStream);
+[[nodiscard]] std::string getString(std::istream& theStream);
+
 
 class intList: parser
 {
@@ -23,6 +42,7 @@ class intList: parser
 	std::vector<int> integers;
 };
 
+
 class llongList: parser
 {
   public:
@@ -33,6 +53,7 @@ class llongList: parser
   private:
 	std::vector<long long> llongs;
 };
+
 
 class ullongList: parser
 {
@@ -69,6 +90,7 @@ class singleLlong: parser
 	long long theLongLong = 0;
 };
 
+
 class singleULlong: parser
 {
   public:
@@ -79,6 +101,7 @@ class singleULlong: parser
   private:
 	unsigned long long theUnsignedLongLong = 0;
 };
+
 
 // Parses an object where each entry is a simple assignment, key = value.
 // Nested objects, key = { ... }, are ignored.
@@ -94,6 +117,7 @@ class simpleObject: parser
 	std::map<std::string, std::string> values;
 };
 
+
 class doubleList: parser
 {
   public:
@@ -104,6 +128,7 @@ class doubleList: parser
   private:
 	std::vector<double> doubles;
 };
+
 
 class blobList: parser
 {

@@ -1,6 +1,7 @@
 #include "GameVersion.h"
+#include "CommonRegexes.h"
 #include "Log.h"
-#include "ParserHelpers.h"
+
 
 GameVersion::GameVersion(std::string version)
 {
@@ -46,18 +47,10 @@ GameVersion::GameVersion(std::istream& theStream)
 
 void GameVersion::registerKeys()
 {
-	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
-		firstPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
-		secondPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
-		thirdPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
-		fourthPart = commonItems::singleInt(theStream).getInt();
-	});
+	registerSetter("first", firstPart);
+	registerSetter("second", secondPart);
+	registerSetter("third", thirdPart);
+	registerSetter("forth", fourthPart);
 	registerMatcher(commonItems::catchallRegexMatch, commonItems::ignoreItem);
 }
 
@@ -139,18 +132,10 @@ std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 
 GameVersion::Factory::Factory()
 {
-	registerKeyword("first", [this](const std::string& unused, std::istream& theStream) {
-		firstPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("second", [this](const std::string& unused, std::istream& theStream) {
-		secondPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("third", [this](const std::string& unused, std::istream& theStream) {
-		thirdPart = commonItems::singleInt(theStream).getInt();
-	});
-	registerKeyword("forth", [this](const std::string& unused, std::istream& theStream) {
-		fourthPart = commonItems::singleInt(theStream).getInt();
-	});
+	registerSetter("first", firstPart);
+	registerSetter("second", secondPart);
+	registerSetter("third", thirdPart);
+	registerSetter("forth", fourthPart);
 	registerMatcher(commonItems::catchallRegexMatch, commonItems::ignoreItem);
 }
 

@@ -1,5 +1,7 @@
 #include "Color.h"
+#include "CommonRegexes.h"
 #include "ParserHelpers.h"
+#include "StringUtils.h"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -7,7 +9,8 @@
 #include <random>
 #include <regex>
 #include <sstream>
-#include "StringUtils.h"
+
+
 
 bool commonItems::Color::operator==(const Color& rhs) const
 {
@@ -274,7 +277,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			// This is a double list.
 			auto doubleStream = std::stringstream(questionableList);
-			auto hsv = doubleList(doubleStream).getDoubles();
+			auto hsv = getDoubles(doubleStream);
 			if (hsv.size() != 3)
 			{
 				throw std::runtime_error("Color has wrong number of components");
@@ -285,12 +288,12 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			// integer list
 			auto integerStream = std::stringstream(questionableList);
-			auto rgb = intList(integerStream).getInts();
+			auto rgb = getInts(integerStream);
 			if (rgb.size() != 3)
 			{
 				throw std::runtime_error("Color has wrong number of components");
 			}
-			return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});			
+			return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 		}
 	}
 }

@@ -1,7 +1,10 @@
+#include "../CommonRegexes.h"
 #include "../Parser.h"
+#include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
-#include "../ParserHelpers.h"
+
+
 
 TEST(Parser_Tests, AbsorbBOMAbsorbsBOM)
 {
@@ -28,12 +31,12 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	std::stringstream input{"key = value"};
 	class Test: commonItems::parser
 	{
-	public:
+	  public:
 		explicit Test(std::istream& stream)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();				
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -41,7 +44,7 @@ TEST(Parser_Tests, KeywordsAreMatched)
 		std::string value;
 	};
 	const auto test = Test(input);
-	
+
 	ASSERT_EQ("key", test.key);
 	ASSERT_EQ("value", test.value);
 }
@@ -56,7 +59,7 @@ TEST(Parser_Tests, QuotedKeywordsAreMatched)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -79,7 +82,7 @@ TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
 		{
 			registerKeyword("\"key\"", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -92,6 +95,79 @@ TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
 	ASSERT_EQ("value", test.value);
 }
 
+
+TEST(Parser_Tests, QuotedValuesAreParsed)
+{
+	std::stringstream input{R"(key = "value quote")"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ("value quote", test.value);
+}
+
+
+TEST(Parser_Tests, QuotedValuesWithEscapedQuotesAreParsed)
+{
+	std::stringstream input{R"(key = "value \"quote\" string")"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ(R"(value \"quote\" string)", test.value);
+}
+
+
+TEST(Parser_Tests, StringLiteralsAreParsed)
+{
+	std::stringstream input{"key = R\"(value \"quote\" string)\""};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	ASSERT_EQ("key", test.key);
+	ASSERT_EQ(R"(value "quote" string)", test.value);
+}
+
+
 TEST(Parser_Tests, WrongKeywordsAreIgnored)
 {
 	std::stringstream input{"wrongkey = value"};
@@ -102,7 +178,7 @@ TEST(Parser_Tests, WrongKeywordsAreIgnored)
 		{
 			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -128,7 +204,7 @@ TEST(Parser_Tests, RegexesAreMatched)
 		{
 			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -151,7 +227,7 @@ TEST(Parser_Tests, WrongRegexesAreIgnored)
 		{
 			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -174,7 +250,7 @@ TEST(Parser_Tests, QuotedRegexesAreMatched)
 		{
 			registerMatcher(keyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -201,7 +277,7 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 		{
 			registerMatcher(quotedKeyMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -224,7 +300,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 		{
 			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -242,7 +318,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
 	std::stringstream input;
 	input << std::noskipws;
 	input << "\"this\tis a\nkey\n\" = value";
-	
+
 	class Test: commonItems::parser
 	{
 	  public:
@@ -250,7 +326,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
 		{
 			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}
@@ -276,7 +352,7 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
 		{
 			registerMatcher(commonItems::catchallRegexMatch, [this](const std::string& keyword, std::istream& theStream) {
 				key = keyword;
-				value = commonItems::singleString(theStream).getString();
+				value = commonItems::getString(theStream);
 			});
 			parseStream(stream);
 		}

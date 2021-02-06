@@ -30,10 +30,18 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 	registeredKeywordStrings.insert(std::make_pair(keyword, function));
 }
 
+void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function)
+{
+	registeredKeywordStringsStreamOnly.insert(std::make_pair(keyword, function));
+}
+
 void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
 {
 	registeredMatchers.emplace_back(matcher, function);
 }
+
+
+
 
 
 void commonItems::parser::parseStream(std::istream& theStream)
@@ -91,7 +99,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 }
 
 
-void commonItems::parser::parseFile(const std::string& filename)
+void commonItems::parser::parseFile(std::string_view filename)
 {
 	std::ifstream theFile(fs::u8path(filename));
 	if (!theFile.is_open())
@@ -109,6 +117,7 @@ void commonItems::parser::parseFile(const std::string& filename)
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
+	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
 	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredMatchers);
 }
 
@@ -129,21 +138,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		const auto strippedLexeme = remQuotes(toReturn);
 		const auto isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
 
-		auto matched = false;
-		if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
-		{
-			match->second(toReturn, theStream);
-			matched = true;
-		}
-		else if (isLexemeQuoted)
-		{
-			if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
-				 strippedMatch != registeredKeywordStrings.end())
-			{
-				strippedMatch->second(toReturn, theStream);
-				matched = true;
-			}
-		}
+		auto matched = tryToMatchAgainstKeywords(toReturn, strippedLexeme, isLexemeQuoted, theStream);
 
 		if (!matched)
 		{
@@ -179,6 +174,70 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 }
 
 
+inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& toReturn,
+	 const std::string& strippedLexeme,
+	 bool isLexemeQuoted,
+	 std::istream& theStream)
+{
+	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn); match != registeredKeywordStringsStreamOnly.end())
+	{
+		match->second(theStream);
+		return true;
+	}
+	else if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
+	{
+		match->second(toReturn, theStream);
+		return true;
+	}
+	else if (isLexemeQuoted)
+	{
+		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme);
+			 strippedMatch != registeredKeywordStringsStreamOnly.end())
+		{
+			strippedMatch->second(theStream);
+			return true;
+		}
+		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
+			 strippedMatch != registeredKeywordStrings.end())
+		{
+			strippedMatch->second(toReturn, theStream);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+inline bool commonItems::parser::tryToMatchAgainstRegexes(const std::string& toReturn,
+	 const std::string& strippedLexeme,
+	 bool isLexemeQuoted,
+	 std::istream& theStream)
+{
+	for (const auto& [regex, parsingFunction]: generatedRegexes)
+	{
+		std::smatch match;
+		if (std::regex_match(toReturn, match, regex))
+		{
+			parsingFunction(toReturn, theStream);
+			return true;
+		}
+	}
+	if (isLexemeQuoted)
+	{
+		for (const auto& [regex, parsingFunction]: generatedRegexes)
+		{
+			std::smatch match;
+			if (std::regex_match(strippedLexeme, match, regex))
+			{
+				parsingFunction(toReturn, theStream);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 std::optional<std::string> commonItems::parser::getNextTokenWithoutMatching(std::istream& theStream)
 {
 	theStream >> std::noskipws;
@@ -206,6 +265,9 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 	std::string toReturn;
 
 	auto inQuotes = false;
+	auto inLiteralQuote = false;
+	unsigned char previousCharacter = '\0';
+
 	while (true)
 	{
 		unsigned char inputChar;
@@ -237,17 +299,33 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			inQuotes = true;
 			toReturn += inputChar;
 		}
-		else if (inputChar == '\"' && inQuotes)
+		else if (inputChar == '\"' && !inQuotes && toReturn.size() == 1 && toReturn.back() == 'R')
+		{
+			inLiteralQuote = true;
+			toReturn.pop_back();
+			toReturn += inputChar;
+		}
+		else if (inputChar == '(' && inLiteralQuote && toReturn.size() == 1)
+		{
+			continue;
+		}
+		else if (inputChar == '\"' && inLiteralQuote && previousCharacter == ')')
+		{
+			toReturn.pop_back();
+			toReturn += inputChar;
+			break;
+		}
+		else if (inputChar == '\"' && inQuotes && previousCharacter != '\\')
 		{
 			toReturn += inputChar;
 			break;
 		}
-		else if (!inQuotes && std::isspace(inputChar))
+		else if (!inQuotes && !inLiteralQuote && std::isspace(inputChar))
 		{
 			if (!toReturn.empty())
 				break;
 		}
-		else if (!inQuotes && inputChar == '{')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '{')
 		{
 			if (toReturn.empty())
 			{
@@ -259,7 +337,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && inputChar == '}')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '}')
 		{
 			if (toReturn.empty())
 			{
@@ -271,7 +349,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
-		else if (!inQuotes && inputChar == '=')
+		else if (!inQuotes && !inLiteralQuote && inputChar == '=')
 		{
 			if (toReturn.empty())
 			{
@@ -287,6 +365,8 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		{
 			toReturn += inputChar;
 		}
+
+		previousCharacter = inputChar;
 	}
 	return toReturn;
 }

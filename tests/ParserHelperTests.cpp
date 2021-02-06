@@ -98,6 +98,78 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 	ASSERT_EQ(" text", std::string{buffer});
 }
 
+
+TEST(ParserHelper_Tests, stringToIntegerLogsNotFullyMatchingInput)
+{
+	std::string str{R"(345 foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const auto theInteger = commonItems::stringToInteger<int>(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! 345 foo\n", log.str());
+	ASSERT_EQ(345, theInteger);
+}
+
+TEST(ParserHelper_Tests, stringToIntegerLogsInvalidInput)
+{
+	std::string str{R"(foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const auto theInteger = commonItems::stringToInteger<int>(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(0, theInteger);
+}
+TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
+{
+	std::string str{R"(345.69 foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const double theDouble = commonItems::stringToDouble(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.69 foo\n", log.str());
+	ASSERT_EQ(345.69, theDouble);
+}
+
+TEST(ParserHelper_Tests, stringToDoubleLogsInvalidInput)
+{
+	std::string str{R"(foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const double theDouble = commonItems::stringToDouble(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
+	ASSERT_EQ(0, theDouble);
+}
+
+TEST(ParserHelper_Tests, stringToDoubleWorksSucceedsWithValidInput)
+{
+	std::string str{R"(345.69)"};
+
+	const double theDouble = commonItems::stringToDouble(str);
+	ASSERT_EQ(345.69, theDouble);
+}
+
 TEST(ParserHelper_Tests, IntListDefaultsToEmpty)
 {
 	std::stringstream input;
@@ -314,7 +386,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected an int, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -386,7 +458,7 @@ TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected a long long, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theLlong.getLlong());
 }
 
@@ -402,7 +474,7 @@ TEST(ParserHelper_Tests, SingleULlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected an unsigned long long, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theULlong.getULlong());
 }
 
@@ -545,6 +617,21 @@ TEST(ParserHelper_Tests, SingleDoubleGetsQuotedDoubleAfterEquals)
 	ASSERT_EQ(1.25, theDouble.getDouble());
 }
 
+TEST(ParserHelper_Tests, SingleDoubleLogsNotFullyMatchingInput)
+{
+	std::stringstream input{R"(= "345.345 foo")"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const commonItems::singleDouble theDouble(input);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.345 foo\n", log.str());
+	ASSERT_EQ(345.345, theDouble.getDouble());
+}
 
 TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 {
@@ -558,7 +645,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected a double, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 
@@ -735,7 +822,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit TestClass(std::istream& theStream)
 		{
-			registerKeyword("test", [this](const std::string& unused, std::istream& theStream) {
+			registerKeyword("test", [this](std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
 				test = testStr.getString() == "yes";
 			});
@@ -961,4 +1048,75 @@ TEST(ParserHelper_Tests, BlobListIsNotAtFaultYouAreOnComplexWrongUsage)
 
 	const auto expectedBlobs = std::vector<std::string>{" key3 = value2 "};
 	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+
+TEST(ParserHelper_Tests, getIntsWrapperWorks)
+{
+	const auto str = " = -1 2 420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::intList(input).getInts(), commonItems::getInts(input2));
+}
+
+TEST(ParserHelper_Tests, getLlongsWrapperWorks)
+{
+	const auto str = "-123456789012345 123456789012320 -154256789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::llongList(input).getLlongs(), commonItems::getLlongs(input2));
+}
+
+TEST(ParserHelper_Tests, getULlongsWrapperWorks)
+{
+	const auto str = "123456789012345 123456789012320 154256789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::ullongList(input).getULlongs(), commonItems::getULlongs(input2));
+}
+
+TEST(ParserHelper_Tests, getDoublesWrapperWorks)
+{
+	const auto str = "69.420 1.2 -0.2";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::doubleList(input).getDoubles(), commonItems::getDoubles(input2));
+}
+
+TEST(ParserHelper_Tests, getStringsWrapperWorks)
+{
+	const auto str = "foo bar baz";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::stringList(input).getStrings(), commonItems::getStrings(input2));
+}
+
+TEST(ParserHelper_Tests, getIntWrapperWorks)
+{
+	const auto str = " = -1";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleInt(input).getInt(), commonItems::getInt(input2));
+}
+
+TEST(ParserHelper_Tests, getLlongWrapperWorks)
+{
+	const auto str = " = -123456789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleLlong(input).getLlong(), commonItems::getLlong(input2));
+}
+
+TEST(ParserHelper_Tests, getULlongWrapperWorks)
+{
+	const auto str = " = 123456789012345";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleULlong(input).getULlong(), commonItems::getULlong(input2));
+}
+
+TEST(ParserHelper_Tests, getDoubleWrapperWorks)
+{
+	const auto str = " = 69.420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleDouble(input).getDouble(), commonItems::getDouble(input2));
+}
+
+TEST(ParserHelper_Tests, getStringWrapperWorks)
+{
+	const auto str = " = 69.420";
+	std::stringstream input{str}, input2{str};
+	ASSERT_EQ(commonItems::singleString(input).getString(), commonItems::getString(input2));
 }
