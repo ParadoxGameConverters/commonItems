@@ -91,6 +91,21 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 	singleString ignore(theStream);
 }
 
+
+
+template <typename T>
+std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str) // for integral types only
+{
+	T theInteger{0};
+	const auto last = str.data() + str.size();
+	const auto [ptr, ec] = std::from_chars(str.data(), last, theInteger);
+	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
+	{
+		Log(LogLevel::Warning) << "string to integer: invalid argument! " << str;
+	}
+	return theInteger;
+}
+
 double stringToDouble(const std::string& str)
 {
 	double theDouble{0.0};
@@ -167,11 +182,11 @@ double stringToDouble(const std::string& str)
 intList::intList(std::istream& theStream)
 {
 	registerRegex(integerRegex, [this](const std::string& theInt, std::istream& unused) {
-		integers.push_back(std::stoi(theInt));
+		integers.push_back(stringToInteger<int>(theInt));
 	});
 	registerRegex(quotedIntegerRegex, [this](const std::string& theInt, std::istream& unused) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
-		integers.push_back(std::stoi(newInt));
+		integers.push_back(stringToInteger<int>(newInt));
 	});
 
 	parseStream(theStream);
@@ -181,11 +196,11 @@ intList::intList(std::istream& theStream)
 llongList::llongList(std::istream& theStream)
 {
 	registerRegex(integerRegex, [this](const std::string& theLongLong, std::istream& unused) {
-		llongs.push_back(std::stoll(theLongLong));
+		llongs.push_back(stringToInteger<long long>(theLongLong));
 	});
 	registerRegex(quotedIntegerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
-		llongs.push_back(std::stoll(newLlong));
+		llongs.push_back(stringToInteger<long long>(newLlong));
 	});
 
 	parseStream(theStream);
@@ -195,11 +210,11 @@ llongList::llongList(std::istream& theStream)
 ullongList::ullongList(std::istream& theStream)
 {
 	registerRegex(integerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
-		ullongs.push_back(std::stoull(theUnsignedLongLong));
+		ullongs.push_back(stringToInteger<unsigned long long>(theUnsignedLongLong));
 	});
 	registerRegex(quotedIntegerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
-		ullongs.push_back(std::stoull(newULlong));
+		ullongs.push_back(stringToInteger<unsigned long long>(newULlong));
 	});
 
 	parseStream(theStream);
@@ -211,15 +226,7 @@ singleInt::singleInt(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	try
-	{
-		theInt = stoi(token);
-	}
-	catch (std::exception&)
-	{
-		Log(LogLevel::Warning) << "Expected an int, but instead got " << token;
-		theInt = 0;
-	}
+	theInt = stringToInteger<int>(token);
 }
 
 
@@ -228,15 +235,7 @@ singleLlong::singleLlong(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	try
-	{
-		theLongLong = std::stoll(token);
-	}
-	catch (std::exception&)
-	{
-		Log(LogLevel::Warning) << "Expected a long long, but instead got " << token;
-		theLongLong = 0;
-	}
+	theLongLong = stringToInteger<long long>(token);
 }
 
 
@@ -245,15 +244,7 @@ singleULlong::singleULlong(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	try
-	{
-		theUnsignedLongLong = std::stoull(token);
-	}
-	catch (std::exception&)
-	{
-		Log(LogLevel::Warning) << "Expected an unsigned long long, but instead got " << token;
-		theUnsignedLongLong = 0;
-	}
+	theUnsignedLongLong = stringToInteger<unsigned long long>(token);
 }
 
 
@@ -320,7 +311,7 @@ int simpleObject::getValueAsInt(const std::string& key) const
 	{
 		return 0;
 	}
-	return std::stoi(value);
+	return stringToInteger<int>(value);
 }
 
 

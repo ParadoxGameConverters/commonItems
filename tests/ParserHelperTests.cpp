@@ -98,6 +98,38 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 	ASSERT_EQ(" text", std::string{buffer});
 }
 
+
+TEST(ParserHelper_Tests, stringToIntegerLogsNotFullyMatchingInput)
+{
+	std::string str{R"(345 foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const auto theInteger = commonItems::stringToInteger<int>(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! 345 foo\n", log.str());
+	ASSERT_EQ(345, theInteger);
+}
+
+TEST(ParserHelper_Tests, stringToIntegerLogsInvalidInput)
+{
+	std::string str{R"(foo)"};
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	const auto theInteger = commonItems::stringToInteger<int>(str);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(0, theInteger);
+}
 TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
 {
 	std::string str{R"(345.69 foo)"};
@@ -354,7 +386,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected an int, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -426,7 +458,7 @@ TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected a long long, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theLlong.getLlong());
 }
 
@@ -442,7 +474,7 @@ TEST(ParserHelper_Tests, SingleULlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Expected an unsigned long long, but instead got foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
 	ASSERT_EQ(0, theULlong.getULlong());
 }
 
