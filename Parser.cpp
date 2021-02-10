@@ -37,9 +37,15 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 }
 
 
+void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
+{
+	registeredMatchers.emplace_back(matcher, function);
+}
+
+
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	generatedRegexes.emplace_back(std::make_pair(std::regex(keyword), function));
+	generatedRegexes.emplace_back(std::regex(keyword), function);
 }
 
 
@@ -117,6 +123,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
+	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>>().swap(registeredMatchers);
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
@@ -140,8 +147,32 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		auto matched = tryToMatchAgainstKeywords(toReturn, strippedLexeme, isLexemeQuoted, theStream);
 
 		if (!matched)
+		{
+			for (const auto& [matcher, parsingFunction]: registeredMatchers)
+			{
+				if (matcher(toReturn))
+				{
+					parsingFunction(toReturn, theStream);
+					matched = true;
+					break;
+				}
+			}
+			if (!matched && isLexemeQuoted)
+			{
+				for (const auto& [matcher, parsingFunction]: registeredMatchers)
+				{
+					if (matcher(strippedLexeme))
+					{
+						parsingFunction(toReturn, theStream);
+						matched = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!matched)
 			matched = tryToMatchAgainstRegexes(toReturn, strippedLexeme, isLexemeQuoted, theStream);
-
+		
 		if (!matched)
 			gotToken = true;
 	}

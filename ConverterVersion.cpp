@@ -10,7 +10,7 @@ commonItems::ConverterVersionParser::ConverterVersionParser()
 	registerSetter("name", converterVersion.name);
 	registerSetter("version", converterVersion.version);
 	registerSetter("descriptionLine", converterVersion.descriptionLine);
-	registerRegex(catchallRegex, ignoreItem);
+	registerMatcher(catchallRegexMatch, ignoreItem);
 }
 
 

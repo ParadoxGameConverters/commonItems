@@ -254,7 +254,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			 static_cast<float>(hsv[1] / 100.0),
 			 static_cast<float>(hsv[2] / 100.0)});
 	}
-	else if (std::smatch match; std::regex_match(*token, match, std::regex(catchallRegex)))
+	else if (catchallRegexMatch(*token))
 	{
 		if (const auto color = namedColors.find(*token); color != namedColors.end())
 		{
