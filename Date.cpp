@@ -63,44 +63,6 @@ int date::convertAUCtoAD(const int yearAUC)
 }
 
 
-bool date::operator==(const date& rhs) const
-{
-	return ((year == rhs.year) && (month == rhs.month) && (day == rhs.day));
-}
-
-
-bool date::operator!=(const date& rhs) const
-{
-	return !(*this == rhs);
-}
-
-
-bool date::operator<(const date& rhs) const
-{
-	return ((year < rhs.year) || ((year == rhs.year) && (month < rhs.month)) ||
-			  ((year == rhs.year) && (month == rhs.month) && (day < rhs.day)));
-}
-
-
-bool date::operator>(const date& rhs) const
-{
-	return ((year > rhs.year) || ((year == rhs.year) && (month > rhs.month)) ||
-			  ((year == rhs.year) && (month == rhs.month) && (day > rhs.day)));
-}
-
-
-bool date::operator<=(const date& rhs) const
-{
-	return ((*this == rhs) || (*this < rhs));
-}
-
-
-bool date::operator>=(const date& rhs) const
-{
-	return ((*this == rhs) || (*this > rhs));
-}
-
-
 float date::diffInYears(const date& rhs) const
 {
 	auto years = static_cast<float>(year - rhs.year);
