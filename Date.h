@@ -22,12 +22,7 @@ class date
 	void addYears(const int years) { year += years; }
 	void subtractYears(int years);
 
-	bool operator==(const date& rhs) const;
-	bool operator!=(const date& rhs) const;
-	bool operator<(const date& rhs) const;
-	bool operator>(const date& rhs) const;
-	bool operator<=(const date& rhs) const;
-	bool operator>=(const date& rhs) const;
+	auto operator<=>(const date& rhs) const = default;
 
 	[[nodiscard]] auto getYear() const { return year; }
 	[[nodiscard]] auto getMonth() const { return month; }
