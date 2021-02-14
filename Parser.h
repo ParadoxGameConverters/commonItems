@@ -20,6 +20,76 @@ typedef std::function<void(std::istream&)> parsingFunctionStreamOnly;
 void absorbBOM(std::istream& theStream);
 
 
+class registeredAnything
+{
+  public:
+	virtual ~registeredAnything() = default;
+	virtual bool match(const std::string& lexeme, std::istream& theStream) = 0;
+	virtual bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) = 0;
+};
+class registeredRegex: public registeredAnything
+{
+  private:
+	std::regex regex;
+	parsingFunction function;
+  public:
+	registeredRegex(const std::string& keyword, const parsingFunction& function):
+		 regex(std::regex(keyword)), function{function}
+	{
+	}
+	bool match(const std::string& lexeme, std::istream& theStream)
+	{
+		if (!std::regex_match(lexeme, regex))
+			return false;
+		else
+		{
+			function(lexeme, theStream);
+			return true;
+		}
+	}
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) {
+		if (!std::regex_match(strippedLexeme, regex))
+			return false;
+		else
+		{
+			function(lexeme, theStream);
+			return true;
+		}
+	}
+};
+class registeredMatcher: public registeredAnything
+{
+  private:
+	bool (*matcher)(std::string_view);
+	parsingFunction function;
+  public:
+	registeredMatcher(bool (*matcher)(std::string_view), const parsingFunction& function):
+		 matcher(matcher), function{function}
+	{
+	}
+	bool match(const std::string& lexeme, std::istream& theStream)
+	{
+		if (!matcher(lexeme))
+			return false;
+		else
+		{
+			function(lexeme, theStream);
+			return true;
+		}
+	}
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream)
+	{
+		if (!matcher(strippedLexeme))
+			return false;
+		else
+		{
+			function(lexeme, theStream);
+			return true;
+		}
+	}
+};
+
+
 class parser
 {
   public:
@@ -50,15 +120,11 @@ class parser
 		 const std::string& strippedLexeme,
 		 bool isLexemeQuoted,
 		 std::istream& theStream);
-	inline bool tryToMatchAgainstRegexes(const std::string& toReturn,
-		 const std::string& strippedLexeme,
-		 bool isLexemeQuoted,
-		 std::istream& theStream);
 
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
-	std::vector<std::pair<bool (*)(std::string_view), parsingFunction>> registeredMatchers;
-	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
+
+	std::vector<std::unique_ptr<registeredAnything>> registeredThings;
 };
 
 } // namespace commonItems
