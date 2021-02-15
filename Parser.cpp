@@ -275,7 +275,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		// regexes and matchers
 		if (!matched)
 		{
-			for (const auto& registered: registeredThings)
+			for (const auto& registered: registeredRegexesAndMatchers)
 			{
 				if (registered->match(toReturn, theStream))
 				{
@@ -285,7 +285,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 			}
 			if (!matched && isLexemeQuoted)
 			{
-				for (const auto& registered: registeredThings)
+				for (const auto& registered: registeredRegexesAndMatchers)
 				{
 					if (registered->matchStripped(toReturn, strippedLexeme, theStream))
 					{
