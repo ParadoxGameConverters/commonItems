@@ -11,9 +11,9 @@
 namespace commonItems
 {
 
-void ignoreItem(const std::string& unused, std::istream& theStream);
-void ignoreObject(const std::string& unused, std::istream& theStream);
-void ignoreString(const std::string& unused, std::istream& theStream);
+void ignoreItem(std::istream& theStream);
+void ignoreObject(std::istream& theStream);
+void ignoreString(std::istream& theStream);
 
 template <typename T>
 [[nodiscard]] std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);

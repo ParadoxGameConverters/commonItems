@@ -8,7 +8,7 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleText)
 {
 	std::stringstream input{"ignore_me More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -20,7 +20,7 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedText)
 {
 	std::stringstream input{"= ignore_me More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -32,7 +32,7 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresBracedItem)
 {
 	std::stringstream input{"{ { ignore_me } } More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -44,7 +44,7 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItem)
 {
 	std::stringstream input{"= { { ignore_me } } More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -56,7 +56,7 @@ TEST(ParserHelper_Tests, IgnoreObjectIgnoresNextItem)
 {
 	std::stringstream input{"ignore_me More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -68,7 +68,7 @@ TEST(ParserHelper_Tests, IgnoreObjectIgnoresWholeBracedItem)
 {
 	std::stringstream input{"{ { ignore_me } } More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -80,7 +80,7 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresNextItem)
 {
 	std::stringstream input{"ignore_me More text"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -92,7 +92,7 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 {
 	std::stringstream input{R"("ignore_me More" text)"};
 	input >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
+	commonItems::ignoreItem(input);
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
@@ -898,8 +898,8 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleColorWithColorSpace)
 	std::stringstream input2{"hsv {0.1 1.0 0.6} More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
-	commonItems::ignoreItem("unused", input2);
+	commonItems::ignoreItem(input);
+	commonItems::ignoreItem(input2);
 
 	char buffer[256];
 	char buffer2[256];
@@ -916,8 +916,8 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedColorWithColorSpace)
 	std::stringstream input2{"= hsv {0.1 1.0 0.6} More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
-	commonItems::ignoreItem("unused", input2);
+	commonItems::ignoreItem(input);
+	commonItems::ignoreItem(input2);
 
 	char buffer[256];
 	char buffer2[256];
@@ -934,8 +934,8 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresRgbAndHsvStringsWithoutBreakingParsing
 	std::stringstream input2{"= hsv next_parameter = 420 More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
-	commonItems::ignoreItem("unused", input2);
+	commonItems::ignoreItem(input);
+	commonItems::ignoreItem(input2);
 
 	char buffer[256];
 	char buffer2[256];
@@ -952,8 +952,8 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresQuotedRgbAndHsvStringsWithoutBreakingP
 	std::stringstream input2{"= \"hsv\" next_parameter = 420 More text"};
 	input >> std::noskipws;
 	input2 >> std::noskipws;
-	commonItems::ignoreItem("unused", input);
-	commonItems::ignoreItem("unused", input2);
+	commonItems::ignoreItem(input);
+	commonItems::ignoreItem(input2);
 
 	char buffer[256];
 	char buffer2[256];
