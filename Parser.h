@@ -110,7 +110,7 @@ class parser
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
-	std::vector<std::unique_ptr<registeredAnything>> registeredThings;
+	std::vector<std::unique_ptr<registeredAnything>> registeredRegexesAndMatchers;
 };
 
 } // namespace commonItems
