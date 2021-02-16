@@ -7,71 +7,51 @@
 #include <map>
 #include <optional>
 #include <regex>
+#include <variant>
 
 
 
 namespace commonItems
 {
 
-typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
-typedef std::function<void(std::istream&)> parsingFunctionStreamOnly;
+using parsingFunction = std::function<void(const std::string&, std::istream&)>;
+using parsingFunctionStreamOnly = std::function<void(std::istream&)>;
+
 
 
 void absorbBOM(std::istream& theStream);
 
 
-class registeredAnything
-{
-  public:
-	virtual ~registeredAnything() = default;
-	virtual bool match(const std::string& lexeme, std::istream& theStream) = 0;
-	virtual bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) = 0;
-};
 
-class registeredRegex: public registeredAnything
-{
-  private:
+struct registeredRegex {
 	std::regex regex;
 	parsingFunction function;
-  public:
-	registeredRegex(const std::string& keyword, const parsingFunction& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
+	bool match(const std::string& lexeme, std::istream& theStream) const;
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
 
-class registeredRegexStreamOnly: public registeredAnything
-{
-  private:
+struct registeredRegexStreamOnly {
 	std::regex regex;
 	parsingFunctionStreamOnly function;
-  public:
-	registeredRegexStreamOnly(const std::string& keyword, const parsingFunctionStreamOnly& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
+	bool match(const std::string& lexeme, std::istream& theStream) const;
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
 
-class registeredMatcher: public registeredAnything
-{
-  private:
+struct registeredMatcher {
 	bool (*matcher)(std::string_view);
 	parsingFunction function;
-  public:
-	registeredMatcher(bool (*matcher)(std::string_view), const parsingFunction& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
+	bool match(const std::string& lexeme, std::istream& theStream) const;
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
 
-class registeredMatcherStreamOnly: public registeredAnything
-{
-  private:
+struct registeredMatcherStreamOnly {
 	bool (*matcher)(std::string_view);
 	parsingFunctionStreamOnly function;
-  public:
-	registeredMatcherStreamOnly(bool (*matcher)(std::string_view), const parsingFunctionStreamOnly& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
+	bool match(const std::string& lexeme, std::istream& theStream) const;
+	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
 
+using registeredVariant = std::variant<registeredMatcher, registeredMatcherStreamOnly, registeredRegex, registeredRegexStreamOnly>;
 
 
 class parser
@@ -110,7 +90,7 @@ class parser
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
-	std::vector<std::unique_ptr<registeredAnything>> registeredRegexesAndMatchers;
+	std::vector<registeredVariant> registeredRegexesAndMatchers;
 };
 
 } // namespace commonItems
