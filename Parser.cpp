@@ -17,84 +17,64 @@ std::string getNextLexeme(std::istream& theStream);
 bool registeredRegex::match(const std::string& lexeme, std::istream& theStream) const {
 	if (!std::regex_match(lexeme, regex))
 		return false;
-	else {
-		function(lexeme, theStream);
-		return true;
-	}
+	
+	function(lexeme, theStream);
+	return true;
 }
 bool registeredRegex::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
 	if (!std::regex_match(strippedLexeme, regex))
 		return false;
-	else {
-		function(lexeme, theStream);
-		return true;
-	}
+
+	function(lexeme, theStream);
+	return true;
 }
 
 
 bool registeredRegexStreamOnly::match(const std::string& lexeme, std::istream& theStream) const {
 	if (!std::regex_match(lexeme, regex))
 		return false;
-	else {
-		function(theStream);
-		return true;
-	}
+	
+	function(theStream);
+	return true;
 }
 bool registeredRegexStreamOnly::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
 	if (!std::regex_match(strippedLexeme, regex))
 		return false;
-	else {
-		function(theStream);
-		return true;
-	}
+	
+	function(theStream);
+	return true;
 }
 
 
-bool registeredMatcher::match(const std::string& lexeme, std::istream& theStream) const
-{
+bool registeredMatcher::match(const std::string& lexeme, std::istream& theStream) const {
 	if (!matcher(lexeme))
 		return false;
-	else
-	{
-		function(lexeme, theStream);
-		return true;
-	}
+	
+	function(lexeme, theStream);
+	return true;
 }
-bool registeredMatcher::matchStripped(const std::string& lexeme,
-	 const std::string& strippedLexeme,
-	 std::istream& theStream) const
-{
+bool registeredMatcher::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
 	if (!matcher(strippedLexeme))
 		return false;
-	else
-	{
-		function(lexeme, theStream);
-		return true;
-	}
+	
+	function(lexeme, theStream);
+	return true;
 }
 
 
-bool registeredMatcherStreamOnly::match(const std::string& lexeme, std::istream& theStream) const
-{
+bool registeredMatcherStreamOnly::match(const std::string& lexeme, std::istream& theStream) const {
 	if (!matcher(lexeme))
 		return false;
-	else
-	{
-		function(theStream);
-		return true;
-	}
+	
+	function(theStream);
+	return true;
 }
-bool registeredMatcherStreamOnly::matchStripped(const std::string& lexeme,
-	 const std::string& strippedLexeme,
-	 std::istream& theStream) const
-{
+bool registeredMatcherStreamOnly::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
 	if (!matcher(strippedLexeme))
 		return false;
-	else
-	{
-		function(theStream);
-		return true;
-	}
+	
+	function(theStream);
+	return true;
 }
 } // namespace commonItems
 
