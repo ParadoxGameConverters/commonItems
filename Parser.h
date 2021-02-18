@@ -29,21 +29,18 @@ struct registeredRegex {
 	bool match(const std::string& lexeme, std::istream& theStream) const;
 	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
-
 struct registeredRegexStreamOnly {
 	std::regex regex;
 	parsingFunctionStreamOnly function;
 	bool match(const std::string& lexeme, std::istream& theStream) const;
 	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
-
 struct registeredMatcher {
 	bool (*matcher)(std::string_view);
 	parsingFunction function;
 	bool match(const std::string& lexeme, std::istream& theStream) const;
 	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
 };
-
 struct registeredMatcherStreamOnly {
 	bool (*matcher)(std::string_view);
 	parsingFunctionStreamOnly function;
@@ -53,6 +50,26 @@ struct registeredMatcherStreamOnly {
 
 using registeredVariant = std::variant<registeredMatcher, registeredMatcherStreamOnly, registeredRegex, registeredRegexStreamOnly>;
 
+struct CallMatch
+{
+	const std::string& lexeme;
+	std::istream& theStream;
+	auto operator()(const registeredMatcher& reg) const { return reg.match(lexeme, theStream); }
+	auto operator()(const registeredMatcherStreamOnly& reg) const { return reg.match(lexeme, theStream); }
+	auto operator()(const registeredRegex& reg) const { return reg.match(lexeme, theStream); }
+	auto operator()(const registeredRegexStreamOnly& reg) const { return reg.match(lexeme, theStream); }
+};
+struct CallMatchStripped
+{
+	const std::string& lexeme;
+	const std::string& strippedLexeme;
+	std::istream& theStream;
+	auto operator()(const registeredMatcher& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
+	auto operator()(const registeredMatcherStreamOnly& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
+	auto operator()(const registeredRegex& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
+	auto operator()(const registeredRegexStreamOnly& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
+};
+	
 
 class parser
 {

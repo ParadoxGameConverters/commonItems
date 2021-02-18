@@ -224,21 +224,17 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		// regexes and matchers
 		if (!matched) {
-			auto matchCaller = [&toReturn, &theStream](auto& obj) {
-				return obj.match(toReturn, theStream);
-			};
 			for (const auto& var: registeredRegexesAndMatchers) {
-				if (std::visit(matchCaller, var)) {
+				if (std::visit(CallMatch{toReturn, theStream}, var))
+				{
 					matched = true;
 					break;
 				}
 			}
 			if (!matched && isLexemeQuoted) {
-				auto matchStrippedCaller = [&toReturn, &strippedLexeme, &theStream](auto& obj) {
-					return obj.matchStripped(toReturn, strippedLexeme, theStream);
-				};
 				for (const auto& var: registeredRegexesAndMatchers) {
-					if (std::visit(matchStrippedCaller, var)) {
+					if (std::visit(CallMatchStripped{toReturn, strippedLexeme, theStream}, var))
+					{
 						matched = true;
 						break;
 					}
