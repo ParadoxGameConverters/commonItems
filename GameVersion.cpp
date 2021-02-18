@@ -1,5 +1,6 @@
 #include "GameVersion.h"
 #include "CommonRegexes.h"
+#include "ParserHelpers.h"
 #include "Log.h"
 
 
