@@ -68,7 +68,7 @@ jobs:
        # Check versions of gcc, g++ and cmake
        gcc -v && g++ -v && cmake --version
        # Run your build commands next
-       chmod u+x build_linux.sh
+       chmod u+x ./tests/build_linux.sh
        ./tests/build_linux.sh
 
     - name: Perform CodeQL Analysis
