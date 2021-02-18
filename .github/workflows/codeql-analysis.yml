@@ -45,11 +45,6 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
-
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
 
@@ -57,9 +52,24 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    #- run: |
-    #   make bootstrap
-    #   make release
+    - run: |
+       git submodule update --init --recursive
+       mkdir $HOME/usr
+       export PATH="$HOME/usr/bin:$PATH"
+       sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+       sudo apt-get update
+       sudo apt-get install gcc-10 g++-10
+       sudo apt-get install libgtest-dev
+       sudo ln -s /usr/bin/gcc-10 /usr/local/bin/gcc
+       sudo ln -s /usr/bin/g++-10 /usr/local/bin/g++
+       # Export CC and CXX to tell cmake which compiler to use
+       export CC=/usr/bin/gcc-10
+       export CXX=/usr/bin/g++-10
+       # Check versions of gcc, g++ and cmake
+       gcc -v && g++ -v && cmake --version
+       # Run your build commands next
+       chmod u+x build_linux.sh
+       ./tests/build_linux.sh
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
