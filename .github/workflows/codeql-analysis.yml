@@ -69,7 +69,7 @@ jobs:
        gcc -v && g++ -v && cmake --version
        # Run your build commands next
        chmod u+x ./tests/build_linux.sh
-       ./tests/build_linux.sh
+       bash ./tests/build_linux.sh
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
