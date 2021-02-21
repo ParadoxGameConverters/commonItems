@@ -17,57 +17,29 @@ namespace commonItems
 using parsingFunction = std::function<void(const std::string&, std::istream&)>;
 using parsingFunctionStreamOnly = std::function<void(std::istream&)>;
 
+using matcherFunction = std::function<bool(const std::string&)>;
 
 
 void absorbBOM(std::istream& theStream);
 
 
-
-struct registeredRegex {
-	std::regex regex;
+struct registeredFunction {
 	parsingFunction function;
-	bool match(const std::string& lexeme, std::istream& theStream) const;
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
+	void execute(const std::string& lexeme, std::istream& theStream) const;
 };
-struct registeredRegexStreamOnly {
-	std::regex regex;
+struct registeredFunctionStreamOnly {
 	parsingFunctionStreamOnly function;
-	bool match(const std::string& lexeme, std::istream& theStream) const;
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
-};
-struct registeredMatcher {
-	bool (*matcher)(std::string_view);
-	parsingFunction function;
-	bool match(const std::string& lexeme, std::istream& theStream) const;
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
-};
-struct registeredMatcherStreamOnly {
-	bool (*matcher)(std::string_view);
-	parsingFunctionStreamOnly function;
-	bool match(const std::string& lexeme, std::istream& theStream) const;
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const;
+	void execute(std::istream& theStream) const;
 };
 
-using registeredVariant = std::variant<registeredMatcher, registeredMatcherStreamOnly, registeredRegex, registeredRegexStreamOnly>;
+using parsingFunctionVariant = std::variant<registeredFunction, registeredFunctionStreamOnly>;
 
-struct CallMatch
+struct CallExecute
 {
 	const std::string& lexeme;
 	std::istream& theStream;
-	auto operator()(const registeredMatcher& reg) const { return reg.match(lexeme, theStream); }
-	auto operator()(const registeredMatcherStreamOnly& reg) const { return reg.match(lexeme, theStream); }
-	auto operator()(const registeredRegex& reg) const { return reg.match(lexeme, theStream); }
-	auto operator()(const registeredRegexStreamOnly& reg) const { return reg.match(lexeme, theStream); }
-};
-struct CallMatchStripped
-{
-	const std::string& lexeme;
-	const std::string& strippedLexeme;
-	std::istream& theStream;
-	auto operator()(const registeredMatcher& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
-	auto operator()(const registeredMatcherStreamOnly& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
-	auto operator()(const registeredRegex& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
-	auto operator()(const registeredRegexStreamOnly& reg) const { return reg.matchStripped(lexeme, strippedLexeme, theStream); }
+	void operator()(const registeredFunction& fun) const { fun.execute(lexeme, theStream); }
+	void operator()(const registeredFunctionStreamOnly& fun) const { fun.execute(theStream); }
 };
 	
 
@@ -83,11 +55,10 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function);
 	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
-	// for compile time regex matchers, but will work with any function that has the same return and argument type
-	void registerMatcher(bool (*matcher)(std::string_view), const parsingFunctionStreamOnly& function);
-	void registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function);
-	void registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function);
-	void registerRegex(const std::string& keyword, const parsingFunction& function);
+	void registerMatcher(const matcherFunction& matcher, const parsingFunctionStreamOnly& function);
+	void registerMatcher(const matcherFunction& matcher, const parsingFunction& function);
+	void registerRegex(const std::string& regex, const parsingFunctionStreamOnly& function);
+	void registerRegex(const std::string& regex, const parsingFunction& function);
 	
 	void clearRegisteredKeywords() noexcept;
 
@@ -97,17 +68,18 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-	
+  protected:
+	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
+	std::map<std::string, parsingFunction> registeredKeywordStrings;
+
+	std::vector<std::pair<matcherFunction, parsingFunctionVariant>> registeredRegexesAndMatchers;
+
   private:
 	inline bool tryToMatchAgainstKeywords(const std::string& toReturn,
 		 const std::string& strippedLexeme,
 		 bool isLexemeQuoted,
 		 std::istream& theStream);
 
-	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
-	std::map<std::string, parsingFunction> registeredKeywordStrings;
-
-	std::vector<registeredVariant> registeredRegexesAndMatchers;
 };
 
 } // namespace commonItems

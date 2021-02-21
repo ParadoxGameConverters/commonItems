@@ -12,70 +12,16 @@ namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
 
-
-
-bool registeredRegex::match(const std::string& lexeme, std::istream& theStream) const {
-	if (!std::regex_match(lexeme, regex))
-		return false;
 	
+
+void registeredFunction::execute(const std::string& lexeme, std::istream& theStream) const {
 	function(lexeme, theStream);
-	return true;
-}
-bool registeredRegex::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
-	if (!std::regex_match(strippedLexeme, regex))
-		return false;
-
-	function(lexeme, theStream);
-	return true;
 }
 
-
-bool registeredRegexStreamOnly::match(const std::string& lexeme, std::istream& theStream) const {
-	if (!std::regex_match(lexeme, regex))
-		return false;
-	
+void registeredFunctionStreamOnly::execute(std::istream& theStream) const {
 	function(theStream);
-	return true;
-}
-bool registeredRegexStreamOnly::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
-	if (!std::regex_match(strippedLexeme, regex))
-		return false;
-	
-	function(theStream);
-	return true;
 }
 
-
-bool registeredMatcher::match(const std::string& lexeme, std::istream& theStream) const {
-	if (!matcher(lexeme))
-		return false;
-	
-	function(lexeme, theStream);
-	return true;
-}
-bool registeredMatcher::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
-	if (!matcher(strippedLexeme))
-		return false;
-	
-	function(lexeme, theStream);
-	return true;
-}
-
-
-bool registeredMatcherStreamOnly::match(const std::string& lexeme, std::istream& theStream) const {
-	if (!matcher(lexeme))
-		return false;
-	
-	function(theStream);
-	return true;
-}
-bool registeredMatcherStreamOnly::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) const {
-	if (!matcher(strippedLexeme))
-		return false;
-	
-	function(theStream);
-	return true;
-}
 } // namespace commonItems
 
 
@@ -102,27 +48,33 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 }
 
 
-void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
+void commonItems::parser::registerMatcher(const matcherFunction& matcher, const parsingFunction& function)
 {
-	registeredRegexesAndMatchers.emplace_back(registeredMatcher{matcher, function});
+	registeredRegexesAndMatchers.emplace_back(matcher, registeredFunction{function});
 }
 
 
-void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunctionStreamOnly& function)
+void commonItems::parser::registerMatcher(const matcherFunction& matcher, const parsingFunctionStreamOnly& function)
 {
-	registeredRegexesAndMatchers.emplace_back(registeredMatcherStreamOnly{matcher, function});
+	registeredRegexesAndMatchers.emplace_back(matcher, registeredFunctionStreamOnly{function});
 }
 
 
-void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
+void commonItems::parser::registerRegex(const std::string& regex, const parsingFunction& function)
 {
-	registeredRegexesAndMatchers.emplace_back(registeredRegex{std::regex(keyword), function});
+	auto matcher = [regex](const std::string& lexeme) {
+		return std::regex_match(lexeme, std::regex{regex});
+	};
+	registeredRegexesAndMatchers.emplace_back(matcher, registeredFunction{function});
 }
 
 
-void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function)
+void commonItems::parser::registerRegex(const std::string& regex, const parsingFunctionStreamOnly& function)
 {
-	registeredRegexesAndMatchers.emplace_back(registeredRegexStreamOnly{std::regex(keyword), function});
+	auto matcher = [regex](const std::string& lexeme) {
+		return std::regex_match(lexeme, std::regex{regex});
+	};
+	registeredRegexesAndMatchers.emplace_back(matcher, registeredFunctionStreamOnly{function});
 }
 
 
@@ -200,7 +152,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
-	std::vector<registeredVariant>().swap(registeredRegexesAndMatchers);
+	std::vector<std::pair<matcherFunction, parsingFunctionVariant>>().swap(registeredRegexesAndMatchers);
 }
 
 
@@ -222,20 +174,21 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		auto matched = tryToMatchAgainstKeywords(toReturn, strippedLexeme, isLexemeQuoted, theStream);
 
-		// regexes and matchers
+		// matchers: currently used for std::regex regexes and compile-time regexes
 		if (!matched) {
-			for (const auto& var: registeredRegexesAndMatchers) {
-				if (std::visit(CallMatch{toReturn, theStream}, var))
-				{
+			for (const auto& [matcher, function] : registeredRegexesAndMatchers) {
+				
+				if (matcher(toReturn)) {
 					matched = true;
+					std::visit(CallExecute{toReturn, theStream}, function);
 					break;
 				}
 			}
 			if (!matched && isLexemeQuoted) {
-				for (const auto& var: registeredRegexesAndMatchers) {
-					if (std::visit(CallMatchStripped{toReturn, strippedLexeme, theStream}, var))
-					{
+				for (const auto& [matcher, function] : registeredRegexesAndMatchers) {
+					if (matcher(strippedLexeme)) {
 						matched = true;
+						std::visit(CallExecute{toReturn, theStream}, function);
 						break;
 					}
 				}
