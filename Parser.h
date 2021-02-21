@@ -68,18 +68,16 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-  protected:
-	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
-	std::map<std::string, parsingFunction> registeredKeywordStrings;
-
-	std::vector<std::pair<matcherFunction, parsingFunctionVariant>> registeredRegexesAndMatchers;
-
   private:
 	inline bool tryToMatchAgainstKeywords(const std::string& toReturn,
 		 const std::string& strippedLexeme,
 		 bool isLexemeQuoted,
 		 std::istream& theStream);
+	
+	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
+	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
+	std::vector<std::pair<matcherFunction, parsingFunctionVariant>> registeredMatchers;
 };
 
 } // namespace commonItems
