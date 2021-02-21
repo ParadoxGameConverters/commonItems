@@ -13,7 +13,7 @@ namespace commonItems
 std::string getNextLexeme(std::istream& theStream);
 
 
-void ignoreItem(std::istream& theStream)
+void ignoreItem(const std::string& unused, std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
 	if (next == "=")
@@ -59,7 +59,7 @@ void ignoreItem(std::istream& theStream)
 }
 
 
-void ignoreObject(std::istream& theStream)
+void ignoreObject(const std::string& unused, std::istream& theStream)
 {
 	auto braceDepth = 0;
 	while (true)
@@ -86,7 +86,7 @@ void ignoreObject(std::istream& theStream)
 }
 
 
-void ignoreString(std::istream& theStream)
+void ignoreString(const std::string& unused, std::istream& theStream)
 {
 	singleString ignore(theStream);
 }
@@ -510,7 +510,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
 	registerMatcher(catchallRegexMatch, [this](const std::string& itemName, std::istream& theStream) {
-		ignoreItem(theStream);
+		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
 
