@@ -22,25 +22,6 @@ using matcherFunction = std::function<bool(const std::string&)>;
 
 void absorbBOM(std::istream& theStream);
 
-
-struct registeredFunction {
-	parsingFunction function;
-	void execute(const std::string& lexeme, std::istream& theStream) const;
-};
-struct registeredFunctionStreamOnly {
-	parsingFunctionStreamOnly function;
-	void execute(std::istream& theStream) const;
-};
-
-using parsingFunctionVariant = std::variant<registeredFunction, registeredFunctionStreamOnly>;
-
-struct CallExecute
-{
-	const std::string& lexeme;
-	std::istream& theStream;
-	void operator()(const registeredFunction& fun) const { fun.execute(lexeme, theStream); }
-	void operator()(const registeredFunctionStreamOnly& fun) const { fun.execute(theStream); }
-};
 	
 
 class parser
@@ -55,9 +36,7 @@ class parser
 
 	void registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function);
 	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
-	void registerMatcher(const matcherFunction& matcher, const parsingFunctionStreamOnly& function);
 	void registerMatcher(const matcherFunction& matcher, const parsingFunction& function);
-	void registerRegex(const std::string& regex, const parsingFunctionStreamOnly& function);
 	void registerRegex(const std::string& regex, const parsingFunction& function);
 	
 	void clearRegisteredKeywords() noexcept;
@@ -77,7 +56,7 @@ class parser
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 
-	std::vector<std::pair<matcherFunction, parsingFunctionVariant>> registeredMatchers;
+	std::vector<std::pair<matcherFunction, parsingFunction>> registeredMatchers;
 };
 
 } // namespace commonItems

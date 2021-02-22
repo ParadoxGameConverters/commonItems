@@ -11,17 +11,6 @@ namespace fs = std::filesystem;
 namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
-
-	
-
-void registeredFunction::execute(const std::string& lexeme, std::istream& theStream) const {
-	function(lexeme, theStream);
-}
-
-void registeredFunctionStreamOnly::execute(std::istream& theStream) const {
-	function(theStream);
-}
-
 } // namespace commonItems
 
 
@@ -50,31 +39,17 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 
 void commonItems::parser::registerMatcher(const matcherFunction& matcher, const parsingFunction& function)
 {
-	registeredMatchers.emplace_back(matcher, registeredFunction{function});
-}
-
-
-void commonItems::parser::registerMatcher(const matcherFunction& matcher, const parsingFunctionStreamOnly& function)
-{
-	registeredMatchers.emplace_back(matcher, registeredFunctionStreamOnly{function});
+	registeredMatchers.emplace_back(matcher, function);
 }
 
 
 void commonItems::parser::registerRegex(const std::string& regex, const parsingFunction& function)
 {
-	auto matcher = [regex](const std::string& lexeme) {
-		return std::regex_match(lexeme, std::regex{regex});
+	std::regex re{regex};
+	auto matcher = [re](const std::string& lexeme) {
+		return std::regex_match(lexeme, re);
 	};
-	registeredMatchers.emplace_back(matcher, registeredFunction{function});
-}
-
-
-void commonItems::parser::registerRegex(const std::string& regex, const parsingFunctionStreamOnly& function)
-{
-	auto matcher = [regex](const std::string& lexeme) {
-		return std::regex_match(lexeme, std::regex{regex});
-	};
-	registeredMatchers.emplace_back(matcher, registeredFunctionStreamOnly{function});
+	registeredMatchers.emplace_back(matcher, function);
 }
 
 
@@ -152,7 +127,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
-	std::vector<std::pair<matcherFunction, parsingFunctionVariant>>().swap(registeredMatchers);
+	std::vector<std::pair<matcherFunction, parsingFunction>>().swap(registeredMatchers);
 }
 
 
@@ -180,7 +155,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				
 				if (matcher(toReturn)) {
 					matched = true;
-					std::visit(CallExecute{toReturn, theStream}, function);
+					function(toReturn, theStream);
 					break;
 				}
 			}
@@ -188,7 +163,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 				for (const auto& [matcher, function] : registeredMatchers) {
 					if (matcher(strippedLexeme)) {
 						matched = true;
-						std::visit(CallExecute{toReturn, theStream}, function);
+						function(toReturn, theStream);
 						break;
 					}
 				}
