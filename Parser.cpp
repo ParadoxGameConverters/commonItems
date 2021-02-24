@@ -154,25 +154,25 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 
 void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunction& function)
 {
-	registeredThings.emplace_back(std::make_unique<registeredMatcher>(matcher, function));
+	registeredRegexesAndMatchers.emplace_back(std::make_unique<registeredMatcher>(matcher, function));
 }
 
 
 void commonItems::parser::registerMatcher(bool (*matcher)(std::string_view), const parsingFunctionStreamOnly& function)
 {
-	registeredThings.emplace_back(std::make_unique<registeredMatcherStreamOnly>(matcher, function));
+	registeredRegexesAndMatchers.emplace_back(std::make_unique<registeredMatcherStreamOnly>(matcher, function));
 }
 
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	registeredThings.emplace_back(std::make_unique<registeredRegex>(keyword, function));
+	registeredRegexesAndMatchers.emplace_back(std::make_unique<registeredRegex>(keyword, function));
 }
 
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function)
 {
-	registeredThings.emplace_back(std::make_unique<registeredRegexStreamOnly>(keyword, function));
+	registeredRegexesAndMatchers.emplace_back(std::make_unique<registeredRegexStreamOnly>(keyword, function));
 }
 
 
@@ -250,7 +250,7 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
 	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
-	std::vector<std::unique_ptr<registeredAnything>>().swap(registeredThings);
+	std::vector<std::unique_ptr<registeredAnything>>().swap(registeredRegexesAndMatchers);
 }
 
 
