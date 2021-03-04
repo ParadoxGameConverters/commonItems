@@ -3,6 +3,10 @@
 #include "ConvenientParser.h"
 #include <string>
 
+
+namespace commonItems
+{
+
 class GameVersion: commonItems::convenientParser
 {
   public:
@@ -56,5 +60,10 @@ class GameVersion::Factory: convenientParser
 };
 
 std::ostream& operator<<(std::ostream&, const GameVersion& version);
+
+} // namespace commonItems
+
+
+[[deprecated("Use commonItems::GameVersion")]] typedef commonItems::GameVersion GameVersion;
 
 #endif // GAME_VERSION_H

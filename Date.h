@@ -1,35 +1,40 @@
-#ifndef DATE_H_
-#define DATE_H_
+#ifndef DATE_H
+#define DATE_H
 
 
 #include <string>
 
 
+namespace commonItems
+{
 
-class date
+class Date
 {
   public:
-	date() = default;
-	explicit date(const int year, const int month, const int day, const bool AUC): year(AUC ? convertAUCtoAD(year) : year), month(month), day(day) {}
-	explicit date(const int year, const int month, const int day): date(year, month, day, false) {}
-	explicit date(std::string init, bool AUC);
-	explicit date(const std::string& init) : date(init, false) {}
+	Date() = default;
+	explicit Date(const int year, const int month, const int day, const bool AUC):
+		 year(AUC ? convertAUCtoAD(year) : year), month(month), day(day)
+	{
+	}
+	explicit Date(const int year, const int month, const int day): Date(year, month, day, false) {}
+	explicit Date(std::string init, bool AUC);
+	explicit Date(const std::string& init): Date(init, false) {}
 
 	void increaseByMonths(int months);
 	void addYears(const int years) { year += years; }
 	void subtractYears(int years);
 
-	auto operator<=>(const date& rhs) const = default;
+	auto operator<=>(const Date& rhs) const = default;
 
 	[[nodiscard]] auto getYear() const { return year; }
 	[[nodiscard]] auto getMonth() const { return month; }
 	[[nodiscard]] auto getDay() const { return day; }
 
-	[[nodiscard]] float diffInYears(const date& rhs) const;
+	[[nodiscard]] float diffInYears(const Date& rhs) const;
 	[[nodiscard]] bool isSet() const;
 	[[nodiscard]] std::string toString() const;
 
-	friend std::ostream& operator<<(std::ostream&, const date&);
+	friend std::ostream& operator<<(std::ostream&, const Date&);
 
   private:
 	[[nodiscard]] int calculateDayInYear() const;
@@ -40,6 +45,10 @@ class date
 	int day = 1;
 };
 
+}
 
 
-#endif // _DATE_H
+[[deprecated("Use commonItems::Date")]] typedef commonItems::Date date;
+
+
+#endif // DATE_H

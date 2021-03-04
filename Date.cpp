@@ -5,7 +5,10 @@
 
 
 
-date::date(std::string init, const bool AUC)
+namespace commonItems
+{
+
+Date::Date(std::string init, const bool AUC)
 {
 	if (init.length() < 1)
 	{
@@ -35,7 +38,7 @@ date::date(std::string init, const bool AUC)
 }
 
 
-void date::increaseByMonths(const int months)
+void Date::increaseByMonths(const int months)
 {
 	year += months / 12;
 	month += months % 12;
@@ -47,12 +50,12 @@ void date::increaseByMonths(const int months)
 }
 
 
-void date::subtractYears(const int years)
+void Date::subtractYears(const int years)
 {
 	year -= years;
 }
 
-int date::convertAUCtoAD(const int yearAUC)
+int Date::convertAUCtoAD(const int yearAUC)
 {
 	auto yearAD = yearAUC - 753;
 	if (yearAD <= 0)
@@ -63,7 +66,7 @@ int date::convertAUCtoAD(const int yearAUC)
 }
 
 
-float date::diffInYears(const date& rhs) const
+float Date::diffInYears(const Date& rhs) const
 {
 	auto years = static_cast<float>(year - rhs.year);
 	years += static_cast<float>(calculateDayInYear() - rhs.calculateDayInYear()) / 365;
@@ -72,13 +75,13 @@ float date::diffInYears(const date& rhs) const
 }
 
 
-bool date::isSet() const
+bool Date::isSet() const
 {
-	return *this != date{};
+	return *this != Date{};
 }
 
 
-std::string date::toString() const
+std::string Date::toString() const
 {
 	std::stringstream buf;
 	buf << year << '.' << month << '.' << day;
@@ -86,7 +89,7 @@ std::string date::toString() const
 }
 
 
-std::ostream& operator<<(std::ostream& out, const date& d)
+std::ostream& operator<<(std::ostream& out, const Date& d)
 {
 	out << d.year << '.' << d.month << '.' << d.day;
 	return out;
@@ -107,10 +110,12 @@ const std::array<int, 12> daysByMonth{
 	 304, // November
 	 334	// December
 };
-int date::calculateDayInYear() const
+int Date::calculateDayInYear() const
 {
 	if (month >= 1 && month <= 12)
 		return day + daysByMonth[static_cast<size_t>(month) - 1];
 	else
-		return day;	
+		return day;
 }
+
+} // namespace commonItems

@@ -4,6 +4,9 @@
 #include "Log.h"
 
 
+namespace commonItems
+{
+
 GameVersion::GameVersion(std::string version)
 {
 	if (version.empty())
@@ -151,3 +154,5 @@ GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
 
 	return GameVersion(firstPart, secondPart, thirdPart, fourthPart);
 }
+
+} // namespace commonItems

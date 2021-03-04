@@ -75,6 +75,9 @@ static Letter g_letters[] = {
 };
 
 
+namespace commonItems
+{
+
 void cp2utf1(char* out, const char* in)
 {
 	static const int table[128] = {0x82D0,
@@ -322,3 +325,5 @@ std::string utf2cp(const std::string& input)
 
 	return newString;
 }
+
+} // namespace commonItems

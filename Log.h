@@ -8,6 +8,9 @@
 
 
 
+namespace commonItems
+{
+
 enum class LogLevel
 {
 	Error,
@@ -43,8 +46,12 @@ class Log
 		std::ostringstream logMessageStream;
 };
 
+} // namespace commonItems
 
-using LOG = Log;
+
+[[deprecated("Use commonItems::Log")]] typedef commonItems::Log Log;
+[[deprecated("Use commonItems::Log")]] typedef commonItems::Log LOG;
+[[deprecated("Use commonItems::LogLevel")]] typedef commonItems::LogLevel LogLevel;
 
 
 
