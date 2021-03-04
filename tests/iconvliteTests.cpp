@@ -291,7 +291,7 @@ TEST(iconvlite_Tests, CpToUtf1LeavesAsciiUnchanged)
 
 	char out[256];
 
-	cp2utf1(out, in);
+	commonItems::cp2utf1(out, in);
 
 	ASSERT_EQ(0, strcmp(in, out));
 }
@@ -305,7 +305,7 @@ TEST(iconvlite_Tests, CpToUtf1Converts1252)
 		out[0] = 0x0;
 		out[1] = 0x0;
 		out[2] = 0x0;
-		cp2utf1(out, windows1252Chars[i]);
+		commonItems::cp2utf1(out, windows1252Chars[i]);
 
 		ASSERT_STREQ(utf8Chars[i], out);
 	}
@@ -321,7 +321,7 @@ TEST(iconvlite_Tests, CpToUtfLeavesAsciiStringUnchanged)
 		 "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 		 "`abcdefghijklmnopqrstuvwxyz{|}~\x7f");
 
-	const auto out = cp2utf(in);
+	const auto out = commonItems::cp2utf(in);
 
 	ASSERT_EQ(in, out);
 }
@@ -335,7 +335,7 @@ TEST(iconvlite_Tests, CpToUtfConverts1252String)
 		in += windows1252Char;
 	}
 
-	const auto out = cp2utf(in);
+	const auto out = commonItems::cp2utf(in);
 
 	std::string expected;
 	for (const auto& utf8Char: utf8Chars)
@@ -358,7 +358,7 @@ TEST(iconvlite_Tests, convert_utf8_to_windows1251LeavesAsciiUnchanged)
 
 	char out[256];
 
-	const auto converted = convert_utf8_to_windows1251(in, out, sizeof in);
+	const auto converted = commonItems::convert_utf8_to_windows1251(in, out, sizeof in);
 
 	ASSERT_TRUE(converted);
 	ASSERT_EQ(0, strcmp(in, out));
@@ -383,7 +383,7 @@ TEST(iconvlite_Tests, convert_utf8_to_windows1251Converts1252)
 		out[1] = 0x0;
 		out[2] = 0x0;
 		out[3] = 0x0;
-		const auto converted = convert_utf8_to_windows1251(utf8Chars[i], out, strlen(utf8Chars[i]));
+		const auto converted = commonItems::convert_utf8_to_windows1251(utf8Chars[i], out, strlen(utf8Chars[i]));
 
 		ASSERT_TRUE(converted);
 		ASSERT_STREQ(windows1252Chars[i], out);
@@ -400,7 +400,7 @@ TEST(iconvlite_Tests, utf2cpLeavesAsciiStringUnchanged)
 		 "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 		 "`abcdefghijklmnopqrstuvwxyz{|}~\x7f");
 
-	const auto out = utf2cp(in);
+	const auto out = commonItems::utf2cp(in);
 
 	ASSERT_EQ(in, out);
 }
@@ -426,7 +426,7 @@ TEST(iconvlite_Tests, utf2cpConverts1252String)
 		expected += windows1252Chars[i];
 	}
 
-	const auto out = utf2cp(in);
+	const auto out = commonItems::utf2cp(in);
 
 	ASSERT_EQ(expected, out);
 }

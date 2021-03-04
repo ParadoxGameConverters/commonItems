@@ -6,6 +6,7 @@
 
 TEST(Log_Tests, ErrorMessagesLogged)
 {
+	using commonItems::Log;
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
@@ -20,6 +21,7 @@ TEST(Log_Tests, ErrorMessagesLogged)
 
 TEST(Log_Tests, WarningMessagesLogged)
 {
+	using commonItems::Log;
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
@@ -34,6 +36,7 @@ TEST(Log_Tests, WarningMessagesLogged)
 
 TEST(Log_Tests, InfoMessagesLogged)
 {
+	using commonItems::Log;
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
@@ -48,6 +51,7 @@ TEST(Log_Tests, InfoMessagesLogged)
 
 TEST(Log_Tests, DebugMessagesLogged)
 {
+	using commonItems::Log;
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
@@ -61,6 +65,7 @@ TEST(Log_Tests, DebugMessagesLogged)
 
 TEST(Log_Tests, ProgressMessagesLogged)
 {
+	using commonItems::Log;
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());

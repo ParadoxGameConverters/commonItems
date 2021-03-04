@@ -7,6 +7,9 @@
 
 
 
+namespace commonItems
+{
+
 Log::Log(const LogLevel level): logLevel(level)
 {
 	static auto logFileCreated = false;
@@ -64,3 +67,5 @@ void Log::WriteTheTime(std::ostream& logFile)
 		logFile << timeBuffer;
 	}
 }
+
+} // namespace commonItems
