@@ -52,7 +52,7 @@ void GameVersion::registerKeys()
 	registerSetter("second", secondPart);
 	registerSetter("third", thirdPart);
 	registerSetter("forth", fourthPart);
-	registerMatcher(commonItems::catchallRegexMatch, commonItems::ignoreItem);
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
 bool GameVersion::operator>=(const GameVersion& rhs) const
@@ -137,7 +137,7 @@ GameVersion::Factory::Factory()
 	registerSetter("second", secondPart);
 	registerSetter("third", thirdPart);
 	registerSetter("forth", fourthPart);
-	registerMatcher(commonItems::catchallRegexMatch, commonItems::ignoreItem);
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
 GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
