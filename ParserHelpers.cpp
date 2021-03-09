@@ -181,10 +181,10 @@ double stringToDouble(const std::string& str)
 
 intList::intList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theInt, std::istream& unused) {
+	registerRegex(integerRegex, [this](const std::string& theInt, std::istream& unused) {
 		integers.push_back(stringToInteger<int>(theInt));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theInt, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theInt, std::istream& unused) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
 		integers.push_back(stringToInteger<int>(newInt));
 	});
@@ -195,10 +195,10 @@ intList::intList(std::istream& theStream)
 
 llongList::llongList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theLongLong, std::istream& unused) {
+	registerRegex(integerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		llongs.push_back(stringToInteger<long long>(theLongLong));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theLongLong, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
 		llongs.push_back(stringToInteger<long long>(newLlong));
 	});
@@ -209,10 +209,10 @@ llongList::llongList(std::istream& theStream)
 
 ullongList::ullongList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
+	registerRegex(integerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		ullongs.push_back(stringToInteger<unsigned long long>(theUnsignedLongLong));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
 		ullongs.push_back(stringToInteger<unsigned long long>(newULlong));
 	});
@@ -317,11 +317,10 @@ int simpleObject::getValueAsInt(const std::string& key) const
 
 doubleList::doubleList(std::istream& theStream)
 {
-	registerMatcher(floatMatch, [this](const std::string& theDouble, std::istream& unused) {
+	registerRegex(floatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		doubles.push_back(stringToDouble(theDouble));
 	});
-	registerMatcher(quotedFloatMatch, [this](const std::string& theDouble, std::istream& unused) {
-
+	registerRegex(quotedFloatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		const auto newDouble = remQuotes(theDouble);
 		doubles.push_back(stringToDouble(newDouble));
 	});
@@ -405,10 +404,10 @@ stringList::stringList(std::istream& theStream)
 {
 	registerKeyword(R"("")", [](std::istream& unused) {
 	});
-	registerMatcher(stringMatch, [this](const std::string& theString, std::istream& unused) {
+	registerRegex(stringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.push_back(theString);
 	});
-	registerMatcher(quotedStringMatch, [this](const std::string& theString, std::istream& unused) {
+	registerRegex(quotedStringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.emplace_back(remQuotes(theString));
 	});
 
@@ -498,7 +497,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& itemName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
 		const stringOfItem theItem(theStream);
 		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
@@ -509,7 +508,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& itemName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
 		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
@@ -520,7 +519,7 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 assignments::assignments(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& assignmentName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
 		getNextTokenWithoutMatching(theStream); // remove equals
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));

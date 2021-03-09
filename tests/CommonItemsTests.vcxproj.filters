@@ -142,10 +142,6 @@
     <CopyFileToFolders Include="TestFiles\version.txt">
       <Filter>TestFiles</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="TestFiles\emptyVersion.txt">
-      <Filter>TestFiles</Filter>
-    </Text>
+    <CopyFileToFolders Include="TestFiles\emptyVersion.txt" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
-#include "ctre.hpp"
+
 
 
 TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleText)
@@ -813,9 +813,6 @@ TEST(ParserHelper_Tests, AssignmentItemsWithinBracesToKeyValuePairs)
 }
 
 
-static constexpr ctll::fixed_string a_zRe{"[a-z]"};
-constexpr bool a_zMatch(std::string_view sv) noexcept { return ctre::match<a_zRe>(sv); }
-
 TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 {
 	class TestClass: commonItems::parser
@@ -834,12 +831,10 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 
 	class WrapperClass: commonItems::parser
 	{
-		
-	
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerMatcher(a_zMatch, [this](const std::string& theKey, std::istream& theStream) {
+			registerRegex("[a-z]", [this](const std::string& theKey, std::istream& theStream) {
 				const TestClass newtest(theStream);
 				theMap[theKey] = newtest.test;
 			});
@@ -868,7 +863,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerMatcher(a_zMatch, [this](const std::string& thekey, std::istream& theStream) {
+			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
 				themap[thekey] = testStr.getString() == "yes";
 			});
