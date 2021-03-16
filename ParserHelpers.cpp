@@ -105,6 +105,16 @@ std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& st
 	}
 	return theInteger;
 }
+template char stringToInteger<char>(const std::string& str, bool skipPartialMatchWarning);
+template unsigned char stringToInteger<unsigned char>(const std::string& str, bool skipPartialMatchWarning);
+template short stringToInteger<short>(const std::string& str, bool skipPartialMatchWarning);
+template unsigned short stringToInteger<unsigned short>(const std::string& str, bool skipPartialMatchWarning);
+template int stringToInteger<int>(const std::string& str, bool skipPartialMatchWarning);
+template unsigned int stringToInteger<unsigned int>(const std::string& str, bool skipPartialMatchWarning);
+template long stringToInteger<long>(const std::string& str, bool skipPartialMatchWarning);
+template unsigned long stringToInteger<unsigned long>(const std::string& str, bool skipPartialMatchWarning);
+template long long stringToInteger<long long>(const std::string& str, bool skipPartialMatchWarning);
+template unsigned long long stringToInteger<unsigned long long>(const std::string& str, bool skipPartialMatchWarning);
 
 double stringToDouble(const std::string& str)
 {
