@@ -123,7 +123,7 @@ double stringToDouble(const std::string& str)
 	const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
 	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
 	{
-		Log(LogLevel::Warning) << "string to double: invalid argument! " << str;
+		Log(LogLevel::Warning) << "string to double - invalid argument: " << str;
 	}
 	return theDouble;
 }
