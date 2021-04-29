@@ -94,9 +94,9 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 
 template <typename T>
-std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
+std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
 {
-	T theInteger{0};
+	T theInteger = 0;
 	const auto last = str.data() + str.size();
 	const auto [ptr, ec] = std::from_chars(str.data(), last, theInteger);
 	if (ec != std::errc() || (!skipPartialMatchWarning && ptr != last)) // conversion either failed or was successful but not all characters matched
@@ -118,7 +118,7 @@ template unsigned long long stringToInteger<unsigned long long>(const std::strin
 
 double stringToDouble(const std::string& str)
 {
-	double theDouble{0.0};
+	double theDouble = 0.0;
 	const auto last = str.data() + str.size();
 	const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
 	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
