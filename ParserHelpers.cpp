@@ -101,7 +101,7 @@ std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& st
 	const auto [ptr, ec] = std::from_chars(str.data(), last, theInteger);
 	if (ec != std::errc() || (!skipPartialMatchWarning && ptr != last)) // conversion either failed or was successful but not all characters matched
 	{
-		Log(LogLevel::Warning) << "string to integer: invalid argument! " << str;
+		Log(LogLevel::Warning) << "string to integer - invalid argument: " << str;
 	}
 	return theInteger;
 }
