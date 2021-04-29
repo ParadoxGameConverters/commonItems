@@ -94,7 +94,7 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 
 template <typename T>
-std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
+std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integer types only
 {
 	T theInteger = 0;
 	const auto last = str.data() + str.size();
