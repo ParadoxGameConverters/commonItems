@@ -112,7 +112,7 @@ TEST(ParserHelper_Tests, stringToIntegerLogsNotFullyMatchingInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! 345 foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer - invalid argument: 345 foo\n", log.str());
 	ASSERT_EQ(345, theInteger);
 }
 
@@ -128,7 +128,7 @@ TEST(ParserHelper_Tests, stringToIntegerLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theInteger);
 }
 TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
@@ -143,7 +143,7 @@ TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.69 foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double - invalid argument: 345.69 foo\n", log.str());
 	ASSERT_EQ(345.69, theDouble);
 }
 
@@ -159,7 +159,7 @@ TEST(ParserHelper_Tests, stringToDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theDouble);
 }
 
@@ -387,7 +387,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -459,7 +459,7 @@ TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theLlong.getLlong());
 }
 
@@ -475,7 +475,7 @@ TEST(ParserHelper_Tests, SingleULlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to integer - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theULlong.getULlong());
 }
 
@@ -630,7 +630,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsNotFullyMatchingInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.345 foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double - invalid argument: 345.345 foo\n", log.str());
 	ASSERT_EQ(345.345, theDouble.getDouble());
 }
 
@@ -646,7 +646,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] string to double - invalid argument: foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 
