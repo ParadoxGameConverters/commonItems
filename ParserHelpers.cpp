@@ -514,7 +514,7 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
 	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
-		ignoreItem(itemName, theStream);
+		ignoreItem(theStream);
 		theStrings.push_back(itemName);
 	});
 
