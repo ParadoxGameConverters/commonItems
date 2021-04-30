@@ -2,7 +2,6 @@
 #define CONVENIENT_PARSER_H
 
 #include "Parser.h"
-#include "ParserHelpers.h"
 
 namespace commonItems
 {

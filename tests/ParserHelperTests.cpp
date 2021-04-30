@@ -1,7 +1,7 @@
 #include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
-#include "ctre.hpp"
+
 
 
 TEST(ParserHelper_Tests, IgnoreItemIgnoresSimpleText)
@@ -97,78 +97,6 @@ TEST(ParserHelper_Tests, IgnoreStringIgnoresWholeQuoation)
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
 	ASSERT_EQ(" text", std::string{buffer});
-}
-
-
-TEST(ParserHelper_Tests, stringToIntegerLogsNotFullyMatchingInput)
-{
-	std::string str{R"(345 foo)"};
-
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const auto theInteger = commonItems::stringToInteger<int>(str);
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! 345 foo\n", log.str());
-	ASSERT_EQ(345, theInteger);
-}
-
-TEST(ParserHelper_Tests, stringToIntegerLogsInvalidInput)
-{
-	std::string str{R"(foo)"};
-
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const auto theInteger = commonItems::stringToInteger<int>(str);
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
-	ASSERT_EQ(0, theInteger);
-}
-TEST(ParserHelper_Tests, stringToDoubleLogsNotFullyMatchingInput)
-{
-	std::string str{R"(345.69 foo)"};
-
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const double theDouble = commonItems::stringToDouble(str);
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.69 foo\n", log.str());
-	ASSERT_EQ(345.69, theDouble);
-}
-
-TEST(ParserHelper_Tests, stringToDoubleLogsInvalidInput)
-{
-	std::string str{R"(foo)"};
-
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const double theDouble = commonItems::stringToDouble(str);
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
-	ASSERT_EQ(0, theDouble);
-}
-
-TEST(ParserHelper_Tests, stringToDoubleWorksSucceedsWithValidInput)
-{
-	std::string str{R"(345.69)"};
-
-	const double theDouble = commonItems::stringToDouble(str);
-	ASSERT_EQ(345.69, theDouble);
 }
 
 TEST(ParserHelper_Tests, IntListDefaultsToEmpty)
@@ -387,7 +315,7 @@ TEST(ParserHelper_Tests, SingleIntLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected an int, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theInteger.getInt());
 }
 
@@ -459,7 +387,7 @@ TEST(ParserHelper_Tests, SingleLlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected a long long, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theLlong.getLlong());
 }
 
@@ -475,7 +403,7 @@ TEST(ParserHelper_Tests, SingleULlongLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to integer: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected an unsigned long long, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theULlong.getULlong());
 }
 
@@ -618,21 +546,6 @@ TEST(ParserHelper_Tests, SingleDoubleGetsQuotedDoubleAfterEquals)
 	ASSERT_EQ(1.25, theDouble.getDouble());
 }
 
-TEST(ParserHelper_Tests, SingleDoubleLogsNotFullyMatchingInput)
-{
-	std::stringstream input{R"(= "345.345 foo")"};
-
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const commonItems::singleDouble theDouble(input);
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! 345.345 foo\n", log.str());
-	ASSERT_EQ(345.345, theDouble.getDouble());
-}
 
 TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 {
@@ -646,7 +559,7 @@ TEST(ParserHelper_Tests, SingleDoubleLogsInvalidInput)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] string to double: invalid argument! foo\n", log.str());
+	ASSERT_EQ(" [WARNING] Expected a double, but instead got foo\n", log.str());
 	ASSERT_EQ(0, theDouble.getDouble());
 }
 
@@ -813,9 +726,6 @@ TEST(ParserHelper_Tests, AssignmentItemsWithinBracesToKeyValuePairs)
 }
 
 
-static constexpr ctll::fixed_string a_zRe{"[a-z]"};
-constexpr bool a_zMatch(std::string_view sv) noexcept { return ctre::match<a_zRe>(sv); }
-
 TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 {
 	class TestClass: commonItems::parser
@@ -834,12 +744,10 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 
 	class WrapperClass: commonItems::parser
 	{
-		
-	
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerMatcher(a_zMatch, [this](const std::string& theKey, std::istream& theStream) {
+			registerRegex("[a-z]", [this](const std::string& theKey, std::istream& theStream) {
 				const TestClass newtest(theStream);
 				theMap[theKey] = newtest.test;
 			});
@@ -868,7 +776,7 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerMatcher(a_zMatch, [this](const std::string& thekey, std::istream& theStream) {
+			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
 				const commonItems::singleString testStr(theStream);
 				themap[thekey] = testStr.getString() == "yes";
 			});
