@@ -5,6 +5,7 @@
 
 #include "Parser.h"
 #include <map>
+#include <type_traits>
 
 
 namespace commonItems
@@ -13,6 +14,27 @@ namespace commonItems
 void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
+
+
+/*function template only enabled for integer types
+* converts string to integer types, e.g.: unsigned int value = stringToInteger<unsigned int>("420");
+* works for:
+* signed char stringToInteger<signed char>(const std::string& str, bool skipPartialMatchWarning);
+* unsigned char stringToInteger<unsigned char>(const std::string& str, bool skipPartialMatchWarning);
+* short stringToInteger<short>(const std::string& str, bool skipPartialMatchWarning);
+* unsigned short stringToInteger<unsigned short>(const std::string& str, bool skipPartialMatchWarning);
+* int stringToInteger<int>(const std::string& str, bool skipPartialMatchWarning);
+* unsigned int stringToInteger<unsigned int>(const std::string& str, bool skipPartialMatchWarning);
+* long stringToInteger<long>(const std::string& str, bool skipPartialMatchWarning);
+* unsigned long stringToInteger<unsigned long>(const std::string& str, bool skipPartialMatchWarning);
+* long long stringToInteger<long long>(const std::string& str, bool skipPartialMatchWarning);
+* unsigned long long stringToInteger<unsigned long long>(const std::string& str, bool skipPartialMatchWarning);
+*/
+template <typename T>
+[[nodiscard]] std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
+
+[[nodiscard]] double stringToDouble(const std::string& str);
+
 
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream);
 [[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
