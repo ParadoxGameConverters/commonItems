@@ -45,7 +45,6 @@ set(commonItems
     "../ParserHelpers.h"
     "../StringUtils.cpp"
     "../StringUtils.h"
-    "../WinUtils.cpp"
 )
 source_group("commonItems" FILES ${commonItems})
 
