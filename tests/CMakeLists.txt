@@ -13,7 +13,9 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 set(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir)
 message("-- Object files will be output to: ${OBJECT_DIR}")
 
+
 include_directories(googletest/googletest/include/gtest)
+add_subdirectory("googletest" "googletest")
 
 ################################################################################
 # Source groups
