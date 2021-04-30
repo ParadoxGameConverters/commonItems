@@ -105,7 +105,7 @@ std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const st
 	}
 	return theInteger;
 }
-template char stringToInteger<char>(const std::string& str, bool skipPartialMatchWarning);
+template signed char stringToInteger<signed char>(const std::string& str, bool skipPartialMatchWarning);
 template unsigned char stringToInteger<unsigned char>(const std::string& str, bool skipPartialMatchWarning);
 template short stringToInteger<short>(const std::string& str, bool skipPartialMatchWarning);
 template unsigned short stringToInteger<unsigned short>(const std::string& str, bool skipPartialMatchWarning);

@@ -15,11 +15,16 @@ void ignoreItem(const std::string& unused, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
+
+/*function template only enabled for integer types
+* converts string to integer types, e.g. unsigned int value = stringToInteger<unsigned int>("420");
+* works for signed char, unsigned char, short, unsigned short, int, unsigned int, long, unsigned long, long long, unsigned long long
+*/
 template <typename T>
-// function template only enabled for integer types
 [[nodiscard]] std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
 
 [[nodiscard]] double stringToDouble(const std::string& str);
+
 
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream);
 [[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
