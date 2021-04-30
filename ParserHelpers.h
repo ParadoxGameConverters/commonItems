@@ -28,8 +28,8 @@ void ignoreString(const std::string& unused, std::istream& theStream);
 * long stringToInteger<long>(const std::string& str, bool skipPartialMatchWarning);
 * unsigned long stringToInteger<unsigned long>(const std::string& str, bool skipPartialMatchWarning);
 * long long stringToInteger<long long>(const std::string& str, bool skipPartialMatchWarning);
- * unsigned long long stringToInteger<unsigned long long>(const std::string& str, bool skipPartialMatchWarning);
- */
+* unsigned long long stringToInteger<unsigned long long>(const std::string& str, bool skipPartialMatchWarning);
+*/
 template <typename T>
 [[nodiscard]] std::enable_if_t<std::numeric_limits<T>::is_integer, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
 
