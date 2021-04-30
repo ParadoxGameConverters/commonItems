@@ -20,40 +20,21 @@ typedef std::function<void(std::istream&)> parsingFunctionStreamOnly;
 void absorbBOM(std::istream& theStream);
 
 
-class Registered
+class RegisteredRegexBase
 {
+  protected:
+	std::regex regex;
   public:
-	virtual ~Registered() = default;
+	RegisteredRegexBase(const std::string& keyword);
+	virtual ~RegisteredRegexBase() = default;
 	virtual bool match(const std::string& lexeme, std::istream& theStream) = 0;
 	virtual bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream) = 0;
 };
 
-class RegisteredKeyword: public Registered
-{
-  private:
-	std::string keyword;
-	parsingFunction function;
-  public:
-	RegisteredKeyword(const std::string& keyword, const parsingFunction& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
-};
 
-class RegisteredKeywordStreamOnly: public Registered
+class RegisteredRegex: public RegisteredRegexBase
 {
   private:
-	std::string keyword;
-	parsingFunctionStreamOnly function;
-  public:
-	RegisteredKeywordStreamOnly(const std::string& keyword, const parsingFunctionStreamOnly& function);
-	bool match(const std::string& lexeme, std::istream& theStream);
-	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
-};
-
-class RegisteredRegex: public Registered
-{
-  private:
-	std::regex regex;
 	parsingFunction function;
   public:
 	RegisteredRegex(const std::string& keyword, const parsingFunction& function);
@@ -61,10 +42,9 @@ class RegisteredRegex: public Registered
 	bool matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream);
 };
 
-class RegisteredRegexStreamOnly: public Registered
+class RegisteredRegexStreamOnly: public RegisteredRegexBase
 {
   private:
-	std::regex regex;
 	parsingFunctionStreamOnly function;
   public:
 	RegisteredRegexStreamOnly(const std::string& keyword, const parsingFunctionStreamOnly& function);
@@ -98,7 +78,7 @@ class parser
 
 	
   private:
-	std::vector<std::unique_ptr<Registered>> registered;
+	std::vector<std::unique_ptr<RegisteredRegexBase>> registeredRegexes;
 };
 
 } // namespace commonItems
