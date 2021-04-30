@@ -50,13 +50,6 @@ set(commonItems
 )
 source_group("commonItems" FILES ${commonItems})
 
-set(gtest
-    "googletest/googletest/src/gtest.cc"
-    "googletest/googletest/src/gtest-all.cc"
-    "googletest/googletest/src/gtest_main.cc"
-)
-source_group("gtest" FILES ${gtest})
-
 set(tests
     "ColorTests.cpp"
     "CommonFunctionsTests.cpp"
@@ -75,7 +68,6 @@ source_group("tests" FILES ${tests})
 
 set(ALL_FILES
     ${commonItems}
-    ${gtest}
     ${tests}
 )
 
