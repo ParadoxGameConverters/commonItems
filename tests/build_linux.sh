@@ -4,6 +4,6 @@
 export CC=/usr/bin/gcc-10 &&
 export CXX=/usr/bin/g++-10 &&
 
-cd .. &&
+cd .. /tests &&
 cmake -H. -Bbuild &&
 cmake --build build -- -j3
