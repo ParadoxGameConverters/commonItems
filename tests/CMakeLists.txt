@@ -82,8 +82,6 @@ set(ALL_FILES
 # Target
 ################################################################################
 add_executable(${PROJECT_NAME} ${ALL_FILES})
-target_link_libraries(${PROJECT_NAME} gtest)
-target_link_libraries(${PROJECT_NAME} gmock)
 
 ################################################################################
 # Include directories
@@ -98,5 +96,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ################################
 enable_testing()
 # Link test executable against gtest & gtest_main
-target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock )
+target_link_libraries(${PROJECT_NAME} gtest gtest_main )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
