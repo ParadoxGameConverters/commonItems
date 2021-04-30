@@ -98,5 +98,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ################################
 enable_testing()
 # Link test executable against gtest & gtest_main
-target_link_libraries(${PROJECT_NAME} gtest gtest_main)
+target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
