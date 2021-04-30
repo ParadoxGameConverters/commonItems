@@ -37,6 +37,7 @@ set(commonItems
     "../GameVersion.h"
     "../iconvlite.cpp"
     "../iconvlite.h"
+    "../LinuxUtils.cpp"
     "../Log.cpp"
     "../Log.h"
     "../OSCommonLayer.cpp"
