@@ -49,6 +49,7 @@ set(commonItems
 source_group("commonItems" FILES ${commonItems})
 
 set(gtest
+    "googletest/googletest/src/gtest.cc"
     "googletest/googletest/src/gtest-all.cc"
     "googletest/googletest/src/gtest_main.cc"
 )
