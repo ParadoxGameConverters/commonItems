@@ -2,8 +2,8 @@
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "StringUtils.h"
+#include <locale>
 #include <sstream>
-#include <charconv>
 
 
 
@@ -92,33 +92,6 @@ void ignoreString(std::istream& theStream)
 }
 
 
-
-template <typename T>
-std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
-{
-	T theInteger{0};
-	const auto last = str.data() + str.size();
-	const auto [ptr, ec] = std::from_chars(str.data(), last, theInteger);
-	if (ec != std::errc() || (!skipPartialMatchWarning && ptr != last)) // conversion either failed or was successful but not all characters matched
-	{
-		Log(LogLevel::Warning) << "string to integer: invalid argument! " << str;
-	}
-	return theInteger;
-}
-
-double stringToDouble(const std::string& str)
-{
-	double theDouble{0.0};
-	const auto last = str.data() + str.size();
-	const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
-	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
-	{
-		Log(LogLevel::Warning) << "string to double: invalid argument! " << str;
-	}
-	return theDouble;
-}
-
-
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream)
 {
 	return intList{theStream}.getInts();
@@ -181,12 +154,12 @@ double stringToDouble(const std::string& str)
 
 intList::intList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theInt, std::istream& unused) {
-		integers.push_back(stringToInteger<int>(theInt));
+	registerRegex(integerRegex, [this](const std::string& theInt, std::istream& unused) {
+		integers.push_back(std::stoi(theInt));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theInt, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theInt, std::istream& unused) {
 		const auto newInt = theInt.substr(1, theInt.size() - 2);
-		integers.push_back(stringToInteger<int>(newInt));
+		integers.push_back(std::stoi(newInt));
 	});
 
 	parseStream(theStream);
@@ -195,12 +168,12 @@ intList::intList(std::istream& theStream)
 
 llongList::llongList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theLongLong, std::istream& unused) {
-		llongs.push_back(stringToInteger<long long>(theLongLong));
+	registerRegex(integerRegex, [this](const std::string& theLongLong, std::istream& unused) {
+		llongs.push_back(std::stoll(theLongLong));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theLongLong, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theLongLong, std::istream& unused) {
 		const auto newLlong = theLongLong.substr(1, theLongLong.size() - 2);
-		llongs.push_back(stringToInteger<long long>(newLlong));
+		llongs.push_back(std::stoll(newLlong));
 	});
 
 	parseStream(theStream);
@@ -209,12 +182,12 @@ llongList::llongList(std::istream& theStream)
 
 ullongList::ullongList(std::istream& theStream)
 {
-	registerMatcher(integerMatch, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
-		ullongs.push_back(stringToInteger<unsigned long long>(theUnsignedLongLong));
+	registerRegex(integerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
+		ullongs.push_back(std::stoull(theUnsignedLongLong));
 	});
-	registerMatcher(quotedIntegerMatch, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
+	registerRegex(quotedIntegerRegex, [this](const std::string& theUnsignedLongLong, std::istream& unused) {
 		const auto newULlong = theUnsignedLongLong.substr(1, theUnsignedLongLong.size() - 2);
-		ullongs.push_back(stringToInteger<unsigned long long>(newULlong));
+		ullongs.push_back(std::stoull(newULlong));
 	});
 
 	parseStream(theStream);
@@ -226,7 +199,15 @@ singleInt::singleInt(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	theInt = stringToInteger<int>(token);
+	try
+	{
+		theInt = stoi(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected an int, but instead got " << token;
+		theInt = 0;
+	}
 }
 
 
@@ -235,7 +216,15 @@ singleLlong::singleLlong(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	theLongLong = stringToInteger<long long>(token);
+	try
+	{
+		theLongLong = std::stoll(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected a long long, but instead got " << token;
+		theLongLong = 0;
+	}
 }
 
 
@@ -244,7 +233,15 @@ singleULlong::singleULlong(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	theUnsignedLongLong = stringToInteger<unsigned long long>(token);
+	try
+	{
+		theUnsignedLongLong = std::stoull(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected an unsigned long long, but instead got " << token;
+		theUnsignedLongLong = 0;
+	}
 }
 
 
@@ -311,19 +308,18 @@ int simpleObject::getValueAsInt(const std::string& key) const
 	{
 		return 0;
 	}
-	return stringToInteger<int>(value);
+	return std::stoi(value);
 }
 
 
 doubleList::doubleList(std::istream& theStream)
 {
-	registerMatcher(floatMatch, [this](const std::string& theDouble, std::istream& unused) {
-		doubles.push_back(stringToDouble(theDouble));
+	registerRegex(floatRegex, [this](const std::string& theDouble, std::istream& unused) {
+		doubles.push_back(std::stod(theDouble));
 	});
-	registerMatcher(quotedFloatMatch, [this](const std::string& theDouble, std::istream& unused) {
-
+	registerRegex(quotedFloatRegex, [this](const std::string& theDouble, std::istream& unused) {
 		const auto newDouble = remQuotes(theDouble);
-		doubles.push_back(stringToDouble(newDouble));
+		doubles.push_back(std::stod(newDouble));
 	});
 
 	parseStream(theStream);
@@ -335,7 +331,15 @@ singleDouble::singleDouble(std::istream& theStream)
 	getNextTokenWithoutMatching(theStream); // remove equals
 	const auto token = remQuotes(*getNextTokenWithoutMatching(theStream));
 
-	theDouble = stringToDouble(token);
+	try
+	{
+		theDouble = stod(token);
+	}
+	catch (std::exception&)
+	{
+		Log(LogLevel::Warning) << "Expected a double, but instead got " << token;
+		theDouble = 0.0;
+	}
 }
 
 
@@ -405,10 +409,10 @@ stringList::stringList(std::istream& theStream)
 {
 	registerKeyword(R"("")", [](std::istream& unused) {
 	});
-	registerMatcher(stringMatch, [this](const std::string& theString, std::istream& unused) {
+	registerRegex(stringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.push_back(theString);
 	});
-	registerMatcher(quotedStringMatch, [this](const std::string& theString, std::istream& unused) {
+	registerRegex(quotedStringRegex, [this](const std::string& theString, std::istream& unused) {
 		strings.emplace_back(remQuotes(theString));
 	});
 
@@ -498,7 +502,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& itemName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
 		const stringOfItem theItem(theStream);
 		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
@@ -509,8 +513,8 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& itemName, std::istream& theStream) {
-		ignoreItem(theStream);
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
+		ignoreItem(itemName, theStream);
 		theStrings.push_back(itemName);
 	});
 
@@ -520,7 +524,7 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 assignments::assignments(std::istream& theStream)
 {
-	registerMatcher(catchallRegexMatch, [this](const std::string& assignmentName, std::istream& theStream) {
+	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
 		getNextTokenWithoutMatching(theStream); // remove equals
 		auto assignmentValue = getNextTokenWithoutMatching(theStream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));

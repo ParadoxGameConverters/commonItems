@@ -1,7 +1,6 @@
 #ifndef GAME_VERSION_H
 #define GAME_VERSION_H
 #include "ConvenientParser.h"
-#include <ostream>
 #include <string>
 
 class GameVersion: commonItems::convenientParser

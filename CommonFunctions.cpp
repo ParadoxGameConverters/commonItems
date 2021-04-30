@@ -40,7 +40,7 @@ std::string getExtension(const std::string& fileName)
 
 std::string replaceCharacter(std::string fileName, const char character)
 {
-	std::replace(fileName.begin(), fileName.end(), character, '_');
+	std::ranges::replace(fileName, character, '_');
 	return fileName;
 }
 
@@ -74,7 +74,7 @@ std::string cardinalToRoman(int number)
 	std::string toReturn;
 	while (number > 0)
 	{
-		int div = number / num[i];
+		auto div = number / num[i];
 		number = number % num[i];
 		while (div--)
 		{
@@ -87,7 +87,7 @@ std::string cardinalToRoman(int number)
 
 std::string normalizeStringPath(const std::string& stringPath)
 {
-	std::string toReturn = commonItems::normalizeUTF8Path(stringPath);
+	auto toReturn = commonItems::normalizeUTF8Path(stringPath);
 	toReturn = replaceCharacter(toReturn, '-');
 	toReturn = replaceCharacter(toReturn, ' ');
 

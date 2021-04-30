@@ -370,8 +370,9 @@ class ConversionOutputBuffer
 		static void str(String& output, char* buffer, std::size_t length)
 		{
 			using namespace std;
-			const Char* output_buffer = reinterpret_cast<const Char*>(buffer);
-			size_t output_length = length / sizeof(Char);
+			size_t output_length = length / sizeof(Char);			
+			wchar_t output_buffer[output_length] = {};
+			std::mbstowcs(output_buffer, buffer, output_length);
 			output.assign(output_buffer, output_length);
 		};
 	};
