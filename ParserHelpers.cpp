@@ -2,8 +2,8 @@
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "StringUtils.h"
-#include <sstream>
 #include <charconv>
+#include <sstream>
 
 
 
@@ -93,8 +93,8 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 
 
-template <typename T>
-std::enable_if_t<std::is_integral_v<T>, T> stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
+template <std::integral T>
+T stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
 {
 	T theInteger = 0;
 	const auto last = str.data() + str.size();
