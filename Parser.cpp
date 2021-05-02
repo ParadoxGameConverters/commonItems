@@ -11,6 +11,59 @@ namespace fs = std::filesystem;
 namespace commonItems
 {
 std::string getNextLexeme(std::istream& theStream);
+
+
+RegisteredRegexBase::RegisteredRegexBase(const std::string& keyword): regex(std::regex(keyword)) {}
+
+
+RegisteredRegex::RegisteredRegex(const std::string& keyword, const parsingFunction& function): RegisteredRegexBase(keyword), function(function) {}
+
+bool RegisteredRegex::match(const std::string& lexeme, std::istream& theStream)
+{
+	if (!std::regex_match(lexeme, regex))
+		return false;
+	else
+	{
+		function(lexeme, theStream);
+		return true;
+	}
+}
+
+bool RegisteredRegex::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream)
+{
+	if (!std::regex_match(strippedLexeme, regex))
+		return false;
+	else
+	{
+		function(lexeme, theStream);
+		return true;
+	}
+}
+
+
+RegisteredRegexStreamOnly::RegisteredRegexStreamOnly(const std::string& keyword, const parsingFunctionStreamOnly& function): RegisteredRegexBase(keyword), function(function) {}
+
+bool RegisteredRegexStreamOnly::match(const std::string& lexeme, std::istream& theStream)
+{
+	if (!std::regex_match(lexeme, regex))
+		return false;
+	else
+	{
+		function(theStream);
+		return true;
+	}
+}
+
+bool RegisteredRegexStreamOnly::matchStripped(const std::string& lexeme, const std::string& strippedLexeme, std::istream& theStream)
+{
+	if (!std::regex_match(strippedLexeme, regex))
+		return false;
+	else
+	{
+		function(theStream);
+		return true;
+	}
+}
 } // namespace commonItems
 
 
@@ -27,19 +80,25 @@ void commonItems::absorbBOM(std::istream& theStream)
 
 void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunction& function)
 {
-	registeredKeywordStrings.insert(std::make_pair(keyword, function));
+	registeredRegexes.emplace_back(std::make_unique<RegisteredRegex>(keyword, function));
 }
 
 
 void commonItems::parser::registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function)
 {
-	registeredKeywordStringsStreamOnly.insert(std::make_pair(keyword, function));
+	registeredRegexes.emplace_back(std::make_unique<RegisteredRegexStreamOnly>(keyword, function));
 }
 
 
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
-	generatedRegexes.emplace_back(std::regex(keyword), function);
+	registeredRegexes.emplace_back(std::make_unique<RegisteredRegex>(keyword, function));
+}
+
+
+void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunctionStreamOnly& function)
+{
+	registeredRegexes.emplace_back(std::make_unique<RegisteredRegexStreamOnly>(keyword, function));
 }
 
 
@@ -115,9 +174,7 @@ void commonItems::parser::parseFile(std::string_view filename)
 
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
-	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
-	std::map<std::string, parsingFunctionStreamOnly>().swap(registeredKeywordStringsStreamOnly);
-	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
+	std::vector<std::unique_ptr<RegisteredRegexBase>>().swap(registeredRegexes);
 }
 
 
@@ -137,11 +194,27 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		const auto strippedLexeme = remQuotes(toReturn);
 		const auto isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
 
-		auto matched = tryToMatchAgainstKeywords(toReturn, strippedLexeme, isLexemeQuoted, theStream);
+		bool matched = false;
+		for (const auto& registered: registeredRegexes)
+		{
+			if (registered->match(toReturn, theStream))
+			{
+				matched = true;
+				break;
+			}
+		}
+		if (!matched && isLexemeQuoted)
+		{
+			for (const auto& registered: registeredRegexes)
+			{
+				if (registered->matchStripped(toReturn, strippedLexeme, theStream))
+				{
+					matched = true;
+					break;
+				}
+			}
+		}
 
-		if (!matched)
-			matched = tryToMatchAgainstRegexes(toReturn, strippedLexeme, isLexemeQuoted, theStream);
-		
 		if (!matched)
 			gotToken = true;
 	}
@@ -149,70 +222,6 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 	if (!toReturn.empty())
 		return std::move(toReturn);
 	return std::nullopt;
-}
-
-
-inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& toReturn,
-	 const std::string& strippedLexeme,
-	 bool isLexemeQuoted,
-	 std::istream& theStream)
-{
-	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn); match != registeredKeywordStringsStreamOnly.end())
-	{
-		match->second(theStream);
-		return true;
-	}
-	else if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
-	{
-		match->second(toReturn, theStream);
-		return true;
-	}
-	else if (isLexemeQuoted)
-	{
-		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStringsStreamOnly.end())
-		{
-			strippedMatch->second(theStream);
-			return true;
-		}
-		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStrings.end())
-		{
-			strippedMatch->second(toReturn, theStream);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-inline bool commonItems::parser::tryToMatchAgainstRegexes(const std::string& toReturn,
-	 const std::string& strippedLexeme,
-	 bool isLexemeQuoted,
-	 std::istream& theStream)
-{
-	for (const auto& [regex, parsingFunction]: generatedRegexes)
-	{
-		std::smatch match;
-		if (std::regex_match(toReturn, match, regex))
-		{
-			parsingFunction(toReturn, theStream);
-			return true;
-		}
-	}
-	if (isLexemeQuoted)
-	{
-		for (const auto& [regex, parsingFunction]: generatedRegexes)
-		{
-			std::smatch match;
-			if (std::regex_match(strippedLexeme, match, regex))
-			{
-				parsingFunction(toReturn, theStream);
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 
