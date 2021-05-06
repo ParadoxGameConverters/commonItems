@@ -8,17 +8,17 @@ namespace commonItems
 // catchall:
 //		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already drop
 //		in the parser.
-static inline const char* catchallRegex = R"([^=^{^}]+|".+")";
+extern const char* catchallRegex;
 
 // numbers
-static inline const char* integerRegex = R"(-?\d+)";
-static inline const char* quotedIntegerRegex = R"("-?\d+")";
-static inline const char* floatRegex = R"(-?\d+(.\d+)?)";
-static inline const char* quotedFloatRegex = R"("-?\d+(.\d+)?")";
+extern const char* integerRegex;
+extern const char* quotedIntegerRegex;
+extern const char* floatRegex;
+extern const char* quotedFloatRegex;
 
 // strings
-static inline const char* stringRegex = R"([^[:s:]^=^\{^\}^\"]+)";
-static inline const char* quotedStringRegex = R"("[^\n^=^\{^\}^\"]+")";
+extern const char* stringRegex;
+extern const char* quotedStringRegex;
 
 } // namespace commonItems
 

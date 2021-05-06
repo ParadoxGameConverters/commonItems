@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="..\Color.cpp" />
     <ClCompile Include="..\CommonFunctions.cpp" />
+    <ClCompile Include="..\CommonRegexes.cpp" />
     <ClCompile Include="..\ConvenientParser.cpp" />
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
