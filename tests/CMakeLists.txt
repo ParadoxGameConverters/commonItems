@@ -26,7 +26,6 @@ set(commonItems
     "../Color.h"
     "../CommonFunctions.cpp"
     "../CommonFunctions.h"
-    "../CommonRegexes.cpp"
     "../CommonRegexes.h"
     "../ConvenientParser.cpp"
     "../ConvenientParser.h"
