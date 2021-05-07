@@ -1,4 +1,5 @@
 #include "../ParserHelpers.h"
+#include "../CommonRegexes.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -49,6 +50,42 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItem)
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
 	ASSERT_EQ(" More text", std::string{buffer});
+}
+
+
+class Foo: commonItems::parser
+{
+  public:
+	explicit Foo(std::istream& theStream)
+	{
+		registerKeyword("key1", [this](std::istream& theStream) {
+			value1 = commonItems::getString(theStream);
+		});
+		registerKeyword("key2", [this](std::istream& theStream) {
+			value2 = commonItems::getString(theStream);
+		});
+		registerRegex(commonItems::catchallRegex, commonItems::ignoreAndLogItem);
+		parseStream(theStream);
+	}
+
+	std::string value1;
+	std::string value2;
+};
+
+TEST(ParserHelper_Tests, ignoreAndLogItemLogsIgnoredKeyword)
+{
+	std::stringstream input;
+	input << R"(key1=val1 key2=val2 key3=mess)";
+
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	Foo foo(input);
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ("   [DEBUG]     Ignoring keyword: key3\n", log.str());
 }
 
 

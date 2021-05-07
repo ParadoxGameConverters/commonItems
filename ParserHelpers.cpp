@@ -58,6 +58,12 @@ void ignoreItem(const std::string& unused, std::istream& theStream)
 	}
 }
 
+void ignoreAndLogItem(const std::string& keyword, std::istream& theStream)
+{
+	Log(LogLevel::Debug) << "Ignoring keyword: " << keyword;
+	ignoreItem(keyword, theStream);
+}
+
 
 void ignoreObject(const std::string& unused, std::istream& theStream)
 {

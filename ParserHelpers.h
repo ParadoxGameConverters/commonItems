@@ -13,6 +13,7 @@ namespace commonItems
 {
 
 void ignoreItem(const std::string& unused, std::istream& theStream);
+void ignoreAndLogItem(const std::string& keyword, std::istream& theStream);
 void ignoreObject(const std::string& unused, std::istream& theStream);
 void ignoreString(const std::string& unused, std::istream& theStream);
 
