@@ -96,9 +96,6 @@
     <ClCompile Include="ConverterVersionTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\CommonRegexes.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
