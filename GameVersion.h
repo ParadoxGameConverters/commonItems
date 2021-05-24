@@ -32,6 +32,9 @@ class GameVersion: commonItems::convenientParser
 	bool operator==(const GameVersion& rhs) const;
 	bool operator!=(const GameVersion& rhs) const;
 
+	[[nodiscard]] std::string toString() const;
+	[[nodiscard]] std::string toShortString() const;
+
 	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
 
   private:
