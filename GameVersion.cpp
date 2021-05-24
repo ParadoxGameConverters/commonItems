@@ -1,7 +1,7 @@
 #include "GameVersion.h"
 #include "CommonRegexes.h"
-#include "ParserHelpers.h"
 #include "Log.h"
+#include "ParserHelpers.h"
 
 
 GameVersion::GameVersion(std::string version)
@@ -150,4 +150,23 @@ GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
 	parseStream(theStream);
 
 	return GameVersion(firstPart, secondPart, thirdPart, fourthPart);
+}
+
+std::string GameVersion::toString() const
+{
+	return std::to_string(firstPart) + "." + std::to_string(secondPart) + "." + std::to_string(thirdPart) + "." +
+			 std::to_string(fourthPart);
+}
+
+std::string GameVersion::toShortString() const
+{
+	std::string nameString;
+	if (fourthPart > 0)
+		nameString = "." + std::to_string(fourthPart);
+	if (thirdPart > 0 || !nameString.empty())
+		nameString = "." + std::to_string(thirdPart) + nameString;
+	if (secondPart > 0 || !nameString.empty())
+		nameString = "." + std::to_string(secondPart) + nameString;
+	nameString = std::to_string(firstPart) + nameString;
+	return nameString;
 }

@@ -282,3 +282,33 @@ TEST(GameVersion_Tests, GameVersionNotEqualMissingFourthPartIsNotSameAsThirdPart
 	const GameVersion requiredVersion("1.3.3");
 	ASSERT_NE(version, requiredVersion);
 }
+
+TEST(GameVersion_Tests, GameVersionFullNameReturned)
+{
+	const GameVersion version1("1.3.0.3");
+	const GameVersion version2("1.3.0");
+	const GameVersion version3("1.3");
+	const GameVersion version4("1");
+	const GameVersion version5("0");
+	
+	ASSERT_EQ("1.3.0.3", version1.toString());
+	ASSERT_EQ("1.3.0.0", version2.toString());
+	ASSERT_EQ("1.3.0.0", version3.toString());
+	ASSERT_EQ("1.0.0.0", version4.toString());
+	ASSERT_EQ("0.0.0.0", version5.toString());
+}
+
+TEST(GameVersion_Tests, GameVersionShortNameReturned)
+{
+	const GameVersion version1("1.3.0.3");
+	const GameVersion version2("1.3.0");
+	const GameVersion version3("1.0");
+	const GameVersion version4("1.0.0.1");
+	const GameVersion version5("0.0.0.0");
+
+	ASSERT_EQ("1.3.0.3", version1.toShortString());
+	ASSERT_EQ("1.3", version2.toShortString());
+	ASSERT_EQ("1", version3.toShortString());
+	ASSERT_EQ("1.0.0.1", version4.toShortString());
+	ASSERT_EQ("0", version5.toShortString());
+}
