@@ -612,6 +612,16 @@ TEST(ParserHelper_Tests, DoubleListAddsDoubles)
 	ASSERT_EQ(expectedDoubles, theDoubles.getDoubles());
 }
 
+TEST(ParserHelper_Tests, DoubleListAddsNegativeDoubles)
+{
+	std::stringstream input{"1.25 -2.5 -3.75"};
+
+	const commonItems::doubleList theDoubles(input);
+
+	const auto expectedDoubles = std::vector<double>{1.25, -2.5, -3.75};
+	ASSERT_EQ(expectedDoubles, theDoubles.getDoubles());
+}
+
 
 TEST(ParserHelper_Tests, DoubleListAddsQuotedDoubles)
 {
@@ -620,6 +630,16 @@ TEST(ParserHelper_Tests, DoubleListAddsQuotedDoubles)
 	const commonItems::doubleList theDoubles(input);
 
 	const auto expectedDoubles = std::vector<double>{1.25, 2.5, 3.75};
+	ASSERT_EQ(expectedDoubles, theDoubles.getDoubles());
+}
+
+TEST(ParserHelper_Tests, DoubleListAddsQuotedNegativeDoubles)
+{
+	std::stringstream input{R"("1.25" "-2.5" "-3.75")"};
+
+	const commonItems::doubleList theDoubles(input);
+
+	const auto expectedDoubles = std::vector<double>{1.25, -2.5, -3.75};
 	ASSERT_EQ(expectedDoubles, theDoubles.getDoubles());
 }
 
