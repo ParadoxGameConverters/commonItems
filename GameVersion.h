@@ -22,6 +22,14 @@ class GameVersion: commonItems::convenientParser
 		 secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
 	{
 	}
+	explicit GameVersion(std::optional<int> theFirstPart,
+		 std::optional<int> theSecondPart,
+		 std::optional<int> theThirdPart,
+		 std::optional<int> theFourthPart):
+		 firstPart(theFirstPart),
+		 secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
+	{
+	}
 	explicit GameVersion(std::string version);
 	explicit GameVersion(std::istream& theStream);
 
@@ -31,18 +39,16 @@ class GameVersion: commonItems::convenientParser
 	bool operator<=(const GameVersion& rhs) const;
 	bool operator==(const GameVersion& rhs) const;
 	bool operator!=(const GameVersion& rhs) const;
-
-	[[nodiscard]] std::string toString() const;
-	[[nodiscard]] std::string toShortString() const;
+	bool smallerish(const GameVersion& rhs) const;
 
 	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
 
   private:
 	void registerKeys();
-	int firstPart = 0;
-	int secondPart = 0;
-	int thirdPart = 0;
-	int fourthPart = 0;
+	std::optional<int> firstPart;
+	std::optional<int> secondPart;
+	std::optional<int> thirdPart;
+	std::optional<int> fourthPart;
 };
 
 class GameVersion::Factory: convenientParser
@@ -52,10 +58,10 @@ class GameVersion::Factory: convenientParser
 	GameVersion getVersion(std::istream& theStream);
 
   private:
-	int firstPart = 0;
-	int secondPart = 0;
-	int thirdPart = 0;
-	int fourthPart = 0;
+	std::optional<int> firstPart;
+	std::optional<int> secondPart;
+	std::optional<int> thirdPart;
+	std::optional<int> fourthPart;
 };
 
 std::ostream& operator<<(std::ostream&, const GameVersion& version);
