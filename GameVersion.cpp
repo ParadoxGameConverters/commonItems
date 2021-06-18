@@ -280,6 +280,63 @@ GameVersion GameVersion::Factory::getVersion(std::istream& theStream)
 	return GameVersion(firstPart, secondPart, thirdPart, fourthPart);
 }
 
+std::string GameVersion::toString() const
+{
+	std::string toReturn;
+	if (firstPart)
+		toReturn += std::to_string(*firstPart) + ".";
+	else
+		toReturn += "0.";
+	if (secondPart)
+		toReturn += std::to_string(*secondPart) + ".";
+	else
+		toReturn += "0.";
+	if (thirdPart)
+		toReturn += std::to_string(*thirdPart) + ".";
+	else
+		toReturn += "0.";
+	if (fourthPart)
+		toReturn += std::to_string(*fourthPart) + ".";
+	else
+		toReturn += "0";
+
+	return toReturn;
+}
+
+std::string GameVersion::toShortString() const
+{
+	std::string nameString;
+	if (fourthPart && *fourthPart > 0)
+		nameString = "." + std::to_string(*fourthPart);
+
+	if (thirdPart)
+	{
+		if (*thirdPart > 0)
+			nameString = "." + std::to_string(*thirdPart) + nameString;
+		else if (!nameString.empty())
+			nameString = ".0" + nameString;
+	}
+
+	if (secondPart)
+	{
+		if (*secondPart > 0)
+			nameString = "." + std::to_string(*secondPart) + nameString;
+		else if (!nameString.empty())
+			nameString = ".0" + nameString;
+	}
+
+	if (firstPart)
+	{
+		if (*firstPart > 0)
+			nameString = std::to_string(*secondPart) + nameString;
+		else
+			nameString = "0" + nameString;
+	}
+
+	return nameString;
+}
+
+
 bool GameVersion::smallerish(const GameVersion& rhs) const
 {
 	// Smallerish is intended for fuzzy comparisons like "converter works with 1.9",
