@@ -281,6 +281,36 @@ TEST(GameVersion_Tests, GameVersionNotEqualMissingFourthPartIsNotSameAsThirdPart
 	EXPECT_NE(version, requiredVersion);
 }
 
+TEST(GameVersion_Tests, GameVersionFullNameReturned)
+{
+	const GameVersion version1("1.3.0.3");
+	const GameVersion version2("1.3.0");
+	const GameVersion version3("1.3");
+	const GameVersion version4("1");
+	const GameVersion version5("0");
+
+	EXPECT_EQ("1.3.0.3", version1.toString());
+	EXPECT_EQ("1.3.0.0", version2.toString());
+	EXPECT_EQ("1.3.0.0", version3.toString());
+	EXPECT_EQ("1.0.0.0", version4.toString());
+	EXPECT_EQ("0.0.0.0", version5.toString());
+}
+
+TEST(GameVersion_Tests, GameVersionShortNameReturned)
+{
+	const GameVersion version1("1.3.0.3");
+	const GameVersion version2("1.3.0");
+	const GameVersion version3("1.0");
+	const GameVersion version4("1.0.0.1");
+	const GameVersion version5("0.0.0.0");
+
+	EXPECT_EQ("1.3.0.3", version1.toShortString());
+	EXPECT_EQ("1.3", version2.toShortString());
+	EXPECT_EQ("1", version3.toShortString());
+	EXPECT_EQ("1.0.0.1", version4.toShortString());
+	EXPECT_EQ("0", version5.toShortString());
+}
+
 TEST(GameVersion_Tests, SmallerishFalseForLarger)
 {
 	const GameVersion requiredVersion("1.1.1.1");
@@ -288,7 +318,7 @@ TEST(GameVersion_Tests, SmallerishFalseForLarger)
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("2.2.0.0")));
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("2.2.2.0")));
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("2.2.2.2")));
-	
+
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("1.2")));
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("1.2.2")));
 	EXPECT_FALSE(requiredVersion.smallerish(GameVersion("1.2.2.2")));
@@ -313,7 +343,7 @@ TEST(GameVersion_Tests, SmallerishTrueForSmaller)
 TEST(GameVersion_Tests, SmallerishTrueForSmallerish)
 {
 	// This is the main meat.
-	
+
 	const GameVersion requiredVersion("2.1");
 	EXPECT_TRUE(requiredVersion.smallerish(GameVersion("2.1")));
 	EXPECT_TRUE(requiredVersion.smallerish(GameVersion("2.1.99.0")));

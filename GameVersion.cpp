@@ -78,45 +78,42 @@ bool GameVersion::operator>(const GameVersion& rhs) const
 
 	if (testL > testR)
 		return true;
+	if (testL < testR)
+		return false;
 
-	if (testL == testR)
-	{
-		testL = 0;
-		testR = 0;
-		if (secondPart)
-			testL = *secondPart;
-		if (rhs.secondPart)
-			testR = *rhs.secondPart;
+	testL = 0;
+	testR = 0;
+	if (secondPart)
+		testL = *secondPart;
+	if (rhs.secondPart)
+		testR = *rhs.secondPart;
 
-		if (testL > testR)
-			return true;
+	if (testL > testR)
+		return true;
+	if (testL < testR)
+		return false;
 
-		if (testL == testR)
-		{
-			testL = 0;
-			testR = 0;
-			if (thirdPart)
-				testL = *thirdPart;
-			if (rhs.thirdPart)
-				testR = *rhs.thirdPart;
+	testL = 0;
+	testR = 0;
+	if (thirdPart)
+		testL = *thirdPart;
+	if (rhs.thirdPart)
+		testR = *rhs.thirdPart;
 
-			if (testL > testR)
-				return true;
+	if (testL > testR)
+		return true;
+	if (testL < testR)
+		return false;
 
-			if (testL == testR)
-			{
-				testL = 0;
-				testR = 0;
-				if (fourthPart)
-					testL = *fourthPart;
-				if (rhs.fourthPart)
-					testR = *rhs.fourthPart;
+	testL = 0;
+	testR = 0;
+	if (fourthPart)
+		testL = *fourthPart;
+	if (rhs.fourthPart)
+		testR = *rhs.fourthPart;
 
-				if (testL > testR)
-					return true;
-			}
-		}
-	}
+	if (testL > testR)
+		return true;
 
 	return false;
 }
@@ -132,45 +129,42 @@ bool GameVersion::operator<(const GameVersion& rhs) const
 
 	if (testL < testR)
 		return true;
+	if (testL > testR)
+		return false;
 
-	if (testL == testR)
-	{
-		testL = 0;
-		testR = 0;
-		if (secondPart)
-			testL = *secondPart;
-		if (rhs.secondPart)
-			testR = *rhs.secondPart;
+	testL = 0;
+	testR = 0;
+	if (secondPart)
+		testL = *secondPart;
+	if (rhs.secondPart)
+		testR = *rhs.secondPart;
 
-		if (testL < testR)
-			return true;
+	if (testL < testR)
+		return true;
+	if (testL > testR)
+		return false;
 
-		if (testL == testR)
-		{
-			testL = 0;
-			testR = 0;
-			if (thirdPart)
-				testL = *thirdPart;
-			if (rhs.thirdPart)
-				testR = *rhs.thirdPart;
+	testL = 0;
+	testR = 0;
+	if (thirdPart)
+		testL = *thirdPart;
+	if (rhs.thirdPart)
+		testR = *rhs.thirdPart;
 
-			if (testL < testR)
-				return true;
+	if (testL < testR)
+		return true;
+	if (testL > testR)
+		return false;
 
-			if (testL == testR)
-			{
-				testL = 0;
-				testR = 0;
-				if (fourthPart)
-					testL = *fourthPart;
-				if (rhs.fourthPart)
-					testR = *rhs.fourthPart;
+	testL = 0;
+	testR = 0;
+	if (fourthPart)
+		testL = *fourthPart;
+	if (rhs.fourthPart)
+		testR = *rhs.fourthPart;
 
-				if (testL < testR)
-					return true;
-			}
-		}
-	}
+	if (testL < testR)
+		return true;
 
 	return false;
 }
