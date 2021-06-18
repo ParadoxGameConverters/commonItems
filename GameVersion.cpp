@@ -290,7 +290,7 @@ std::string GameVersion::toString() const
 	else
 		toReturn += "0.";
 	if (fourthPart)
-		toReturn += std::to_string(*fourthPart) + ".";
+		toReturn += std::to_string(*fourthPart);
 	else
 		toReturn += "0";
 
@@ -322,7 +322,7 @@ std::string GameVersion::toShortString() const
 	if (firstPart)
 	{
 		if (*firstPart > 0)
-			nameString = std::to_string(*secondPart) + nameString;
+			nameString = std::to_string(*firstPart) + nameString;
 		else
 			nameString = "0" + nameString;
 	}
