@@ -333,7 +333,7 @@ std::string GameVersion::toShortString() const
 bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 {
 	// Largerish is intended for fuzzy comparisons like "converter works with up to 1.9",
-	// so everything incoming on rhs from 0.0.0.0 to 1.9.x.y will match, (where x and y are > 0),
+	// so everything incoming on rhs from 0.0.0.0 to 1.9.x.y will match, (where x and y are >= 0),
 	// thus overshooting the internal "1.9.0.0" setup. This works if ".0.0" are actually undefined.
 
 	auto testDigit = 0;
