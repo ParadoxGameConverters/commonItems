@@ -300,32 +300,17 @@ std::string GameVersion::toString() const
 std::string GameVersion::toShortString() const
 {
 	std::string nameString;
-	if (fourthPart && *fourthPart > 0)
+	if (fourthPart)
 		nameString = "." + std::to_string(*fourthPart);
 
 	if (thirdPart)
-	{
-		if (*thirdPart > 0)
-			nameString = "." + std::to_string(*thirdPart) + nameString;
-		else if (!nameString.empty())
-			nameString = ".0" + nameString;
-	}
+		nameString = "." + std::to_string(*thirdPart) + nameString;
 
 	if (secondPart)
-	{
-		if (*secondPart > 0)
-			nameString = "." + std::to_string(*secondPart) + nameString;
-		else if (!nameString.empty())
-			nameString = ".0" + nameString;
-	}
+		nameString = "." + std::to_string(*secondPart) + nameString;
 
 	if (firstPart)
-	{
-		if (*firstPart > 0)
-			nameString = std::to_string(*firstPart) + nameString;
-		else
-			nameString = "0" + nameString;
-	}
+		nameString = std::to_string(*firstPart) + nameString;
 
 	return nameString;
 }

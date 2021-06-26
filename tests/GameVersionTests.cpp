@@ -287,7 +287,7 @@ TEST(GameVersion_Tests, GameVersionFullNameReturned)
 	const GameVersion version2("1.3.0");
 	const GameVersion version3("1.3");
 	const GameVersion version4("1");
-	const GameVersion version5("0");
+	const GameVersion version5("");
 
 	EXPECT_EQ("1.3.0.3", version1.toString());
 	EXPECT_EQ("1.3.0.0", version2.toString());
@@ -301,14 +301,14 @@ TEST(GameVersion_Tests, GameVersionShortNameReturned)
 	const GameVersion version1("1.3.0.3");
 	const GameVersion version2("1.3.0");
 	const GameVersion version3("1.0");
-	const GameVersion version4("1.0.0.1");
-	const GameVersion version5("0.0.0.0");
+	const GameVersion version4("1");
+	const GameVersion version5("");
 
 	EXPECT_EQ("1.3.0.3", version1.toShortString());
-	EXPECT_EQ("1.3", version2.toShortString());
-	EXPECT_EQ("1", version3.toShortString());
-	EXPECT_EQ("1.0.0.1", version4.toShortString());
-	EXPECT_EQ("0", version5.toShortString());
+	EXPECT_EQ("1.3.0", version2.toShortString());
+	EXPECT_EQ("1.0", version3.toShortString());
+	EXPECT_EQ("1", version4.toShortString());
+	EXPECT_EQ("", version5.toShortString());
 }
 
 TEST(GameVersion_Tests, LargerishFalseForLarger)
