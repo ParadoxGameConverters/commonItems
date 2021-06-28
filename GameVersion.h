@@ -50,9 +50,12 @@ class GameVersion: commonItems::convenientParser
 
 	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
 
-	[[nodiscard]] static std::optional<GameVersion> extractLauncherVersion(const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
-	[[nodiscard]] static std::optional<GameVersion> extractReadMeVersion(const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
-	[[nodiscard]] static std::optional<GameVersion> extractChangeLogVersion(const std::string& filePath); // extracts version from CK2 ChangeLog.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(
+		 const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(
+		 const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(
+		 const std::string& filePath); // extracts version from CK2 ChangeLog.txt.
 
   private:
 	void registerKeys();

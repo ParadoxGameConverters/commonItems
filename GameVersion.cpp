@@ -349,7 +349,7 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 	return true;
 }
 
-std::optional<GameVersion> GameVersion::extractLauncherVersion(const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
 {
 	// use this for modern PDX games, point filePath to launcher-settings.json to get installation version.
 
@@ -409,7 +409,7 @@ std::optional<GameVersion> GameVersion::extractLauncherVersion(const std::string
 	return std::nullopt;
 }
 
-std::optional<GameVersion> GameVersion::extractReadMeVersion(const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
 {
 	// Use this for Vic2 ReadMe.txt/Readme.txt. Be sure to check both as name changes across versions, and it's not
 	// internally consistent on windows. Steam update from one version to another can in fact *not* change the case on
@@ -459,7 +459,7 @@ std::optional<GameVersion> GameVersion::extractReadMeVersion(const std::string& 
 	}
 }
 
-std::optional<GameVersion> GameVersion::extractChangeLogVersion(const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
 {
 	// Use this to get CK2 installation version from CK2's ChangeLog.txt.
 
