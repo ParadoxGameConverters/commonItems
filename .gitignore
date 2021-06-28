@@ -7,7 +7,6 @@ Analysis
 AnalysisIntermediate
 testResults
 *testResults*
-changelog.txt
 *.opensdf
 *.opendb
 *.sdf

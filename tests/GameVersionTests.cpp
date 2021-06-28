@@ -380,3 +380,101 @@ TEST(GameVersion_Tests, LargerishForActualIntendedZeroWithoutSubversions)
 	requiredVersion = GameVersion("1.0.0");
 	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("1.9.1")));
 }
+
+TEST(GameVersion_Tests, extractLauncherVersionExtractsGameVersion)
+{
+	const auto version = GameVersion::extractLauncherVersion("launcher-settings.json");
+	
+	EXPECT_EQ(GameVersion("1.31.5"), *version);
+}
+
+TEST(GameVersion_Tests, extractLauncherVersionReturnsNulloptForMissingFile)
+{
+	const auto version = GameVersion::extractLauncherVersion("launcher-settings.json2");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractLauncherVersionReturnsNulloptForMissingRawVersion)
+{
+	const auto version = GameVersion::extractLauncherVersion("ChangeLog.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractLauncherVersionReturnsNulloptForBrokenRawVersion)
+{
+	const auto version = GameVersion::extractLauncherVersion("broken-settings.json");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractLauncherVersionReturnsNulloptForNonsenseRawVersion)
+{
+	const auto version = GameVersion::extractLauncherVersion("broken-settings2.json");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractLauncherVersionReturnsVersionForChangedRawVersion)
+{
+	const auto version = GameVersion::extractLauncherVersion("changed-settings.json");
+
+	EXPECT_EQ(GameVersion("1.31.5"), *version);
+}
+
+TEST(GameVersion_Tests, extractChangeLogVersionExtractsGameVersion)
+{
+	const auto version = GameVersion::extractChangeLogVersion("ChangeLog.txt");
+
+	EXPECT_EQ(GameVersion("3.3.3"), *version);
+}
+
+TEST(GameVersion_Tests, extractChangeLogVersionReturnsNulloptForMissingFile)
+{
+	const auto version = GameVersion::extractChangeLogVersion("ChangeLog.txt2");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractChangeLogVersionReturnsNulloptForBrokenFile)
+{
+	const auto version = GameVersion::extractChangeLogVersion("changed-settings.json");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractChangeLogVersionReturnsNulloptForNonsenseVersion)
+{
+	const auto version = GameVersion::extractChangeLogVersion("BrokenLog.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractReadMeVersionExtractsGameVersion)
+{
+	const auto version = GameVersion::extractReadMeVersion("Readme.txt");
+
+	EXPECT_EQ(GameVersion("3.3"), *version);
+}
+
+TEST(GameVersion_Tests, extractReadMeVersionReturnsNulloptForMissingFile)
+{
+	const auto version = GameVersion::extractReadMeVersion("Readme.txt2");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractReadMeVersionReturnsNulloptForBrokenFile)
+{
+	const auto version = GameVersion::extractReadMeVersion("changed-settings.json");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractReadMeVersionReturnsNulloptForNonsenseVersion)
+{
+	const auto version = GameVersion::extractReadMeVersion("BrokenMe.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
