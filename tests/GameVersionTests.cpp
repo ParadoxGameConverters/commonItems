@@ -423,6 +423,13 @@ TEST(GameVersion_Tests, extractVersionFromLauncherReturnsVersionForChangedRawVer
 	EXPECT_EQ(GameVersion("1.31.5"), *version);
 }
 
+TEST(GameVersion_Tests, extractVersionFromLauncherReturnsVersionForRome)
+{
+	const auto version = GameVersion::extractVersionFromLauncher("rome-settings.json");
+
+	EXPECT_EQ(GameVersion("2.0.3"), *version);
+}
+
 TEST(GameVersion_Tests, extractVersionFromReadMeExtractsGameVersion)
 {
 	const auto version = GameVersion::extractVersionFromReadMe("Readme.txt");

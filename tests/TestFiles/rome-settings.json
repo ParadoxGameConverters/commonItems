@@ -1,0 +1,13 @@
+{
+    "browserDlcUrl": "https://www.paradoxplaza.com/games/?prefn1=pdx-brand&prefn2=pdx-type&prefv1=EU4%7CEuropa%20Universalis&prefv2=dlc",
+    "distPlatform": "steam",
+    "exeArgs": [
+        "-enabletelemetry"
+    ],
+    "exePath": "eu4.exe",
+    "gameDataPath": "%USER_DOCUMENTS%/Paradox Interactive/Europa Universalis IV",
+    "gameId": "eu4",
+    "ingameSettingsLayoutPath": "settings-layout.json",
+    "themeFile": "launcher-assets/theme-settings.json",
+    "version": "2.0.3"
+}

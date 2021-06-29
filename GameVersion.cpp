@@ -359,53 +359,71 @@ std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::st
 		return std::nullopt;
 	}
 
-	std::ifstream versionFile(filePath);
-	if (!versionFile.is_open())
+	auto result = extractVersionByStringFromLauncher("rawVersion", filePath);
+	if (!result)
 	{
-		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " cannot be opened.";
+		// imperator rome?
+		result = extractVersionByStringFromLauncher("version", filePath);
+	}
+	if (!result)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " does not contain installation version!";
 		return std::nullopt;
 	}
+	return result;
+}
+
+std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString,
+	 const std::string& filePath)
+{
+
+	std::ifstream versionFile(filePath);
+	if (!versionFile.is_open())
+		return std::nullopt;
 
 	while (!versionFile.eof())
 	{
 		std::string line;
 		std::getline(versionFile, line);
-		if (line.find("rawVersion") == std::string::npos)
+		if (line.find(versionString) == std::string::npos)
 			continue;
 		auto pos = line.find(':');
 		if (pos == std::string::npos)
 		{
-			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			versionFile.close();
 			return std::nullopt;
 		}
+
 		line = line.substr(pos + 1, line.length());
 		pos = line.find_first_of('\"');
 		if (pos == std::string::npos)
 		{
-			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			versionFile.close();
 			return std::nullopt;
 		}
+
 		line = line.substr(pos + 1, line.length());
 		pos = line.find_first_of('\"');
 		if (pos == std::string::npos)
 		{
-			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			versionFile.close();
 			return std::nullopt;
 		}
+
 		line = line.substr(0, pos);
 
 		try
 		{
 			return GameVersion(line);
 		}
-		catch (std::exception& e)
+		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "Failure extracting version - rawVersion: " << line << " is broken: " << e.what();
+			versionFile.close();
 			return std::nullopt;
 		}
 	}
 
-	Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " doesn't contain \"rawVersion\".";
+	versionFile.close();
 	return std::nullopt;
 }
 
