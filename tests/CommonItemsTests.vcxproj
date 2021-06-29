@@ -235,6 +235,11 @@
   <ItemGroup>
     <CopyFileToFolders Include="TestFiles\BrokenLog.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\rome-settings.json">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

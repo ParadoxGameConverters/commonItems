@@ -169,5 +169,8 @@
     <CopyFileToFolders Include="TestFiles\emptyVersion.txt">
       <Filter>TestFiles</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\rome-settings.json">
+      <Filter>TestFiles</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

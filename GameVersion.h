@@ -52,6 +52,8 @@ class GameVersion: commonItems::convenientParser
 
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(
 		 const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString,
+		 const std::string& filePath);
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(
 		 const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(
