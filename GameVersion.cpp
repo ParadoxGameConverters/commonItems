@@ -1,7 +1,8 @@
 #include "GameVersion.h"
 #include "CommonRegexes.h"
+#include "OSCompatibilityLayer.h"
 #include "ParserHelpers.h"
-#include <sstream>
+#include <fstream>
 
 GameVersion::GameVersion(std::string version)
 {
@@ -346,4 +347,171 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 		return false;
 
 	return true;
+}
+
+std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
+{
+	// use this for modern PDX games, point filePath to launcher-settings.json to get installation version.
+
+	if (!commonItems::DoesFileExist(filePath))
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " does not exist.";
+		return std::nullopt;
+	}
+
+	std::ifstream versionFile(filePath);
+	if (!versionFile.is_open())
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " cannot be opened.";
+		return std::nullopt;
+	}
+
+	while (!versionFile.eof())
+	{
+		std::string line;
+		std::getline(versionFile, line);
+		if (line.find("rawVersion") == std::string::npos)
+			continue;
+		auto pos = line.find(':');
+		if (pos == std::string::npos)
+		{
+			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			return std::nullopt;
+		}
+		line = line.substr(pos + 1, line.length());
+		pos = line.find_first_of('\"');
+		if (pos == std::string::npos)
+		{
+			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			return std::nullopt;
+		}
+		line = line.substr(pos + 1, line.length());
+		pos = line.find_first_of('\"');
+		if (pos == std::string::npos)
+		{
+			Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken rawVersion: " << line;
+			return std::nullopt;
+		}
+		line = line.substr(0, pos);
+
+		try
+		{
+			return GameVersion(line);
+		}
+		catch (std::exception& e)
+		{
+			Log(LogLevel::Warning) << "Failure extracting version - rawVersion: " << line << " is broken: " << e.what();
+			return std::nullopt;
+		}
+	}
+
+	Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " doesn't contain \"rawVersion\".";
+	return std::nullopt;
+}
+
+std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
+{
+	// Use this for Vic2 ReadMe.txt/Readme.txt. Be sure to check both as name changes across versions, and it's not
+	// internally consistent on windows. Steam update from one version to another can in fact *not* change the case on
+	// the file, even if fresh reinstallation would!
+
+	std::ifstream versionFile(filePath);
+	if (!versionFile.is_open())
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " cannot be opened.";
+		return std::nullopt;
+	}
+
+	std::string line;
+	std::getline(versionFile, line); // skip first line
+	if (versionFile.eof())
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " is broken.";
+		return std::nullopt;
+	}
+	std::getline(versionFile, line);
+
+	auto pos = line.find(" below");
+	if (pos == std::string::npos)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " is broken.";
+		return std::nullopt;
+	}
+
+	line = line.substr(0, pos);
+	pos = line.find_last_of(' ');
+	line = line.substr(pos + 1, line.length());
+
+	if (!std::isdigit(*line.begin()))
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken version.";
+		return std::nullopt;
+	}
+
+	try
+	{
+		return GameVersion(line);
+	}
+	catch (std::exception& e)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << line << " is broken: " << e.what();
+		return std::nullopt;
+	}
+}
+
+std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
+{
+	// Use this to get CK2 installation version from CK2's ChangeLog.txt.
+
+	if (!commonItems::DoesFileExist(filePath))
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " does not exist.";
+		return std::nullopt;
+	}
+
+	std::ifstream versionFile(filePath);
+	if (!versionFile.is_open())
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " cannot be opened.";
+		return std::nullopt;
+	}
+
+	std::string line;
+	std::getline(versionFile, line);
+	std::getline(versionFile, line);
+	if (versionFile.eof())
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " is broken.";
+		return std::nullopt;
+	}
+	std::getline(versionFile, line);
+
+	auto pos = line.find_first_of(' ');
+	if (pos == std::string::npos)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken version.";
+		return std::nullopt;
+	}
+	line = line.substr(pos + 1, line.length());
+	pos = line.find_first_of(' ');
+	if (pos == std::string::npos)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken version.";
+		return std::nullopt;
+	}
+	line = line.substr(0, pos);
+	if (!std::isdigit(*line.begin()))
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken version.";
+		return std::nullopt;
+	}
+	try
+	{
+		return GameVersion(line);
+	}
+	catch (std::exception& e)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << line << " is broken: " << e.what();
+		return std::nullopt;
+	}
 }

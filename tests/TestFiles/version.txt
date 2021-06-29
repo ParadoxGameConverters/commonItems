@@ -1,5 +1,10 @@
 # Version info
 
-version = "test-version"
-name = "test-name"
-descriptionLine = "test description"
+version = "0.1A"
+name = "Adams-prerelease"
+source = "EU4"
+minSource = "1.31"
+maxSource = "1.31.7"
+target = "Vic3"
+minTarget = "1.0"
+maxTarget = "1.1"
