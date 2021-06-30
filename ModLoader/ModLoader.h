@@ -10,7 +10,7 @@ using IncomingMods = std::vector<std::pair<std::string, std::string>>; // vector
 
 namespace commonItems
 {
-
+class ModParser;
 class ModLoader
 {
   public:
@@ -22,6 +22,8 @@ class ModLoader
 
   private:
 	void loadModDirectory(const std::string& gameDocumentsPath, const IncomingMods& incomingMods);
+	static void warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path);
+	void fileUnderCategory(const ModParser& theMod, const std::string& path);
 
 	[[nodiscard]] std::optional<std::string> getModPath(const std::string& modName) const;
 	[[nodiscard]] bool extractZip(const std::string& archive, const std::string& path) const;

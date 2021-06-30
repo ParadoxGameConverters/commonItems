@@ -118,16 +118,7 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			}
 			else
 			{
-				if (usedModName.empty())
-					Log(LogLevel::Warning)
-						 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
-								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-				else
-					Log(LogLevel::Warning)
-						 << "\t\tMod [" << usedModName
-						 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
-								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-
+				warnForInvalidPath(theMod, usedModName, usedModFilePath);
 				continue;
 			}
 		}
@@ -141,32 +132,44 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			}
 			else
 			{
-				if (usedModName.empty())
-					Log(LogLevel::Warning)
-						 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
-								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-				else
-					Log(LogLevel::Warning)
-						 << "\t\tMod [" << usedModName
-						 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
-								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+				warnForInvalidPath(theMod, usedModName, usedModFilePath);
 				continue;
 			}
 		}
 
 		// file under category.
-		if (!theMod.isCompressed())
-		{
-			possibleUncompressedMods.emplace(theMod.getName(), theMod.getPath());
-			Log(LogLevel::Info) << "\t\tFound potential mod named " << theMod.getName() << " with a mod file at "
-									  << modsPath + "/" + trimmedModFileName << " and itself at " << theMod.getPath();
-		}
-		else
-		{
-			possibleCompressedMods.emplace(theMod.getName(), theMod.getPath());
-			Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at "
-									  << modsPath << "/" << trimmedModFileName << " and itself at " << theMod.getPath();
-		}
+		fileUnderCategory(theMod, trimmedModFileName + "/" + modsPath);
+	}
+}
+
+void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod,
+	 const std::string& name,
+	 const std::string& path)
+{
+	if (name.empty())
+		Log(LogLevel::Warning)
+			 << "\t\tMod at " + path + " points to " + theMod.getPath() +
+					  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+	else
+		Log(LogLevel::Warning)
+			 << "\t\tMod [" << name
+			 << "] at " + path + " points to " + theMod.getPath() +
+					  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+}
+
+void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const std::string& path)
+{
+	if (!theMod.isCompressed())
+	{
+		possibleUncompressedMods.emplace(theMod.getName(), theMod.getPath());
+		Log(LogLevel::Info) << "\t\tFound potential mod named " << theMod.getName() << " with a mod file at " << path
+								  << " and itself at " << theMod.getPath();
+	}
+	else
+	{
+		possibleCompressedMods.emplace(theMod.getName(), theMod.getPath());
+		Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at " << path
+								  << " and itself at " << theMod.getPath();
 	}
 }
 
