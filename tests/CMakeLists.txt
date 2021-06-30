@@ -3,6 +3,7 @@ project(CommonItemsTests)
 
 # Include diretories
 include_directories(/usr/include)
+include_directories("../ZipLib")
 link_directories(/usr/lib)
 
 # Set the compiler options
@@ -16,6 +17,7 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 
 include_directories(googletest/googletest/include/gtest)
 add_subdirectory("googletest" "googletest")
+add_subdirectory(../ZipLib [binary_dir])
 
 ################################################################################
 # Source groups
@@ -40,6 +42,8 @@ set(commonItems
     "../LinuxUtils.cpp"
     "../Log.cpp"
     "../Log.h"
+    "../ModLoader/ModLoader.h"
+    "../ModLoader/ModParser.h"
     "../OSCommonLayer.cpp"
     "../OSCompatibilityLayer.h"
     "../Parser.cpp"
@@ -60,6 +64,8 @@ set(tests
     "GameVersionTests.cpp"
     "iconvliteTests.cpp"
     "LogTests.cpp"
+    "ModLoaderTests.cpp"
+    "ModParserTests.cpp"
     "OSCompatibilityLayerTests.cpp"
     "ParserHelperTests.cpp"
     "ParserTests.cpp"
@@ -91,5 +97,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ################################
 enable_testing()
 # Link test executable against gtest & gtest_main
-target_link_libraries(${PROJECT_NAME} gtest gtest_main )
+target_link_libraries(${PROJECT_NAME} gtest gtest_main ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
