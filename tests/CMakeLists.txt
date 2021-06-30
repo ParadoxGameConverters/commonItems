@@ -7,7 +7,7 @@ include_directories("../ZipLib")
 link_directories(/usr/lib)
 
 # Set the compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -g -O0 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -g -O0")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 # Create OBJECT_DIR variable
