@@ -22,6 +22,12 @@ class ModLoader
 
   private:
 	void loadModDirectory(const std::string& gameDocumentsPath, const IncomingMods& incomingMods);
+	void processLoadedMod(ModParser& theMod,
+		 const std::string& modName,
+		 const std::string& modFileName,
+		 const std::string& modPath,
+		 const std::string& modsPath,
+		 const std::string& gameDocumentsPath);
 	static void warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path);
 	void fileUnderCategory(const ModParser& theMod, const std::string& path);
 

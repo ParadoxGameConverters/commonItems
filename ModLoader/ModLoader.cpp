@@ -100,46 +100,55 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 										  << "! Mod will not be useable for conversions.";
 			continue;
 		}
-
-		if (!theMod.isValid())
-		{
-			Log(LogLevel::Warning) << "\t\tMod at " << modsPath + "/" + trimmedModFileName << " does not look valid.";
-			continue;
-		}
-
-		// Fix potential pathing issues.
-		if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
-		{
-			// Maybe we have a relative path
-			if (DoesFolderExist(gameDocumentsPath + "/" + theMod.getPath()))
-			{
-				// fix this.
-				theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
-			}
-			else
-			{
-				warnForInvalidPath(theMod, usedModName, usedModFilePath);
-				continue;
-			}
-		}
-		else if (theMod.isCompressed() && !DoesFileExist(theMod.getPath()))
-		{
-			// Maybe we have a relative path
-			if (DoesFileExist(gameDocumentsPath + "/" + theMod.getPath()))
-			{
-				// fix this.
-				theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
-			}
-			else
-			{
-				warnForInvalidPath(theMod, usedModName, usedModFilePath);
-				continue;
-			}
-		}
-
-		// file under category.
-		fileUnderCategory(theMod, trimmedModFileName + "/" + modsPath);
+		processLoadedMod(theMod, usedModName, trimmedModFileName, usedModFilePath, modsPath, gameDocumentsPath);
 	}
+}
+
+void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
+	 const std::string& modName,
+	 const std::string& modFileName,
+	 const std::string& modPath,
+	 const std::string& modsPath,
+	 const std::string& gameDocumentsPath)
+{
+	if (!theMod.isValid())
+	{
+		Log(LogLevel::Warning) << "\t\tMod at " << modsPath + "/" + modFileName << " does not look valid.";
+		return;
+	}
+
+	// Fix potential pathing issues.
+	if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
+	{
+		// Maybe we have a relative path
+		if (DoesFolderExist(gameDocumentsPath + "/" + theMod.getPath()))
+		{
+			// fix this.
+			theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+		}
+		else
+		{
+			warnForInvalidPath(theMod, modName, modPath);
+			return;
+		}
+	}
+	else if (theMod.isCompressed() && !DoesFileExist(theMod.getPath()))
+	{
+		// Maybe we have a relative path
+		if (DoesFileExist(gameDocumentsPath + "/" + theMod.getPath()))
+		{
+			// fix this.
+			theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+		}
+		else
+		{
+			warnForInvalidPath(theMod, modName, modPath);
+			return;
+		}
+	}
+
+	// file under category.
+	fileUnderCategory(theMod, modsPath + "/" + modFileName);
 }
 
 void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod,
