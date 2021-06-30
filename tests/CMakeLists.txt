@@ -16,7 +16,8 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 
 include_directories(googletest/googletest/include/gtest)
 include_directories(googletest/googlemock/include/gmock)
-add_subdirectory("googletest" "googletest" "googlemock")
+add_subdirectory("googletest" "googletest")
+add_subdirectory("googlemock" "googlemock")
 add_subdirectory(../ZipLib [binary_dir])
 
 ################################################################################
