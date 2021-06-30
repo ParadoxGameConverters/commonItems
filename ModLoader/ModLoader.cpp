@@ -47,7 +47,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 
 		// All verified mods go into usableMods
 		Log(LogLevel::Info) << "\t\t->> Found potentially useful [" << usedModName << "]: " << *possibleModPath + "/";
-		usableMods.insert(std::pair(usedModName, *possibleModPath + "/"));
+		usableMods.emplace(usedModName, *possibleModPath + "/");
 	}
 }
 
@@ -68,11 +68,11 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			if (usedModName.empty())
 				Log(LogLevel::Warning)
 					 << "\t\tSavegame uses mod at " << usedModFilePath
-					 << " which is not present on disk.  Skipping at your risk, but this can greatly affect conversion.";
+					 << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else
 				Log(LogLevel::Warning)
 					 << "\t\tSavegame uses [" << usedModName << "] at " << usedModFilePath
-					 << " which is not present on disk.  Skipping at your risk, but this can greatly affect conversion.";
+					 << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			continue;
 		}
 
