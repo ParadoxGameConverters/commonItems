@@ -162,7 +162,7 @@ void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const st
 	if (!theMod.isCompressed())
 	{
 		possibleUncompressedMods.emplace(theMod.getName(), theMod.getPath());
-		Log(LogLevel::Info) << "\t\tFound potential mod [" << theMod.getName() << "] with a mod file at " << path
+		Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at " << path
 								  << " and itself at " << theMod.getPath();
 	}
 	else
