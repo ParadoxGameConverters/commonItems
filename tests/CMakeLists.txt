@@ -14,9 +14,9 @@ set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 set(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir)
 message("-- Object files will be output to: ${OBJECT_DIR}")
 
-
 include_directories(googletest/googletest/include/gtest)
-add_subdirectory("googletest" "googletest")
+include_directories(googletest/googlemock/include/gmock)
+add_subdirectory("googletest" "googletest" "googlemock")
 add_subdirectory(../ZipLib [binary_dir])
 
 ################################################################################
@@ -97,5 +97,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 ################################
 enable_testing()
 # Link test executable against gtest & gtest_main
-target_link_libraries(${PROJECT_NAME} gtest gtest_main ZIPLIB )
+target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
