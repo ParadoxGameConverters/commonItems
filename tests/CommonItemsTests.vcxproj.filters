@@ -232,5 +232,11 @@
     <CopyFileToFolders Include="TestFiles\mod\themod.mod">
       <Filter>TestFiles\mod</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.zip">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

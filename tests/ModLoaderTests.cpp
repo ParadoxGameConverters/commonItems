@@ -44,3 +44,16 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	EXPECT_THAT(mods, UnorderedElementsAre(Pair("Packed Mod", "mods/packedmod/")));
 	EXPECT_TRUE(commonItems::DoesFolderExist("mods/packedmod/"));
 }
+
+TEST(ModLoaderTests, BrokenCompressedModsAreNotSkippedEvenThoughTheyShouldBe)
+{
+	IncomingMods incomingMods;
+	incomingMods.emplace_back(std::pair("broken packed mod", "mod/brokenpacked.mod"));
+
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("TestFiles", incomingMods);
+	const auto mods = modLoader.getMods();
+
+	EXPECT_THAT(mods, UnorderedElementsAre(Pair("Broken Packed Mod", "mods/brokenpacked/")));
+	EXPECT_TRUE(commonItems::DoesFolderExist("mods/brokenpacked/"));
+}

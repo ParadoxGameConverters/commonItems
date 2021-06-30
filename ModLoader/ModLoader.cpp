@@ -34,29 +34,20 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 	auto allMods = possibleUncompressedMods;
 	allMods.insert(possibleCompressedMods.begin(), possibleCompressedMods.end());
 
-	// With a list of all detected and matched mods, we unpack the compressed ones if any and store the result.
+	// With a list of all detected and matched mods, we unpack the compressed ones (if any) and store the results.
 	for (const auto& usedModName: std::views::keys(allMods))
 	{
-		// This invocation (getModPath) will unpack any compressed mods into our converter's folder.
-		if (auto possibleModPath = getModPath(usedModName); possibleModPath)
+		// This invocation will unpack any compressed mods into our converter's folder, and skip already unpacked ones.
+		const auto possibleModPath = uncompressAndReturnNewPath(usedModName);
+		if (!possibleModPath)
 		{
-			if (!DoesFolderExist(*possibleModPath) && !DoesFileExist(*possibleModPath))
-			{
-				Log(LogLevel::Warning) << "\t\t" << usedModName
-											  << " could not be found in the specified mod directory. Tried: " << *possibleModPath;
-				continue;
-			}
+			Log(LogLevel::Warning) << "\t\tFailure unpacking " << usedModName << ", skipping this mod at your risk.";
+			continue;
+		}
 
-			// All verified mods go into usableMods
-			Log(LogLevel::Info) << "\t\t->> Found potentially useful [" << usedModName << "]: " << *possibleModPath + "/";
-			usableMods.insert(std::pair(usedModName, *possibleModPath + "/"));
-		}
-		else
-		{
-			Log(LogLevel::Warning)
-				 << "\t\tNo path could be found for " << usedModName
-				 << ". Check that the mod is present and that the .mod file specifies the path for the mod";
-		}
+		// All verified mods go into usableMods
+		Log(LogLevel::Info) << "\t\t->> Found potentially useful [" << usedModName << "]: " << *possibleModPath + "/";
+		usableMods.insert(std::pair(usedModName, *possibleModPath + "/"));
 	}
 }
 
@@ -182,7 +173,7 @@ void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const st
 	}
 }
 
-std::optional<std::string> commonItems::ModLoader::getModPath(const std::string& modName) const
+std::optional<std::string> commonItems::ModLoader::uncompressAndReturnNewPath(const std::string& modName) const
 {
 	if (const auto& mod = possibleUncompressedMods.find(modName); mod != possibleUncompressedMods.end())
 	{
@@ -203,7 +194,7 @@ std::optional<std::string> commonItems::ModLoader::getModPath(const std::string&
 			{
 				Log(LogLevel::Warning) << "We're having trouble automatically uncompressing your mod.";
 				Log(LogLevel::Warning) << "Please, manually uncompress: " << archivePath;
-				Log(LogLevel::Warning) << "Into: [converter's folder]/mods/" << uncompressedName;
+				Log(LogLevel::Warning) << "Into converter's folder, mods/" << uncompressedName << " subfolder.";
 				Log(LogLevel::Warning) << "Then run the converter again. Thank you and good luck.";
 				return std::nullopt;
 			}
