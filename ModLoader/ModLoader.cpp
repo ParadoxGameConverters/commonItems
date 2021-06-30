@@ -5,7 +5,6 @@
 #include "../ZipLib/ZipFile.h"
 #include "ModParser.h"
 #include <filesystem>
-#include <fstream>
 #include <ranges>
 #include <set>
 #include <stdexcept>
@@ -85,83 +84,88 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 					 << " which is not present on disk.  Skipping at your risk, but this can greatly affect conversion.";
 			continue;
 		}
+
 		if (getExtension(trimmedModFileName) != "mod")
 			continue; // shouldn't be necessary but just in case.
+
+		// Attempt parsing .mod file
+		ModParser theMod;
 		try
 		{
-			std::ifstream modFile(fs::u8path(modsPath + "/" + trimmedModFileName));
-			ModParser theMod(modFile);
-			modFile.close();
-
-			if (!theMod.isValid())
-			{
-				Log(LogLevel::Warning) << "\t\tMod at " << modsPath + "/" + trimmedModFileName << " does not look valid.";
-				continue;
-			}
-
-			if (!theMod.isCompressed())
-			{
-				if (!DoesFolderExist(theMod.getPath()))
-				{
-					// Maybe we have a relative path
-					if (DoesFolderExist(gameDocumentsPath + "/" + theMod.getPath()))
-					{
-						// fix this.
-						theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
-					}
-					else
-					{
-						if (usedModName.empty())
-							Log(LogLevel::Warning)
-								 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
-										  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-						else
-							Log(LogLevel::Warning)
-								 << "\t\tMod [" << usedModName
-								 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
-										  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-
-						continue;
-					}
-				}
-
-				possibleUncompressedMods.emplace(theMod.getName(), theMod.getPath());
-				Log(LogLevel::Info) << "\t\tFound potential mod named " << theMod.getName() << " with a mod file at "
-										  << modsPath + "/" + trimmedModFileName << " and itself at " << theMod.getPath();
-			}
-			else
-			{
-				// Maybe we have a relative path
-				if (DoesFileExist(gameDocumentsPath + "/" + theMod.getPath()))
-				{
-					// fix this.
-					theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
-				}
-				else
-				{
-					if (!DoesFileExist(theMod.getPath()))
-					{
-						if (usedModName.empty())
-							Log(LogLevel::Warning)
-								 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
-										  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-						else
-							Log(LogLevel::Warning)
-								 << "\t\tMod [" << usedModName
-								 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
-										  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
-						continue;
-					}
-				}
-				possibleCompressedMods.emplace(theMod.getName(), theMod.getPath());
-				Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at "
-										  << modsPath << "/" << trimmedModFileName << " and itself at " << theMod.getPath();
-			}
+			theMod.parseMod(modsPath + "/" + trimmedModFileName);
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "Error while reading " << modsPath << "/" << trimmedModFileName
+			Log(LogLevel::Warning) << "\t\tError while reading " << modsPath << "/" << trimmedModFileName
 										  << "! Mod will not be useable for conversions.";
+			continue;
+		}
+
+		if (!theMod.isValid())
+		{
+			Log(LogLevel::Warning) << "\t\tMod at " << modsPath + "/" + trimmedModFileName << " does not look valid.";
+			continue;
+		}
+
+		// Fix potential pathing issues.
+		if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
+		{
+			// Maybe we have a relative path
+			if (DoesFolderExist(gameDocumentsPath + "/" + theMod.getPath()))
+			{
+				// fix this.
+				theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+			}
+			else
+			{
+				if (usedModName.empty())
+					Log(LogLevel::Warning)
+						 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
+								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+				else
+					Log(LogLevel::Warning)
+						 << "\t\tMod [" << usedModName
+						 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
+								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+
+				continue;
+			}
+		}
+		else if (theMod.isCompressed() && !DoesFileExist(theMod.getPath()))
+		{
+			// Maybe we have a relative path
+			if (DoesFileExist(gameDocumentsPath + "/" + theMod.getPath()))
+			{
+				// fix this.
+				theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+			}
+			else
+			{
+				if (usedModName.empty())
+					Log(LogLevel::Warning)
+						 << "\t\tMod at " + usedModFilePath + " points to " + theMod.getPath() +
+								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+				else
+					Log(LogLevel::Warning)
+						 << "\t\tMod [" << usedModName
+						 << "] at " + usedModFilePath + " points to " + theMod.getPath() +
+								  " which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+				continue;
+			}
+		}
+
+		// file under category.
+		if (!theMod.isCompressed())
+		{
+			possibleUncompressedMods.emplace(theMod.getName(), theMod.getPath());
+			Log(LogLevel::Info) << "\t\tFound potential mod named " << theMod.getName() << " with a mod file at "
+									  << modsPath + "/" + trimmedModFileName << " and itself at " << theMod.getPath();
+		}
+		else
+		{
+			possibleCompressedMods.emplace(theMod.getName(), theMod.getPath());
+			Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at "
+									  << modsPath << "/" << trimmedModFileName << " and itself at " << theMod.getPath();
 		}
 	}
 }

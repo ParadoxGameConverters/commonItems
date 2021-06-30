@@ -3,10 +3,23 @@
 #include "../CommonRegexes.h"
 #include "../ParserHelpers.h"
 
-commonItems::ModParser::ModParser(std::istream& theStream)
+void commonItems::ModParser::parseMod(std::istream& theStream)
 {
 	registerKeys();
 	parseStream(theStream);
+	clearRegisteredKeywords();
+
+	if (!path.empty())
+	{
+		const auto ending = getExtension(path);
+		compressed = ending == "zip" || ending == "bin";
+	}
+}
+
+void commonItems::ModParser::parseMod(const std::string& fileName)
+{
+	registerKeys();
+	parseFile(fileName);
 	clearRegisteredKeywords();
 
 	if (!path.empty())

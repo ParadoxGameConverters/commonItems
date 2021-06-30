@@ -7,7 +7,9 @@ namespace commonItems
 class ModParser: convenientParser
 {
   public:
-	explicit ModParser(std::istream& theStream);
+	ModParser() = default;
+	void parseMod(std::istream& theStream);
+	void parseMod(const std::string& fileName);
 
 	[[nodiscard]] const auto& getName() const { return name; }
 	[[nodiscard]] const auto& getPath() const { return path; }
