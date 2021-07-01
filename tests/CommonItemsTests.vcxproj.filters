@@ -13,6 +13,24 @@
     <Filter Include="TestFiles">
       <UniqueIdentifier>{4c7f9845-860d-462c-96fc-5f8db590be36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="commonItems\ModLoader">
+      <UniqueIdentifier>{92ace537-3417-4563-b6af-d049b12815c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\mod">
+      <UniqueIdentifier>{ee98048f-a7ba-415f-bfd2-cc09798c15ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\mod\themod">
+      <UniqueIdentifier>{0ab2f948-1235-421f-9e48-1db612144979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\mod\themod\common">
+      <UniqueIdentifier>{62ab09e0-7a7d-444b-a7f7-b996cfa6c71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\mod\themod\common\countries">
+      <UniqueIdentifier>{c832cb1f-e2b2-414e-b157-76775af56c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\mod\themod\common\country_tags">
+      <UniqueIdentifier>{f3e1a059-c38b-404e-8f00-dad1ab54081a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -96,6 +114,21 @@
     <ClCompile Include="ConverterVersionTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\ModLoader\ModLoader.cpp">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ModLoader\ModParser.cpp">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="ModLoaderTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="ModParserTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="googletest\googlemock\src\gmock-all.cc">
+      <Filter>gtest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -137,6 +170,12 @@
     <ClInclude Include="..\ConverterVersion.h">
       <Filter>commonItems</Filter>
     </ClInclude>
+    <ClInclude Include="..\ModLoader\ModLoader.h">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ModLoader\ModParser.h">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="TestFiles\version.txt">
@@ -171,6 +210,33 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="TestFiles\rome-settings.json">
       <Filter>TestFiles</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\themod\common\countries\Ccccountry.txt">
+      <Filter>TestFiles\mod\themod\common\countries</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\themod\common\country_tags\added_countries.txt">
+      <Filter>TestFiles\mod\themod\common\country_tags</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\brokenmod.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\missingmod.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\packedmod.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\packedmod.zip">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\themod.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.mod">
+      <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.zip">
+      <Filter>TestFiles\mod</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>
