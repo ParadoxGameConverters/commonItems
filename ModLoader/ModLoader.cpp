@@ -21,7 +21,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 
 	// We enter this function with a vector of (optional) mod names and (required) mod file locations from the savegame.
 	// We need to read all the mod files, check their paths (and potential archives for ancient mods) unpack what's
-	// necessary, and exit, with a map of updated mod names (savegame can differ from actual mod file) and mod folder
+	// necessary, and exit with a vector of updated mod names (savegame can differ from actual mod file) and mod folder
 	// locations.
 
 	// The function below reads all the incoming .mod files and verifies their internal paths/archives are correct and
