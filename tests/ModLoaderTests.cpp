@@ -13,7 +13,8 @@ TEST(ModLoaderTests, ModsCanBeLocatedUnpackedAndUpdated)
 	modLoader.loadMods("TestFiles", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	EXPECT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	ASSERT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)

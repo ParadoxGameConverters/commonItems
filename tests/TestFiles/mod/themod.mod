@@ -10,3 +10,4 @@ replace_path="common/bookmarks/"
 replace_path="common/technologies/"
 supported_version="1.31.*"
 path="mod/themod"
+dependencies={ "Packed Mod" "Missing Mod" }

@@ -1,6 +1,7 @@
 #ifndef MOD_LOADER_H
 #define MOD_LOADER_H
 #include <optional>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -10,8 +11,11 @@ struct Mod
 {
 	Mod() = default;
 	explicit Mod(const Name& theName, const Path& thePath): name(theName), path(thePath) {}
+	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies):
+		 name(theName), path(thePath), dependencies(theDependencies) {}
 	Name name;
 	Path path;
+	std::set<Name> dependencies;
 	bool operator==(const Mod& rhs) const { return rhs.name == name && rhs.path == path; }
 };
 using Mods = std::vector<Mod>;
