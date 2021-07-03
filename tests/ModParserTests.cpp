@@ -1,5 +1,7 @@
 #include "../ModLoader/ModParser.h"
 #include "gtest/gtest.h"
+#include <gmock/gmock-matchers.h>
+using testing::UnorderedElementsAre;
 
 TEST(ModParserTests, primitivesDefaultToBlank)
 {
@@ -9,6 +11,7 @@ TEST(ModParserTests, primitivesDefaultToBlank)
 
 	EXPECT_TRUE(theMod.getName().empty());
 	EXPECT_TRUE(theMod.getPath().empty());
+	EXPECT_TRUE(theMod.getDependencies().empty());
 }
 
 TEST(ModParserTests, primitivesCanBeSet)
@@ -16,11 +19,13 @@ TEST(ModParserTests, primitivesCanBeSet)
 	std::stringstream input;
 	input << "name=modName\n";
 	input << "path=modPath\n";
+	input << "dependencies = { dep1 dep2 }\n";
 	commonItems::ModParser theMod;
 	theMod.parseMod(input);
 
 	EXPECT_EQ("modName", theMod.getName());
 	EXPECT_EQ("modPath", theMod.getPath());
+	EXPECT_THAT(theMod.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
 }
 
 TEST(ModParserTests, pathCanBeSetFromArchive)

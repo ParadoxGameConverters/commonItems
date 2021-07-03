@@ -1,5 +1,6 @@
 #ifndef MOD_PARSER_H
 #define MOD_PARSER_H
+#include <set>
 #include "../ConvenientParser.h"
 
 namespace commonItems
@@ -15,6 +16,7 @@ class ModParser: convenientParser
 	[[nodiscard]] const auto& getPath() const { return path; }
 	[[nodiscard]] auto isValid() const { return !name.empty() && !path.empty(); }
 	[[nodiscard]] auto isCompressed() const { return compressed; }
+	[[nodiscard]] const auto& getDependencies() const { return dependencies; }
 
 	void setPath(const std::string& thePath) { path = thePath; }
 
@@ -24,6 +26,7 @@ class ModParser: convenientParser
 	std::string name;
 	std::string path;
 	bool compressed = false;
+	std::set<std::string> dependencies;
 };
 } // namespace commonItems
 
