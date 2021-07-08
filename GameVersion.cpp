@@ -316,6 +316,32 @@ std::string GameVersion::toShortString() const
 	return nameString;
 }
 
+std::string GameVersion::toWildCard() const
+{
+	std::string nameString;
+	if (fourthPart)
+		nameString = "." + std::to_string(*fourthPart);
+	else if (thirdPart)
+		nameString = ".*";
+
+	if (thirdPart)
+		nameString = "." + std::to_string(*thirdPart) + nameString;
+	else if (secondPart)
+		nameString = ".*";
+
+	if (secondPart)
+		nameString = "." + std::to_string(*secondPart) + nameString;
+	else if (firstPart)
+		nameString = ".*";
+
+	if (firstPart)
+		nameString = std::to_string(*firstPart) + nameString;
+	else
+		nameString = "*";
+
+	return nameString;
+}
+
 bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 {
 	// Largerish is intended for fuzzy comparisons like "converter works with up to 1.9",

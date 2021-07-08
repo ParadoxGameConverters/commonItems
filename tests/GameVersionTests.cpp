@@ -311,6 +311,21 @@ TEST(GameVersion_Tests, GameVersionShortNameReturned)
 	EXPECT_EQ("", version5.toShortString());
 }
 
+TEST(GameVersion_Tests, GameVersionWildCardReturned)
+{
+	const GameVersion version1("1.3.0.3");
+	const GameVersion version2("1.3.0");
+	const GameVersion version3("1.0");
+	const GameVersion version4("1");
+	const GameVersion version5("");
+
+	EXPECT_EQ("1.3.0.3", version1.toWildCard());
+	EXPECT_EQ("1.3.0.*", version2.toWildCard());
+	EXPECT_EQ("1.0.*", version3.toWildCard());
+	EXPECT_EQ("1.*", version4.toWildCard());
+	EXPECT_EQ("*", version5.toWildCard());
+}
+
 TEST(GameVersion_Tests, LargerishFalseForLarger)
 {
 	const GameVersion requiredVersion("2.1.1.1");
