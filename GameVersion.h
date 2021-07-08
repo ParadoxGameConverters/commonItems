@@ -47,6 +47,7 @@ class GameVersion: commonItems::convenientParser
 
 	[[nodiscard]] std::string toString() const;
 	[[nodiscard]] std::string toShortString() const;
+	[[nodiscard]] std::string toWildCard() const;
 
 	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
 
