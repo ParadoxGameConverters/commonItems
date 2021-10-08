@@ -71,3 +71,16 @@ TEST(Log_Tests, ProgressMessagesLogged)
 
 	ASSERT_EQ("[PROGRESS] Progress message\n", log.str());
 }
+
+TEST(Log_Tests, NoticeMessagesLogged)
+{
+	const std::stringstream log;
+	auto* const stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	Log(LogLevel::Notice) << "Notice message";
+
+	std::cout.rdbuf(stdOutBuf);
+
+	ASSERT_EQ("  [NOTICE] Notice message\n", log.str());
+}
