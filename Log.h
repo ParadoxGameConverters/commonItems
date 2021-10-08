@@ -14,7 +14,8 @@ enum class LogLevel
 	Warning,
 	Info,
 	Debug,
-	Progress
+	Progress,
+	Notice
 };
 
 
