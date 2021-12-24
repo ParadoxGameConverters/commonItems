@@ -146,6 +146,8 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 	std::ranges::replace(asciiPath, '>', '_');
 	std::ranges::replace(asciiPath, '|', '_');
 	asciiPath.erase(std::ranges::remove(asciiPath, '\t').begin(), asciiPath.end());
+	asciiPath.erase(std::ranges::remove(asciiPath, '\n').begin(), asciiPath.end());
+	asciiPath.erase(std::ranges::remove(asciiPath, '\r').begin(), asciiPath.end());
 
 	return asciiPath;
 }
