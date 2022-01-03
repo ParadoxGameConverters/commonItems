@@ -49,22 +49,22 @@ namespace commonItems
 {
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void
-GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
+[[deprecated("Use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void GetAllFilesInFolder(const std::string& path,
+	 std::set<std::string>& fileNames)
 {
 	fileNames = GetAllFilesInFolder(path);
 }
 std::set<std::string> GetAllSubfolders(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void GetAllSubfolders(
-	 const std::string& path,
+[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void GetAllSubfolders(const std::string& path,
 	 std::set<std::string>& subFolders)
 {
 	subFolders = GetAllSubfolders(path);
 }
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void
-GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
+[[deprecated("Use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void GetAllFilesInFolderRecursive(
+	 const std::string& path,
+	 std::set<std::string>& fileNames)
 {
 	fileNames = GetAllFilesInFolderRecursive(path);
 }

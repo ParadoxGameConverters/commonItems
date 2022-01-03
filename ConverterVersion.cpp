@@ -23,26 +23,18 @@ void commonItems::ConverterVersion::registerKeys()
 	registerSetter("version", version);
 	registerSetter("source", source);
 	registerSetter("target", target);
-	registerKeyword("minSource",
-		 [this](std::istream& theStream)
-		 {
-			 minSource = GameVersion(getString(theStream));
-		 });
-	registerKeyword("maxSource",
-		 [this](std::istream& theStream)
-		 {
-			 maxSource = GameVersion(getString(theStream));
-		 });
-	registerKeyword("minTarget",
-		 [this](std::istream& theStream)
-		 {
-			 minTarget = GameVersion(getString(theStream));
-		 });
-	registerKeyword("maxTarget",
-		 [this](std::istream& theStream)
-		 {
-			 maxTarget = GameVersion(getString(theStream));
-		 });
+	registerKeyword("minSource", [this](std::istream& theStream) {
+		minSource = GameVersion(getString(theStream));
+	});
+	registerKeyword("maxSource", [this](std::istream& theStream) {
+		maxSource = GameVersion(getString(theStream));
+	});
+	registerKeyword("minTarget", [this](std::istream& theStream) {
+		minTarget = GameVersion(getString(theStream));
+	});
+	registerKeyword("maxTarget", [this](std::istream& theStream) {
+		maxTarget = GameVersion(getString(theStream));
+	});
 	registerRegex(catchallRegex, ignoreItem);
 }
 

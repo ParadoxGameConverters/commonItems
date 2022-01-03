@@ -565,11 +565,9 @@ class foo: commonItems::parser
   public:
 	explicit foo(std::istream& theStream)
 	{
-		registerKeyword("color",
-			 [this](std::istream& theStream)
-			 {
-				 color = commonItems::Color::Factory{}.getColor(theStream);
-			 });
+		registerKeyword("color", [this](std::istream& theStream) {
+			color = commonItems::Color::Factory{}.getColor(theStream);
+		});
 		parseStream(theStream);
 	}
 

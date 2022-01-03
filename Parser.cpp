@@ -157,8 +157,7 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 	 bool isLexemeQuoted,
 	 std::istream& theStream)
 {
-	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn);
-		 match != registeredKeywordStringsStreamOnly.end())
+	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn); match != registeredKeywordStringsStreamOnly.end())
 	{
 		match->second(theStream);
 		return true;
@@ -170,14 +169,12 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 	}
 	else if (isLexemeQuoted)
 	{
-		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStringsStreamOnly.end())
+		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme); strippedMatch != registeredKeywordStringsStreamOnly.end())
 		{
 			strippedMatch->second(theStream);
 			return true;
 		}
-		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
-					strippedMatch != registeredKeywordStrings.end())
+		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme); strippedMatch != registeredKeywordStrings.end())
 		{
 			strippedMatch->second(toReturn, theStream);
 			return true;

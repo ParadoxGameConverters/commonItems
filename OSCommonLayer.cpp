@@ -69,12 +69,10 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
-	const auto success =
-		 fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
+	const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
 	if (success)
 		return true;
-	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - "
-								  << GetLastErrorString();
+	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
 	return false;
 }
 

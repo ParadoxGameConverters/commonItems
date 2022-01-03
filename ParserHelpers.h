@@ -32,8 +32,7 @@ void ignoreString(const std::string& unused, std::istream& theStream);
  * long long stringToInteger<long long>(const std::string& str, bool skipPartialMatchWarning);
  * unsigned long long stringToInteger<unsigned long long>(const std::string& str, bool skipPartialMatchWarning);
  */
-template <std::integral T>
-[[nodiscard]] T stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
+template <std::integral T> [[nodiscard]] T stringToInteger(const std::string& str, bool skipPartialMatchWarning = false);
 
 [[nodiscard]] double stringToDouble(const std::string& str);
 

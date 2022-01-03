@@ -11,10 +11,7 @@ struct Mod
 {
 	Mod() = default;
 	explicit Mod(const Name& theName, const Path& thePath): name(theName), path(thePath) {}
-	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies):
-		 name(theName), path(thePath), dependencies(theDependencies)
-	{
-	}
+	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies): name(theName), path(thePath), dependencies(theDependencies) {}
 	Name name;
 	Path path;
 	std::set<Name> dependencies;

@@ -45,14 +45,8 @@ class parser
 
 
   private:
-	inline bool tryToMatchAgainstKeywords(const std::string& toReturn,
-		 const std::string& strippedLexeme,
-		 bool isLexemeQuoted,
-		 std::istream& theStream);
-	inline bool tryToMatchAgainstRegexes(const std::string& toReturn,
-		 const std::string& strippedLexeme,
-		 bool isLexemeQuoted,
-		 std::istream& theStream);
+	inline bool tryToMatchAgainstKeywords(const std::string& toReturn, const std::string& strippedLexeme, bool isLexemeQuoted, std::istream& theStream);
+	inline bool tryToMatchAgainstRegexes(const std::string& toReturn, const std::string& strippedLexeme, bool isLexemeQuoted, std::istream& theStream);
 
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;

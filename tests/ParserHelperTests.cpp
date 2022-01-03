@@ -58,16 +58,12 @@ class Foo: commonItems::parser
   public:
 	explicit Foo(std::istream& theStream)
 	{
-		registerKeyword("key1",
-			 [this](std::istream& theStream)
-			 {
-				 value1 = commonItems::getString(theStream);
-			 });
-		registerKeyword("key2",
-			 [this](std::istream& theStream)
-			 {
-				 value2 = commonItems::getString(theStream);
-			 });
+		registerKeyword("key1", [this](std::istream& theStream) {
+			value1 = commonItems::getString(theStream);
+		});
+		registerKeyword("key2", [this](std::istream& theStream) {
+			value2 = commonItems::getString(theStream);
+		});
 		registerRegex(commonItems::catchallRegex, commonItems::ignoreAndLogItem);
 		parseStream(theStream);
 	}
@@ -318,8 +314,7 @@ TEST(ParserHelper_Tests, ULlongListAddsLlongs)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -350,8 +345,7 @@ TEST(ParserHelper_Tests, ULlongListAddsQuotedLLongs)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -372,8 +366,7 @@ TEST(ParserHelper_Tests, ULlongListAddsULlongsFromBracedBlock)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -880,12 +873,10 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit TestClass(std::istream& theStream)
 		{
-			registerKeyword("test",
-				 [this](std::istream& theStream)
-				 {
-					 const commonItems::singleString testStr(theStream);
-					 test = testStr.getString() == "yes";
-				 });
+			registerKeyword("test", [this](std::istream& theStream) {
+				const commonItems::singleString testStr(theStream);
+				test = testStr.getString() == "yes";
+			});
 			parseStream(theStream);
 		}
 		bool test = false;
@@ -896,12 +887,10 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerRegex("[a-z]",
-				 [this](const std::string& theKey, std::istream& theStream)
-				 {
-					 const TestClass newtest(theStream);
-					 theMap[theKey] = newtest.test;
-				 });
+			registerRegex("[a-z]", [this](const std::string& theKey, std::istream& theStream) {
+				const TestClass newtest(theStream);
+				theMap[theKey] = newtest.test;
+			});
 			parseStream(theStream);
 		}
 		std::map<std::string, bool> theMap;
@@ -927,12 +916,10 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerRegex("[a-z]",
-				 [this](const std::string& thekey, std::istream& theStream)
-				 {
-					 const commonItems::singleString testStr(theStream);
-					 themap[thekey] = testStr.getString() == "yes";
-				 });
+			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
+				const commonItems::singleString testStr(theStream);
+				themap[thekey] = testStr.getString() == "yes";
+			});
 			parseStream(theStream);
 		}
 		std::map<std::string, bool> themap;
