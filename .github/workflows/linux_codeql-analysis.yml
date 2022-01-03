@@ -46,6 +46,7 @@ jobs:
 
   analyze:
     name: Analyze
+    if: github.repository_owner != 'ParadoxGameConverters'
     runs-on: ubuntu-latest
 
     strategy:
