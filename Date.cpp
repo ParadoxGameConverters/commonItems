@@ -112,5 +112,5 @@ int date::calculateDayInYear() const
 	if (month >= 1 && month <= 12)
 		return day + daysByMonth[static_cast<size_t>(month) - 1];
 	else
-		return day;	
+		return day;
 }

@@ -21,7 +21,7 @@ class ConverterVersion: convenientParser
 	[[nodiscard]] const auto& getMaxSource() const { return maxSource; }
 	[[nodiscard]] const auto& getMinTarget() const { return minTarget; }
 	[[nodiscard]] const auto& getMaxTarget() const { return maxTarget; }
-	
+
 	[[nodiscard]] std::string getDescription() const;
 
 	friend std::ostream& operator<<(std::ostream& output, const ConverterVersion& version);

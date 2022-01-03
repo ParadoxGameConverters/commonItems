@@ -109,7 +109,8 @@ std::string convertUTF8To8859_15(const std::string& UTF8)
 
 std::string convertUTF8ToWin125_(const std::string& UTF8, const int codepage)
 {
-	const int requiredSize = WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
+	const int requiredSize =
+		 WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
 	char* asciiArray = new char[requiredSize];
 
 	if (0 ==

@@ -23,18 +23,26 @@ void commonItems::ConverterVersion::registerKeys()
 	registerSetter("version", version);
 	registerSetter("source", source);
 	registerSetter("target", target);
-	registerKeyword("minSource", [this](std::istream& theStream) {
-		minSource = GameVersion(getString(theStream));
-	});
-	registerKeyword("maxSource", [this](std::istream& theStream) {
-		maxSource = GameVersion(getString(theStream));
-	});
-	registerKeyword("minTarget", [this](std::istream& theStream) {
-		minTarget = GameVersion(getString(theStream));
-	});
-	registerKeyword("maxTarget", [this](std::istream& theStream) {
-		maxTarget = GameVersion(getString(theStream));
-	});
+	registerKeyword("minSource",
+		 [this](std::istream& theStream)
+		 {
+			 minSource = GameVersion(getString(theStream));
+		 });
+	registerKeyword("maxSource",
+		 [this](std::istream& theStream)
+		 {
+			 maxSource = GameVersion(getString(theStream));
+		 });
+	registerKeyword("minTarget",
+		 [this](std::istream& theStream)
+		 {
+			 minTarget = GameVersion(getString(theStream));
+		 });
+	registerKeyword("maxTarget",
+		 [this](std::istream& theStream)
+		 {
+			 maxTarget = GameVersion(getString(theStream));
+		 });
 	registerRegex(catchallRegex, ignoreItem);
 }
 
@@ -55,17 +63,17 @@ std::ostream& commonItems::operator<<(std::ostream& output, const ConverterVersi
 {
 	output << "\n\n";
 	output << "************ -= The Paradox Game Converters Group =- *****************\n";
-	
+
 	if (!version.version.empty() && !version.name.empty())
 		output << "* Converter version " << version.version << " \"" << version.name << "\"\n";
-	
+
 	output << "* " << version.getDescription() << "\n";
 	output << "* Built on " << __TIMESTAMP__ << "\n";
 
 	std::string footerTitle = " + " + version.source + " To " + version.target + " + ";
 	if (footerTitle.length() >= 68)
 	{
-		footerTitle = "*" + footerTitle + "*\n";		
+		footerTitle = "*" + footerTitle + "*\n";
 	}
 	else
 	{
@@ -76,9 +84,9 @@ std::ostream& commonItems::operator<<(std::ostream& output, const ConverterVersi
 		target = static_cast<int>(70 - footerTitle.length());
 		for (auto counter = 0; counter < target; counter++)
 			footerTitle += "*";
-		footerTitle += "\n";		
+		footerTitle += "\n";
 	}
-	
+
 	output << footerTitle;
 	return output;
 }

@@ -1,8 +1,8 @@
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
+#include <algorithm>
 #include <codecvt>
 #include <filesystem>
-#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -23,17 +23,18 @@ bool TryCreateFolder(const std::string& path)
 
 std::wstring GetCurrentDirectoryWString()
 {
-    // Tried straight returning wstring, but on Linux it will break if filesystem uses characters
-    // outside ascii, apparently inherent conversion is broken.
-    try {
+	// Tried straight returning wstring, but on Linux it will break if filesystem uses characters
+	// outside ascii, apparently inherent conversion is broken.
+	try
+	{
 		const auto path = fs::current_path().string();
 		return convertUTF8ToUTF16(path);
-    }
-    catch (std::exception& e)
-    {
-        Log(LogLevel::Error) << "Cannot determine current path; " << e.what();
-        return std::wstring();
-    }
+	}
+	catch (std::exception& e)
+	{
+		Log(LogLevel::Error) << "Cannot determine current path; " << e.what();
+		return std::wstring();
+	}
 }
 
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
@@ -68,7 +69,8 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
-	const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
+	const auto success =
+		 fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
 	if (success)
 		return true;
 	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - "
@@ -155,15 +157,15 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 #if _MSC_VER >= 1900 && _MSC_VER < 1920
 std::string utf16_to_utf8(std::u16string utf16_string)
 {
-    std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> conversion;
-    auto p = reinterpret_cast<const int16_t *>(utf16_string.data());
-    return conversion.to_bytes(p, p + utf16_string.size());
+	std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> conversion;
+	auto p = reinterpret_cast<const int16_t*>(utf16_string.data());
+	return conversion.to_bytes(p, p + utf16_string.size());
 }
 #else
 std::string utf16_to_utf8(const std::u16string& utf16_string)
 {
-    std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
-    return conversion.to_bytes(utf16_string);
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+	return conversion.to_bytes(utf16_string);
 }
 #endif
 
@@ -171,7 +173,7 @@ std::string utf16_to_utf8(const std::u16string& utf16_string)
 std::string UTF16ToUTF8(const std::wstring& UTF16)
 {
 	const std::u16string u16str(UTF16.begin(), UTF16.end());
-        return utf16_to_utf8(u16str);
+	return utf16_to_utf8(u16str);
 }
 
 } // namespace commonItems

@@ -55,8 +55,9 @@ GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
 	fileNames = GetAllFilesInFolder(path);
 }
 std::set<std::string> GetAllSubfolders(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void
-GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
+[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void GetAllSubfolders(
+	 const std::string& path,
+	 std::set<std::string>& subFolders)
 {
 	subFolders = GetAllSubfolders(path);
 }

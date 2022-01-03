@@ -1,5 +1,5 @@
-#include "../ParserHelpers.h"
 #include "../CommonRegexes.h"
+#include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -58,12 +58,16 @@ class Foo: commonItems::parser
   public:
 	explicit Foo(std::istream& theStream)
 	{
-		registerKeyword("key1", [this](std::istream& theStream) {
-			value1 = commonItems::getString(theStream);
-		});
-		registerKeyword("key2", [this](std::istream& theStream) {
-			value2 = commonItems::getString(theStream);
-		});
+		registerKeyword("key1",
+			 [this](std::istream& theStream)
+			 {
+				 value1 = commonItems::getString(theStream);
+			 });
+		registerKeyword("key2",
+			 [this](std::istream& theStream)
+			 {
+				 value2 = commonItems::getString(theStream);
+			 });
 		registerRegex(commonItems::catchallRegex, commonItems::ignoreAndLogItem);
 		parseStream(theStream);
 	}
@@ -77,7 +81,7 @@ TEST(ParserHelper_Tests, ignoreAndLogItemLogsIgnoredKeyword)
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	
+
 	std::stringstream input;
 	input << R"(key1=val1 key2=val2 key3=mess)";
 	Foo foo(input);
@@ -876,10 +880,12 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit TestClass(std::istream& theStream)
 		{
-			registerKeyword("test", [this](std::istream& theStream) {
-				const commonItems::singleString testStr(theStream);
-				test = testStr.getString() == "yes";
-			});
+			registerKeyword("test",
+				 [this](std::istream& theStream)
+				 {
+					 const commonItems::singleString testStr(theStream);
+					 test = testStr.getString() == "yes";
+				 });
 			parseStream(theStream);
 		}
 		bool test = false;
@@ -890,10 +896,12 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyInBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerRegex("[a-z]", [this](const std::string& theKey, std::istream& theStream) {
-				const TestClass newtest(theStream);
-				theMap[theKey] = newtest.test;
-			});
+			registerRegex("[a-z]",
+				 [this](const std::string& theKey, std::istream& theStream)
+				 {
+					 const TestClass newtest(theStream);
+					 theMap[theKey] = newtest.test;
+				 });
 			parseStream(theStream);
 		}
 		std::map<std::string, bool> theMap;
@@ -919,10 +927,12 @@ TEST(ParserHelper_Tests, ParseStreamSkipsMissingKeyOutsideBraces)
 	  public:
 		explicit WrapperClass(std::istream& theStream)
 		{
-			registerRegex("[a-z]", [this](const std::string& thekey, std::istream& theStream) {
-				const commonItems::singleString testStr(theStream);
-				themap[thekey] = testStr.getString() == "yes";
-			});
+			registerRegex("[a-z]",
+				 [this](const std::string& thekey, std::istream& theStream)
+				 {
+					 const commonItems::singleString testStr(theStream);
+					 themap[thekey] = testStr.getString() == "yes";
+				 });
 			parseStream(theStream);
 		}
 		std::map<std::string, bool> themap;

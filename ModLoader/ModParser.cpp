@@ -32,12 +32,16 @@ void commonItems::ModParser::parseMod(const std::string& fileName)
 void commonItems::ModParser::registerKeys()
 {
 	registerSetter("name", name);
-	registerRegex("path|archive", [this](const std::string& unused, std::istream& theStream) {
-		path = getString(theStream);
-	});
-	registerKeyword("dependencies", [this](std::istream& theStream) {
-		const auto theDependencies = getStrings(theStream);
-		dependencies.insert(theDependencies.begin(), theDependencies.end());
-	});
+	registerRegex("path|archive",
+		 [this](const std::string& unused, std::istream& theStream)
+		 {
+			 path = getString(theStream);
+		 });
+	registerKeyword("dependencies",
+		 [this](std::istream& theStream)
+		 {
+			 const auto theDependencies = getStrings(theStream);
+			 dependencies.insert(theDependencies.begin(), theDependencies.end());
+		 });
 	registerRegex(catchallRegex, ignoreItem);
 }

@@ -10,10 +10,13 @@ class date
 {
   public:
 	date() = default;
-	explicit date(const int year, const int month, const int day, const bool AUC): year(AUC ? convertAUCtoAD(year) : year), month(month), day(day) {}
+	explicit date(const int year, const int month, const int day, const bool AUC):
+		 year(AUC ? convertAUCtoAD(year) : year), month(month), day(day)
+	{
+	}
 	explicit date(const int year, const int month, const int day): date(year, month, day, false) {}
 	explicit date(std::string init, bool AUC);
-	explicit date(const std::string& init) : date(init, false) {}
+	explicit date(const std::string& init): date(init, false) {}
 
 	void increaseByMonths(int months);
 	void addYears(const int years) { year += years; }

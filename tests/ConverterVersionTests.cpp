@@ -4,7 +4,7 @@
 TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 {
 	commonItems::ConverterVersion converterVersion;
-	converterVersion.loadVersion("emptyVersion.txt");	
+	converterVersion.loadVersion("emptyVersion.txt");
 
 	EXPECT_TRUE(converterVersion.getName().empty());
 	EXPECT_TRUE(converterVersion.getVersion().empty());
@@ -85,7 +85,7 @@ TEST(ConverterVersion_Tests, ConverterVersionCanBeOutput)
 	{
 		std::getline(expectedStream, expectedLine);
 		std::getline(actualStream, actualLine);
-		EXPECT_EQ(expectedLine, actualLine);		
+		EXPECT_EQ(expectedLine, actualLine);
 	}
 
 	std::getline(expectedStream, expectedLine);

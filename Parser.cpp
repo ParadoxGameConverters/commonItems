@@ -141,7 +141,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 			matched = tryToMatchAgainstRegexes(toReturn, strippedLexeme, isLexemeQuoted, theStream);
-		
+
 		if (!matched)
 			gotToken = true;
 	}
@@ -157,7 +157,8 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 	 bool isLexemeQuoted,
 	 std::istream& theStream)
 {
-	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn); match != registeredKeywordStringsStreamOnly.end())
+	if (const auto& match = registeredKeywordStringsStreamOnly.find(toReturn);
+		 match != registeredKeywordStringsStreamOnly.end())
 	{
 		match->second(theStream);
 		return true;
@@ -176,7 +177,7 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 			return true;
 		}
 		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStrings.end())
+					strippedMatch != registeredKeywordStrings.end())
 		{
 			strippedMatch->second(toReturn, theStream);
 			return true;

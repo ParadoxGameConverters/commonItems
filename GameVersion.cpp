@@ -48,18 +48,26 @@ GameVersion::GameVersion(std::istream& theStream)
 
 void GameVersion::registerKeys()
 {
-	registerKeyword("first", [this](std::istream& theStream) {
-		firstPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("second", [this](std::istream& theStream) {
-		secondPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("third", [this](std::istream& theStream) {
-		thirdPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("forth", [this](std::istream& theStream) {
-		fourthPart = commonItems::getInt(theStream);
-	});
+	registerKeyword("first",
+		 [this](std::istream& theStream)
+		 {
+			 firstPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("second",
+		 [this](std::istream& theStream)
+		 {
+			 secondPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("third",
+		 [this](std::istream& theStream)
+		 {
+			 thirdPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("forth",
+		 [this](std::istream& theStream)
+		 {
+			 fourthPart = commonItems::getInt(theStream);
+		 });
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 
@@ -248,18 +256,26 @@ std::ostream& operator<<(std::ostream& out, const GameVersion& version)
 
 GameVersion::Factory::Factory()
 {
-	registerKeyword("first", [this](std::istream& theStream) {
-		firstPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("second", [this](std::istream& theStream) {
-		secondPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("third", [this](std::istream& theStream) {
-		thirdPart = commonItems::getInt(theStream);
-	});
-	registerKeyword("forth", [this](std::istream& theStream) {
-		fourthPart = commonItems::getInt(theStream);
-	});
+	registerKeyword("first",
+		 [this](std::istream& theStream)
+		 {
+			 firstPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("second",
+		 [this](std::istream& theStream)
+		 {
+			 secondPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("third",
+		 [this](std::istream& theStream)
+		 {
+			 thirdPart = commonItems::getInt(theStream);
+		 });
+	registerKeyword("forth",
+		 [this](std::istream& theStream)
+		 {
+			 fourthPart = commonItems::getInt(theStream);
+		 });
 	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
 }
 

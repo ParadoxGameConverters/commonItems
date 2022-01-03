@@ -282,7 +282,9 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			{
 				throw std::runtime_error("Color has wrong number of components");
 			}
-			return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)), static_cast<int>(std::round(hsv[1] * 255.0)), static_cast<int>(std::round(hsv[2] * 255.0))});
+			return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)),
+				 static_cast<int>(std::round(hsv[1] * 255.0)),
+				 static_cast<int>(std::round(hsv[2] * 255.0))});
 		}
 		else
 		{
