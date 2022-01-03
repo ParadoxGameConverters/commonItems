@@ -14,20 +14,12 @@ class GameVersion: commonItems::convenientParser
 	GameVersion& operator=(GameVersion&&) = default;
 	~GameVersion() = default;
 
-	explicit GameVersion(const int theFirstPart,
-		 const int theSecondPart,
-		 const int theThirdPart,
-		 const int theFourthPart):
-		 firstPart(theFirstPart),
-		 secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
+	explicit GameVersion(const int theFirstPart, const int theSecondPart, const int theThirdPart, const int theFourthPart):
+		 firstPart(theFirstPart), secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
 	{
 	}
-	explicit GameVersion(std::optional<int> theFirstPart,
-		 std::optional<int> theSecondPart,
-		 std::optional<int> theThirdPart,
-		 std::optional<int> theFourthPart):
-		 firstPart(theFirstPart),
-		 secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
+	explicit GameVersion(std::optional<int> theFirstPart, std::optional<int> theSecondPart, std::optional<int> theThirdPart, std::optional<int> theFourthPart):
+		 firstPart(theFirstPart), secondPart(theSecondPart), thirdPart(theThirdPart), fourthPart(theFourthPart)
 	{
 	}
 	explicit GameVersion(std::string version);
@@ -51,14 +43,10 @@ class GameVersion: commonItems::convenientParser
 
 	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
 
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(
-		 const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
-	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString,
-		 const std::string& filePath);
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(
-		 const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(
-		 const std::string& filePath); // extracts version from CK2 ChangeLog.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath);
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(const std::string& filePath); // extracts version from CK2 ChangeLog.txt.
 
   private:
 	void registerKeys();

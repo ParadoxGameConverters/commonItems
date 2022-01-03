@@ -141,7 +141,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 
 		if (!matched)
 			matched = tryToMatchAgainstRegexes(toReturn, strippedLexeme, isLexemeQuoted, theStream);
-		
+
 		if (!matched)
 			gotToken = true;
 	}
@@ -169,14 +169,12 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 	}
 	else if (isLexemeQuoted)
 	{
-		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStringsStreamOnly.end())
+		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme); strippedMatch != registeredKeywordStringsStreamOnly.end())
 		{
 			strippedMatch->second(theStream);
 			return true;
 		}
-		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme);
-			 strippedMatch != registeredKeywordStrings.end())
+		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme); strippedMatch != registeredKeywordStrings.end())
 		{
 			strippedMatch->second(toReturn, theStream);
 			return true;

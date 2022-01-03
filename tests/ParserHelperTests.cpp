@@ -1,5 +1,5 @@
-#include "../ParserHelpers.h"
 #include "../CommonRegexes.h"
+#include "../ParserHelpers.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -77,7 +77,7 @@ TEST(ParserHelper_Tests, ignoreAndLogItemLogsIgnoredKeyword)
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	
+
 	std::stringstream input;
 	input << R"(key1=val1 key2=val2 key3=mess)";
 	Foo foo(input);
@@ -314,8 +314,7 @@ TEST(ParserHelper_Tests, ULlongListAddsLlongs)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -346,8 +345,7 @@ TEST(ParserHelper_Tests, ULlongListAddsQuotedLLongs)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 
@@ -368,8 +366,7 @@ TEST(ParserHelper_Tests, ULlongListAddsULlongsFromBracedBlock)
 
 	const commonItems::ullongList theULlongs(input);
 
-	const auto expectedULlongs =
-		 std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
+	const auto expectedULlongs = std::vector<unsigned long long>{299792458000000000, 299792458000000304, 256792458000000304};
 	ASSERT_EQ(expectedULlongs, theULlongs.getULlongs());
 }
 

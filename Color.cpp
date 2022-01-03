@@ -26,8 +26,7 @@ bool commonItems::Color::operator!=(const Color& rhs) const
 
 std::string commonItems::Color::outputRgb() const
 {
-	return "= rgb { " + std::to_string(rgbComponents[0]) + ' ' + std::to_string(rgbComponents[1]) + ' ' +
-			 std::to_string(rgbComponents[2]) + " }";
+	return "= rgb { " + std::to_string(rgbComponents[0]) + ' ' + std::to_string(rgbComponents[1]) + ' ' + std::to_string(rgbComponents[2]) + " }";
 }
 
 
@@ -65,8 +64,7 @@ std::string commonItems::Color::outputHsv360() const
 
 void commonItems::Color::RandomlyFluctuate(const int stdDev)
 {
-	static std::mt19937 generator(
-		 static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+	static std::mt19937 generator(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
 	const auto allChange = std::normal_distribution<float>(0.0f, static_cast<float>(stdDev))(generator);
 
@@ -240,8 +238,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(
-			 std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+		return Color(std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
 	}
 	else if (token == "hsv360")
 	{
@@ -250,9 +247,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0),
-			 static_cast<float>(hsv[1] / 100.0),
-			 static_cast<float>(hsv[2] / 100.0)});
+		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0), static_cast<float>(hsv[1] / 100.0), static_cast<float>(hsv[2] / 100.0)});
 	}
 	else if (std::regex_match(*token, std::regex(catchallRegex)))
 	{
@@ -282,7 +277,9 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			{
 				throw std::runtime_error("Color has wrong number of components");
 			}
-			return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)), static_cast<int>(std::round(hsv[1] * 255.0)), static_cast<int>(std::round(hsv[2] * 255.0))});
+			return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)),
+				 static_cast<int>(std::round(hsv[1] * 255.0)),
+				 static_cast<int>(std::round(hsv[2] * 255.0))});
 		}
 		else
 		{

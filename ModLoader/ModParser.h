@@ -1,7 +1,7 @@
 #ifndef MOD_PARSER_H
 #define MOD_PARSER_H
-#include <set>
 #include "../ConvenientParser.h"
+#include <set>
 
 namespace commonItems
 {

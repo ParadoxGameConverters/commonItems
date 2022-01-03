@@ -129,6 +129,9 @@
     <ClCompile Include="googletest\googlemock\src\gmock-all.cc">
       <Filter>gtest</Filter>
     </ClCompile>
+    <ClCompile Include="..\targa.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="..\ModLoader\ModParser.h">
       <Filter>commonItems\ModLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\targa.h">
+      <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

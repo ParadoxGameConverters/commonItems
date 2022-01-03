@@ -32,8 +32,7 @@ static const std::map<LogLevel, std::string> logLevelStrings = {{LogLevel::Error
 	 {LogLevel::Info, "    [INFO] "},
 	 {LogLevel::Debug, "   [DEBUG]     "},
 	 {LogLevel::Progress, "[PROGRESS] "},
-	 {LogLevel::Notice, "  [NOTICE] "}
-};
+	 {LogLevel::Notice, "  [NOTICE] "}};
 
 void Log::WriteToFile(const LogLevel level, const std::string& logMessage)
 {
@@ -52,12 +51,12 @@ void Log::WriteTheTime(std::ostream& logFile)
 	time(&rawTime);
 
 	tm timeInfo{};
-	#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32__))
 	localtime_s(&timeInfo, &rawTime);
-	#else
+#else
 	localtime_r(&rawTime, &timeInfo); // POSIX
-	#endif
-	
+#endif
+
 
 	char timeBuffer[64];
 	const auto bytesWritten = strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", &timeInfo);

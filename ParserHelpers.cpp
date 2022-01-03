@@ -99,8 +99,7 @@ void ignoreString(const std::string& unused, std::istream& theStream)
 
 
 
-template <std::integral T>
-T stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
+template <std::integral T> T stringToInteger(const std::string& str, bool skipPartialMatchWarning) // for integral types only
 {
 	T theInteger = 0;
 	const auto last = str.data() + str.size();
@@ -302,7 +301,7 @@ simpleObject::simpleObject(std::istream& theStream)
 			values[key] = *value;
 			key.clear();
 		}
-		else if (!std::isspace(inputChar, std::locale("en_US.UTF8")))
+		else if (!std::isspace(inputChar))
 		{
 			key += inputChar;
 		}

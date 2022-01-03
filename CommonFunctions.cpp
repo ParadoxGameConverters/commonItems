@@ -1,6 +1,6 @@
 #include "CommonFunctions.h"
-#include <algorithm>
 #include "OSCompatibilityLayer.h"
+#include <algorithm>
 
 std::string trimPath(const std::string& fileName)
 {

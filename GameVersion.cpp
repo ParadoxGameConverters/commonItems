@@ -399,8 +399,7 @@ std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::st
 	return result;
 }
 
-std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString,
-	 const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath)
 {
 	std::ifstream versionFile(filePath);
 	if (!versionFile.is_open())

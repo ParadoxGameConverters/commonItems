@@ -55,17 +55,17 @@ std::ostream& commonItems::operator<<(std::ostream& output, const ConverterVersi
 {
 	output << "\n\n";
 	output << "************ -= The Paradox Game Converters Group =- *****************\n";
-	
+
 	if (!version.version.empty() && !version.name.empty())
 		output << "* Converter version " << version.version << " \"" << version.name << "\"\n";
-	
+
 	output << "* " << version.getDescription() << "\n";
 	output << "* Built on " << __TIMESTAMP__ << "\n";
 
 	std::string footerTitle = " + " + version.source + " To " + version.target + " + ";
 	if (footerTitle.length() >= 68)
 	{
-		footerTitle = "*" + footerTitle + "*\n";		
+		footerTitle = "*" + footerTitle + "*\n";
 	}
 	else
 	{
@@ -76,9 +76,9 @@ std::ostream& commonItems::operator<<(std::ostream& output, const ConverterVersi
 		target = static_cast<int>(70 - footerTitle.length());
 		for (auto counter = 0; counter < target; counter++)
 			footerTitle += "*";
-		footerTitle += "\n";		
+		footerTitle += "\n";
 	}
-	
+
 	output << footerTitle;
 	return output;
 }

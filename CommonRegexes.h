@@ -6,8 +6,8 @@
 namespace commonItems
 {
 // catchall:
-//		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already drop
-//		in the parser.
+//		We grab everything that's NOT =, { or }, OR we grab everything within quotes, except newlines, which we already
+//		drop in the parser.
 inline constexpr const char* catchallRegex = R"([^=^{^}]+|".+")";
 
 // numbers

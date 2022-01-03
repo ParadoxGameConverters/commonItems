@@ -23,8 +23,7 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 		if (!p.is_directory())
 		{
 			const auto currentPath = p.path().native();
-			const auto requestedPath =
-				 currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
+			const auto requestedPath = currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
 			fileNames.insert(UTF16ToUTF8(requestedPath));
 		}
 	}
@@ -37,13 +36,8 @@ std::string GetLastErrorString()
 	const DWORD errorCode = GetLastError();
 	const DWORD errorBufferSize = 256;
 	wchar_t errorBuffer[errorBufferSize];
-	const BOOL success = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
-		 nullptr,
-		 errorCode,
-		 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		 errorBuffer,
-		 errorBufferSize - 1,
-		 nullptr);
+	const BOOL success =
+		 FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errorBuffer, errorBufferSize - 1, nullptr);
 	if (success)
 	{
 		return UTF16ToUTF8(errorBuffer);
@@ -53,24 +47,10 @@ std::string GetLastErrorString()
 
 std::string convertUTF8ToASCII(const std::string& UTF8)
 {
-	const int requiredSize = WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/,
-		 0,
-		 convertUTF8ToUTF16(UTF8).c_str(),
-		 -1,
-		 nullptr,
-		 0,
-		 "0",
-		 nullptr);
+	const int requiredSize = WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
 	char* asciiArray = new char[requiredSize];
 
-	if (0 == WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/,
-					 0,
-					 convertUTF8ToUTF16(UTF8).c_str(),
-					 -1,
-					 asciiArray,
-					 requiredSize,
-					 "0",
-					 nullptr))
+	if (0 == WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
 		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
@@ -84,18 +64,10 @@ std::string convertUTF8ToASCII(const std::string& UTF8)
 
 std::string convertUTF8To8859_15(const std::string& UTF8)
 {
-	const int requiredSize =
-		 WideCharToMultiByte(28605 /*8859-15*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
+	const int requiredSize = WideCharToMultiByte(28605 /*8859-15*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
 	char* asciiArray = new char[requiredSize];
 
-	if (0 == WideCharToMultiByte(28605 /*8859-15*/,
-					 0,
-					 convertUTF8ToUTF16(UTF8).c_str(),
-					 -1,
-					 asciiArray,
-					 requiredSize,
-					 "0",
-					 nullptr))
+	if (0 == WideCharToMultiByte(28605 /*8859-15*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
 		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
@@ -112,8 +84,7 @@ std::string convertUTF8ToWin125_(const std::string& UTF8, const int codepage)
 	const int requiredSize = WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, nullptr, 0, "0", nullptr);
 	char* asciiArray = new char[requiredSize];
 
-	if (0 ==
-		 WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
+	if (0 == WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
 		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
 	}
@@ -253,9 +224,8 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 	const HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // a handle to the console window
 	if (console != INVALID_HANDLE_VALUE)
 	{
-		CONSOLE_SCREEN_BUFFER_INFO oldConsoleInfo; // the current (soon to be outdated) console data
-		const BOOL success =
-			 GetConsoleScreenBufferInfo(console, &oldConsoleInfo); // whether or not the console data could be retrieved
+		CONSOLE_SCREEN_BUFFER_INFO oldConsoleInfo;											// the current (soon to be outdated) console data
+		const BOOL success = GetConsoleScreenBufferInfo(console, &oldConsoleInfo); // whether or not the console data could be retrieved
 		if (success)
 		{
 			WORD color;
@@ -280,11 +250,7 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 			}
 			SetConsoleTextAttribute(console, color);
 			DWORD bytesWritten = 0;
-			WriteConsoleW(console,
-				 convertUTF8ToUTF16(logMessage).c_str(),
-				 static_cast<DWORD>(logMessage.size()),
-				 &bytesWritten,
-				 nullptr);
+			WriteConsoleW(console, convertUTF8ToUTF16(logMessage).c_str(), static_cast<DWORD>(logMessage.size()), &bytesWritten, nullptr);
 
 			// Restore old console color.
 			SetConsoleTextAttribute(console, oldConsoleInfo.wAttributes);
@@ -314,17 +280,10 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 	wchar_t value[255];
 	value[0] = 0;
 	DWORD BufferSize = 8192;
-	std::wstring registryPath =
-		 convertUTF8ToUTF16(R"(SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App )" + steamID);
+	std::wstring registryPath = convertUTF8ToUTF16(R"(SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App )" + steamID);
 	const std::wstring installPath = convertUTF8ToUTF16(R"(InstallLocation)");
 
-	RegGetValue(HKEY_LOCAL_MACHINE,
-		 registryPath.c_str(),
-		 installPath.c_str(),
-		 RRF_RT_ANY,
-		 nullptr,
-		 static_cast<PVOID>(&value),
-		 &BufferSize);
+	RegGetValue(HKEY_LOCAL_MACHINE, registryPath.c_str(), installPath.c_str(), RRF_RT_ANY, nullptr, static_cast<PVOID>(&value), &BufferSize);
 
 	if (value[0] != 0)
 	{
@@ -336,13 +295,7 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 	}
 
 	registryPath = convertUTF8ToUTF16(R"(SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App )" + steamID);
-	RegGetValue(HKEY_LOCAL_MACHINE,
-		 registryPath.c_str(),
-		 installPath.c_str(),
-		 RRF_RT_ANY,
-		 nullptr,
-		 static_cast<PVOID>(&value),
-		 &BufferSize);
+	RegGetValue(HKEY_LOCAL_MACHINE, registryPath.c_str(), installPath.c_str(), RRF_RT_ANY, nullptr, static_cast<PVOID>(&value), &BufferSize);
 
 	if (value[0] != 0)
 	{

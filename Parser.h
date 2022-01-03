@@ -31,9 +31,10 @@ class parser
 	parser& operator=(parser&&) = default;
 
 	void registerKeyword(const std::string& keyword, const parsingFunctionStreamOnly& function);
-	void registerKeyword(const std::string& keyword, const parsingFunction& function); // for the few keywords that need to be returned
+	void registerKeyword(const std::string& keyword,
+		 const parsingFunction& function); // for the few keywords that need to be returned
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
-	
+
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
@@ -42,16 +43,10 @@ class parser
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
-	
+
   private:
-	inline bool tryToMatchAgainstKeywords(const std::string& toReturn,
-		 const std::string& strippedLexeme,
-		 bool isLexemeQuoted,
-		 std::istream& theStream);
-	inline bool tryToMatchAgainstRegexes(const std::string& toReturn,
-		 const std::string& strippedLexeme,
-		 bool isLexemeQuoted,
-		 std::istream& theStream);
+	inline bool tryToMatchAgainstKeywords(const std::string& toReturn, const std::string& strippedLexeme, bool isLexemeQuoted, std::istream& theStream);
+	inline bool tryToMatchAgainstRegexes(const std::string& toReturn, const std::string& strippedLexeme, bool isLexemeQuoted, std::istream& theStream);
 
 	std::map<std::string, parsingFunctionStreamOnly> registeredKeywordStringsStreamOnly;
 	std::map<std::string, parsingFunction> registeredKeywordStrings;

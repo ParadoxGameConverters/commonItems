@@ -470,7 +470,7 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamWithName)
 {
 	auto colorFactory = commonItems::Color::Factory();
 	colorFactory.addNamedColor("dark_moderate_cyan", commonItems::Color(std::array<int, 3>{64, 128, 128}));
-	
+
 	std::stringstream input;
 	input << "= dark_moderate_cyan";
 	const auto testColor = colorFactory.getColor(input);
@@ -510,10 +510,10 @@ TEST(Color_Tests, ColorCanBeInitializedFromQuotedStreamWithName)
 TEST(Color_Tests, ColorInitializingRequiresCachedColorWhenUsingName)
 {
 	const auto colorFactory = commonItems::Color::Factory();
-	
+
 	std::stringstream input;
 	input << "= dark_moderate_cyan";
-	ASSERT_THROW( auto color = colorFactory.getColor(input), std::runtime_error);
+	ASSERT_THROW(auto color = colorFactory.getColor(input), std::runtime_error);
 }
 
 
@@ -735,7 +735,7 @@ TEST(Color_Tests, ColorPaletteCanBeInitializedByMap)
 	std::map<std::string, commonItems::Color> theMap;
 	theMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{255, 255, 255})));
 	theMap.insert(std::pair("gray", commonItems::Color(std::array<int, 3>{50, 50, 50})));
-	
+
 	auto colorFactory = commonItems::Color::Factory();
 	colorFactory.addNamedColorMap(theMap);
 
@@ -773,11 +773,11 @@ TEST(Color_Tests, ColorPaletteCanBeAlteredByStream)
 	std::stringstream input;
 	input << "= { 255 0 0 }";
 	colorFactory.addNamedColor("gold", input);
-	
+
 	std::stringstream input2;
 	input2 << "= hex { FFD700 }";
 	colorFactory.addNamedColor("gold", input2);
-	
+
 	const auto gold = colorFactory.getColor("gold");
 
 	auto [r, g, b] = gold.getRgbComponents();
@@ -857,7 +857,7 @@ TEST(Color_Tests, ColorPaletteCanBeCleared)
 	std::map<std::string, commonItems::Color> colorMap;
 	colorMap.insert(std::pair("white", commonItems::Color(std::array<int, 3>{0, 0, 0})));
 	colorMap.insert(std::pair("red", commonItems::Color(std::array<int, 3>{255, 255, 19})));
-	
+
 	auto colorFactory = commonItems::Color::Factory();
 	colorFactory.addNamedColorMap(colorMap);
 
