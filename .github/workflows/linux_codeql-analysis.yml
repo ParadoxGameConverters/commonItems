@@ -33,6 +33,7 @@ jobs:
 
     - name: Build solution
       run: |
+       cd tests
        chmod u+x build_linux.sh
        ./build_linux.sh
 
