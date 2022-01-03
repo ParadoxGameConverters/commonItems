@@ -19,11 +19,6 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - name: "Get previous tag"
-      if: ${{ github.event_name == 'push' }}
-      id: previoustag
-      uses: "WyriHaximus/github-action-get-previous-tag@v1"
-
     - name: "Build solution"
       run: |
        cd "C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\"
