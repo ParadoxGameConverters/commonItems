@@ -706,7 +706,7 @@ tga_result tga_write_rgb_rle(const char* filename, uint8_t* image, const uint16_
  */
 tga_result tga_flip_horiz(tga_image* img)
 {
-	uint16_t row;
+	size_t row;
 	size_t bpp;
 	uint8_t *left, *right;
 	int r_to_l;
@@ -815,7 +815,7 @@ tga_result tga_color_unmap(tga_image* img)
 	if (!SANE_DEPTH(img->color_map_depth))
 		return TGAERR_CMAP_DEPTH;
 
-	tmp = realloc(img->image_data, img->width * img->height * bpp);
+	tmp = realloc(img->image_data, (size_t)img->width * img->height * bpp);
 	if (tmp == NULL)
 		return TGAERR_NO_MEM;
 	img->image_data = (uint8_t*)tmp;
@@ -1007,7 +1007,7 @@ tga_result tga_desaturate(tga_image* img, const int cr, const int cg, const int 
 	}
 
 	/* shrink */
-	tmp = reinterpret_cast<uint8_t*>(realloc(img->image_data, img->width * img->height));
+	tmp = reinterpret_cast<uint8_t*>(realloc(img->image_data, (size_t)img->width * img->height));
 	if (tmp == NULL)
 		return TGAERR_NO_MEM;
 	img->image_data = tmp;
@@ -1083,7 +1083,7 @@ tga_result tga_convert_depth(tga_image* img, const uint8_t bits)
 		}
 
 		/* shrink */
-		tmp = realloc(img->image_data, img->width * img->height * dest_bpp);
+		tmp = realloc(img->image_data, (size_t)img->width * img->height * dest_bpp);
 		if (tmp == NULL)
 			return TGAERR_NO_MEM;
 		img->image_data = reinterpret_cast<uint8_t*>(tmp);
@@ -1091,7 +1091,7 @@ tga_result tga_convert_depth(tga_image* img, const uint8_t bits)
 	else
 	{
 		/* expand */
-		void* tmp = realloc(img->image_data, img->width * img->height * dest_bpp);
+		void* tmp = realloc(img->image_data, (size_t)img->width * img->height * dest_bpp);
 		if (tmp == NULL)
 			return TGAERR_NO_MEM;
 		img->image_data = (uint8_t*)tmp;
