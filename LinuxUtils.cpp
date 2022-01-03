@@ -4,15 +4,14 @@
 #include <algorithm>
 #include <cstdarg>
 #include <cstring>
-#include <iostream>
-#include <set>
-#include <errno.h>
-#include <string.h>
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <iconv.h>
+#include <iostream>
+#include <set>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -317,8 +316,7 @@ class ConversionInputBuffer
 	std::size_t remainder;
 
   public:
-	explicit ConversionInputBuffer(const std::string& input):
-		 data(new char[input.length()]), in_buffer(data), remainder(input.length())
+	explicit ConversionInputBuffer(const std::string& input): data(new char[input.length()]), in_buffer(data), remainder(input.length())
 	{
 		using namespace std;
 		// POSIX iconv expects a pointer to char *, not to const char * and consequently does not guarantee that the input
@@ -370,7 +368,7 @@ class ConversionOutputBuffer
 		static void str(String& output, char* buffer, std::size_t length)
 		{
 			using namespace std;
-			size_t output_length = length / sizeof(Char);			
+			size_t output_length = length / sizeof(Char);
 			wchar_t output_buffer[output_length] = {};
 			std::mbstowcs(output_buffer, buffer, output_length);
 			output.assign(output_buffer, output_length);
@@ -450,8 +448,7 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 	iconv_t descriptor = iconv_open(toCode, fromCode);
 	if (descriptor == ((iconv_t)(-1)))
 	{
-		LOG(LogLevel::Error) << "unable to recode string from '" << fromCode << "' to '" << toCode
-									<< ": not supported on this system";
+		LOG(LogLevel::Error) << "unable to recode string from '" << fromCode << "' to '" << toCode << ": not supported on this system";
 		return false;
 	}
 	while (from.has_remaining_bytes())
@@ -464,13 +461,11 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 					to.grow();
 					break;
 				case EILSEQ:
-					LOG(LogLevel::Error) << "invalid input sequence encountered during conversion of "
-								<< from.data << " from " << fromCode << " to " << toCode
-								<< " : " << std::hex << *reinterpret_cast<uint16_t *>(from.in_buffer);
+					LOG(LogLevel::Error) << "invalid input sequence encountered during conversion of " << from.data << " from " << fromCode << " to " << toCode
+												<< " : " << std::hex << *reinterpret_cast<uint16_t*>(from.in_buffer);
 					return false;
 				case EINVAL:
-					LOG(LogLevel::Error) << "incomplete input sequence encountered during conversion from " << fromCode
-												<< " to " << toCode;
+					LOG(LogLevel::Error) << "incomplete input sequence encountered during conversion from " << fromCode << " to " << toCode;
 					return false;
 			}
 		}
@@ -489,11 +484,7 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
  *
  */
 template <typename InputString, typename OutputString>
-bool ConvertString(const char* fromCode,
-	 const char* toCode,
-	 const InputString& from,
-	 OutputString& to,
-	 std::size_t to_buffer_size = 0)
+bool ConvertString(const char* fromCode, const char* toCode, const InputString& from, OutputString& to, std::size_t to_buffer_size = 0)
 {
 	using namespace std;
 	if (to_buffer_size == 0)
@@ -514,10 +505,7 @@ bool ConvertString(const char* fromCode,
 }
 
 template <typename InputString, typename OutputString>
-OutputString ConvertString(const char* fromCode,
-	 const char* toCode,
-	 const InputString& from,
-	 std::size_t to_buffer_size = 0)
+OutputString ConvertString(const char* fromCode, const char* toCode, const InputString& from, std::size_t to_buffer_size = 0)
 {
 	using namespace std;
 	OutputString to;
@@ -618,7 +606,7 @@ std::string convertToUTF8(const std::wstring& input)
 
 std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 {
-	//TODO: Write some actual code for this when able.
+	// TODO: Write some actual code for this when able.
 	return std::nullopt;
 }
 
