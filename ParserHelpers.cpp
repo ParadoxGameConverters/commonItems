@@ -301,7 +301,7 @@ simpleObject::simpleObject(std::istream& theStream)
 			values[key] = *value;
 			key.clear();
 		}
-		else if (!std::isspace(inputChar, std::locale("en_US.UTF8")))
+		else if (!std::isspace(inputChar))
 		{
 			key += inputChar;
 		}
