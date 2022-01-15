@@ -353,18 +353,24 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 		testDigit = *rhs.firstPart;
 	if (firstPart && testDigit > *firstPart)
 		return false;
+	if (firstPart && testDigit < *firstPart)
+		return true;
 
 	testDigit = 0;
 	if (rhs.secondPart)
 		testDigit = *rhs.secondPart;
 	if (secondPart && testDigit > *secondPart)
 		return false;
+	if (secondPart && testDigit < *secondPart)
+		return true;
 
 	testDigit = 0;
 	if (rhs.thirdPart)
 		testDigit = *rhs.thirdPart;
 	if (thirdPart && testDigit > *thirdPart)
 		return false;
+	if (thirdPart && testDigit < *thirdPart)
+		return true;
 
 	testDigit = 0;
 	if (rhs.fourthPart)

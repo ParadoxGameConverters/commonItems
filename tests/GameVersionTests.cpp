@@ -339,6 +339,17 @@ TEST(GameVersion_Tests, LargerishFalseForLarger)
 	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("3")));
 }
 
+TEST(GameVersion_Tests, LargerishFalseForLargerWithUndefineds)
+{
+	const GameVersion requiredVersion("2.1.1");
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("2.1.2")));
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("2.1.2.9")));
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("2.2")));
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("2.2.2")));
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("2.2.2.2")));
+	EXPECT_FALSE(requiredVersion.isLargerishThan(GameVersion("3")));
+}
+
 TEST(GameVersion_Tests, LargerishTrueForSmaller)
 {
 	const GameVersion requiredVersion("2.1.1.1");
@@ -350,6 +361,24 @@ TEST(GameVersion_Tests, LargerishTrueForSmaller)
 	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1.0")));
 	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1")));
 	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1.5")));
+
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("0.0.0.0")));
+}
+
+TEST(GameVersion_Tests, LargerishTrueForSmallerWithUndefineds)
+{
+	const GameVersion requiredVersion("2.1");
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.0")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1.1")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1")));
+
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1.0")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("2.1")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1.5")));
+	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("1.5.9")));
 
 	EXPECT_TRUE(requiredVersion.isLargerishThan(GameVersion("0.0.0.0")));
 }
