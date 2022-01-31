@@ -4,7 +4,7 @@
 #include <gmock/gmock-matchers.h>
 using testing::UnorderedElementsAre;
 
-TEST(ModLoaderTests, ModsCanBeLocatedUnpackedAndUpdated)
+TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 {
 	Mods incomingMods;														  // this is what comes from the save
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
