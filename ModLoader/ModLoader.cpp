@@ -19,6 +19,11 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 		return;
 	}
 
+	// First see what we're up against. Load mod folder, and cache the mod names. We need the names as bare minimum in case
+	// we're doing old-style name-recognition modfinding and don't have the paths in incomingMods.
+
+	cacheModNames(gameDocumentsPath);
+
 	// We enter this function with a vector of (optional) mod names and (required) mod file locations from the savegame.
 	// We need to read all the mod files, check their paths (and potential archives for ancient mods) unpack what's
 	// necessary, and exit with a vector of updated mod names (savegame can differ from actual mod file) and mod folder
@@ -53,16 +58,21 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPath, const Mods& incomingMods)
 {
 	const auto& modsPath = gameDocumentsPath + "/mod";
-	if (!DoesFolderExist(modsPath))
-		throw std::invalid_argument("Mods directory path is invalid! Is it at: " + gameDocumentsPath + "/mod/ ?");
-
-	Log(LogLevel::Info) << "\tMods directory is " << modsPath;
 
 	const auto diskModNames = GetAllFilesInFolder(modsPath);
-	for (const auto& mod: incomingMods)
+	for (auto mod: incomingMods)
 	{
+		// If we don't have a loaded mod path but have it in our cache, might as well fix it.
+		if (mod.path.empty() && modCache.contains(mod.name))
+			mod.path = modCache.at(mod.name);
+
 		const auto trimmedModFileName = trimPath(mod.path);
-		if (!diskModNames.contains(trimmedModFileName))
+
+		// We either have the path as the reference point (in which case name we'll read ourselves), or the name, in which case we looked up the
+		// cached map for the path.
+		// If we have neither, that's unusable.
+
+		if (!diskModNames.contains(trimmedModFileName) && !modCache.contains(mod.name))
 		{
 			if (mod.name.empty())
 				Log(LogLevel::Warning) << "\t\tSavegame uses mod at " << mod.path
@@ -73,7 +83,8 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			continue;
 		}
 
-		if (getExtension(trimmedModFileName) != "mod")
+		// if we do have a path incoming from the save, just make sure it's not some abnormality.
+		if (!trimmedModFileName.empty() && getExtension(trimmedModFileName) != "mod")
 			continue; // shouldn't be necessary but just in case.
 
 		// Attempt parsing .mod file
@@ -88,6 +99,33 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			continue;
 		}
 		processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, modsPath, gameDocumentsPath);
+	}
+}
+
+void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
+{
+	const auto& modsPath = gameDocumentsPath + "/mod";
+	Log(LogLevel::Info) << "\tMods directory is " << modsPath;
+
+	if (!DoesFolderExist(modsPath))
+		throw std::invalid_argument("Mods directory path is invalid! Is it at: " + gameDocumentsPath + "/mod/ ?");
+
+	const auto diskModFiles = GetAllFilesInFolder(modsPath);
+	for (const auto& diskModFile: diskModFiles)
+	{
+		ModParser theMod;
+		const auto trimmedModFileName = trimPath(diskModFile);
+		try
+		{
+			theMod.parseMod(modsPath + "/" + trimmedModFileName);
+		}
+		catch (std::exception&)
+		{
+			Log(LogLevel::Warning) << "\t\tError while caching " << modsPath << "/" << trimmedModFileName << "! Mod will not be useable for conversions.";
+			continue;
+		}
+		if (theMod.isValid())
+			modCache.emplace(theMod.getName(), diskModFile);
 	}
 }
 

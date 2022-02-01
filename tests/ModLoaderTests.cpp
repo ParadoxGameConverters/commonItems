@@ -4,10 +4,23 @@
 #include <gmock/gmock-matchers.h>
 using testing::UnorderedElementsAre;
 
-TEST(ModLoaderTests, ModsCanBeLocatedUnpackedAndUpdated)
+TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 {
 	Mods incomingMods;														  // this is what comes from the save
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
+
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("TestFiles", incomingMods);
+	const auto mods = modLoader.getMods();
+
+	ASSERT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
+}
+
+TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
+{
+	Mods incomingMods;									  // this is what comes from the save
+	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
 	modLoader.loadMods("TestFiles", incomingMods);

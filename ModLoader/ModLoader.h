@@ -1,5 +1,6 @@
 #ifndef MOD_LOADER_H
 #define MOD_LOADER_H
+#include <map>
 #include <optional>
 #include <set>
 #include <string>
@@ -33,6 +34,7 @@ class ModLoader
 
   private:
 	void loadModDirectory(const std::string& gameDocumentsPath, const Mods& incomingMods);
+	void cacheModNames(const std::string& gameDocumentsPath);
 	void processLoadedMod(ModParser& theMod,
 		 const std::string& modName,
 		 const std::string& modFileName,
@@ -48,6 +50,8 @@ class ModLoader
 	Mods possibleUncompressedMods = {}; // name, absolute path to mod directory
 	Mods possibleCompressedMods = {};	// name, absolute path to zip file
 	Mods usableMods = {};					// name, absolute path for directories, relative for unpacked
+
+	std::map<Name, Path> modCache;
 };
 } // namespace commonItems
 
