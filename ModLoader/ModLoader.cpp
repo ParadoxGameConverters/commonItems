@@ -113,6 +113,8 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 	const auto diskModFiles = GetAllFilesInFolder(modsPath);
 	for (const auto& diskModFile: diskModFiles)
 	{
+		if (getExtension(diskModFile) != "mod")
+			continue;
 		ModParser theMod;
 		const auto trimmedModFileName = trimPath(diskModFile);
 		try
