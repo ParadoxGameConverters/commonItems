@@ -17,6 +17,7 @@ class ModParser: convenientParser
 	[[nodiscard]] auto isValid() const { return !name.empty() && !path.empty(); }
 	[[nodiscard]] auto isCompressed() const { return compressed; }
 	[[nodiscard]] const auto& getDependencies() const { return dependencies; }
+	[[nodiscard]] const auto& getReplacedPaths() const { return replacedPaths; }
 
 	void setPath(const std::string& thePath) { path = thePath; }
 
@@ -27,6 +28,7 @@ class ModParser: convenientParser
 	std::string path;
 	bool compressed = false;
 	std::set<std::string> dependencies;
+	std::set<std::string> replacedPaths;
 };
 } // namespace commonItems
 
