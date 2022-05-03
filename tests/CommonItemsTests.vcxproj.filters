@@ -31,6 +31,39 @@
     <Filter Include="TestFiles\mod\themod\common\country_tags">
       <UniqueIdentifier>{f3e1a059-c38b-404e-8f00-dad1ab54081a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestFiles\ModFilesystem">
+      <UniqueIdentifier>{ebc37c7a-e2b1-434b-ad67-5dc0906e3b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation">
+      <UniqueIdentifier>{ef9a9976-f2bd-42b2-8c23-c6c188620b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root">
+      <UniqueIdentifier>{1c1c0a01-6a04-41f5-aa05-b32fd4eea0a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one">
+      <UniqueIdentifier>{5ab7a2c1-e131-4f49-bac2-227ab50ebd0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two">
+      <UniqueIdentifier>{0b6eea94-8d36-4637-b4eb-f74f5a3957da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder">
+      <UniqueIdentifier>{ac2ca689-1fe3-4b1e-8870-25aa8dac2b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder">
+      <UniqueIdentifier>{83df2c0a-2d48-400a-ae99-e3a4eb1b6f92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder">
+      <UniqueIdentifier>{95e5c08d-50db-4a6f-9e93-8b0d08af5919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder">
+      <UniqueIdentifier>{9c070536-2b31-49d3-b450-d235da6257ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder">
+      <UniqueIdentifier>{4a574554-8b5f-406a-b2c9-9f0d8301c459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder">
+      <UniqueIdentifier>{38888e23-f2c6-47a3-bb38-90da61ccd799}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -132,6 +165,12 @@
     <ClCompile Include="..\targa.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\ModLoader\ModFilesystem.cpp">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="ModFilesystemTests.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -181,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="..\targa.h">
       <Filter>commonItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ModLoader\Mod.h">
+      <Filter>commonItems\ModLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ModLoader\ModFilesystem.h">
+      <Filter>commonItems\ModLoader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +288,33 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="TestFiles\mod\brokenpacked.zip">
       <Filter>TestFiles\mod</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\test_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\test_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\test_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\root_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_file.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>
