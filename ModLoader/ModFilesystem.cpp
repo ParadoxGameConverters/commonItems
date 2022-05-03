@@ -116,13 +116,79 @@ std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolder(const std:
 }
 
 
-std::set<std::string> commonItems::ModFilesystem::GetAllSubfolders(std::string_view path) const
+std::set<std::string> commonItems::ModFilesystem::GetAllSubfolders(const std::string& path) const
 {
-	return {};
+	std::set<std::string> full_folders;
+	std::set<std::string> found_folders;
+
+	for (const auto& mod: mods_ | std::views::reverse)
+	{
+		for (const auto& new_folder: commonItems::GetAllSubfolders(mod.path + '/' + std::string(path)))
+		{
+			if (found_folders.contains(new_folder))
+			{
+				continue;
+			}
+
+			found_folders.insert(new_folder);
+			full_folders.insert(mod.path + '/' + path + '/' + std::string(new_folder));
+		}
+
+		if (PathIsReplaced(path, mod.replacedFolders))
+		{
+			return full_folders;
+		}
+	}
+
+	for (const auto& new_folder: commonItems::GetAllSubfolders(game_root_ + '/' + std::string(path)))
+	{
+		if (found_folders.contains(new_folder))
+		{
+			continue;
+		}
+
+		found_folders.insert(new_folder);
+		full_folders.insert(game_root_ + '/' + path + '/' + std::string(new_folder));
+	}
+
+	return full_folders;
 }
 
 
-std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(std::string_view path) const
+std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const std::string& path) const
 {
-	return {};
+	std::set<std::string> full_files;
+	std::set<std::string> found_files;
+
+	for (const auto& mod: mods_ | std::views::reverse)
+	{
+		for (const auto& new_file: commonItems::GetAllFilesInFolderRecursive(mod.path + '/' + std::string(path)))
+		{
+			if (found_files.contains(new_file))
+			{
+				continue;
+			}
+
+			found_files.insert(new_file);
+			full_files.insert(mod.path + '/' + path + '/' + std::string(new_file));
+		}
+
+		if (PathIsReplaced(path, mod.replacedFolders))
+		{
+			return full_files;
+		}
+	}
+
+	for (const auto& new_file: commonItems::GetAllFilesInFolderRecursive(game_root_ + '/' + std::string(path)))
+	{
+		if (found_files.contains(new_file))
+		{
+			continue;
+		}
+
+		found_files.insert(new_file);
+		full_files.insert(game_root_ + '/' + path + '/' + std::string(new_file));
+	}
+
+	return full_files;
 }

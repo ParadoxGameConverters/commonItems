@@ -21,8 +21,8 @@ class ModFilesystem
 	[[nodiscard]] std::optional<std::string> GetActualFileLocation(const std::string& path) const;
 	[[nodiscard]] std::optional<std::string> GetActualFolderLocation(const std::string& path) const;
 	[[nodiscard]] std::set<std::string> GetAllFilesInFolder(const std::string& path) const;
-	[[nodiscard]] std::set<std::string> GetAllSubfolders(std::string_view path) const;
-	[[nodiscard]] std::set<std::string> GetAllFilesInFolderRecursive(std::string_view path) const;
+	[[nodiscard]] std::set<std::string> GetAllSubfolders(const std::string& path) const;
+	[[nodiscard]] std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path) const;
 
   private:
 	std::string game_root_;
