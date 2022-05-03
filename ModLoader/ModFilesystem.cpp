@@ -31,55 +31,49 @@ bool PathIsReplaced(std::string_view path, const std::set<std::string>& replaced
 
 std::optional<std::string> commonItems::ModFilesystem::GetActualFileLocation(const std::string& path) const
 {
-	std::optional<std::string> possible_location;
+	for (const auto& mod : mods_ | std::views::reverse)
+	{
+		if (DoesFileExist(mod.path + '/' + path))
+		{
+			return mod.path + '/' + path;
+		}
+		if (PathIsReplaced(path, mod.replacedFolders))
+		{
+			return std::nullopt;
+		}
+	}
 
 	// check game root
 	if (DoesFileExist(game_root_ + '/' + path))
 	{
-		possible_location = game_root_ + '/' + path;
+		return game_root_ + '/' + path;
 	}
 
-	// check mods, latest one is the actual location
-	for (const auto& mod: mods_)
-	{
-		if (PathIsReplaced(path, mod.replacedFolders))
-		{
-			possible_location.reset();
-		}
-		if (DoesFileExist(mod.path + '/' + path))
-		{
-			possible_location = mod.path + '/' + path;
-		}
-	}
-
-	return possible_location;
+	return std::nullopt;
 }
 
 
 std::optional<std::string> commonItems::ModFilesystem::GetActualFolderLocation(const std::string& path) const
 {
-	std::optional<std::string> possible_location;
+	for (const auto& mod : mods_ | std::views::reverse)
+	{
+		if (DoesFolderExist(mod.path + '/' + path))
+		{
+			return mod.path + '/' + path;
+		}
+		if (PathIsReplaced(path, mod.replacedFolders))
+		{
+			return std::nullopt;
+		}
+	}
 
 	// check game root
 	if (DoesFolderExist(game_root_ + '/' + path))
 	{
-		possible_location = game_root_ + '/' + path;
+		return game_root_ + '/' + path;
 	}
 
-	// check mods, latest one is the actual location
-	for (const auto& mod: mods_)
-	{
-		if (PathIsReplaced(path, mod.replacedFolders))
-		{
-			possible_location.reset();
-		}
-		if (DoesFolderExist(mod.path + '/' + path))
-		{
-			possible_location = mod.path + '/' + path;
-		}
-	}
-
-	return possible_location;
+	return std::nullopt;
 }
 
 
