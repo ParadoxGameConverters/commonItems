@@ -1,20 +1,27 @@
 #ifndef MOD_LOADER_H
 #define MOD_LOADER_H
+
+
+
+#include "Mod.h"
 #include <map>
 #include <optional>
 #include <set>
 #include <string>
 #include <vector>
-#include "Mod.h"
 
 
 
 using Mods = std::vector<Mod>;
 
 
+
 namespace commonItems
 {
+
 class ModParser;
+
+
 class ModLoader
 {
   public:
@@ -45,6 +52,9 @@ class ModLoader
 
 	std::map<Name, Path> modCache;
 };
+
 } // namespace commonItems
+
+
 
 #endif // MOD_LOADER_H
