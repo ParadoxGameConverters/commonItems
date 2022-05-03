@@ -183,7 +183,7 @@ TEST(ModFilesystemTests, ModFilesAddToAndReplaceEarlierModFiles)
 }
 
 
-TEST(ModFilesystemTests, ReplaceFolderKeepsKilesFromBeingFound)
+TEST(ModFilesystemTests, ReplaceFolderKeepsFilesFromBeingFound)
 {
 	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
@@ -192,4 +192,60 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsKilesFromBeingFound)
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("test_folder"),
 		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_file.txt"));
+}
+
+
+TEST(ModFilesystemTests, NoFoldersInMissingDirectory)
+{
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {});
+
+	EXPECT_THAT(mod_filesystem.GetAllSubfolders("/non_folder"), testing::UnorderedElementsAre());
+}
+
+
+TEST(ModFilesystemTests, FoldersInGameRootAreFound)
+{
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {});
+
+	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder"));
+}
+
+
+TEST(ModFilesystemTests, ModFoldersAddToAndReplaceGameRootFolders)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+
+	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder"));
+}
+
+
+TEST(ModFilesystemTests, ModFoldersAddToAndReplaceEarlierModFolders)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two");
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+
+	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder"));
+}
+
+
+TEST(ModFilesystemTests, ReplaceFolderKeepsFoldersFromBeingFound)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+
+	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder"));
 }

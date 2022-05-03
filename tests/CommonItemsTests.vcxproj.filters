@@ -64,6 +64,15 @@
     <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder">
       <UniqueIdentifier>{38888e23-f2c6-47a3-bb38-90da61ccd799}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder">
+      <UniqueIdentifier>{08ed3746-6a63-4ba6-a661-b600fc207632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder">
+      <UniqueIdentifier>{a5b34d88-93ea-4b53-9835-3fdba475a56b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder">
+      <UniqueIdentifier>{9f3c9031-a300-433f-8ced-a56b49125bbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -315,6 +324,15 @@
     </CopyFileToFolders>
     <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_file.txt">
       <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder\dummy.txt">
+      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

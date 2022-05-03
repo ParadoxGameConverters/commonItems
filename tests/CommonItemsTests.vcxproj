@@ -347,6 +347,24 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
