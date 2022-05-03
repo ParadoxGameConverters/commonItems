@@ -31,7 +31,7 @@ bool PathIsReplaced(std::string_view path, const std::set<std::string>& replaced
 
 std::optional<std::string> commonItems::ModFilesystem::GetActualFileLocation(const std::string& path) const
 {
-	for (const auto& mod : mods_ | std::views::reverse)
+	for (const auto& mod: mods_ | std::views::reverse)
 	{
 		if (DoesFileExist(mod.path + '/' + path))
 		{
@@ -55,7 +55,7 @@ std::optional<std::string> commonItems::ModFilesystem::GetActualFileLocation(con
 
 std::optional<std::string> commonItems::ModFilesystem::GetActualFolderLocation(const std::string& path) const
 {
-	for (const auto& mod : mods_ | std::views::reverse)
+	for (const auto& mod: mods_ | std::views::reverse)
 	{
 		if (DoesFolderExist(mod.path + '/' + path))
 		{
@@ -113,4 +113,16 @@ std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolder(const std:
 	}
 
 	return full_files;
+}
+
+
+std::set<std::string> commonItems::ModFilesystem::GetAllSubfolders(std::string_view path) const
+{
+	return {};
+}
+
+
+std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(std::string_view path) const
+{
+	return {};
 }
