@@ -42,6 +42,9 @@ set(commonItems
     "../LinuxUtils.cpp"
     "../Log.cpp"
     "../Log.h"
+	"../ModLoader/Mod.h"
+	"../ModLoader/ModFilesystem.cpp"
+    "../ModLoader/ModFilesystem.h"
     "../ModLoader/ModLoader.cpp"
     "../ModLoader/ModLoader.h"
     "../ModLoader/ModParser.cpp"
@@ -66,6 +69,7 @@ set(tests
     "GameVersionTests.cpp"
     "iconvliteTests.cpp"
     "LogTests.cpp"
+	"ModFilesystemTests.cpp"
     "ModLoaderTests.cpp"
     "ModParserTests.cpp"
     "OSCompatibilityLayerTests.cpp"
@@ -101,3 +105,4 @@ enable_testing()
 # Link test executable against gtest & gtest_main
 target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
+file(COPY "TestFiles" DESTINATION "${CMAKE_BINARY_DIR}")
