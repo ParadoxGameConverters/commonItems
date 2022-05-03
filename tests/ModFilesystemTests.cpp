@@ -249,3 +249,70 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFoldersFromBeingFound)
 		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder"));
 }
+
+
+TEST(ModFilesystemTests, NoFilesInMissingDirectoryTree)
+{
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {});
+
+	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("/non_folder"), testing::UnorderedElementsAre());
+}
+
+
+TEST(ModFilesystemTests, FilesInGameRootAndSubfoldersAreFound)
+{
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {});
+
+	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/test_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt"));
+}
+
+
+TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceGameRootFiles)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+
+	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/test_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_file.txt"));
+}
+
+
+TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceEarlierModFiles)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two");
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+
+	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_file.txt"));
+}
+
+
+TEST(ModFilesystemTests, ReplaceFolderKeepsFilesAndSubfoldersFromBeingFound)
+{
+	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
+	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+
+	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_file.txt"));
+}
