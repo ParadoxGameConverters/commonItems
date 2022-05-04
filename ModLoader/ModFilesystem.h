@@ -15,6 +15,10 @@ namespace commonItems
 class ModFilesystem
 {
   public:
+	// The constructor establishes the root of the filesystem.
+	// game_root points at the game's root folder, and all paths in the lookup functions will be based on that root.
+	// mods is a list of the mods applied, in increasing order of precedence. Later mods will override files in the game root or earlier mods, and their
+	// replace_paths will block earlier mods and the game It is the caller's responsibility to sort the mods appropriately
 	explicit ModFilesystem(std::string_view game_root, std::vector<Mod> mods): game_root_(game_root), mods_(std::move(mods)) {}
 
 	// lookup functions
