@@ -1,28 +1,27 @@
 #ifndef MOD_LOADER_H
 #define MOD_LOADER_H
+
+
+
+#include "Mod.h"
 #include <map>
 #include <optional>
 #include <set>
 #include <string>
 #include <vector>
 
-using Name = std::string;
-using Path = std::string;
-struct Mod
-{
-	Mod() = default;
-	explicit Mod(const Name& theName, const Path& thePath): name(theName), path(thePath) {}
-	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies): name(theName), path(thePath), dependencies(theDependencies) {}
-	Name name;
-	Path path;
-	std::set<Name> dependencies;
-	bool operator==(const Mod& rhs) const { return rhs.name == name && rhs.path == path; }
-};
+
+
 using Mods = std::vector<Mod>;
+
+
 
 namespace commonItems
 {
+
 class ModParser;
+
+
 class ModLoader
 {
   public:
@@ -53,6 +52,9 @@ class ModLoader
 
 	std::map<Name, Path> modCache;
 };
+
 } // namespace commonItems
+
+
 
 #endif // MOD_LOADER_H

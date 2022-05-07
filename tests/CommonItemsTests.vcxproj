@@ -162,6 +162,7 @@
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\Log.cpp" />
+    <ClCompile Include="..\ModLoader\ModFilesystem.cpp" />
     <ClCompile Include="..\ModLoader\ModLoader.cpp" />
     <ClCompile Include="..\ModLoader\ModParser.cpp" />
     <ClCompile Include="..\OSCommonLayer.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
     <ClCompile Include="ColorTests.cpp" />
+    <ClCompile Include="ModFilesystemTests.cpp" />
     <ClCompile Include="ModLoaderTests.cpp" />
     <ClCompile Include="ModParserTests.cpp" />
     <ClCompile Include="OSCompatibilityLayerTests.cpp" />
@@ -198,6 +200,8 @@
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Log.h" />
     <ClInclude Include="..\Color.h" />
+    <ClInclude Include="..\ModLoader\Mod.h" />
+    <ClInclude Include="..\ModLoader\ModFilesystem.h" />
     <ClInclude Include="..\ModLoader\ModLoader.h" />
     <ClInclude Include="..\ModLoader\ModParser.h" />
     <ClInclude Include="..\Parser.h" />
@@ -287,6 +291,78 @@
     <CopyFileToFolders Include="TestFiles\mod\brokenpacked.zip">
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/mod</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\test_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\test_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\test_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\root_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_file.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder\dummy.txt">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

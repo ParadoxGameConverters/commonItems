@@ -39,5 +39,8 @@ void commonItems::ModParser::registerKeys()
 		const auto theDependencies = getStrings(theStream);
 		dependencies.insert(theDependencies.begin(), theDependencies.end());
 	});
+	registerKeyword("replace_path", [this](std::istream& theStream) {
+		replacedPaths.emplace(getString(theStream));
+	});
 	registerRegex(catchallRegex, ignoreItem);
 }

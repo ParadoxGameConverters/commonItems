@@ -51,7 +51,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 
 		// All verified mods go into usableMods
 		Log(LogLevel::Info) << "\t\t->> Found potentially useful [" << mod.name << "]: " << *possibleModPath + "/";
-		usableMods.emplace_back(Mod(mod.name, *possibleModPath + "/", mod.dependencies));
+		usableMods.emplace_back(Mod(mod.name, *possibleModPath + "/", mod.dependencies, mod.replacedFolders));
 	}
 }
 
@@ -193,12 +193,12 @@ void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const st
 {
 	if (!theMod.isCompressed())
 	{
-		possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies()));
+		possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
 		Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at " << path << " and itself at " << theMod.getPath();
 	}
 	else
 	{
-		possibleCompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies()));
+		possibleCompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
 		Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at " << path << " and itself at " << theMod.getPath();
 	}
 }
