@@ -11,18 +11,45 @@
 namespace
 {
 
+std::vector<std::string> SplitPath(std::string path)
+{
+	std::vector<std::string> split_path;
+
+	auto separator = std::min(path.find_first_of('/'), path.find_first_of('\\'));
+	while (separator != std::string::npos)
+	{
+		split_path.push_back(path.substr(0, separator));
+		path = path.substr(separator + 1, path.length());
+		separator = std::min(path.find_first_of('/'), path.find_first_of('\\'));
+	}
+	if (!path.empty())
+	{
+		split_path.push_back(path);
+	}
+
+	return split_path;
+}
+
+
 bool PathIsReplaced(std::string_view path, const std::set<std::string>& replaced_paths)
 {
-	return std::ranges::any_of(replaced_paths, [&path](const std::string& replaced_path) {
-		if (path.starts_with(replaced_path))
+	const auto split_path = SplitPath(std::string(path));
+
+	return std::ranges::any_of(replaced_paths, [&split_path](const std::string& replaced_path) {
+		const auto split_replaced_path = SplitPath(replaced_path);
+		for (size_t i = 0; i < split_replaced_path.size(); i++)
 		{
-			return true;
+			if (i >= split_path.size())
+			{
+				return false;
+			}
+			if (split_path[i] != split_replaced_path[i])
+			{
+				return false;
+			}
 		}
-		if (!replaced_path.starts_with('/') && path.starts_with('/' + replaced_path))
-		{
-			return true;
-		}
-		return false;
+
+		return true;
 	});
 }
 
