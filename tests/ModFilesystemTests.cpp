@@ -76,8 +76,8 @@ TEST(ModFilesystemTests, ReplacePathOnlyBlocksActualPath)
 {
 	const Mod mod_one("Mod One", "TestFiles/ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "TestFiles/ModFilesystem/GetActualFileLocation/mod_two");
-	const Mod mod_three("Mod Three", "TestFiles/ModFilesystem/GetActualFileLocation/mod_three", {}, { "test_fold" });
-	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", { mod_one, mod_two, mod_three });
+	const Mod mod_three("Mod Three", "TestFiles/ModFilesystem/GetActualFileLocation/mod_three", {}, {"test_fold"});
+	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
