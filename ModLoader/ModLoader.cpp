@@ -282,3 +282,54 @@ bool commonItems::ModLoader::extractZip(const std::string& archive, const std::s
 	}
 	return true;
 }
+
+
+void commonItems::ModLoader::sortMods()
+{
+	// using Kahn's algorithm - https://en.wikipedia.org/wiki/Topological_sorting#Kahn's_algorithm
+	auto unsortedMods = usableMods;
+
+	// track incoming edges
+	std::map<std::string, std::set<std::string>> incomingDependencies;
+	for (const auto& mod: unsortedMods)
+	{
+		for (const auto& dependency: mod.dependencies)
+		{
+			if (auto [itr, inserted] = incomingDependencies.emplace(dependency, std::set{mod.name}); !inserted)
+			{
+				itr->second.insert(mod.name);
+			}
+		}
+	}
+
+	// add mods with no incoming edges to the sorted mods
+	Mods sortedMods;
+	while (!unsortedMods.empty())
+	{
+		auto itr = unsortedMods.begin();
+		while (incomingDependencies.contains(itr->name))
+		{
+			++itr;
+			if (itr == unsortedMods.end())
+			{
+				throw std::invalid_argument("A mod dependency was missing.");
+			}
+		}
+
+		sortedMods.push_back(*itr);
+
+		for (const auto& dependencyName: itr->dependencies)
+		{
+			auto dependency = incomingDependencies.find(dependencyName);
+			dependency->second.erase(itr->name);
+			if (dependency->second.empty())
+			{
+				incomingDependencies.erase(dependencyName);
+			}
+		}
+
+		unsortedMods.erase(itr);
+	}
+
+	usableMods = sortedMods;
+}
