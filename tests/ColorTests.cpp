@@ -439,6 +439,33 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenHsv)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInCapitalHsv)
+{
+	std::stringstream input;
+	input << "= HSV { 0.5 0.5 0.5 }";
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(63, r);
+	ASSERT_EQ(127, g);
+	ASSERT_EQ(127, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
+TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenCapitalHsv)
+{
+	std::stringstream input;
+	input << "= HSV { 0.333 0.5 }";
+
+	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+}
+
+
 TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv360)
 {
 	std::stringstream input;
