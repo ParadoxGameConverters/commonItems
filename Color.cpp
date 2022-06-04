@@ -231,7 +231,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		const auto b = std::stoi(hex.substr(4, 2), nullptr, 16);
 		return Color(std::array<int, 3>{r, g, b});
 	}
-	else if (token == "hsv")
+	else if (token == "hsv" || token == "HSV")
 	{
 		const auto hsv = doubleList{theStream}.getDoubles();
 		if (hsv.size() != 3)
