@@ -3,6 +3,10 @@
 
 
 
+// A parser for reading Paradox Script.
+
+
+
 #include <functional>
 #include <map>
 #include <optional>

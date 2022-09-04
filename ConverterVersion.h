@@ -1,7 +1,16 @@
 #ifndef CONVERTER_VERSION_H
 #define CONVERTER_VERSION_H
+
+
+
+// A class to handle converter-style versions
+
+
+
 #include "GameVersion.h"
 #include "Parser.h"
+
+
 
 namespace commonItems
 {

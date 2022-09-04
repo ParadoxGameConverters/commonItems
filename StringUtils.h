@@ -3,6 +3,10 @@
 
 
 
+// Utilities for modifying strings.
+
+
+
 #include <string>
 
 
