@@ -152,7 +152,7 @@ jobs:
       run: |
        cd tests/build
        make gcov
-       
+
     - name: Run lcov
       run: |
        cd tests/build
