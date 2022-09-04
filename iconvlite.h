@@ -1,13 +1,9 @@
-/*
-iconvlite.h
-Iconv Lite
-Simple cpp functions to convert strings from cp1251 to utf8 and from utf8 to cp1251
-*/
-
-
-
 #ifndef ICONVLITE_H
 #define ICONVLITE_H
+
+
+
+// Simple cpp functions to convert strings from cp1251 to utf8 and from utf8 to cp1251
 
 
 

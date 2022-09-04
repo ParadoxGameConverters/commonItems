@@ -2,6 +2,9 @@
 #define PARSER_HELPERS_H
 
 
+// Functions for reading common structures within Paradox Script.
+
+
 
 #include "Parser.h"
 #include <concepts>

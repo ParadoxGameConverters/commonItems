@@ -1,10 +1,19 @@
 #ifndef CONVENIENT_PARSER_H
 #define CONVENIENT_PARSER_H
 
+
+
+// A parser that allows simple keyword to variable matches
+
+
+
 #include "Parser.h"
+
+
 
 namespace commonItems
 {
+
 class convenientParser: public parser
 {
   public:
@@ -16,5 +25,7 @@ class convenientParser: public parser
 };
 
 } // namespace commonItems
+
+
 
 #endif // CONVENIENT_PARSER_H
