@@ -50,7 +50,6 @@ jobs:
 
     - name: Build solution
       run: |
-       cd tests
        cmake -H. -Bbuild && cmake --build ./build -- -j40
 
     - name: Run tests
@@ -60,13 +59,18 @@ jobs:
 
     - name: Run gcov
       run: |
-       cd tests/build
+       cd build
+       echo pwd
        pwd
+       echo ls
+       ls
+       echo ls CMakeFiles/CommonItemsTests.dir
+       ls CMakeFiles/CommonItemsTests.dir
        make gcov
 
     - name: Run lcov
       run: |
-       cd tests/build
+       cd build
        pwd
        make lcov
 
@@ -74,7 +78,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: tests/build/lcoverage/coverage.info
+        path-to-lcov: build/lcoverage/coverage.info
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
@@ -140,22 +144,21 @@ jobs:
        # Check versions of gcc, g++ and cmake
        gcc -v && g++ -v && cmake --version
        # Run your build commands next
-       cd tests
        cmake -H. -Bbuild && cmake --build ./build -- -j3
 
     - name: Run tests
       run: |
-       cd tests/build
+       cd build
        ./CommonItemsTests
 
     - name: Run gcov
       run: |
-       cd tests/build
+       cd build
        make gcov
 
     - name: Run lcov
       run: |
-       cd tests/build
+       cd build
        pwd
        make lcov
 

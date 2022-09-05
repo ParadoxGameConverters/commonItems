@@ -20,14 +20,14 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 
 include_directories(googletest/googletest/include/gtest)
 include_directories(googletest/googlemock/include/gmock)
-add_subdirectory("googletest" "googletest")
-add_subdirectory(../ZipLib [binary_dir])
+add_subdirectory("tests/googletest" "googletest")
+add_subdirectory(ZipLib [binary_dir])
 
 ################################################################################
 # Source groups
 ################################################################################
 set(commonItems
-    "test_main.cpp"
+    "tests/test_main.cpp"
     "../Color.cpp"
     "../Color.h"
     "../CommonFunctions.cpp"
@@ -65,21 +65,21 @@ set(commonItems
 source_group("commonItems" FILES ${commonItems})
 
 set(tests
-    "ColorTests.cpp"
-    "CommonFunctionsTests.cpp"
-    "ConvenientParserTests.cpp"
-    "ConverterVersionTests.cpp"
-    "DateTests.cpp"
-    "GameVersionTests.cpp"
-    "iconvliteTests.cpp"
-    "LogTests.cpp"
-	"ModFilesystemTests.cpp"
-    "ModLoaderTests.cpp"
-    "ModParserTests.cpp"
-    "OSCompatibilityLayerTests.cpp"
-    "ParserHelperTests.cpp"
-    "ParserTests.cpp"
-    "StringUtilsTests.cpp"
+    "tests/ColorTests.cpp"
+    "tests/CommonFunctionsTests.cpp"
+    "tests/ConvenientParserTests.cpp"
+    "tests/ConverterVersionTests.cpp"
+    "tests/DateTests.cpp"
+    "tests/GameVersionTests.cpp"
+    "tests/iconvliteTests.cpp"
+    "tests/LogTests.cpp"
+	"tests/ModFilesystemTests.cpp"
+    "tests/ModLoaderTests.cpp"
+    "tests/ModParserTests.cpp"
+    "tests/OSCompatibilityLayerTests.cpp"
+    "tests/ParserHelperTests.cpp"
+    "tests/ParserTests.cpp"
+    "tests/StringUtilsTests.cpp"
 )
 source_group("tests" FILES ${tests})
 
@@ -94,17 +94,12 @@ set(ALL_FILES
 ################################################################################
 add_executable(${PROJECT_NAME} ${ALL_FILES})
 
-################################################################################
-# Include directories
-################################################################################
-target_include_directories(${PROJECT_NAME} PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/../compile-time-regular-expressions/single-header"
-)
 
 ################################################################################
 # Test Files
 ################################################################################
-file(COPY "../tests/TestFiles/" DESTINATION "./")
+file(COPY "tests/TestFiles/" DESTINATION "./")
+
 
 ################################
 # Coverage

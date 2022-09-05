@@ -15,6 +15,7 @@ testResults
 .vs/
 packages/
 tests/build/
+build/
 
 #OpenCppCoverage stuff
 *.log
