@@ -107,6 +107,14 @@ TEST(Date_Tests, DateCanBeInputFromString)
 }
 
 
+TEST(Date_Tests, DateInitializedFromEmptyStringIsDefault)
+{
+	const date testDate("");
+
+	ASSERT_EQ("1.1.1", testDate.toString());
+}
+
+
 TEST(Date_Tests, DateLogsBadInitialization)
 {
 	const std::stringstream log;
@@ -146,6 +154,113 @@ TEST(Date_Tests, DateIsOneJanuaryFirstOnBadInitialization)
 	std::cout.rdbuf(stdOutBuf);
 
 	ASSERT_EQ("1.1.1", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeIncreased)
+{
+	date testDate(2020, 1, 25);
+	testDate.ChangeByDays(4);
+
+	ASSERT_EQ("2020.1.29", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeIncreasedAndWrapsMonths)
+{
+	date testDate(2020, 4, 25);
+	testDate.ChangeByDays(14);
+
+	ASSERT_EQ("2020.5.9", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeIncreasedAndWrapsYears)
+{
+	date testDate(2020, 4, 25);
+	testDate.ChangeByDays(314);
+
+	ASSERT_EQ("2021.3.5", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeDecreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.ChangeByDays(-4);
+
+	ASSERT_EQ("2020.4.21", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeDecreasedAndWrapsMonths)
+{
+	date testDate(2020, 2, 25);
+	testDate.ChangeByDays(-34);
+
+	ASSERT_EQ("2020.1.22", testDate.toString());
+}
+
+
+TEST(Date_Tests, DaysCanBeDecreasedAndWrapsYears)
+{
+	date testDate(2020, 4, 25);
+	testDate.ChangeByDays(-679);
+
+	ASSERT_EQ("2018.6.15", testDate.toString());
+}
+
+
+TEST(Date_Tests, MonthsCanBeIncreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.increaseByMonths(4);
+
+	ASSERT_EQ("2020.8.25", testDate.toString());
+}
+
+
+TEST(Date_Tests, MonthsCanBeIncreasedAndWrapAround)
+{
+	date testDate(2020, 4, 25);
+	testDate.increaseByMonths(9);
+
+	ASSERT_EQ("2021.1.25", testDate.toString());
+}
+
+
+TEST(Date_Tests, MonthsCanBeDecreased)
+{
+	date testDate(2020, 8, 25);
+	testDate.ChangeByMonths(-4);
+
+	ASSERT_EQ("2020.4.25", testDate.toString());
+}
+
+
+TEST(Date_Tests, MonthsCanBeDecreasedAndWrapAround)
+{
+	date testDate(2020, 4, 25);
+	testDate.ChangeByMonths(-9);
+
+	ASSERT_EQ("2019.7.25", testDate.toString());
+}
+
+
+TEST(Date_Tests, YearsCanBeIncreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.addYears(4);
+
+	ASSERT_EQ("2024.4.25", testDate.toString());
+}
+
+TEST(Date_Tests, YearsCanBeDecreased)
+{
+	date testDate(2020, 4, 25);
+	testDate.subtractYears(4);
+
+	ASSERT_EQ("2016.4.25", testDate.toString());
 }
 
 
@@ -319,40 +434,6 @@ TEST(Date_Tests, DiffInYearsHandlesNegative)
 	const date testDateTwo(2020, 4, 25);
 
 	ASSERT_NEAR(-0.246575f, testDate.diffInYears(testDateTwo), 0.0001);
-}
-
-
-TEST(Date_Tests, MonthsCanBeIncreased)
-{
-	date testDate(2020, 4, 25);
-	testDate.increaseByMonths(4);
-
-	ASSERT_EQ("2020.8.25", testDate.toString());
-}
-
-
-TEST(Date_Tests, MonthsCanBeIncreasedAndWrapAround)
-{
-	date testDate(2020, 4, 25);
-	testDate.increaseByMonths(9);
-
-	ASSERT_EQ("2021.1.25", testDate.toString());
-}
-
-
-TEST(Date_Tests, YearsCanBeIncreased)
-{
-	date testDate(2020, 4, 25);
-	testDate.addYears(4);
-
-	ASSERT_EQ("2024.4.25", testDate.toString());
-}
-TEST(Date_Tests, YearsCanBeDecreased)
-{
-	date testDate(2020, 4, 25);
-	testDate.subtractYears(4);
-
-	ASSERT_EQ("2016.4.25", testDate.toString());
 }
 
 
