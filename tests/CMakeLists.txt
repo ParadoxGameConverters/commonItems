@@ -130,7 +130,6 @@ if (DEFINED ENV{COVERAGE})
 		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
 		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
 		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/targa.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
 		COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
 	)
