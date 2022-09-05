@@ -130,7 +130,7 @@ std::string convertUTF8ToWin1250(const std::string& UTF8);
 // converts a string in the system dependent wchar_t encoding to UTF-8
 std::string convertToUTF8(const std::wstring& input);
 
-// Converts an UTF8 path to the system dependent filesystem path encodingand removes non - allowed characters.
+// Converts an UTF8 path to the system dependent filesystem path encoding and removes non - allowed characters.
 std::string normalizeUTF8Path(const std::string& utf_8_path);
 
 } // namespace commonItems

@@ -10,10 +10,12 @@ TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("TestFiles", incomingMods);
+	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	ASSERT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "The Mod");
+	EXPECT_EQ(mods[0].path, "mod/themod/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
@@ -23,10 +25,12 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("TestFiles", incomingMods);
+	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	ASSERT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "The Mod");
+	EXPECT_EQ(mods[0].path, "mod/themod/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
@@ -39,10 +43,12 @@ TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 	incomingMods.emplace_back(Mod("Nonexistent mod", "mod/nonexistentmod.mod")); // doesn't exist.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("TestFiles", incomingMods);
+	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	EXPECT_THAT(mods, UnorderedElementsAre(Mod("The Mod", "TestFiles/mod/themod/")));
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "The Mod");
+	EXPECT_EQ(mods[0].path, "mod/themod/");
 }
 
 TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
@@ -51,10 +57,12 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	incomingMods.emplace_back(Mod("some packed mod", "mod/packedmod.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("TestFiles", incomingMods);
+	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	EXPECT_THAT(mods, UnorderedElementsAre(Mod("Packed Mod", "mods/packedmod/")));
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "Packed Mod");
+	EXPECT_EQ(mods[0].path, "mods/packedmod/");
 	EXPECT_TRUE(commonItems::DoesFolderExist("mods/packedmod/"));
 }
 
@@ -64,9 +72,11 @@ TEST(ModLoaderTests, BrokenCompressedModsAreNotSkippedEvenThoughTheyShouldBe)
 	incomingMods.emplace_back(Mod("broken packed mod", "mod/brokenpacked.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("TestFiles", incomingMods);
+	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	EXPECT_THAT(mods, UnorderedElementsAre(Mod("Broken Packed Mod", "mods/brokenpacked/")));
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "Broken Packed Mod");
+	EXPECT_EQ(mods[0].path, "mods/brokenpacked/");
 	EXPECT_TRUE(commonItems::DoesFolderExist("mods/brokenpacked/"));
 }

@@ -197,7 +197,12 @@ std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(c
 			}
 
 			found_files.insert(new_file);
-			full_files.insert(mod.path + '/' + path + '/' + std::string(new_file));
+			auto full_file = mod.path + '/' + path + '/' + std::string(new_file);
+			for (auto index = full_file.find("//"); index != std::string::npos; index = full_file.find("//"))
+			{
+				full_file.replace(index, 1, "");
+			}
+			full_files.insert(full_file);
 		}
 
 		if (PathIsReplaced(path, mod.replacedFolders))
@@ -214,7 +219,12 @@ std::set<std::string> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(c
 		}
 
 		found_files.insert(new_file);
-		full_files.insert(game_root_ + '/' + path + '/' + std::string(new_file));
+		auto full_file = game_root_ + '/' + path + '/' + std::string(new_file);
+		for (auto index = full_file.find("//"); index != std::string::npos; index = full_file.find("//"))
+		{
+			full_file.replace(index, 1, "");
+		}
+		full_files.insert(full_file);
 	}
 
 	return full_files;
