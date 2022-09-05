@@ -67,87 +67,26 @@ date::date(std::string init, const bool AUC)
 
 void date::ChangeByDays(int days)
 {
-	int new_year = year;
-	int new_month = month;
-	int new_day = day;
-
-	if (days > 0)
+	auto current_day_in_year = calculateDayInYear() + days;
+	while (current_day_in_year < 0)
 	{
-		do
-		{
-			const auto current_month_index = new_month - 1;
-			const auto current_day_in_year = days_by_month[current_month_index] + new_day + days;
-
-			bool does_month_change;
-			if (new_month < 12)
-			{
-				does_month_change = current_day_in_year > days_by_month[new_month];
-			}
-			else
-			{
-				does_month_change = current_day_in_year > 365;
-			}
-
-			if (does_month_change)
-			{
-				date temp_date(new_year, new_month, new_day);
-				temp_date.ChangeByMonths(1);
-				new_year = temp_date.year;
-				new_month = temp_date.month;
-				new_day = temp_date.day;
-
-				const auto days_in_month = CommonItems::DaysInMonth(new_month);
-				const auto days_forward = days_in_month - new_day + 1;
-				days -= days_forward;
-				new_day = 1;
-			}
-			else
-			{
-				new_day += days;
-				days = 0;
-			}
-		} while (days > 0);
-	}
-	else if (days < 0)
-	{
-		do
-		{
-			const auto current_month_index = new_month - 1;
-			const auto current_day_in_year = days_by_month[current_month_index] + new_day + days;
-
-			bool does_month_change;
-			if (new_month > 1)
-			{
-				does_month_change = current_day_in_year <= days_by_month[current_month_index];
-			}
-			else
-			{
-				does_month_change = current_day_in_year <= 0;
-			}
-
-			if (does_month_change)
-			{
-				date temp_date(new_year, new_month, new_day);
-				temp_date.ChangeByMonths(-1);
-				new_year = temp_date.year;
-				new_month = temp_date.month;
-				new_day = temp_date.day;
-
-				const auto days_in_month = CommonItems::DaysInMonth(new_month);
-				days += new_day;
-				new_day = days_in_month;
-			}
-			else
-			{
-				new_day += days;
-				days = 0;
-			}
-		} while (days < 0);
+		--year;
+		current_day_in_year += 365;
 	}
 
-	year = new_year;
-	month = new_month;
-	day = new_day;
+	year += current_day_in_year / 365;
+	current_day_in_year = current_day_in_year % 365;
+	for (month = 0; current_day_in_year > days_by_month[month]; ++month)
+	{
+	}
+	if (month > 0)
+	{
+		day = current_day_in_year - days_by_month[month - 1];
+	}
+	else
+	{
+		day = current_day_in_year;
+	}
 }
 
 
