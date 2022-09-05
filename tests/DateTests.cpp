@@ -1,4 +1,5 @@
 #include "../Date.h"
+#include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 
 
@@ -45,7 +46,7 @@ TEST(Date_Tests, DateLogsBadInitialization)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Problem inputting date: invalid stoi argument\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(" [WARNING] Problem inputting date:"));
 }
 
 

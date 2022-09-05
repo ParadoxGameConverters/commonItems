@@ -258,6 +258,17 @@ bool IsDirectory(const std::string& path)
 */
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
+	auto validatedPath = path;
+	if (validatedPath.ends_with('/') || validatedPath.ends_with('\\'))
+		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
+	const auto origPathStr = fs::u8path(validatedPath).native();
+
+	const auto tempPath = fs::u8path(path);
+	if (!fs::exists(tempPath) || !fs::is_directory(tempPath))
+	{
+		return {};
+	}
+
 	std::set<std::string> fileNames;
 	for (auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
 	{
