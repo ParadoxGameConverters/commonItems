@@ -49,7 +49,7 @@ TEST(CommonRegexes_Tests, CatchallRegexMatchesInternalQuotes)
 }
 
 
-TEST(CommonRegexes_Tests, CatchallRegexDoesntMatchQuotedInternalQuotes)
+TEST(CommonRegexes_Tests, CatchallRegexMatchesQuotedInternalQuotes)
 {
 	std::smatch match;
 	const std::string test_string(R"("1234-"abcd")");
