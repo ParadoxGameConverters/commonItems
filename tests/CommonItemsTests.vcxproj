@@ -173,6 +173,7 @@
     <ClCompile Include="..\targa.cpp" />
     <ClCompile Include="..\WinUtils.cpp" />
     <ClCompile Include="CommonFunctionsTests.cpp" />
+    <ClCompile Include="CommonRegexesTests.cpp" />
     <ClCompile Include="ConvenientParserTests.cpp" />
     <ClCompile Include="ConverterVersionTests.cpp" />
     <ClCompile Include="DateTests.cpp" />

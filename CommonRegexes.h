@@ -22,7 +22,7 @@ inline constexpr const char* floatRegex = R"(-?\d+(.\d+)?)";
 inline constexpr const char* quotedFloatRegex = R"("-?\d+(.\d+)?")";
 
 // strings
-inline constexpr const char* stringRegex = R"([^[:s:]^=^\{^\}^\"]+)";
+inline constexpr const char* stringRegex = R"([^[:s:]^=^\{^\}^\^\[^\]"]+)";
 inline constexpr const char* quotedStringRegex = R"("[^\n^=^\{^\}^\"]+")";
 
 } // namespace commonItems
