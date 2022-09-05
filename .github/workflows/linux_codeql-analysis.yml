@@ -33,7 +33,6 @@ jobs:
 
     - name: Build solution
       run: |
-       cd tests
        chmod u+x build_linux.sh
        ./build_linux.sh
 
@@ -79,8 +78,7 @@ jobs:
        # Check versions of gcc, g++ and cmake
        gcc -v && g++ -v && cmake --version
        # Run your build commands next
-       chmod u+x ./tests/build_linux_foreign.sh
-       cd tests
+       chmod u+x ./build_linux_foreign.sh
        bash ./build_linux_foreign.sh
 
     - name: Perform CodeQL Analysis

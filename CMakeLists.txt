@@ -20,14 +20,14 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 
 include_directories(googletest/googletest/include/gtest)
 include_directories(googletest/googlemock/include/gmock)
-add_subdirectory("googletest" "googletest")
-add_subdirectory(../ZipLib [binary_dir])
+add_subdirectory("tests/googletest" "googletest")
+add_subdirectory(ZipLib [binary_dir])
 
 ################################################################################
 # Source groups
 ################################################################################
 set(commonItems
-    "test_main.cpp"
+    "tests/test_main.cpp"
     "../Color.cpp"
     "../Color.h"
     "../CommonFunctions.cpp"
@@ -65,21 +65,21 @@ set(commonItems
 source_group("commonItems" FILES ${commonItems})
 
 set(tests
-    "ColorTests.cpp"
-    "CommonFunctionsTests.cpp"
-    "ConvenientParserTests.cpp"
-    "ConverterVersionTests.cpp"
-    "DateTests.cpp"
-    "GameVersionTests.cpp"
-    "iconvliteTests.cpp"
-    "LogTests.cpp"
-	"ModFilesystemTests.cpp"
-    "ModLoaderTests.cpp"
-    "ModParserTests.cpp"
-    "OSCompatibilityLayerTests.cpp"
-    "ParserHelperTests.cpp"
-    "ParserTests.cpp"
-    "StringUtilsTests.cpp"
+    "tests/ColorTests.cpp"
+    "tests/CommonFunctionsTests.cpp"
+    "tests/ConvenientParserTests.cpp"
+    "tests/ConverterVersionTests.cpp"
+    "tests/DateTests.cpp"
+    "tests/GameVersionTests.cpp"
+    "tests/iconvliteTests.cpp"
+    "tests/LogTests.cpp"
+	"tests/ModFilesystemTests.cpp"
+    "tests/ModLoaderTests.cpp"
+    "tests/ModParserTests.cpp"
+    "tests/OSCompatibilityLayerTests.cpp"
+    "tests/ParserHelperTests.cpp"
+    "tests/ParserTests.cpp"
+    "tests/StringUtilsTests.cpp"
 )
 source_group("tests" FILES ${tests})
 
@@ -94,17 +94,12 @@ set(ALL_FILES
 ################################################################################
 add_executable(${PROJECT_NAME} ${ALL_FILES})
 
-################################################################################
-# Include directories
-################################################################################
-target_include_directories(${PROJECT_NAME} PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/../compile-time-regular-expressions/single-header"
-)
 
 ################################################################################
 # Test Files
 ################################################################################
-file(COPY "../tests/TestFiles/" DESTINATION "./")
+file(COPY "tests/TestFiles/" DESTINATION "./")
+
 
 ################################
 # Coverage
@@ -116,20 +111,20 @@ if (DEFINED ENV{COVERAGE})
 	)
 	add_custom_command(TARGET gcov
 		COMMAND echo "=================== GCOV ===================="
-		#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems
+		#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
 		COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
 	)
@@ -140,7 +135,7 @@ if (DEFINED ENV{COVERAGE})
 	add_custom_command(TARGET lcov
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --capture --directory CMakeFiles/CommonItemsTests.dir/home/runner/actions-runner/_work/commonItems/commonItems --output-file lcoverage/coverage.info
+		COMMAND lcov --capture --directory CMakeFiles --output-file lcoverage/coverage.info
 		COMMAND echo "-- Generating HTML output files"
 		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
 	)
