@@ -140,7 +140,7 @@ if (DEFINED ENV{COVERAGE})
 		COMMAND echo "-- Generating HTML output files"
 		COMMAND genhtml lcoverage/main_coverage.info --output-directory lcoverage
 	)
-	add_dependencies(gcov commonItems)
+	add_dependencies(gcov ${PROJECT_NAME})
 
 	# Make sure to clean up the coverage folder
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
