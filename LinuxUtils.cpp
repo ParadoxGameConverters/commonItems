@@ -274,12 +274,10 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 	{
 		if (!p.is_directory())
 		{
-			auto lastSlash = p.path().native().find_last_of("/");
-			auto tempDir = p.path().native().substr(0, lastSlash);
-			lastSlash = tempDir.find_last_of("/");
-			auto dirName = tempDir.substr(lastSlash + 1, tempDir.length());
-			auto returnName = "/" + dirName + "/" + p.path().filename().string();
-			fileNames.insert(returnName);
+			const auto currentPath = p.path().native();
+
+			const auto requestedPath = currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
+			fileNames.insert(requestedPath);
 		}
 	}
 	return fileNames;

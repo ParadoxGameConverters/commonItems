@@ -30,8 +30,11 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 		if (!p.is_directory())
 		{
 			const auto currentPath = p.path().native();
+
 			const auto requestedPath = currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
-			fileNames.insert(UTF16ToUTF8(requestedPath));
+			auto utf8_path = UTF16ToUTF8(requestedPath);
+			std::ranges::replace(utf8_path, '\\', '/');
+			fileNames.insert(utf8_path);
 		}
 	}
 	return fileNames;

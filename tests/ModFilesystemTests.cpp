@@ -277,8 +277,8 @@ TEST(ModFilesystemTests, FilesInGameRootAndSubfoldersAreFound)
 	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
-		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/dummy.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/test_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt"));
 }
@@ -290,10 +290,10 @@ TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceGameRootFiles)
 	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
-		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/dummy.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/test_file.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder\\dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/dummy.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_file.txt"));
 }
@@ -306,10 +306,10 @@ TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceEarlierModFiles)
 	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
-		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder\\dummy.txt",
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/game_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/dummy.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/game_root/test_folder/root_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_one/test_folder/mod_one_file.txt",
@@ -324,8 +324,8 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFilesAndSubfoldersFromBeingFound)
 	const commonItems::ModFilesystem mod_filesystem("TestFiles/ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
-		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder\\dummy.txt",
-			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder\\dummy.txt",
+		 testing::UnorderedElementsAre("TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/dummy.txt",
+			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_folder/dummy.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
 			  "TestFiles/ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_file.txt"));
 }
