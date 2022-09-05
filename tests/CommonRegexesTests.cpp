@@ -255,7 +255,7 @@ TEST(CommonRegexes_Tests, QuotedStringRegexMatchesQuotedStrings)
 {
 	std::smatch match;
 	const std::string test_string(R"("1234-abcd")");
-	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
 }
 
 
