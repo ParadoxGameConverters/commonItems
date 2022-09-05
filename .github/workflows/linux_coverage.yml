@@ -62,6 +62,8 @@ jobs:
       run: |
        cd tests/build
        pwd
+       ls CMakeFiles
+       ls CMakeFiles/CommonItemsTests.dir
        make gcov
 
     - name: Run lcov
