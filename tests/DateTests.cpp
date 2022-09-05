@@ -4,6 +4,77 @@
 
 
 
+TEST(Date_Tests, DaysInMonthCorrectForJanuary)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(1), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForFebruary)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(2), 28);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForMarch)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(3), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForApril)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(4), 30);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForMay)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(5), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForJune)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(6), 30);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForJuly)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(7), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForAugust)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(8), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForSeptember)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(9), 30);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForOctober)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(10), 31);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForNovember)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(11), 30);
+}
+
+
+TEST(Date_Tests, DaysInMonthCorrectForDecember)
+{
+	EXPECT_EQ(CommonItems::DaysInMonth(12), 31);
+}
+
 TEST(Date_Tests, DefaultDateIsNotSet)
 {
 	const date testDate;
