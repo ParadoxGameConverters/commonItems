@@ -167,4 +167,3 @@ enable_testing()
 # Link test executable against gtest & gtest_main
 target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
-file(COPY "TestFiles" DESTINATION "${CMAKE_BINARY_DIR}")
