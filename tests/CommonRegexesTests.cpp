@@ -293,3 +293,35 @@ TEST(CommonRegexes_Tests, QuotedStringRegexDoesntMatchEquals)
 	const std::string test_string(R"("1234-abcd=")");
 	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::stringRegex)));
 }
+
+
+TEST(CommonRegexes_Tests, DateRegexMatchesDates)
+{
+	std::smatch match;
+	const std::string test_string("1918.11.11");
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::stringRegex)));
+}
+
+
+TEST(CommonRegexes_Tests, DateRegexRequiresThreeSections)
+{
+	std::smatch match;
+	const std::string test_string("1918.11");
+	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::dateRegex)));
+	const std::string test_string_two("1918");
+	EXPECT_FALSE(std::regex_match(test_string_two, match, std::regex(commonItems::dateRegex)));
+	const std::string test_string_three;
+	EXPECT_FALSE(std::regex_match(test_string_three, match, std::regex(commonItems::dateRegex)));
+}
+
+
+TEST(CommonRegexes_Tests, DateRegexDoesntMatchDatesWithCharacters)
+{
+	std::smatch match;
+	const std::string test_string("1918a.11.11");
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::stringRegex)));
+	const std::string test_string_two("1918.11a.11");
+	EXPECT_TRUE(std::regex_match(test_string_two, match, std::regex(commonItems::stringRegex)));
+	const std::string test_string_three("1918.11.11a");
+	EXPECT_TRUE(std::regex_match(test_string_three, match, std::regex(commonItems::stringRegex)));
+}
