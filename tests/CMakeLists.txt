@@ -101,6 +101,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/../compile-time-regular-expressions/single-header"
 )
 
+################################################################################
+# Test Files
+################################################################################
+file(COPY "../tests/TestFiles/" DESTINATION "./")
+
 ################################
 # Coverage
 ################################
