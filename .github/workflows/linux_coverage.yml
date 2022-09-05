@@ -54,7 +54,7 @@ jobs:
 
     - name: Run tests
       run: |
-       cd tests/build
+       cd build
        ./CommonItemsTests
 
     - name: Run gcov
