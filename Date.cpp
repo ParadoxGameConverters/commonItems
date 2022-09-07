@@ -5,6 +5,36 @@
 
 
 
+namespace
+{
+
+const std::array<int, 13> days_by_month{
+	 0,	// January
+	 31,	// February
+	 59,	// March
+	 90,	// April
+	 120, // May
+	 151, // June
+	 181, // July
+	 212, // August
+	 243, // September
+	 273, // October
+	 304, // November
+	 334, // December
+	 365, // End of year
+};
+
+}
+
+
+
+int CommonItems::DaysInMonth(int month)
+{
+	return days_by_month[month] - days_by_month[month - 1];
+}
+
+
+
 date::date(std::string init, const bool AUC)
 {
 	if (init.length() < 1)
@@ -35,22 +65,60 @@ date::date(std::string init, const bool AUC)
 }
 
 
-void date::increaseByMonths(const int months)
+void date::ChangeByDays(int days)
 {
-	year += months / 12;
-	month += months % 12;
-	if (month > 12)
+	auto current_day_in_year = calculateDayInYear() + days;
+	while (current_day_in_year < 0)
 	{
-		year++;
-		month -= 12;
+		--year;
+		current_day_in_year += 365;
+	}
+
+	year += current_day_in_year / 365;
+	current_day_in_year = current_day_in_year % 365;
+	for (month = 0; current_day_in_year > days_by_month[month]; ++month)
+	{
+	}
+	if (month > 0)
+	{
+		day = current_day_in_year - days_by_month[month - 1];
+	}
+	else
+	{
+		day = current_day_in_year;
 	}
 }
 
 
-void date::subtractYears(const int years)
+void date::ChangeByMonths(int months)
 {
-	year -= years;
+	int new_year = year;
+	int new_month = month;
+
+	new_year += months / 12;
+	new_month += months % 12;
+	if (new_month > 12)
+	{
+		++new_year;
+		new_month -= 12;
+	}
+	else if (new_month < 1)
+	{
+		--new_year;
+		new_month += 12;
+	}
+
+	year = new_year;
+	month = new_month;
 }
+
+
+
+void date::increaseByMonths(const int months)
+{
+	ChangeByMonths(months);
+}
+
 
 int date::convertAUCtoAD(const int yearAUC)
 {
@@ -93,24 +161,10 @@ std::ostream& operator<<(std::ostream& out, const date& d)
 }
 
 
-const std::array<int, 12> daysByMonth{
-	 0,	// January
-	 31,	// February
-	 59,	// March
-	 90,	// April
-	 120, // May
-	 151, // June
-	 181, // July
-	 212, // August
-	 243, // September
-	 273, // October
-	 304, // November
-	 334	// December
-};
 int date::calculateDayInYear() const
 {
 	if (month >= 1 && month <= 12)
-		return day + daysByMonth[static_cast<size_t>(month) - 1];
+		return day + days_by_month[static_cast<size_t>(month) - 1];
 	else
 		return day;
 }

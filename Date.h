@@ -27,6 +27,15 @@
 
 
 
+namespace CommonItems
+{
+
+[[nodiscard]] int DaysInMonth(int month);
+
+}
+
+
+
 class date
 {
   public:
@@ -36,9 +45,12 @@ class date
 	explicit date(std::string init, bool AUC);
 	explicit date(const std::string& init): date(init, false) {}
 
+	void ChangeByDays(int days);
+	void ChangeByMonths(int months);
 	void increaseByMonths(int months);
-	void addYears(const int years) { year += years; }
-	void subtractYears(int years);
+	void ChangeByYears(int years) { year += years; }
+	void addYears(int years) { ChangeByYears(years); }
+	void subtractYears(int years) { ChangeByYears(-years); }
 
 	auto operator<=>(const date& rhs) const = default;
 
