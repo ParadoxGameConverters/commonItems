@@ -29,7 +29,7 @@
 //	ASSERT_EQ(R"("Quoted string)", unquotedString);
 //}
 //
-//
+
 //TEST(StringUtils_Tests, RemQuotesLeavesSingleQuote)
 //{
 //	const std::string quotedString{R"(")"};
