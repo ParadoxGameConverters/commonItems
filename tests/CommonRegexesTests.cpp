@@ -259,21 +259,21 @@ TEST(CommonRegexes_Tests, QuotedStringRegexMatchesQuotedStrings)
 }
 
 
-TEST(CommonRegexes_Tests, QuotedStringRegexDoesntMatchCurlyBrackets)
+TEST(CommonRegexes_Tests, QuotedStringRegexMatchesQuotedStringContainingCurlyBrackets)
 {
 	std::smatch match;
 	const std::string test_string(R"("1234-abcd{")");
-	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
 	const std::string test_string_two("1234-abcd}");
 	EXPECT_FALSE(std::regex_match(test_string_two, match, std::regex(commonItems::quotedStringRegex)));
 }
 
 
-TEST(CommonRegexes_Tests, QuotedStringRegexDoesntMatchBrackets)
+TEST(CommonRegexes_Tests, QuotedStringRegexMatchesQuotedStringContainingBrackets)
 {
 	std::smatch match;
 	const std::string test_string(R"("1234-abcd[")");
-	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
 	const std::string test_string_two("1234-abcd]");
 	EXPECT_FALSE(std::regex_match(test_string_two, match, std::regex(commonItems::quotedStringRegex)));
 }
@@ -287,11 +287,11 @@ TEST(CommonRegexes_Tests, QuotedStringRegexDoesntMatchInternalQuotes)
 }
 
 
-TEST(CommonRegexes_Tests, QuotedStringRegexDoesntMatchEquals)
+TEST(CommonRegexes_Tests, QuotedStringRegexMatchesQuotedStringContainingEquals)
 {
 	std::smatch match;
 	const std::string test_string(R"("1234-abcd=")");
-	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
+	EXPECT_TRUE(std::regex_match(test_string, match, std::regex(commonItems::quotedStringRegex)));
 }
 
 
