@@ -5,6 +5,13 @@
 namespace commonItems
 {
 
+
+bool IsQuoted(const std::string& string)
+{
+	return string.starts_with('"') && string.ends_with('"');
+}
+
+
 std::string remQuotes(const std::string& in)
 {
 	const auto length = in.size();
