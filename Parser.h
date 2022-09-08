@@ -7,6 +7,7 @@
 
 
 
+#include "ModLoader/ModFilesystem.h"
 #include <functional>
 #include <map>
 #include <optional>
@@ -43,6 +44,17 @@ class parser
 
 	void parseStream(std::istream& theStream);
 	void parseFile(std::string_view filename);
+
+	// Parses a game file in either vanilla game or mods directory.
+	// For example:
+	//		relativePath may be "map_data/areas.txt"
+	void ParseGameFile(const std::string& relative_path, const ModFilesystem& mod_fs);
+
+	// Parses a game folder in both vanilla game and mods directory.
+	// For example:
+	//		relativePath may be "common/governments"
+	//		extensions may be "txt", "text"
+	void ParseGameFolder(const std::string& relative_path, const ModFilesystem& mod_fs, const std::set<std::string>& extensions, bool recursive);
 
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);

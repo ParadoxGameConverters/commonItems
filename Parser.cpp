@@ -1,8 +1,11 @@
 #include "Parser.h"
+#include "CommonFunctions.h"
 #include "Log.h"
+#include "OSCompatibilityLayer.h"
 #include "StringUtils.h"
 #include <filesystem>
 #include <fstream>
+
 
 
 namespace fs = std::filesystem;
@@ -110,6 +113,46 @@ void commonItems::parser::parseFile(std::string_view filename)
 	absorbBOM(theFile);
 	parseStream(theFile);
 	theFile.close();
+}
+
+
+void commonItems::parser::ParseGameFile(const std::string& relative_path, const ModFilesystem& mod_fs)
+{
+	if (const auto file_path = mod_fs.GetActualFileLocation(relative_path); file_path)
+	{
+		parseFile(*file_path);
+	}
+}
+
+
+void commonItems::parser::ParseGameFolder(const std::string& relative_path,
+	 const ModFilesystem& mod_fs,
+	 const std::set<std::string>& extensions,
+	 bool recursive)
+{
+	std::set<std::string> all_files;
+	if (recursive)
+	{
+		all_files = mod_fs.GetAllFilesInFolderRecursive(relative_path);
+	}
+	else
+	{
+		all_files = mod_fs.GetAllFilesInFolder(relative_path);
+	}
+
+	std::set<std::string> wanted_files;
+	for (const auto& file: all_files)
+	{
+		if (extensions.contains(getExtension(file)))
+		{
+			wanted_files.insert(file);
+		}
+	}
+
+	for (const auto& file: wanted_files)
+	{
+		parseFile(file);
+	}
 }
 
 
