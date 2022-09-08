@@ -14,6 +14,7 @@
 namespace commonItems
 {
 
+bool IsQuoted(const std::string& string);
 std::string remQuotes(const std::string& in);
 std::string addQuotes(const std::string& in);
 

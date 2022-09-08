@@ -3,6 +3,30 @@
 
 
 
+TEST(StringUtils_Tests, IsQuotedTrueWhenQuoted)
+{
+	EXPECT_TRUE(commonItems::IsQuoted(R"("quoted")"));
+}
+
+
+TEST(StringUtils_Tests, IsQuotedFalseWhenFirstQuoteMissing)
+{
+	EXPECT_FALSE(commonItems::IsQuoted(R"(partially_quoted")"));
+}
+
+
+TEST(StringUtils_Tests, IsQuotedFalseWhenLastQuoteMissing)
+{
+	EXPECT_FALSE(commonItems::IsQuoted(R"("partially_quoted)"));
+}
+
+
+TEST(StringUtils_Tests, IsQuotedFalseWhenBothQuotesMissing)
+{
+	EXPECT_FALSE(commonItems::IsQuoted(R"(unquoted)"));
+}
+
+
 TEST(StringUtils_Tests, RemQuotesRemovesQuotes)
 {
 	const std::string quotedString{R"("Quoted string")"};
