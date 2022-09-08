@@ -9,10 +9,8 @@ link_directories(/usr/lib)
 # Set the compiler options
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -g -O0")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-if (DEFINED ENV{COVERAGE})
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -fprofile-arcs -ftest-coverage")
-	set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-endif (DEFINED ENV{COVERAGE})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 # Create OBJECT_DIR variable
 set(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir)
@@ -104,55 +102,53 @@ file(COPY "tests/TestFiles/" DESTINATION "./")
 ################################
 # Coverage
 ################################
-if (DEFINED ENV{COVERAGE})
-	add_custom_target(gcov
-		COMMAND mkdir -p gcoverage
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-	)
-	add_custom_command(TARGET gcov
-		COMMAND echo "=================== GCOV ===================="
-		#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-		COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
-	)
+add_custom_target(gcov
+	COMMAND mkdir -p gcoverage
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+add_custom_command(TARGET gcov
+	COMMAND echo "=================== GCOV ===================="
+	#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
+)
 
-	add_custom_target(lcov
-		COMMAND mkdir -p lcoverage
-	)
-	add_custom_command(TARGET lcov
-		COMMAND echo "=================== LCOV ===================="
-		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --capture --directory CMakeFiles --output-file lcoverage/coverage.info
-		COMMAND echo "-- Generating HTML output files"
-		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
-	)
-	add_dependencies(gcov ${PROJECT_NAME})
+add_custom_target(lcov
+	COMMAND mkdir -p lcoverage
+)
+add_custom_command(TARGET lcov
+	COMMAND echo "=================== LCOV ===================="
+	COMMAND echo "-- Passing lcov tool under code coverage"
+	COMMAND lcov --capture --directory CMakeFiles --output-file lcoverage/coverage.info
+	COMMAND echo "-- Generating HTML output files"
+	COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
+)
+add_dependencies(gcov ${PROJECT_NAME})
 
-	# Make sure to clean up the coverage folder
-	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
+# Make sure to clean up the coverage folder
+set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
 
-	# Create the gcov-clean target. This cleans the build as well as generated 
-	# .gcda and .gcno files.
-	add_custom_target(init
-		COMMAND ${CMAKE_MAKE_PROGRAM} clean
-		COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcno
-		COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcda
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-	)
-endif (DEFINED ENV{COVERAGE})
+# Create the gcov-clean target. This cleans the build as well as generated 
+# .gcda and .gcno files.
+add_custom_target(init
+	COMMAND ${CMAKE_MAKE_PROGRAM} clean
+	COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcno
+	COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcda
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
 
 ################################
 # Unit Tests
