@@ -65,6 +65,7 @@ source_group("commonItems" FILES ${commonItems})
 set(tests
     "tests/ColorTests.cpp"
     "tests/CommonFunctionsTests.cpp"
+    "tests/CommonRegexesTests.cpp"
     "tests/ConvenientParserTests.cpp"
     "tests/ConverterVersionTests.cpp"
     "tests/DateTests.cpp"

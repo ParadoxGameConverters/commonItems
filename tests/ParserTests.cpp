@@ -1,6 +1,7 @@
 #include "../CommonRegexes.h"
 #include "../Parser.h"
 #include "../ParserHelpers.h"
+#include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
 #include <sstream>
 
@@ -357,4 +358,70 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
 
 	ASSERT_EQ("\"this = is a silly { key\t} \"", test.key);
 	ASSERT_EQ("value", test.value);
+}
+
+
+TEST(Parser_Tests, IgnoreUnregisteredItemsIgnoresUnregisteredItems)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "key = value\n";
+	input << "key_two = { nested_item}\n";
+
+	commonItems::parser parser;
+	parser.IgnoreUnregisteredItems();
+
+
+	std::stringstream log;
+	auto std_out_buf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	parser.parseStream(input);
+
+	std::cout.rdbuf(std_out_buf);
+	std::string actual_output = log.str();
+
+	EXPECT_TRUE(actual_output.empty());
+}
+
+
+TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItems)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "key = value\n";
+	input << "key_two = { nested_item}\n";
+
+	commonItems::parser parser;
+	parser.IgnoreAndLogUnregisteredItems();
+
+
+	std::stringstream log;
+	auto std_out_buf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	parser.parseStream(input);
+
+	std::cout.rdbuf(std_out_buf);
+	std::string actual_output = log.str();
+
+	EXPECT_EQ(actual_output, "   [DEBUG]     Ignoring keyword: key\n   [DEBUG]     Ignoring keyword: key_two\n");
+}
+
+
+TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItems)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "key = value\n";
+	input << "key_two = { nested_item}\n";
+
+	std::set<std::string> ignored_items;
+	commonItems::parser parser;
+	parser.IgnoreAndStoreUnregisteredItems(ignored_items);
+
+
+	parser.parseStream(input);
+
+	EXPECT_THAT(ignored_items, testing::UnorderedElementsAre("key", "key_two"));
 }
