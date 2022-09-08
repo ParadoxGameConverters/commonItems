@@ -39,6 +39,9 @@ class parser
 	void registerKeyword(const std::string& keyword,
 		 const parsingFunction& function); // for the few keywords that need to be returned
 	void registerRegex(const std::string& keyword, const parsingFunction& function);
+	void IgnoreUnregisteredItems();
+	void IgnoreAndLogUnregisteredItems();
+	void IgnoreAndStoreUnregisteredItems(std::set<std::string>& ignored_tokens);
 
 	void clearRegisteredKeywords() noexcept;
 

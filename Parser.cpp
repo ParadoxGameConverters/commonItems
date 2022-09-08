@@ -1,7 +1,9 @@
 #include "Parser.h"
 #include "CommonFunctions.h"
+#include "CommonRegexes.h"
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
+#include "ParserHelpers.h"
 #include "StringUtils.h"
 #include <filesystem>
 #include <fstream>
@@ -43,6 +45,27 @@ void commonItems::parser::registerKeyword(const std::string& keyword, const pars
 void commonItems::parser::registerRegex(const std::string& keyword, const parsingFunction& function)
 {
 	generatedRegexes.emplace_back(std::regex(keyword), function);
+}
+
+
+void commonItems::parser::IgnoreUnregisteredItems()
+{
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+}
+
+
+void commonItems::parser::IgnoreAndLogUnregisteredItems()
+{
+	registerRegex(commonItems::catchallRegex, commonItems::ignoreAndLogItem);
+}
+
+
+void commonItems::parser::IgnoreAndStoreUnregisteredItems(std::set<std::string>& ignored_tokens)
+{
+	registerRegex(commonItems::catchallRegex, [&ignored_tokens](const std::string& key, std::istream& the_stream) {
+		ignored_tokens.insert(key);
+		commonItems::ignoreItem(key, the_stream);
+	});
 }
 
 
