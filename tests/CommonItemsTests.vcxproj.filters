@@ -73,6 +73,9 @@
     <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder">
       <UniqueIdentifier>{9f3c9031-a300-433f-8ced-a56b49125bbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="commonItems\Localization">
+      <UniqueIdentifier>{6764c972-c8b3-4c83-9530-7abb8fa5ed59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -183,6 +186,9 @@
     <ClCompile Include="CommonRegexesTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\Localization\LocalizationBlock.cpp">
+      <Filter>commonItems\Localization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -239,103 +245,16 @@
     <ClInclude Include="..\ModLoader\ModFilesystem.h">
       <Filter>commonItems\ModLoader</Filter>
     </ClInclude>
+    <ClInclude Include="..\Localization\LocalizationLambdas.h">
+      <Filter>commonItems\Localization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Localization\LocalizationBlock.h">
+      <Filter>commonItems\Localization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="TestFiles\version.txt">
       <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\Readme.txt">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\launcher-settings.json">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ChangeLog.txt">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\changed-settings.json">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\broken-settings2.json">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\broken-settings.json">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\BrokenMe.txt">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\BrokenLog.txt">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\emptyVersion.txt">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\rome-settings.json">
-      <Filter>TestFiles</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\themod\common\countries\Ccccountry.txt">
-      <Filter>TestFiles\mod\themod\common\countries</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\themod\common\country_tags\added_countries.txt">
-      <Filter>TestFiles\mod\themod\common\country_tags</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\brokenmod.mod">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\missingmod.mod">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\packedmod.mod">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\packedmod.zip">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\themod.mod">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.mod">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\mod\brokenpacked.zip">
-      <Filter>TestFiles\mod</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\test_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\test_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\test_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\deeper_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\deeper_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\deeper_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\root_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_file.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\game_root\test_folder\game_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_one\test_folder\mod_one_folder</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder\dummy.txt">
-      <Filter>TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>
