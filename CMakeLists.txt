@@ -118,9 +118,9 @@ add_custom_command(TARGET gcov
 	COMMAND echo "=================== GCOV ===================="
 	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationBlock.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
 	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationDatabase.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
-	#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModFilesystem.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModLoader.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModFilesystem.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModLoader.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
+	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
 	#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
 	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
 	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
