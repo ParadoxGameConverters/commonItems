@@ -76,6 +76,9 @@
     <Filter Include="commonItems\Localization">
       <UniqueIdentifier>{6764c972-c8b3-4c83-9530-7abb8fa5ed59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="tests\Localization">
+      <UniqueIdentifier>{2b71081d-5abb-4039-a19f-168a026762aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -191,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="..\Localization\LocalizationDatabase.cpp">
       <Filter>commonItems\Localization</Filter>
+    </ClCompile>
+    <ClCompile Include="Localization\LocalizationBlockTests.cpp">
+      <Filter>tests\Localization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

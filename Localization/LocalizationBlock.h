@@ -21,15 +21,15 @@ class LocalizationBlock
 		 key_(std::move(key)), languages_to_localizations_(other_block.languages_to_localizations_), base_language_(other_block.base_language_)
 	{
 	}
+	void CopyFrom(const LocalizationBlock& other_block);
 
 	[[nodiscard]] const std::string& GetKey() const { return key_; }
+	[[nodiscard]] const std::string& GetBaseLanguage() const { return base_language_; }
 	[[nodiscard]] const std::map<std::string, std::string>& GetLocalizations() const { return languages_to_localizations_; }
 
-	[[nodiscard]] std::optional<std::string> GetLocalization(const std::string& language) const;
+	[[nodiscard]] std::string GetLocalization(const std::string& language) const;
 
 	void ModifyLocalization(const std::string& language, const std::string& localization) { languages_to_localizations_[language] = localization; }
-
-	void CopyFrom(const LocalizationBlock& other_block);
 
 	// ModifyForEveryLanguage helps remove boilerplate by applying modifying_function to every language in the block
 	// For example:
@@ -45,7 +45,7 @@ class LocalizationBlock
 	//  modifying_localization, const std::string& language){
 	// 		return base_localization.Replace("$ADJ$", *modifying_localization);
 	//  });
-	void ModifyForEveryLanguage(const LocalizationBlock& other_block, const LocalizationLambda& modifying_function);
+	void ModifyForEveryLanguage(const LocalizationLambda& modifying_function);
 	void ModifyForEveryLanguage(const LocalizationBlock& other_block, const TwoArgLocalizationLambda& modifying_function);
 
   private:

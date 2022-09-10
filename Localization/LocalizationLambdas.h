@@ -14,7 +14,7 @@ namespace commonItems
 
 using LocalizationLambda = std::function<std::string(const std::string& base_localization, const std::string& language)>;
 using TwoArgLocalizationLambda =
-	 std::function<std::string(const std::string& base_localization, const std::optional<std::string>& modifying_localization, const std::string& language)>;
+	 std::function<std::string(const std::string& base_localization, const std::string& modifying_localization, const std::string& language)>;
 
 } // namespace commonItems
 
