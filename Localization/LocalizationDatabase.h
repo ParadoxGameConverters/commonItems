@@ -26,7 +26,7 @@ class LocalizationDatabase
 	{
 	}
 
-	void ScrapeLocalizations(const ModFilesystem& mod_filesystem);
+	void ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder);
 	[[nodiscard]] int ScrapeStream(std::istream& stream);
 	void AddOrModifyLocalizationBlock(const std::string& key, const LocalizationBlock& new_block);
 

@@ -2,11 +2,11 @@
 
 
 
-void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem)
+void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
 {
 	Log(LogLevel::Info) << "Reading Localization...";
 
-	const auto localization_files = mod_filesystem.GetAllFilesInFolderRecursive("localization");
+	const auto localization_files = mod_filesystem.GetAllFilesInFolderRecursive(localization_folder);
 	int lines_count = 0;
 	for (const auto& file: localization_files)
 	{

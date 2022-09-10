@@ -165,7 +165,7 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	std::stringstream log;
 	auto stdout_buf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	database.ScrapeLocalizations(filesystem);
+	database.ScrapeLocalizations(filesystem, "localization");
 	std::cout.rdbuf(stdout_buf);
 	std::string actual_output = log.str();
 
