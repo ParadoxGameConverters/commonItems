@@ -33,18 +33,20 @@ class LocalizationBlock
 
 	// ModifyForEveryLanguage helps remove boilerplate by applying modifying_function to every language in the block
 	// For example:
-	//  name_block["english"] = name_block["english"].Replace("$ADJ$", base_adjective_block["english"]);
-	//  name_block["french"] = name_block["french"].Replace("$ADJ$", base_adjective_block["french"]);
-	//  name_block["german"] = name_block["german"].Replace("$ADJ$", base_adjective_block["german"]);
-	//  name_block["russian"] = name_block["russian"].Replace("$ADJ$", base_adjective_block["russian"]);
-	//  name_block["simp_chinese"] = name_block["simp_chinese"].Replace("$ADJ$", base_adjective_block["simp_chinese"]);
-	//  name_block["spanish"] = name_block["spanish"].Replace("$ADJ$", base_adjective_block["spanish"]);
+	//  name_block["english"] = name_block["english"].replace("$ADJ$", base_adjective_block.GetLocalization("english"));
+	//  name_block["french"] = name_block["french"].replace("$ADJ$", base_adjective_block.GetLocalization("french"));
+	//  name_block["german"] = name_block["german"].replace("$ADJ$", base_adjective_block.GetLocalization("german"));
+	//  name_block["russian"] = name_block["russian"].replace("$ADJ$", base_adjective_block.GetLocalization("russian"));
+	//  name_block["simp_chinese"] = name_block["simp_chinese"].replace("$ADJ$", base_adjective_block.GetLocalization("simp_chinese"));
+	//  name_block["spanish"] = name_block["spanish"].replace("$ADJ$", base_adjective_block.GetLocalization("spanish"));
 	//
 	// Can be replaced by:
-	//  name_block.ModifyForEveryLanguage(base_adjective_block, [this](const std::string& base_localization, const std::optional<std::string>&
-	//  modifying_localization, const std::string& language){
-	// 		return base_localization.Replace("$ADJ$", *modifying_localization);
-	//  });
+	// name_block.ModifyForEveryLanguage(adjective_block,
+	//	 [](const std::string& base_localization, const std::string& modifying_localization, const std::string& language) {
+	//		const std::string placeholder = "$ADJ$";
+	//		std::string updated_localization = base_localization;
+	//		return updated_localization.replace(updated_localization.find(placeholder), placeholder.size(), modifying_localization);
+	// });
 	void ModifyForEveryLanguage(const LocalizationLambda& modifying_function);
 	void ModifyForEveryLanguage(const LocalizationBlock& other_block, const TwoArgLocalizationLambda& modifying_function);
 
