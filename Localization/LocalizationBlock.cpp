@@ -5,7 +5,7 @@
 
 void commonItems::LocalizationBlock::CopyFrom(const LocalizationBlock& other_block)
 {
-	for (const auto& [language, localization] : other_block.GetLocalizations())
+	for (const auto& [language, localization]: other_block.GetLocalizations())
 	{
 		languages_to_localizations_[language] = localization;
 	}
