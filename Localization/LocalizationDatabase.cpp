@@ -63,7 +63,7 @@ std::optional<commonItems::LocalizationBlock> commonItems::LocalizationDatabase:
 }
 
 
-void commonItems::LocalizationDatabase::AddLocalizationBlock(const std::string& key, const LocalizationBlock& new_block)
+void commonItems::LocalizationDatabase::AddOrModifyLocalizationBlock(const std::string& key, const LocalizationBlock& new_block)
 {
 	{
 		if (auto [itr, success] = localizations_.emplace(key, new_block); !success)
@@ -90,7 +90,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	const std::string stripped_line = std::regex_replace(partially_stripped_line, std::regex("\\s+$"), std::string(""));
 
 	const auto separator_location = stripped_line.find_first_of(':');
-	if (separator_location == -1)
+	if (separator_location == std::string::npos)
 	{
 		return {};
 	}
@@ -100,6 +100,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 		if (stripped_line == "l_" + base_language_ + ":")
 		{
 			current_language = base_language_;
+			return {};
 		}
 		for (const auto& language: other_languages_)
 		{
@@ -108,6 +109,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 				continue;
 			}
 			current_language = language;
+			return {};
 		}
 
 		return {};
@@ -119,7 +121,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 		return {};
 	}
 
-	const auto key = stripped_line.substr(1, separator_location - 1);
+	const auto key = stripped_line.substr(0, separator_location);
 	const auto new_line = stripped_line.substr(separator_location + 1);
 	const auto quote_index = new_line.find_first_of('\"');
 	const auto quote_two_index = new_line.find_last_of('\"');

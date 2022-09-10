@@ -198,6 +198,9 @@
     <ClCompile Include="Localization\LocalizationBlockTests.cpp">
       <Filter>tests\Localization</Filter>
     </ClCompile>
+    <ClCompile Include="Localization\LocalizationDatabaseTests.cpp">
+      <Filter>tests\Localization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">

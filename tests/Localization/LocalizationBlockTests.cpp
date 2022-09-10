@@ -4,7 +4,7 @@
 
 
 
-TEST(Localization_Tests, LocalizationBlockCanBeCreated)
+TEST(Localization_LocalizationBlock_Tests, LocalizationBlockCanBeCreated)
 {
 	const commonItems::LocalizationBlock block("key", "base language");
 
@@ -13,7 +13,7 @@ TEST(Localization_Tests, LocalizationBlockCanBeCreated)
 }
 
 
-TEST(Localization_Tests, LocalizationsCanBeAddedToBlock)
+TEST(Localization_LocalizationBlock_Tests, LocalizationsCanBeAddedToBlock)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("base language", "base localization");
@@ -24,7 +24,7 @@ TEST(Localization_Tests, LocalizationsCanBeAddedToBlock)
 }
 
 
-TEST(Localization_Tests, LocalizationsCanBeConstructedFromOtherBlock)
+TEST(Localization_LocalizationBlock_Tests, LocalizationsCanBeConstructedFromOtherBlock)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("base language", "base localization");
@@ -39,7 +39,7 @@ TEST(Localization_Tests, LocalizationsCanBeConstructedFromOtherBlock)
 }
 
 
-TEST(Localization_Tests, LocalizationsCanBeCopiedFromOtherBlock)
+TEST(Localization_LocalizationBlock_Tests, LocalizationsCanBeCopiedFromOtherBlock)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("base language", "base localization");
@@ -62,7 +62,7 @@ TEST(Localization_Tests, LocalizationsCanBeCopiedFromOtherBlock)
 }
 
 
-TEST(Localization_Tests, LocalizationCanBeRetrieved)
+TEST(Localization_LocalizationBlock_Tests, LocalizationCanBeRetrieved)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("base language", "base localization");
@@ -72,7 +72,7 @@ TEST(Localization_Tests, LocalizationCanBeRetrieved)
 }
 
 
-TEST(Localization_Tests, BaseLanguageIsUsedForMissingLanguage)
+TEST(Localization_LocalizationBlock_Tests, BaseLanguageIsUsedForMissingLanguage)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("base language", "base localization");
@@ -82,7 +82,7 @@ TEST(Localization_Tests, BaseLanguageIsUsedForMissingLanguage)
 }
 
 
-TEST(Localization_Tests, KeyIsUsedForMissingBaseLanguage)
+TEST(Localization_LocalizationBlock_Tests, KeyIsUsedForMissingBaseLanguage)
 {
 	commonItems::LocalizationBlock block("key", "base language");
 	block.ModifyLocalization("second language", "second localization");
@@ -92,7 +92,7 @@ TEST(Localization_Tests, KeyIsUsedForMissingBaseLanguage)
 }
 
 
-TEST(Localization_Tests, LocalizationBlockCanBeModifiedForEveryLanguageWithoutOtherBlock)
+TEST(Localization_LocalizationBlock_Tests, LocalizationBlockCanBeModifiedForEveryLanguageWithoutOtherBlock)
 {
 	commonItems::LocalizationBlock block("key1", "english");
 	block.ModifyLocalization("english", "$NUM$ Revolt");
@@ -119,7 +119,7 @@ TEST(Localization_Tests, LocalizationBlockCanBeModifiedForEveryLanguageWithoutOt
 }
 
 
-TEST(Localization_Tests, LocalizationBlockCanBeModifiedForEveryLanguageWithOtherBlock)
+TEST(Localization_LocalizationBlock_Tests, LocalizationBlockCanBeModifiedForEveryLanguageWithOtherBlock)
 {
 	commonItems::LocalizationBlock block("key1", "english");
 	block.ModifyLocalization("english", "$ADJ$ Revolt");

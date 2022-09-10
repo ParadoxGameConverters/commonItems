@@ -184,6 +184,7 @@
     <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="Localization\LocalizationBlockTests.cpp" />
+    <ClCompile Include="Localization\LocalizationDatabaseTests.cpp" />
     <ClCompile Include="LogTests.cpp" />
     <ClCompile Include="ColorTests.cpp" />
     <ClCompile Include="ModFilesystemTests.cpp" />
