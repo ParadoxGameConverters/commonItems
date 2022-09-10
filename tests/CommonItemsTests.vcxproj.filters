@@ -189,6 +189,9 @@
     <ClCompile Include="..\Localization\LocalizationBlock.cpp">
       <Filter>commonItems\Localization</Filter>
     </ClCompile>
+    <ClCompile Include="..\Localization\LocalizationDatabase.cpp">
+      <Filter>commonItems\Localization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -249,6 +252,9 @@
       <Filter>commonItems\Localization</Filter>
     </ClInclude>
     <ClInclude Include="..\Localization\LocalizationBlock.h">
+      <Filter>commonItems\Localization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Localization\LocalizationDatabase.h">
       <Filter>commonItems\Localization</Filter>
     </ClInclude>
   </ItemGroup>
