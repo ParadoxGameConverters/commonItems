@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf build
 cmake -H. -Bbuild && cmake --build ./build -- -j40
 cd build
 ./CommonItemsTests
