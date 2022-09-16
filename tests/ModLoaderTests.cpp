@@ -1,8 +1,34 @@
 #include "../ModLoader/ModLoader.h"
 #include "../OSCompatibilityLayer.h"
+#include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
-#include <gmock/gmock-matchers.h>
+
+
+
 using testing::UnorderedElementsAre;
+
+
+
+TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
+{
+	const Mods incomingMods;
+
+	std::stringstream log;
+	auto stdOutBuf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("./", incomingMods);
+	const auto mods = modLoader.getMods();
+
+	std::cout.rdbuf(stdOutBuf);
+	std::string actualOutput = log.str();
+	std::stringstream actualStream(actualOutput);
+
+	EXPECT_TRUE(mods.empty());
+	EXPECT_EQ(actualStream.str(), "    [INFO] No mods were detected in savegame. Skipping mod processing.\n");
+}
+
+
 
 TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 {
@@ -19,6 +45,7 @@ TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
+
 TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 {
 	Mods incomingMods;									  // this is what comes from the save
@@ -33,6 +60,7 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 	EXPECT_EQ(mods[0].path, "mod/themod/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
+
 
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 {
@@ -51,6 +79,7 @@ TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 	EXPECT_EQ(mods[0].path, "mod/themod/");
 }
 
+
 TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 {
 	Mods incomingMods;
@@ -65,6 +94,7 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	EXPECT_EQ(mods[0].path, "mods/packedmod/");
 	EXPECT_TRUE(commonItems::DoesFolderExist("mods/packedmod/"));
 }
+
 
 TEST(ModLoaderTests, BrokenCompressedModsAreNotSkippedEvenThoughTheyShouldBe)
 {
