@@ -2,9 +2,9 @@
 
 
 
-std::map<std::string, std::string> commonItems::GetAdjectiveRules()
+std::vector<std::pair<std::string, std::string>> commonItems::GetAdjectiveRules()
 {
-	std::map<std::string, std::string> rules = {
+	std::vector<std::pair<std::string, std::string>> rules = {
 #include "adjectives.txt"
 	};
 

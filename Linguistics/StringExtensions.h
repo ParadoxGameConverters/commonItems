@@ -3,15 +3,15 @@
 
 
 
-#include <map>
 #include <string>
+#include <vector>
 
 
 namespace commonItems
 {
 
 
-std::map<std::string, std::string> GetAdjectiveRules();
+std::vector<std::pair<std::string, std::string>> GetAdjectiveRules();
 
 
 }
