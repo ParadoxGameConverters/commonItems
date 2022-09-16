@@ -161,6 +161,8 @@
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
+    <ClCompile Include="..\Linguistics\StringExtensions.cpp" />
+    <ClCompile Include="..\Linguistics\StringExtensionsTests.cpp" />
     <ClCompile Include="..\Localization\LocalizationBlock.cpp" />
     <ClCompile Include="..\Localization\LocalizationDatabase.cpp" />
     <ClCompile Include="..\Log.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="..\ConverterVersion.h" />
     <ClInclude Include="..\Date.h" />
     <ClInclude Include="..\iconvlite.h" />
+    <ClInclude Include="..\Linguistics\StringExtensions.h" />
     <ClInclude Include="..\Localization\LocalizationBlock.h" />
     <ClInclude Include="..\Localization\LocalizationDatabase.h" />
     <ClInclude Include="..\Localization\LocalizationLambdas.h" />
@@ -233,6 +236,9 @@
       <DeploymentContent>true</DeploymentContent>
       <Link>%(RecursiveDir)\%(Filename)%(Extension)</Link>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Linguistics\adjectives.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
