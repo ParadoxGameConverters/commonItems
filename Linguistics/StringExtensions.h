@@ -18,5 +18,4 @@ std::map<std::string, std::string> GetAdjectiveRules();
 
 
 
-
 #endif // LINGUISTICS_STRING_EXTENSIONS_H
