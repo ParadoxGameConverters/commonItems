@@ -2,7 +2,6 @@
 
 
 
-
 std::map<std::string, std::string> commonItems::GetAdjectiveRules()
 {
 	std::map<std::string, std::string> rules = {
