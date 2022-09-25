@@ -201,6 +201,9 @@
     <ClCompile Include="Localization\LocalizationDatabaseTests.cpp">
       <Filter>tests\Localization</Filter>
     </ClCompile>
+    <ClCompile Include="..\LinuxUtils.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">

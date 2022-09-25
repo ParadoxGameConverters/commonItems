@@ -161,6 +161,9 @@
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
+    <ClCompile Include="..\LinuxUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Localization\LocalizationBlock.cpp" />
     <ClCompile Include="..\Localization\LocalizationDatabase.cpp" />
     <ClCompile Include="..\Log.cpp" />

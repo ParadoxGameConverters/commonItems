@@ -379,7 +379,8 @@ class ConversionOutputBuffer
 		{
 			using namespace std;
 			size_t output_length = length / sizeof(Char);
-			wchar_t output_buffer[output_length] = {};
+			wchar_t output_buffer[output_length];
+			memset(output_buffer, 0, output_length * sizeof(wchar_t));
 			std::mbstowcs(output_buffer, buffer, output_length);
 			output.assign(output_buffer, output_length);
 		};
@@ -609,7 +610,6 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 	{
 		unsigned long uni;
 		size_t todo;
-		bool error = false;
 		unsigned char ch = UTF8[i++];
 		if (ch <= 0x7F)
 		{
