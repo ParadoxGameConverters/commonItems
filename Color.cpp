@@ -66,9 +66,9 @@ void commonItems::Color::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
-	const auto allChange = std::normal_distribution<float>(0.0F, static_cast<float>(stdDev))(generator);
+	const auto allChange = std::normal_distribution(0.0F, static_cast<float>(stdDev))(generator);
 
-	std::normal_distribution<float> distribution(0.0F, static_cast<float>(stdDev) / 4.0F);
+	std::normal_distribution distribution(0.0F, static_cast<float>(stdDev) / 4.0F);
 	for (auto& component: rgbComponents)
 	{
 		component += static_cast<int>(std::round(allChange + distribution(generator)));
@@ -194,7 +194,7 @@ void commonItems::Color::deriveRgbFromHsv()
 	g *= 255;
 	b *= 255;
 
-	rgbComponents = std::array<int, 3>{static_cast<int>(r), static_cast<int>(g), static_cast<int>(b)};
+	rgbComponents = std::array{static_cast<int>(r), static_cast<int>(g), static_cast<int>(b)};
 }
 
 
@@ -219,7 +219,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+		return Color(std::array{rgb[0], rgb[1], rgb[2]});
 	}
 	if (token == "hex")
 	{
@@ -231,7 +231,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		const auto r = std::stoi(hex.substr(0, 2), nullptr, 16);
 		const auto g = std::stoi(hex.substr(2, 2), nullptr, 16);
 		const auto b = std::stoi(hex.substr(4, 2), nullptr, 16);
-		return Color(std::array<int, 3>{r, g, b});
+		return Color(std::array{r, g, b});
 	}
 	if (token == "hsv" || token == "HSV")
 	{
@@ -240,7 +240,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+		return Color(std::array{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
 	}
 	if (token == "hsv360")
 	{
@@ -249,17 +249,18 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0), static_cast<float>(hsv[1] / 100.0), static_cast<float>(hsv[2] / 100.0)});
+		return Color(std::array{static_cast<float>(hsv[0] / 360.0), static_cast<float>(hsv[1] / 100.0), static_cast<float>(hsv[2] / 100.0)});
 	}
 	if (std::regex_match(*token, std::regex(catchallRegex)))
 	{
-		if (const auto color = namedColors.find(*token); color != namedColors.end())
+		const auto color = namedColors.find(*token);
+		if (color == namedColors.end())
 		{
-			return color->second;
+			throw std::runtime_error(*token + " was not a cached color");
 		}
 		else
 		{
-			throw std::runtime_error(*token + " was not a cached color");
+			return color->second;
 		}
 	}
 
@@ -278,9 +279,8 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)),
-			 static_cast<int>(std::round(hsv[1] * 255.0)),
-			 static_cast<int>(std::round(hsv[2] * 255.0))});
+		return Color(
+			 std::array{static_cast<int>(std::round(hsv[0] * 255.0)), static_cast<int>(std::round(hsv[1] * 255.0)), static_cast<int>(std::round(hsv[2] * 255.0))});
 	}
 	else
 	{
@@ -291,22 +291,22 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
+		return Color(std::array{rgb[0], rgb[1], rgb[2]});
 	}
 }
 
 
 commonItems::Color commonItems::Color::Factory::getColor(const std::string& colorName) const
 {
-	if (const auto color = namedColors.find(colorName); color != namedColors.end())
-	{
-		return color->second;
-	}
-	else
+	const auto color = namedColors.find(colorName);
+	if (color == namedColors.end())
 	{
 		throw std::runtime_error(colorName + " was not a cached color");
 	}
+
+	return color->second;
 }
+
 
 void commonItems::Color::Factory::addNamedColor(const std::string& name, const Color& color)
 {
