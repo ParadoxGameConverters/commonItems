@@ -183,3 +183,15 @@ enable_testing()
 # Link test executable against gtest & gtest_main
 target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
+
+################################
+# Clang-tidy
+################################
+
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}")
+add_library(run_clang_tidy
+	${ALL_FILES}
+)
+target_link_libraries(run_clang_tidy pthread)
+set_target_properties(run_clang_tidy PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
