@@ -66,18 +66,18 @@ class Color
 	// bit more (with a much smaller standard deviation).
 	void RandomlyFluctuate(int stdDev);
 
-	friend std::ostream& operator<<(std::ostream&, const Color&);
+	friend std::ostream& operator<<(std::ostream& out, const Color& color);
 
   private:
 	void deriveHsvFromRgb();
 	void deriveRgbFromHsv();
 
 	std::array<int, 3> rgbComponents{0, 0, 0};
-	std::array<float, 3> hsvComponents{0.0f, 0.0f, 0.0f};
+	std::array<float, 3> hsvComponents{0.0F, 0.0F, 0.0F};
 };
 
 
-std::ostream& operator<<(std::ostream&, const Color&);
+std::ostream& operator<<(std::ostream& out, const Color& color);
 
 
 class Color::Factory: parser

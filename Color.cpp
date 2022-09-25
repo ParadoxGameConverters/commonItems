@@ -66,12 +66,12 @@ void commonItems::Color::RandomlyFluctuate(const int stdDev)
 {
 	static std::mt19937 generator(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
-	const auto allChange = std::normal_distribution<float>(0.0f, static_cast<float>(stdDev))(generator);
+	const auto allChange = std::normal_distribution<float>(0.0F, static_cast<float>(stdDev))(generator);
 
-	std::normal_distribution<float> distribution(0.0f, static_cast<float>(stdDev) / 4.0f);
+	std::normal_distribution<float> distribution(0.0F, static_cast<float>(stdDev) / 4.0F);
 	for (auto& component: rgbComponents)
 	{
-		component += lround(allChange + distribution(generator));
+		component += static_cast<int>(std::round(allChange + distribution(generator)));
 		if (component < 0)
 		{
 			component = 0;
@@ -88,17 +88,17 @@ void commonItems::Color::RandomlyFluctuate(const int stdDev)
 
 void commonItems::Color::deriveHsvFromRgb()
 {
-	const auto r = static_cast<float>(rgbComponents[0]) / 255.0f;
-	const auto g = static_cast<float>(rgbComponents[1]) / 255.0f;
-	const auto b = static_cast<float>(rgbComponents[2]) / 255.0f;
+	const auto r = static_cast<float>(rgbComponents[0]) / 255.0F;
+	const auto g = static_cast<float>(rgbComponents[1]) / 255.0F;
+	const auto b = static_cast<float>(rgbComponents[2]) / 255.0F;
 	const auto xMax = std::max({r, g, b});
 	const auto xMin = std::min({r, g, b});
 	const auto chroma = xMax - xMin;
 
-	auto h = 0.0f;
-	if (chroma == 0.0f)
+	auto h = 0.0F;
+	if (chroma == 0.0F)
 	{
-		h = 0.0f;
+		h = 0.0F;
 	}
 	else if (xMax == r)
 	{
@@ -114,16 +114,16 @@ void commonItems::Color::deriveHsvFromRgb()
 		h = (r - g) / chroma;
 		h += 4;
 	}
-	h /= 6.0f;
+	h /= 6.0F;
 	if (h < 0)
 	{
-		h += 1.0f;
+		h += 1.0F;
 	}
 	hsvComponents[0] = h;
 
-	if (xMax == 0.0f)
+	if (xMax == 0.0F)
 	{
-		hsvComponents[1] = 0.0f;
+		hsvComponents[1] = 0.0F;
 	}
 	else
 	{
@@ -137,17 +137,19 @@ void commonItems::Color::deriveRgbFromHsv()
 {
 	auto [h, s, v] = hsvComponents;
 
-	float r, g, b;
-	if (s == 0.0f) // achromatic (grey)
+	float r = 0.0F;
+	float g = 0.0F;
+	float b = 0.0F;
+	if (s == 0.0F) // achromatic (grey)
 	{
 		r = g = b = v;
 	}
 	else
 	{
-		if (h >= 1.0f)
-			h = 0.0f;
-		const int sector = static_cast<int>(floor(h * 6.0f));
-		const float fraction = h * 6.0f - static_cast<float>(sector);
+		if (h >= 1.0F)
+			h = 0.0F;
+		const int sector = static_cast<int>(std::floor(h * 6.0F));
+		const float fraction = h * 6.0F - static_cast<float>(sector);
 		const float p = v * (1 - s);
 		const float q = v * (1 - s * fraction);
 		const float t = v * (1 - s * (1 - fraction));
@@ -219,7 +221,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
-	else if (token == "hex")
+	if (token == "hex")
 	{
 		const auto hex = singleString{theStream}.getString();
 		if (hex.size() != 6)
@@ -231,7 +233,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		const auto b = std::stoi(hex.substr(4, 2), nullptr, 16);
 		return Color(std::array<int, 3>{r, g, b});
 	}
-	else if (token == "hsv" || token == "HSV")
+	if (token == "hsv" || token == "HSV")
 	{
 		const auto hsv = doubleList{theStream}.getDoubles();
 		if (hsv.size() != 3)
@@ -240,7 +242,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<float, 3>{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
 	}
-	else if (token == "hsv360")
+	if (token == "hsv360")
 	{
 		const auto hsv = doubleList{theStream}.getDoubles();
 		if (hsv.size() != 3)
@@ -249,7 +251,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		}
 		return Color(std::array<float, 3>{static_cast<float>(hsv[0] / 360.0), static_cast<float>(hsv[1] / 100.0), static_cast<float>(hsv[2] / 100.0)});
 	}
-	else if (std::regex_match(*token, std::regex(catchallRegex)))
+	if (std::regex_match(*token, std::regex(catchallRegex)))
 	{
 		if (const auto color = namedColors.find(*token); color != namedColors.end())
 		{
@@ -260,38 +262,36 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 			throw std::runtime_error(*token + " was not a cached color");
 		}
 	}
+
+	auto actualToken = *token;
+	for (auto i = actualToken.rbegin(); i != actualToken.rend(); ++i)
+	{
+		theStream.putback(*i);
+	}
+	const auto questionableList = stringOfItem(theStream).getString();
+	if (questionableList.find('.') != std::string::npos)
+	{
+		// This is a double list.
+		auto doubleStream = std::stringstream(questionableList);
+		auto hsv = getDoubles(doubleStream);
+		if (hsv.size() != 3)
+		{
+			throw std::runtime_error("Color has wrong number of components");
+		}
+		return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)),
+			 static_cast<int>(std::round(hsv[1] * 255.0)),
+			 static_cast<int>(std::round(hsv[2] * 255.0))});
+	}
 	else
 	{
-		auto actualToken = *token;
-		for (auto i = actualToken.rbegin(); i != actualToken.rend(); ++i)
+		// integer list
+		auto integerStream = std::stringstream(questionableList);
+		auto rgb = getInts(integerStream);
+		if (rgb.size() != 3)
 		{
-			theStream.putback(*i);
+			throw std::runtime_error("Color has wrong number of components");
 		}
-		const auto questionableList = stringOfItem(theStream).getString();
-		if (questionableList.find('.') != std::string::npos)
-		{
-			// This is a double list.
-			auto doubleStream = std::stringstream(questionableList);
-			auto hsv = getDoubles(doubleStream);
-			if (hsv.size() != 3)
-			{
-				throw std::runtime_error("Color has wrong number of components");
-			}
-			return Color(std::array<int, 3>{static_cast<int>(std::round(hsv[0] * 255.0)),
-				 static_cast<int>(std::round(hsv[1] * 255.0)),
-				 static_cast<int>(std::round(hsv[2] * 255.0))});
-		}
-		else
-		{
-			// integer list
-			auto integerStream = std::stringstream(questionableList);
-			auto rgb = getInts(integerStream);
-			if (rgb.size() != 3)
-			{
-				throw std::runtime_error("Color has wrong number of components");
-			}
-			return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
-		}
+		return Color(std::array<int, 3>{rgb[0], rgb[1], rgb[2]});
 	}
 }
 
