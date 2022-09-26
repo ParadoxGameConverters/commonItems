@@ -1,39 +1,32 @@
-
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
 #include <algorithm>
+#include <cerrno>
 #include <cstdarg>
+#include <cstdlib>
 #include <cstring>
 #include <dirent.h>
-#include <errno.h>
 #include <fcntl.h>
+#include <filesystem>
 #include <iconv.h>
 #include <iostream>
 #include <set>
-#include <stdlib.h>
-#include <string.h>
+#include <sys/sendfile.h>
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <vector>
 
-#ifdef __linux__
-#include <sys/sendfile.h>
-#endif
 
-#include <filesystem>
 namespace fs = std::filesystem;
 
-using namespace std;
 
 
-
-void sprintf_s_Linux(char* __restrict __s, size_t __maxlen, const char* __restrict __format, ...)
+void sprintf_s_Linux(char* __restrict __s, size_t __maxlength, const char* __restrict __format, ...)
 {
-	va_list argptr;
-	va_start(argptr, __format);
-	snprintf(__s, __maxlen, __format, argptr);
-	va_end(argptr);
+	va_list arg_ptr;
+	va_start(arg_ptr, __format);
+	snprintf(__s, __maxlength, __format, arg_ptr);
+	va_end(arg_ptr);
 }
 
 
@@ -52,10 +45,10 @@ int fopen_s_Linux(FILE** file, const char* filename, const char* mode)
 
 void fprintf_s_Linux(FILE* file, const char* format, ...)
 {
-	va_list argptr;
-	va_start(argptr, format);
-	fprintf(file, format, argptr);
-	va_end(argptr);
+	va_list arg_ptr;
+	va_start(arg_ptr, format);
+	fprintf(file, format, arg_ptr);
+	va_end(arg_ptr);
 }
 
 #ifdef __linux__
@@ -86,9 +79,7 @@ bool IsRegularNodeName(const std::string& name)
 */
 bool IsActualNodeName(const std::string& name)
 {
-	using namespace std;
-	using namespace std;
-	for (string::const_iterator i = name.begin(); i != name.end(); ++i)
+	for (auto i = name.begin(); i != name.end(); ++i)
 	{
 		if (*i != '.')
 		{
@@ -126,8 +117,7 @@ const char* StripLeadingSeparators(const char* path)
 {
 	while (true)
 	{
-		char c = *path;
-		if (c != '/')
+		if (*path != '/')
 		{
 			return path;
 		}
@@ -141,35 +131,32 @@ const char* StripLeadingSeparators(const char* path)
 */
 std::string ConcatenatePaths(const std::string& first, const std::string& second)
 {
-	using namespace std;
 	const char* first_begin = first.c_str();
 	const char* first_end = StripTrailingSeparators(first_begin, first.length());
 	const char* second_begin = StripLeadingSeparators(second.c_str());
-	return string(first_begin, first_end) + "/" + string(second_begin);
+	return std::string(first_begin, first_end) + "/" + std::string(second_begin);
 }
 
 /*
-	Contatenates a path and a valid node name
+	Concatenates a path and a valid node name
 	A valid node name is a non empty string that does not contain '/'
 	use ConcatenatePaths for other concatenations
 */
 std::string ConcatenateNodeName(const std::string& path, const std::string& name)
 {
-	using namespace std;
 	const char* path_begin = path.c_str();
 	const char* path_end = StripTrailingSeparators(path_begin, path.length());
-	return string(path_begin, path_end) + "/" + name;
+	return std::string(path_begin, path_end) + "/" + name;
 }
 
 /*
-	Splits the node name from the rest of the path and returns both values as a pair (path, nodename)
+	Splits the node name from the rest of the path and returns both values as a pair (path, node_name)
 */
 std::pair<std::string, std::string> SplitNodeNameFromPath(const std::string& path)
 {
-	using namespace std;
 	if (path.empty())
 	{
-		return make_pair(string(), string());
+		return std::make_pair(std::string(), std::string());
 	}
 	const char* buffer = path.c_str();
 	const char* end = buffer + path.length() - 1;
@@ -179,7 +166,7 @@ std::pair<std::string, std::string> SplitNodeNameFromPath(const std::string& pat
 	}
 	if (end == buffer)
 	{
-		return make_pair(string(buffer, buffer + 1), string());
+		return std::make_pair(std::string(buffer, buffer + 1), std::string());
 	}
 	const char* begin = end;
 	++end;
@@ -192,7 +179,7 @@ std::pair<std::string, std::string> SplitNodeNameFromPath(const std::string& pat
 		++begin;
 	}
 
-	return make_pair(string(buffer, begin), string(begin, end));
+	return std::make_pair(std::string(buffer, begin), std::string(begin, end));
 }
 
 bool IsLinuxPathElementSeparator(char c)
@@ -215,30 +202,25 @@ char* CopyFolderPathElement(const char*& input_begin, const char* input_end, cha
 		{
 			return output;
 		}
-		else
-		{
-			*output = c;
-			++output;
-		}
+
+		*output = c;
+		++output;
 	}
 	return output;
-};
+}
 
 
 
 bool GetFileMode(const std::string& path, mode_t& result)
 {
-	using namespace std;
 	struct stat status;
 	if (stat(path.c_str(), &status) != 0)
 	{
 		return false;
 	}
-	else
-	{
-		result = status.st_mode;
-		return true;
-	}
+
+	result = status.st_mode;
+	return true;
 }
 
 bool IsRegularFile(const std::string& path)
@@ -263,14 +245,13 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
 	const auto origPathStr = fs::u8path(validatedPath).native();
 
-	const auto tempPath = fs::u8path(path);
-	if (!fs::exists(tempPath) || !fs::is_directory(tempPath))
+	if (const auto tempPath = fs::u8path(path); !fs::exists(tempPath) || !fs::is_directory(tempPath))
 	{
 		return {};
 	}
 
 	std::set<std::string> fileNames;
-	for (auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
+	for (const auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
 	{
 		if (!p.is_directory())
 		{
@@ -328,34 +309,30 @@ class ConversionInputBuffer
   public:
 	explicit ConversionInputBuffer(const std::string& input): data(new char[input.length()]), in_buffer(data), remainder(input.length())
 	{
-		using namespace std;
 		// POSIX iconv expects a pointer to char *, not to const char * and consequently does not guarantee that the input
 		// sequence is not modified so we copy it into the buffer before attempting conversion
-		copy(input.begin(), input.end(), data);
-	};
+		std::copy(input.begin(), input.end(), data);
+	}
+	ConversionInputBuffer(const ConversionInputBuffer&) = delete;
+	ConversionInputBuffer& operator=(const ConversionInputBuffer&) = delete;
+	ConversionInputBuffer(ConversionInputBuffer&&) = delete;
+	ConversionInputBuffer& operator=(ConversionInputBuffer&&) = delete;
 
 	template <typename String> explicit ConversionInputBuffer(const String& input)
 	{
 		typedef typename String::value_type Char;
-		using namespace std;
 		remainder = sizeof(Char) * input.length();
 		data = new char[remainder];
 		in_buffer = data;
-		const char* input_str = reinterpret_cast<const char*>(input.c_str());
-		copy(input_str, input_str + remainder, data);
-	};
+		const auto* const input_str = reinterpret_cast<const char*>(input.c_str());
+		std::copy(input_str, input_str + remainder, data);
+	}
 
-	~ConversionInputBuffer() { delete[] data; };
+	~ConversionInputBuffer() { delete[] data; }
 
-	bool has_remaining_bytes() const { return remainder != 0; };
+	[[nodiscard]] bool has_remaining_bytes() const { return remainder != 0; }
 
-	friend bool ConvertBuffer(const char*, const char*, ConversionInputBuffer&, ConversionOutputBuffer&);
-
-  private:
-	// declared private to avoid copy of buffer
-	// unsure if versions pre c++11  should be supported, if not, copy constructors can be explicitly deleted
-	ConversionInputBuffer(const ConversionInputBuffer&);
-	ConversionInputBuffer& operator=(const ConversionInputBuffer&);
+	friend bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuffer& from, ConversionOutputBuffer& to);
 };
 
 /*
@@ -372,18 +349,16 @@ class ConversionOutputBuffer
 
 	template <typename String> struct OutputStrHelper
 	{
-
 		typedef typename String::value_type Char;
 
-		static void str(String& output, char* buffer, std::size_t length)
+		static void str(String& output, const char* buffer, std::size_t length)
 		{
-			using namespace std;
 			size_t output_length = length / sizeof(Char);
 			wchar_t output_buffer[output_length];
 			memset(output_buffer, 0, output_length * sizeof(wchar_t));
 			std::mbstowcs(output_buffer, buffer, output_length);
 			output.assign(output_buffer, output_length);
-		};
+		}
 	};
 
 	template <typename Traits, typename Alloc> struct OutputStrHelper<std::basic_string<char, Traits, Alloc>>
@@ -391,9 +366,8 @@ class ConversionOutputBuffer
 
 		static void str(std::basic_string<char, Traits, Alloc>& output, char* buffer, std::size_t length)
 		{
-			using namespace std;
 			output.assign(buffer, length);
-		};
+		}
 	};
 
   public:
@@ -405,66 +379,56 @@ class ConversionOutputBuffer
 			data = new char[size];
 			out_buffer = data;
 		}
-	};
+	}
+	ConversionOutputBuffer(const ConversionOutputBuffer&) = delete;
+	ConversionOutputBuffer& operator=(const ConversionOutputBuffer&) = delete;
+	ConversionOutputBuffer(ConversionOutputBuffer&&) = delete;
+	ConversionOutputBuffer& operator=(ConversionOutputBuffer&&) = delete;
 
-	~ConversionOutputBuffer() { delete[] data; };
+	~ConversionOutputBuffer() { delete[] data; }
 
-	bool full() const { return remainder != 0; };
+	[[nodiscard]] bool full() const { return remainder != 0; }
 
-	size_t length() const { return size - remainder; };
+	[[nodiscard]] size_t length() const { return size - remainder; }
 
-	std::string str() const
-	{
-		using namespace std;
-		return string(data, data + length());
-	};
+	[[nodiscard]] std::string str() const { return std::string(data, data + length()); }
 
-	template <typename String> void str(String& output) const { OutputStrHelper<String>::str(output, data, length()); };
+	template <typename String> void str(String& output) const { OutputStrHelper<String>::str(output, data, length()); }
 
 	bool ensure_capacity(std::size_t capacity)
 	{
-		using namespace std;
 		if (size < capacity)
 		{
-			size_t len = length();
-			char* ndata = new char[capacity];
-			copy(data, data + len, ndata);
+			const size_t len = length();
+			char* new_data = new char[capacity];
+			std::copy(data, data + len, new_data);
 			delete[] data;
-			data = ndata;
+			data = new_data;
 			out_buffer = data + len;
-			remainder += (capacity - size);
+			remainder += capacity - size;
 			size = capacity;
 			return true;
 		}
-		else
-		{
-			return false;
-		}
-	};
 
-	bool grow() { return ensure_capacity(size + block_size); };
+		return false;
+	}
 
-	friend bool ConvertBuffer(const char*, const char*, ConversionInputBuffer&, ConversionOutputBuffer&);
+	bool grow() { return ensure_capacity(size + block_size); }
 
-  private:
-	// declared private to avoid copy of buffer
-	// unsure if versions pre c++11  should be supported, if not, copy constructors can be explicitly deleted
-	ConversionOutputBuffer(const ConversionOutputBuffer&);
-	ConversionOutputBuffer& operator=(const ConversionOutputBuffer&);
+	friend bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuffer& from, ConversionOutputBuffer& to);
 };
 
 bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuffer& from, ConversionOutputBuffer& to)
 {
-	using namespace std;
 	iconv_t descriptor = iconv_open(toCode, fromCode);
-	if (descriptor == ((iconv_t)(-1)))
+	if (descriptor == reinterpret_cast<iconv_t>(-1))
 	{
 		LOG(LogLevel::Error) << "unable to recode string from '" << fromCode << "' to '" << toCode << ": not supported on this system";
 		return false;
 	}
 	while (from.has_remaining_bytes())
 	{
-		if (iconv(descriptor, &from.in_buffer, &from.remainder, &to.out_buffer, &to.remainder) == ((size_t)(-1)))
+		if (iconv(descriptor, &from.in_buffer, &from.remainder, &to.out_buffer, &to.remainder) == static_cast<size_t>(-1))
 		{
 			switch (errno)
 			{
@@ -478,6 +442,8 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 				case EINVAL:
 					LOG(LogLevel::Error) << "incomplete input sequence encountered during conversion from " << fromCode << " to " << toCode;
 					return false;
+				default:
+					break;
 			}
 		}
 	}
@@ -497,7 +463,6 @@ bool ConvertBuffer(const char* fromCode, const char* toCode, ConversionInputBuff
 template <typename InputString, typename OutputString>
 bool ConvertString(const char* fromCode, const char* toCode, const InputString& from, OutputString& to, std::size_t to_buffer_size = 0)
 {
-	using namespace std;
 	if (to_buffer_size == 0)
 	{
 		to_buffer_size = from.length();
@@ -509,16 +474,13 @@ bool ConvertString(const char* fromCode, const char* toCode, const InputString& 
 		to_buffer.str(to);
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 template <typename InputString, typename OutputString>
 OutputString ConvertString(const char* fromCode, const char* toCode, const InputString& from, std::size_t to_buffer_size = 0)
 {
-	using namespace std;
 	OutputString to;
 	ConvertString(fromCode, toCode, from, to, to_buffer_size);
 	return to;
@@ -526,39 +488,33 @@ OutputString ConvertString(const char* fromCode, const char* toCode, const Input
 
 std::string convertUTF8ToASCII(const std::string& UTF8)
 {
-	using namespace std;
-	return ConvertString<string, string>("UTF-8", "ASCII//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::string>("UTF-8", "ASCII//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8To8859_15(const std::string& UTF8)
 {
-	using namespace std;
-	return ConvertString<string, string>("UTF−8", "ISO−8859−15//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::string>("UTF−8", "ISO−8859−15//TRANSLIT", UTF8);
 }
 
 
 std::string convertUTF8ToWin1252(const std::string& UTF8)
 {
-	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1252//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::string>("UTF−8", "CP1252//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8ToWin1251(const std::string& UTF8)
 {
-	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1251//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::string>("UTF−8", "CP1251//TRANSLIT", UTF8);
 }
 
 std::string convertUTF8ToWin1250(const std::string& UTF8)
 {
-	using namespace std;
-	return ConvertString<string, string>("UTF−8", "CP1250//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::string>("UTF−8", "CP1250//TRANSLIT", UTF8);
 }
 
 std::string convert8859_15ToUTF8(const std::string& input)
 {
-	using namespace std;
-	return ConvertString<string, string>("ISO−8859−15", "UTF-8//TRANSLIT", input);
+	return ConvertString<std::string, std::string>("ISO−8859−15", "UTF-8//TRANSLIT", input);
 }
 
 /*
@@ -566,35 +522,30 @@ std::string convert8859_15ToUTF8(const std::string& input)
 	This is an implementation of the original Windows-based API which uses UTF-16 LE as the system dependent wchar_t
 	encoding This behaviour is replicated on Linux but it uses the (system dependent) wchar_t encoding.
 */
-std::wstring convert8859_15ToUTF16(const std::string& UTF8)
+std::wstring convert8859_15ToUTF16(const std::string& input)
 {
-	using namespace std;
-	return ConvertString<string, wstring>("ISO−8859−15", "wchar_t//TRANSLIT", UTF8);
+	return ConvertString<std::string, std::wstring>("ISO−8859−15", "wchar_t//TRANSLIT", input);
 }
 
-std::string convertWin1250ToUTF8(const std::string& Win1252)
+std::string convertWin1250ToUTF8(const std::string& Win1250)
 {
-	using namespace std;
-	return ConvertString<string, string>("CP1250", "UTF-8//TRANSLIT", Win1252);
+	return ConvertString<std::string, std::string>("CP1250", "UTF-8//TRANSLIT", Win1250);
 }
 
-std::string convertWin1251ToUTF8(const std::string& Win1252)
+std::string convertWin1251ToUTF8(const std::string& Win1251)
 {
-	using namespace std;
-	return ConvertString<string, string>("CP1251", "UTF-8//TRANSLIT", Win1252);
+	return ConvertString<std::string, std::string>("CP1251", "UTF-8//TRANSLIT", Win1251);
 }
 
 std::string convertWin1252ToUTF8(const std::string& Win1252)
 {
-	using namespace std;
-	return ConvertString<string, string>("CP1252", "UTF-8//TRANSLIT", Win1252);
+	return ConvertString<std::string, std::string>("CP1252", "UTF-8//TRANSLIT", Win1252);
 }
 
 
 std::wstring convertWin1252ToUTF16(const std::string& Win1252)
 {
-	using namespace std;
-	return ConvertString<string, wstring>("CP1252", "wchar_t//TRANSLIT", Win1252);
+	return ConvertString<std::string, std::wstring>("CP1252", "wchar_t//TRANSLIT", Win1252);
 }
 
 /*
@@ -605,11 +556,10 @@ std::wstring convertWin1252ToUTF16(const std::string& Win1252)
 std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 {
 	std::vector<unsigned long> unicode;
-	size_t i = 0;
-	while (i < UTF8.size())
+	for (size_t i = 0; i < UTF8.size();)
 	{
-		unsigned long uni;
-		size_t todo;
+		uint32_t uni = '\0';
+		size_t todo = 0;
 		unsigned char ch = UTF8[i++];
 		if (ch <= 0x7F)
 		{
@@ -643,7 +593,7 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 		{
 			if (i == UTF8.size())
 				throw std::logic_error("not a UTF-8 string");
-			unsigned char ch = UTF8[i++];
+			ch = UTF8[i++];
 			if (ch < 0x80 || ch > 0xBF)
 				throw std::logic_error("not a UTF-8 string");
 			uni <<= 6;
@@ -661,13 +611,13 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 		unsigned long uni = unicode[i];
 		if (uni <= 0xFFFF)
 		{
-			utf16 += (wchar_t)uni;
+			utf16 += static_cast<wchar_t>(uni);
 		}
 		else
 		{
 			uni -= 0x10000;
-			utf16 += (wchar_t)((uni >> 10) + 0xD800);
-			utf16 += (wchar_t)((uni & 0x3FF) + 0xDC00);
+			utf16 += static_cast<wchar_t>((uni >> 10) + 0xD800);
+			utf16 += static_cast<wchar_t>((uni & 0x3FF) + 0xDC00);
 		}
 	}
 	return utf16;
@@ -676,8 +626,7 @@ std::wstring convertUTF8ToUTF16(const std::string& UTF8)
 
 std::string convertToUTF8(const std::wstring& input)
 {
-	using namespace std;
-	return ConvertString<wstring, string>("wchar_t", "UTF-8//TRANSLIT", input);
+	return ConvertString<std::wstring, std::string>("wchar_t", "UTF-8//TRANSLIT", input);
 }
 
 std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)

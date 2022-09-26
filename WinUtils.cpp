@@ -1,8 +1,10 @@
 #include "Log.h"
 #include "OSCompatibilityLayer.h"
+#include "iconvlite.h"
 #include <Windows.h>
 #include <filesystem>
 #include <iostream>
+
 namespace fs = std::filesystem;
 
 #pragma warning(disable : 4996) // suppress warnings about wcscmp()
@@ -18,8 +20,7 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
 	const auto origPathStr = fs::u8path(validatedPath).native();
 
-	const auto tempPath = fs::u8path(path);
-	if (!fs::exists(tempPath) || !fs::is_directory(tempPath))
+	if (const auto tempPath = fs::u8path(path); !fs::exists(tempPath) || !fs::is_directory(tempPath))
 	{
 		return {};
 	}
@@ -44,11 +45,14 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 std::string GetLastErrorString()
 {
 	const DWORD errorCode = GetLastError();
-	const DWORD errorBufferSize = 256;
-	wchar_t errorBuffer[errorBufferSize];
-	const BOOL success =
-		 FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errorBuffer, errorBufferSize - 1, nullptr);
-	if (success)
+	constexpr DWORD errorBufferSize = 256;
+	if (wchar_t errorBuffer[errorBufferSize]; static_cast<bool>(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
+			  nullptr,
+			  errorCode,
+			  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			  errorBuffer,
+			  errorBufferSize - 1,
+			  nullptr)))
 	{
 		return UTF16ToUTF8(errorBuffer);
 	}
@@ -231,12 +235,11 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 		return;
 	}
 
-	const HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // a handle to the console window
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); // a handle to the console window
 	if (console != INVALID_HANDLE_VALUE)
 	{
-		CONSOLE_SCREEN_BUFFER_INFO oldConsoleInfo;											// the current (soon to be outdated) console data
-		const BOOL success = GetConsoleScreenBufferInfo(console, &oldConsoleInfo); // whether or not the console data could be retrieved
-		if (success)
+		CONSOLE_SCREEN_BUFFER_INFO oldConsoleInfo; // the current (soon to be outdated) console data
+		if (static_cast<bool>(GetConsoleScreenBufferInfo(console, &oldConsoleInfo)))
 		{
 			WORD color;
 			switch (level)
@@ -254,6 +257,8 @@ void WriteToConsole(const LogLevel level, const std::string& logMessage)
 					break;
 
 				case LogLevel::Debug:
+				case LogLevel::Notice:
+				case LogLevel::Progress:
 				default:
 					color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 					break;
@@ -297,8 +302,7 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 
 	if (value[0] != 0)
 	{
-		auto result = std::wstring(value);
-		if (result.length() > 2)
+		if (auto result = std::wstring(value); result.length() > 2)
 		{
 			return result;
 		}
@@ -309,8 +313,7 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
 
 	if (value[0] != 0)
 	{
-		auto result = std::wstring(value);
-		if (result.length() > 2)
+		if (auto result = std::wstring(value); result.length() > 2)
 		{
 			return result;
 		}

@@ -13,8 +13,7 @@ bool TryCreateFolder(const std::string& path)
 {
 	if (fs::exists(fs::u8path(path)))
 		return true;
-	const auto success = fs::create_directory(fs::u8path(path));
-	if (success)
+	if (fs::create_directory(fs::u8path(path)))
 		return true;
 
 	Log(LogLevel::Error) << "Could not create directory: " << path << " : " << GetLastErrorString();
@@ -33,7 +32,7 @@ std::wstring GetCurrentDirectoryWString()
 	catch (std::exception& e)
 	{
 		Log(LogLevel::Error) << "Cannot determine current path; " << e.what();
-		return std::wstring();
+		return {};
 	}
 }
 
@@ -69,8 +68,7 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
-	const auto success = fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing);
-	if (success)
+	if (fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing))
 		return true;
 	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
 	return false;
@@ -107,8 +105,7 @@ bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder
 
 bool DoesFileExist(const std::string& path)
 {
-	const auto tempPath = fs::u8path(path);
-	if (fs::exists(tempPath) && !fs::is_directory(tempPath))
+	if (const auto tempPath = fs::u8path(path); fs::exists(tempPath) && !fs::is_directory(tempPath))
 		return true;
 	return false;
 }
@@ -116,8 +113,7 @@ bool DoesFileExist(const std::string& path)
 
 bool DoesFolderExist(const std::string& path)
 {
-	const auto tempPath = fs::u8path(path);
-	if (fs::exists(tempPath) && fs::is_directory(tempPath))
+	if (const auto tempPath = fs::u8path(path); fs::exists(tempPath) && fs::is_directory(tempPath))
 		return true;
 	return false;
 }
@@ -126,8 +122,7 @@ bool DeleteFolder(const std::string& folder)
 {
 	if (!fs::exists(fs::u8path(folder)))
 		return true;
-	const auto success = fs::remove_all(fs::u8path(folder));
-	if (success)
+	if (fs::remove_all(fs::u8path(folder)) != static_cast<std::uintmax_t>(-1))
 		return true;
 	Log(LogLevel::Error) << "Could not delete folder: " << folder << " " << GetLastErrorString();
 	return false;
