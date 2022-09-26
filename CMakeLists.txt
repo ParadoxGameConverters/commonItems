@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(CommonItemsTests)
 
-# Include diretories
+# Include directories
+include_directories(.)
 include_directories(/usr/include)
-include_directories("../ZipLib")
+include_directories("ZipLib")
 link_directories(/usr/lib)
 
 # Set the compiler options
@@ -25,49 +26,49 @@ add_subdirectory(ZipLib [binary_dir])
 # Source groups
 ################################################################################
 set(commonItems
-    "tests/test_main.cpp"
-    "../Color.cpp"
-    "../Color.h"
-    "../CommonFunctions.cpp"
-    "../CommonFunctions.h"
-    "../CommonRegexes.h"
-    "../ConvenientParser.cpp"
-    "../ConvenientParser.h"
-    "../ConverterVersion.cpp"
-    "../ConverterVersion.h"
-    "../Date.cpp"
-    "../Date.h"
-    "../GameVersion.cpp"
-    "../GameVersion.h"
-    "../iconvlite.cpp"
-    "../iconvlite.h"
-    "../LinuxUtils.cpp"
-    "../Log.cpp"
-    "../Log.h"
-	"../Localization/LocalizationBlock.cpp"
-	"../Localization/LocalizationBlock.h"
-	"../Localization/LocalizationDatabase.cpp"
-	"../Localization/LocalizationDatabase.h"
-	"../Localization/LocalizationLambdas.h"
-	"../ModLoader/Mod.h"
-	"../ModLoader/ModFilesystem.cpp"
-    "../ModLoader/ModFilesystem.h"
-    "../ModLoader/ModLoader.cpp"
-    "../ModLoader/ModLoader.h"
-    "../ModLoader/ModParser.cpp"
-    "../ModLoader/ModParser.h"
-    "../OSCommonLayer.cpp"
-    "../OSCompatibilityLayer.h"
-    "../Parser.cpp"
-    "../Parser.h"
-    "../ParserHelpers.cpp"
-    "../ParserHelpers.h"
-    "../StringUtils.cpp"
-    "../StringUtils.h"
+    "Color.cpp"
+    "Color.h"
+    "CommonFunctions.cpp"
+    "CommonFunctions.h"
+    "CommonRegexes.h"
+    "ConvenientParser.cpp"
+    "ConvenientParser.h"
+    "ConverterVersion.cpp"
+    "ConverterVersion.h"
+    "Date.cpp"
+    "Date.h"
+    "GameVersion.cpp"
+    "GameVersion.h"
+    "iconvlite.cpp"
+    "iconvlite.h"
+    "LinuxUtils.cpp"
+    "Log.cpp"
+    "Log.h"
+	"Localization/LocalizationBlock.cpp"
+	"Localization/LocalizationBlock.h"
+	"Localization/LocalizationDatabase.cpp"
+	"Localization/LocalizationDatabase.h"
+	"Localization/LocalizationLambdas.h"
+	"ModLoader/Mod.h"
+	"ModLoader/ModFilesystem.cpp"
+    "ModLoader/ModFilesystem.h"
+    "ModLoader/ModLoader.cpp"
+    "ModLoader/ModLoader.h"
+    "ModLoader/ModParser.cpp"
+    "ModLoader/ModParser.h"
+    "OSCommonLayer.cpp"
+    "OSCompatibilityLayer.h"
+    "Parser.cpp"
+    "Parser.h"
+    "ParserHelpers.cpp"
+    "ParserHelpers.h"
+    "StringUtils.cpp"
+    "StringUtils.h"
 )
 source_group("commonItems" FILES ${commonItems})
 
 set(tests
+	"tests/test_main.cpp"
     "tests/ColorTests.cpp"
     "tests/CommonFunctionsTests.cpp"
     "tests/CommonRegexesTests.cpp"
