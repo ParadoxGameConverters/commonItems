@@ -363,11 +363,7 @@ class ConversionOutputBuffer
 
 	template <typename Traits, typename Alloc> struct OutputStrHelper<std::basic_string<char, Traits, Alloc>>
 	{
-
-		static void str(std::basic_string<char, Traits, Alloc>& output, char* buffer, std::size_t length)
-		{
-			output.assign(buffer, length);
-		}
+		static void str(std::basic_string<char, Traits, Alloc>& output, char* buffer, std::size_t length) { output.assign(buffer, length); }
 	};
 
   public:

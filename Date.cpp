@@ -9,10 +9,10 @@ namespace
 {
 
 const std::array days_by_month{
-	 0, // January
-	 31, // February
-	 59, // March
-	 90, // April
+	 0,	// January
+	 31,	// February
+	 59,	// March
+	 90,	// April
 	 120, // May
 	 151, // June
 	 181, // July
