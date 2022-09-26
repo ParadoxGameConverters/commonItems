@@ -3,10 +3,9 @@
 
 
 
-#include "../Log.h"
 #include "../ModLoader/ModFilesystem.h"
 #include "LocalizationBlock.h"
-#include <fstream>
+#include <istream>
 #include <map>
 #include <optional>
 #include <regex>
