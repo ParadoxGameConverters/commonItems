@@ -9,7 +9,7 @@
 #include "Parser.h"
 #include <concepts>
 #include <map>
-#include <type_traits>
+#include <vector>
 
 
 namespace commonItems
@@ -41,13 +41,13 @@ template <std::integral T> [[nodiscard]] T stringToInteger(const std::string& st
 
 
 [[nodiscard]] std::vector<int> getInts(std::istream& theStream);
-[[nodiscard]] std::vector<long long> getLlongs(std::istream& theStream);
-[[nodiscard]] std::vector<unsigned long long> getULlongs(std::istream& theStream);
+[[nodiscard]] std::vector<int64_t> getLlongs(std::istream& theStream);
+[[nodiscard]] std::vector<uint64_t> getULlongs(std::istream& theStream);
 [[nodiscard]] std::vector<double> getDoubles(std::istream& theStream);
 [[nodiscard]] std::vector<std::string> getStrings(std::istream& theStream);
 [[nodiscard]] int getInt(std::istream& theStream);
-[[nodiscard]] long long getLlong(std::istream& theStream);
-[[nodiscard]] unsigned long long getULlong(std::istream& theStream);
+[[nodiscard]] int64_t getLlong(std::istream& theStream);
+[[nodiscard]] uint64_t getULlong(std::istream& theStream);
 [[nodiscard]] double getDouble(std::istream& theStream);
 [[nodiscard]] std::string getString(std::istream& theStream);
 
@@ -69,10 +69,10 @@ class llongList: parser
   public:
 	explicit llongList(std::istream& theStream);
 
-	[[nodiscard]] std::vector<long long> getLlongs() const { return llongs; }
+	[[nodiscard]] std::vector<int64_t> getLlongs() const { return llongs; }
 
   private:
-	std::vector<long long> llongs;
+	std::vector<int64_t> llongs;
 };
 
 
@@ -81,10 +81,10 @@ class ullongList: parser
   public:
 	explicit ullongList(std::istream& theStream);
 
-	[[nodiscard]] std::vector<unsigned long long> getULlongs() const { return ullongs; }
+	[[nodiscard]] std::vector<uint64_t> getULlongs() const { return ullongs; }
 
   private:
-	std::vector<unsigned long long> ullongs;
+	std::vector<uint64_t> ullongs;
 };
 
 
@@ -105,10 +105,10 @@ class singleLlong: parser
   public:
 	explicit singleLlong(std::istream& theStream);
 
-	[[nodiscard]] long long getLlong() const noexcept { return theLongLong; }
+	[[nodiscard]] int64_t getLlong() const noexcept { return theLongLong; }
 
   private:
-	long long theLongLong = 0;
+	int64_t theLongLong = 0;
 };
 
 
@@ -117,10 +117,10 @@ class singleULlong: parser
   public:
 	explicit singleULlong(std::istream& theStream);
 
-	[[nodiscard]] unsigned long long getULlong() const noexcept { return theUnsignedLongLong; }
+	[[nodiscard]] uint64_t getULlong() const noexcept { return theUnsignedLongLong; }
 
   private:
-	unsigned long long theUnsignedLongLong = 0;
+	uint64_t theUnsignedLongLong = 0;
 };
 
 
