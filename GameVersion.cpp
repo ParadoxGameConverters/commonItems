@@ -208,7 +208,7 @@ bool GameVersion::operator==(const GameVersion& rhs) const
 	if (rhs.fourthPart)
 		testR = *rhs.fourthPart;
 
-	return testL != testR;
+	return testL == testR;
 }
 
 bool GameVersion::operator!=(const GameVersion& rhs) const
@@ -366,7 +366,7 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 	testDigit = 0;
 	if (rhs.fourthPart)
 		testDigit = *rhs.fourthPart;
-	return fourthPart && testDigit > *fourthPart;
+	return !fourthPart || testDigit <= *fourthPart;
 }
 
 std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
