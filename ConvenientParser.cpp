@@ -22,14 +22,14 @@ void commonItems::convenientParser::registerSetter(const std::string& keyword, d
 	});
 }
 
-void commonItems::convenientParser::registerSetter(const std::string& keyword, int64_t& targetLlong)
+void commonItems::convenientParser::registerSetter(const std::string& keyword, long long& targetLlong)
 {
 	registerKeyword(keyword, [&targetLlong](std::istream& theStream) {
 		targetLlong = getLlong(theStream);
 	});
 }
 
-void commonItems::convenientParser::registerSetter(const std::string& keyword, uint64_t& targetULlong)
+void commonItems::convenientParser::registerSetter(const std::string& keyword, unsigned long long& targetULlong)
 {
 	registerKeyword(keyword, [&targetULlong](std::istream& theStream) {
 		targetULlong = getULlong(theStream);

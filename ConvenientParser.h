@@ -20,8 +20,8 @@ class convenientParser: public parser
 	void registerSetter(const std::string& keyword, std::string& targetString);
 	void registerSetter(const std::string& keyword, int& targetInt);
 	void registerSetter(const std::string& keyword, double& targetDouble);
-	void registerSetter(const std::string& keyword, int64_t& targetLlong);
-	void registerSetter(const std::string& keyword, uint64_t& targetULlong);
+	void registerSetter(const std::string& keyword, long long& targetLlong);
+	void registerSetter(const std::string& keyword, unsigned long long& targetULlong);
 };
 
 } // namespace commonItems
