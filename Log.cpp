@@ -7,13 +7,12 @@
 
 
 
-Log::Log(const LogLevel level): logLevel(level)
+Log::Log(LogLevel level): logLevel(level)
 {
-	static auto logFileCreated = false;
-	if (!logFileCreated)
+	if (!log_file_created)
 	{
 		std::ofstream logFile("log.txt", std::ofstream::trunc);
-		logFileCreated = true;
+		log_file_created = true;
 		logFile.close();
 	}
 }
@@ -34,7 +33,7 @@ static const std::map<LogLevel, std::string> logLevelStrings = {{LogLevel::Error
 	 {LogLevel::Progress, "[PROGRESS] "},
 	 {LogLevel::Notice, "  [NOTICE] "}};
 
-void Log::WriteToFile(const LogLevel level, const std::string& logMessage)
+void Log::WriteToFile(LogLevel level, const std::string& logMessage)
 {
 	std::ofstream logFile("log.txt", std::ofstream::app);
 	WriteTheTime(logFile);
@@ -58,9 +57,7 @@ void Log::WriteTheTime(std::ostream& logFile)
 #endif
 
 
-	char timeBuffer[64];
-	const auto bytesWritten = strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", &timeInfo);
-	if (bytesWritten != 0)
+	if (char timeBuffer[64]; strftime(timeBuffer, sizeof timeBuffer, "%Y-%m-%d %H:%M:%S ", &timeInfo) != 0)
 	{
 		logFile << timeBuffer;
 	}

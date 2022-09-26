@@ -44,7 +44,7 @@ enum class LogLevel
 class Log
 {
   public:
-	explicit Log(LogLevel);
+	explicit Log(LogLevel level);
 	~Log();
 	Log(const Log&) = delete;
 	Log operator=(const Log&) = delete;
@@ -58,9 +58,10 @@ class Log
 	}
 
   private:
-	static void WriteToFile(LogLevel, const std::string& logMessage);
+	static void WriteToFile(LogLevel level, const std::string& logMessage);
 	static void WriteTheTime(std::ostream& logFile);
 
+	bool log_file_created = false;
 	LogLevel logLevel;
 	std::ostringstream logMessageStream;
 };
