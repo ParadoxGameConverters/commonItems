@@ -21,8 +21,7 @@ std::string getNextLexeme(std::istream& theStream);
 
 void commonItems::absorbBOM(std::istream& theStream)
 {
-	const auto firstChar = static_cast<char>(theStream.peek());
-	if (firstChar == '\xEF')
+	if (const auto firstChar = static_cast<char>(theStream.peek()); firstChar == '\xEF')
 	{
 		char bitBucket[3];
 		theStream.read(bitBucket, sizeof bitBucket);
@@ -50,21 +49,21 @@ void commonItems::parser::registerRegex(const std::string& keyword, const parsin
 
 void commonItems::parser::IgnoreUnregisteredItems()
 {
-	registerRegex(commonItems::catchallRegex, commonItems::ignoreItem);
+	registerRegex(catchallRegex, ignoreItem);
 }
 
 
 void commonItems::parser::IgnoreAndLogUnregisteredItems()
 {
-	registerRegex(commonItems::catchallRegex, commonItems::ignoreAndLogItem);
+	registerRegex(catchallRegex, ignoreAndLogItem);
 }
 
 
 void commonItems::parser::IgnoreAndStoreUnregisteredItems(std::set<std::string>& ignored_tokens)
 {
-	registerRegex(commonItems::catchallRegex, [&ignored_tokens](const std::string& key, std::istream& the_stream) {
+	registerRegex(catchallRegex, [&ignored_tokens](const std::string& key, std::istream& the_stream) {
 		ignored_tokens.insert(key);
-		commonItems::ignoreItem(key, the_stream);
+		ignoreItem(key, the_stream);
 	});
 }
 
@@ -77,8 +76,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 
 	while (true)
 	{
-		auto token = getNextToken(theStream);
-		if (token)
+		if (auto token = getNextToken(theStream); token)
 		{
 			tokensSoFar += *token;
 			if (*token == "=")
@@ -88,24 +86,22 @@ void commonItems::parser::parseStream(std::istream& theStream)
 					value = true; // swapping to value part.
 					continue;
 				}
-				else // leaving else to be noticeable.
+
+				// value is positive, meaning we were at value, and now we're hitting an equal. This is bad. We need to
+				// manually fast-forward to brace-lvl 0 and die.
+				char inputChar;
+				while (braceDepth)
 				{
-					// value is positive, meaning we were at value, and now we're hitting an equal. This is bad. We need to
-					// manually fast-forward to brace-lvl 0 and die.
-					char inputChar;
-					while (braceDepth)
-					{
-						theStream >> inputChar;
-						if (inputChar == '{')
-							braceDepth++;
-						if (inputChar == '}')
-							braceDepth--;
-						if (!isspace(inputChar))
-							tokensSoFar += inputChar;
-					}
-					Log(LogLevel::Warning) << "Broken token syntax at " << tokensSoFar;
-					return;
+					theStream >> inputChar;
+					if (inputChar == '{')
+						braceDepth++;
+					if (inputChar == '}')
+						braceDepth--;
+					if (!isspace(inputChar))
+						tokensSoFar += inputChar;
 				}
+				Log(LogLevel::Warning) << "Broken token syntax at " << tokensSoFar;
+				return;
 			}
 			if (*token == "{")
 				braceDepth++;
@@ -201,7 +197,7 @@ std::optional<std::string> commonItems::parser::getNextToken(std::istream& theSt
 		toReturn = getNextLexeme(theStream);
 
 		const auto strippedLexeme = remQuotes(toReturn);
-		const auto isLexemeQuoted = (strippedLexeme.size() < toReturn.size());
+		const auto isLexemeQuoted = strippedLexeme.size() < toReturn.size();
 
 		auto matched = tryToMatchAgainstKeywords(toReturn, strippedLexeme, isLexemeQuoted, theStream);
 
@@ -228,19 +224,19 @@ inline bool commonItems::parser::tryToMatchAgainstKeywords(const std::string& to
 		match->second(theStream);
 		return true;
 	}
-	else if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
+	if (const auto& match = registeredKeywordStrings.find(toReturn); match != registeredKeywordStrings.end())
 	{
 		match->second(toReturn, theStream);
 		return true;
 	}
-	else if (isLexemeQuoted)
+	if (isLexemeQuoted)
 	{
 		if (const auto& strippedMatch = registeredKeywordStringsStreamOnly.find(strippedLexeme); strippedMatch != registeredKeywordStringsStreamOnly.end())
 		{
 			strippedMatch->second(theStream);
 			return true;
 		}
-		else if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme); strippedMatch != registeredKeywordStrings.end())
+		if (const auto& strippedMatch = registeredKeywordStrings.find(strippedLexeme); strippedMatch != registeredKeywordStrings.end())
 		{
 			strippedMatch->second(toReturn, theStream);
 			return true;
@@ -257,8 +253,7 @@ inline bool commonItems::parser::tryToMatchAgainstRegexes(const std::string& toR
 {
 	for (const auto& [regex, parsingFunction]: generatedRegexes)
 	{
-		std::smatch match;
-		if (std::regex_match(toReturn, match, regex))
+		if (std::smatch match; std::regex_match(toReturn, match, regex))
 		{
 			parsingFunction(toReturn, theStream);
 			return true;
@@ -268,8 +263,7 @@ inline bool commonItems::parser::tryToMatchAgainstRegexes(const std::string& toR
 	{
 		for (const auto& [regex, parsingFunction]: generatedRegexes)
 		{
-			std::smatch match;
-			if (std::regex_match(strippedLexeme, match, regex))
+			if (std::smatch match; std::regex_match(strippedLexeme, match, regex))
 			{
 				parsingFunction(toReturn, theStream);
 				return true;
