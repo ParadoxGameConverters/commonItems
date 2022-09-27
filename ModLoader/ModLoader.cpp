@@ -8,7 +8,7 @@
 #include <set>
 #include <stdexcept>
 #include <string>
-namespace fs = std::filesystem;
+
 
 void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods)
 {
@@ -110,8 +110,7 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 	if (!DoesFolderExist(modsPath))
 		throw std::invalid_argument("Mods directory path is invalid! Is it at: " + gameDocumentsPath + "/mod/ ?");
 
-	const auto diskModFiles = GetAllFilesInFolder(modsPath);
-	for (const auto& diskModFile: diskModFiles)
+	for (const auto& diskModFile: GetAllFilesInFolder(modsPath))
 	{
 		if (getExtension(diskModFile) != "mod")
 			continue;
@@ -246,7 +245,7 @@ std::optional<std::string> commonItems::ModLoader::uncompressAndReturnNewPath(co
 bool commonItems::ModLoader::extractZip(const std::string& archive, const std::string& path) const
 {
 	TryCreateFolder(path);
-	auto modFile = ZipFile::Open(archive);
+	const auto modFile = ZipFile::Open(archive);
 	if (!modFile)
 		return false;
 	for (size_t entryNum = 0; entryNum < modFile->GetEntriesCount(); ++entryNum)

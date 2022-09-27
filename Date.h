@@ -16,7 +16,7 @@
 // * Dates can be compared using all the standard comparators.Additionally, the difference between two dates(in years) can be found.
 //
 // Modification
-// * Dates can be increased by months or years, and can be decreased by years.In all cases thse must be whole - number changes to months or years.
+// * Dates can be increased by months or years, and can be decreased by years.In all cases these must be whole - number changes to months or years.
 //
 // Output
 // * Dates can be output to a stream or converted to a string.
@@ -32,7 +32,7 @@ namespace CommonItems
 
 [[nodiscard]] int DaysInMonth(int month);
 
-}
+} // namespace CommonItems
 
 
 
@@ -62,7 +62,7 @@ class date
 	[[nodiscard]] bool isSet() const;
 	[[nodiscard]] std::string toString() const;
 
-	friend std::ostream& operator<<(std::ostream&, const date&);
+	friend std::ostream& operator<<(std::ostream& out, const date& date);
 
   private:
 	[[nodiscard]] int calculateDayInYear() const;

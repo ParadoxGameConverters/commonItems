@@ -9,18 +9,13 @@
 
 
 #include "Log.h"
-#include "iconvlite.h"
-#include <cstdio>
 #include <optional>
 #include <set>
-#include <stdint.h>
 #include <string>
 
 
 
-#ifndef MAX_PATH
-#define MAX_PATH 260
-#endif // MAX_PATH
+constexpr int MAX_PATH = 260;
 
 
 
@@ -143,26 +138,26 @@ std::string normalizeUTF8Path(const std::string& utf_8_path);
 // sprintf_s is not implemented on Linux. It functions similarly to the function snprintf, but the return values are
 // different. Since return values are not used, they are directly translated for now. If return values will some day be
 // used, the compiler will give an error due to sprintf_s_Linux returning void.
-#define sprintf_s sprintf_s_Linux
-void sprintf_s_Linux(char* __restrict __s, size_t __maxlen, const char* __restrict __format, ...);
+void sprintf_s_Linux(char* __restrict __s, size_t __maxlength, const char* __restrict __format, ...);
+const auto sprintf_s = sprintf_s_Linux;
 
 // See sprintf_s_Linux
-#define strcpy_s strcpy_s_Linux
 void strcpy_s_Linux(char* __restrict __dest, const char* __restrict __src);
+const auto strcpy_s = strcpy_s_Linux;
 
 // Very basic implementation, simply returns 0 if FILE* is not NULL
-#define fopen_s fopen_s_Linux
 int fopen_s_Linux(FILE** file, const char* filename, const char* mode);
+const auto fopen_s = fopen_s_Linux;
 
-#define fprintf_s fprintf_s_Linux
 void fprintf_s_Linux(FILE* file, const char* format, ...);
+const auto fprintf_s = fprintf_s_Linux;
 
-typedef uint64_t HANDLE;
-#define STD_OUTPUT_HANDLE -11
-#define INVALID_HANDLE_VALUE -1
+using HANDLE = uint64_t;
+constexpr int STD_OUTPUT_HANDLE = -11;
+constexpr int INVALID_HANDLE_VALUE = -1;
 HANDLE GetStdHandle(int nothing);
 
-typedef int errno_t;
+using errno_t = int;
 
 #endif //__linux__
 

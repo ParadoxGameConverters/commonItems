@@ -61,13 +61,13 @@ class GameVersion: commonItems::convenientParser
 	// Largerish is intended for fuzzy comparisons like "converter works with up to 1.9",
 	// so everything incoming on rhs from 0.0.0.0 to 1.9.x.y will match, (where x and y are >= 0),
 	// thus overshooting the internal "1.9.0.0" setup. This works if ".0.0" are actually undefined.
-	bool isLargerishThan(const GameVersion& rhs) const;
+	[[nodiscard]] bool isLargerishThan(const GameVersion& rhs) const;
 
 	[[nodiscard]] std::string toString() const;
 	[[nodiscard]] std::string toShortString() const;
 	[[nodiscard]] std::string toWildCard() const;
 
-	friend std::ostream& operator<<(std::ostream&, const GameVersion& version);
+	friend std::ostream& operator<<(std::ostream& out, const GameVersion& version);
 
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath);
@@ -97,7 +97,7 @@ class GameVersion::Factory: convenientParser
 };
 
 
-std::ostream& operator<<(std::ostream&, const GameVersion& version);
+std::ostream& operator<<(std::ostream& out, const GameVersion& version);
 
 
 

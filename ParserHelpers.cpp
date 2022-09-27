@@ -125,8 +125,8 @@ double stringToDouble(const std::string& str)
 {
 	double theDouble = 0.0;
 	const auto last = str.data() + str.size();
-	const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
-	if (ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
+	if (const auto [ptr, ec] = std::from_chars(str.data(), last, theDouble);
+		 ec != std::errc() || ptr != last) // conversion either failed or was successful but not all characters matched
 	{
 		Log(LogLevel::Warning) << "string to double - invalid argument: " << str;
 	}
@@ -315,7 +315,7 @@ std::string simpleObject::getValue(const std::string& key) const
 	{
 		return valueItr->second;
 	}
-	return std::string();
+	return {};
 }
 
 
@@ -512,8 +512,8 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 stringsOfItems::stringsOfItems(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
-		const stringOfItem theItem(theStream);
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& lambda_stream) {
+		const stringOfItem theItem(lambda_stream);
 		theStrings.push_back(itemName + " " + theItem.getString() + "\n");
 	});
 
@@ -523,8 +523,8 @@ stringsOfItems::stringsOfItems(std::istream& theStream)
 
 stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& theStream) {
-		ignoreItem(itemName, theStream);
+	registerRegex(catchallRegex, [this](const std::string& itemName, std::istream& lambda_stream) {
+		ignoreItem(itemName, lambda_stream);
 		theStrings.push_back(itemName);
 	});
 
@@ -534,9 +534,9 @@ stringsOfItemNames::stringsOfItemNames(std::istream& theStream)
 
 assignments::assignments(std::istream& theStream)
 {
-	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& theStream) {
-		getNextTokenWithoutMatching(theStream); // remove equals
-		auto assignmentValue = getNextTokenWithoutMatching(theStream);
+	registerRegex(catchallRegex, [this](const std::string& assignmentName, std::istream& lambda_stream) {
+		getNextTokenWithoutMatching(lambda_stream); // remove equals
+		auto assignmentValue = getNextTokenWithoutMatching(lambda_stream);
 		theAssignments.emplace(std::make_pair(assignmentName, *assignmentValue));
 	});
 

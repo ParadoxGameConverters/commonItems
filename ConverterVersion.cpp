@@ -3,10 +3,10 @@
 #include "ParserHelpers.h"
 #include <fstream>
 
-void commonItems::ConverterVersion::loadVersion(const std::string& fileName)
+void commonItems::ConverterVersion::loadVersion(const std::string& filename)
 {
 	registerKeys();
-	parseFile(fileName);
+	parseFile(filename);
 	clearRegisteredKeywords();
 }
 

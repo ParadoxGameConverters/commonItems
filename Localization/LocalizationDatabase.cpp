@@ -1,4 +1,6 @@
 #include "LocalizationDatabase.h"
+#include "../Log.h"
+#include <fstream>
 
 
 

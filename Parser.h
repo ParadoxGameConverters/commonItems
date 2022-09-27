@@ -18,8 +18,8 @@
 namespace commonItems
 {
 
-typedef std::function<void(const std::string&, std::istream&)> parsingFunction;
-typedef std::function<void(std::istream&)> parsingFunctionStreamOnly;
+using parsingFunction = std::function<void(const std::string&, std::istream&)>;
+using parsingFunctionStreamOnly = std::function<void(std::istream&)>;
 
 
 void absorbBOM(std::istream& theStream);
