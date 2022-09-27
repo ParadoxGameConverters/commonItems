@@ -8,7 +8,7 @@
 namespace
 {
 
-const std::array<int, 13> days_by_month{
+const std::array days_by_month{
 	 0,	// January
 	 31,	// February
 	 59,	// March
@@ -24,7 +24,7 @@ const std::array<int, 13> days_by_month{
 	 365, // End of year
 };
 
-}
+} // namespace
 
 
 
@@ -154,9 +154,9 @@ std::string date::toString() const
 }
 
 
-std::ostream& operator<<(std::ostream& out, const date& d)
+std::ostream& operator<<(std::ostream& out, const date& date)
 {
-	out << d.year << '.' << d.month << '.' << d.day;
+	out << date.year << '.' << date.month << '.' << date.day;
 	return out;
 }
 
@@ -165,6 +165,6 @@ int date::calculateDayInYear() const
 {
 	if (month >= 1 && month <= 12)
 		return day + days_by_month[static_cast<size_t>(month) - 1];
-	else
-		return day;
+
+	return day;
 }

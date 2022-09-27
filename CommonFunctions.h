@@ -14,9 +14,9 @@
 namespace commonItems
 {
 
-constexpr char utf8BOM[] = "\xEF\xBB\xBF";
+constexpr auto utf8BOM = "\xEF\xBB\xBF";
 
-}
+} // namespace commonItems
 
 
 // Given a file with path included (such as '/this/is/a/path.txt' or 'c:\this\is\a\path.txt'), returns the part that's just the filename ('path.txt')

@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(CommonItemsTests)
 
-# Include diretories
+# Include directories
+include_directories(.)
 include_directories(/usr/include)
-include_directories("../ZipLib")
+include_directories("ZipLib")
 link_directories(/usr/lib)
 
 # Set the compiler options
@@ -25,49 +26,49 @@ add_subdirectory(ZipLib [binary_dir])
 # Source groups
 ################################################################################
 set(commonItems
-    "tests/test_main.cpp"
-    "../Color.cpp"
-    "../Color.h"
-    "../CommonFunctions.cpp"
-    "../CommonFunctions.h"
-    "../CommonRegexes.h"
-    "../ConvenientParser.cpp"
-    "../ConvenientParser.h"
-    "../ConverterVersion.cpp"
-    "../ConverterVersion.h"
-    "../Date.cpp"
-    "../Date.h"
-    "../GameVersion.cpp"
-    "../GameVersion.h"
-    "../iconvlite.cpp"
-    "../iconvlite.h"
-    "../LinuxUtils.cpp"
-    "../Log.cpp"
-    "../Log.h"
-	"../Localization/LocalizationBlock.cpp"
-	"../Localization/LocalizationBlock.h"
-	"../Localization/LocalizationDatabase.cpp"
-	"../Localization/LocalizationDatabase.h"
-	"../Localization/LocalizationLambdas.h"
-	"../ModLoader/Mod.h"
-	"../ModLoader/ModFilesystem.cpp"
-    "../ModLoader/ModFilesystem.h"
-    "../ModLoader/ModLoader.cpp"
-    "../ModLoader/ModLoader.h"
-    "../ModLoader/ModParser.cpp"
-    "../ModLoader/ModParser.h"
-    "../OSCommonLayer.cpp"
-    "../OSCompatibilityLayer.h"
-    "../Parser.cpp"
-    "../Parser.h"
-    "../ParserHelpers.cpp"
-    "../ParserHelpers.h"
-    "../StringUtils.cpp"
-    "../StringUtils.h"
+    "Color.cpp"
+    "Color.h"
+    "CommonFunctions.cpp"
+    "CommonFunctions.h"
+    "CommonRegexes.h"
+    "ConvenientParser.cpp"
+    "ConvenientParser.h"
+    "ConverterVersion.cpp"
+    "ConverterVersion.h"
+    "Date.cpp"
+    "Date.h"
+    "GameVersion.cpp"
+    "GameVersion.h"
+    "iconvlite.cpp"
+    "iconvlite.h"
+    "LinuxUtils.cpp"
+    "Log.cpp"
+    "Log.h"
+	"Localization/LocalizationBlock.cpp"
+	"Localization/LocalizationBlock.h"
+	"Localization/LocalizationDatabase.cpp"
+	"Localization/LocalizationDatabase.h"
+	"Localization/LocalizationLambdas.h"
+	"ModLoader/Mod.h"
+	"ModLoader/ModFilesystem.cpp"
+    "ModLoader/ModFilesystem.h"
+    "ModLoader/ModLoader.cpp"
+    "ModLoader/ModLoader.h"
+    "ModLoader/ModParser.cpp"
+    "ModLoader/ModParser.h"
+    "OSCommonLayer.cpp"
+    "OSCompatibilityLayer.h"
+    "Parser.cpp"
+    "Parser.h"
+    "ParserHelpers.cpp"
+    "ParserHelpers.h"
+    "StringUtils.cpp"
+    "StringUtils.h"
 )
 source_group("commonItems" FILES ${commonItems})
 
 set(tests
+	"tests/test_main.cpp"
     "tests/ColorTests.cpp"
     "tests/CommonFunctionsTests.cpp"
     "tests/CommonRegexesTests.cpp"
@@ -151,10 +152,14 @@ add_custom_command(TARGET lcov
 	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/11/bits/*" -o lcoverage/coverage.info
+	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info
+	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info
+	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "commonItems/tests/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "commonItems/tests/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "commonItems/tests/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
 	COMMAND lcov --remove lcoverage/coverage.info "commonItems/tests/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
+	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info
 	COMMAND echo "-- Generating HTML output files"
 	COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
 )
@@ -179,3 +184,15 @@ enable_testing()
 # Link test executable against gtest & gtest_main
 target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
+
+################################
+# Clang-tidy
+################################
+
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
+set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}")
+add_library(run_clang_tidy
+	${ALL_FILES}
+)
+target_link_libraries(run_clang_tidy pthread)
+set_target_properties(run_clang_tidy PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")

@@ -12,10 +12,13 @@ using Path = std::string;
 struct Mod
 {
 	Mod() = default;
-	explicit Mod(const Name& theName, const Path& thePath): name(theName), path(thePath) {}
-	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies): name(theName), path(thePath), dependencies(theDependencies) {}
-	explicit Mod(const Name& theName, const Path& thePath, const std::set<Name> theDependencies, const std::set<std::string> theReplacedFolders):
-		 name(theName), path(thePath), dependencies(theDependencies), replacedFolders(theReplacedFolders)
+	explicit Mod(Name theName, Path thePath): name(std::move(theName)), path(std::move(thePath)) {}
+	explicit Mod(Name theName, Path thePath, std::set<Name> theDependencies):
+		 name(std::move(theName)), path(std::move(thePath)), dependencies(std::move(theDependencies))
+	{
+	}
+	explicit Mod(Name theName, Path thePath, std::set<Name> theDependencies, std::set<std::string> theReplacedFolders):
+		 name(std::move(theName)), path(std::move(thePath)), dependencies(std::move(theDependencies)), replacedFolders(std::move(theReplacedFolders))
 	{
 	}
 	Name name;

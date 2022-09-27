@@ -1,6 +1,9 @@
 #include "CommonFunctions.h"
 #include "OSCompatibilityLayer.h"
 #include <algorithm>
+#include <array>
+
+
 
 std::string trimPath(const std::string& fileName)
 {
@@ -23,9 +26,11 @@ std::string trimExtension(const std::string& fileName)
 	const auto rawFile = trimPath(fileName);
 	const auto dotPos = rawFile.find_last_of('.');
 	if (dotPos == std::string::npos)
+	{
 		return fileName;
-	else
-		return fileName.substr(0, fileName.find(rawFile) + dotPos);
+	}
+
+	return fileName.substr(0, fileName.find(rawFile) + dotPos);
 }
 
 std::string getExtension(const std::string& fileName)
@@ -33,9 +38,11 @@ std::string getExtension(const std::string& fileName)
 	const auto rawFile = trimPath(fileName);
 	const auto dotPos = rawFile.find_last_of('.');
 	if (dotPos == std::string::npos)
-		return std::string();
-	else
-		return rawFile.substr(dotPos + 1);
+	{
+		return {};
+	}
+
+	return rawFile.substr(dotPos + 1);
 }
 
 std::string replaceCharacter(std::string fileName, const char character)
@@ -68,17 +75,17 @@ std::string cardinalToOrdinal(const int cardinal)
 
 std::string cardinalToRoman(int number)
 {
-	int num[] = {1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
-	std::string sym[] = {"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
-	int i = 12;
+	const std::array numbers{1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
+	const std::array symbols{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
+	int i = static_cast<int>(numbers.size());
 	std::string toReturn;
 	while (number > 0)
 	{
-		auto div = number / num[i];
-		number = number % num[i];
-		while (div--)
+		auto div = number / numbers[i];
+		number = number % numbers[i];
+		while (div-- > 0)
 		{
-			toReturn += sym[i];
+			toReturn += symbols[i];
 		}
 		i--;
 	}
