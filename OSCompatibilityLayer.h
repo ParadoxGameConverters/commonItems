@@ -15,10 +15,6 @@
 
 
 
-constexpr int MAX_PATH = 260;
-
-
-
 namespace commonItems
 {
 
