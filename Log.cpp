@@ -9,6 +9,7 @@
 
 Log::Log(LogLevel level): logLevel(level)
 {
+	static bool log_file_created = false;
 	if (!log_file_created)
 	{
 		std::ofstream logFile("log.txt", std::ofstream::trunc);
