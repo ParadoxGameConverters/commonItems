@@ -61,7 +61,6 @@ class Log
 	static void WriteToFile(LogLevel level, const std::string& logMessage);
 	static void WriteTheTime(std::ostream& logFile);
 
-	bool log_file_created = false;
 	LogLevel logLevel;
 	std::ostringstream logMessageStream;
 };
