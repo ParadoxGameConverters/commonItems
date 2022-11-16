@@ -34,6 +34,22 @@ TEST(Color_Tests, ColorCanBeInitializedWithRgbComponents)
 	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
+TEST(Color_Tests, ColorCanBeInitializedWithRgbaComponents)
+{
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128}, 0.5f);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	EXPECT_EQ(64, r);
+	EXPECT_EQ(128, g);
+	EXPECT_EQ(128, b);
+	EXPECT_EQ(0.5, testColor.a());
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	EXPECT_NEAR(0.5f, h, 0.01);
+	EXPECT_NEAR(0.5f, s, 0.01);
+	EXPECT_NEAR(0.5f, v, 0.01);
+}
+
 
 TEST(Color_Tests, ColorCanBeInitializedWithHsvComponents)
 {
@@ -48,6 +64,22 @@ TEST(Color_Tests, ColorCanBeInitializedWithHsvComponents)
 	ASSERT_NEAR(0.5f, h, 0.01);
 	ASSERT_NEAR(0.5f, s, 0.01);
 	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+TEST(Color_Tests, ColorCanBeInitializedWithHsvaComponents)
+{
+	const commonItems::Color testColor(std::array<float, 3>{0.5f, 0.5f, 0.5f}, 0.5f);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	EXPECT_EQ(63, r);
+	EXPECT_EQ(127, g);
+	EXPECT_EQ(127, b);
+	EXPECT_EQ(0.5, testColor.a());
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	EXPECT_NEAR(0.5f, h, 0.01);
+	EXPECT_NEAR(0.5f, s, 0.01);
+	EXPECT_NEAR(0.5f, v, 0.01);
 }
 
 
@@ -330,6 +362,24 @@ TEST(Color_Tests, ColorRGBDoublesCanBeInitializedFromStream) // Yes, this is a t
 	ASSERT_NEAR(0.90f, v, 0.01);
 }
 
+TEST(Color_Tests, ColorRGBADoublesCanBeInitializedFromStream) // Yes, unfortunately this is a thing as well.
+{
+	std::stringstream input;
+	input << "= { 0.5 0.9 0.1 0.5 }";
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	EXPECT_EQ(128, r);
+	EXPECT_EQ(230, g);
+	EXPECT_EQ(26, b);
+	EXPECT_EQ(0.5, testColor.a());
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	EXPECT_NEAR(0.25f, h, 0.01);
+	EXPECT_NEAR(0.89f, s, 0.01);
+	EXPECT_NEAR(0.90f, v, 0.01);
+}
+
 
 TEST(Color_Tests, ColorCanBeInitializedFromStreamWithQuotes)
 {
@@ -427,6 +477,24 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsv)
 	ASSERT_NEAR(0.5f, h, 0.01);
 	ASSERT_NEAR(0.5f, s, 0.01);
 	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInHsva)
+{
+	std::stringstream input;
+	input << "= hsv { 0.5 0.5 0.5 0.5 }";
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	EXPECT_EQ(63, r);
+	EXPECT_EQ(127, g);
+	EXPECT_EQ(127, b);
+	EXPECT_EQ(0.5, testColor.a());
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	EXPECT_NEAR(0.5f, h, 0.01);
+	EXPECT_NEAR(0.5f, s, 0.01);
+	EXPECT_NEAR(0.5f, v, 0.01);
 }
 
 
@@ -719,6 +787,15 @@ TEST(Color_Tests, ColorCanBeOutputInHsvColorSpace)
 	ASSERT_EQ("= hsv { 0.5 0.5 0.5 }", output.str());
 }
 
+TEST(Color_Tests, ColorCanBeOutputInHsvaColorSpace)
+{
+	const commonItems::Color testColor(std::array<int, 3>{64, 128, 128}, 0.5f);
+
+	std::stringstream output;
+	output << testColor.outputHsv();
+
+	EXPECT_EQ("= hsv { 0.5 0.5 0.5 0.5 }", output.str());
+}
 
 TEST(Color_Tests, ColorCanBeOutputInHsv360ColorSpace)
 {

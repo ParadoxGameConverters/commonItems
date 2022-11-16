@@ -6,21 +6,26 @@
 // Represents a Paradox - defined color.
 //
 // Can be directly created in either the RGB or HSV color spaces.
+// If alpha is persent we're assuming it's RGBA or HSVA.
 //
 // Can be imported in :
 // * Unspecified with ints(becomes RGB) - "= { 64 128 128 }"
-// * Unspecified with floats(becomes RGB) - "= { 0.5 0.9 0.1 }"
+// * Unspecified with three floats(becomes RGB) - "= { 0.5 0.9 0.1 }"
+// * Unspecified with four floats(becomes RGBA) - "= { 0.5 0.9 0.1 0.1 }"
 // * RGB - "= rgb { 64 128 128 }"
 // * Hex - "= hex { 408080 }"
 // * HSV - "= hsv { 0.5 0.5 0.5 }"
+// * HSVA - "= hsv { 0.5 0.5 0.5 0.1 }"
 // * HSV360 - "= hsv360 { 180 50 50 }"
 // * Name(requires caching definitions for the named colors in advance) - "= dark_moderate_cyan"
 //
 // Can be output in :
 // * unspecified(rgb) - "= { 64 128 128 }"
 // * RGB - "= rgb { 64 128 128 }"
+// * RGBA - we don't export RGBA. yet.
 // * hex - "= hex { 408080 }"
 // * HSV - "= hsv { 0.5 0.5 0.5 }"
+// * HSVA - "= hsv { 0.5 0.5 0.5 0.1 }"
 // * HSV360 - "= hsv360 { 180 50 50 }"
 //
 // The individual components can be accessed in both RGB and HSV color spaces, equality and inequality can be checked, the color cache can be reviewed and
@@ -43,7 +48,9 @@ class Color
 	class Factory;
 	Color() = default;
 	explicit Color(std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
+	explicit Color(std::array<int, 3> rgbComponents, float alpha): rgbComponents(rgbComponents), alpha(alpha) { deriveHsvFromRgb(); }
 	explicit Color(std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
+	explicit Color(std::array<float, 3> hsvComponents, float alpha): hsvComponents(hsvComponents), alpha(alpha) { deriveRgbFromHsv(); }
 
 	bool operator==(const Color& rhs) const;
 	bool operator!=(const Color& rhs) const;
@@ -56,6 +63,7 @@ class Color
 	[[nodiscard]] const auto& h() const { return hsvComponents[0]; }
 	[[nodiscard]] const auto& s() const { return hsvComponents[1]; }
 	[[nodiscard]] const auto& v() const { return hsvComponents[2]; }
+	[[nodiscard]] const auto& a() const { return alpha; }
 
 	[[nodiscard]] std::string outputRgb() const;
 	[[nodiscard]] std::string outputHex() const;
@@ -74,6 +82,7 @@ class Color
 
 	std::array<int, 3> rgbComponents{0, 0, 0};
 	std::array<float, 3> hsvComponents{0.0F, 0.0F, 0.0F};
+	std::optional<float> alpha;
 };
 
 
