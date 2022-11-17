@@ -46,7 +46,10 @@ std::string commonItems::Color::outputHsv() const
 {
 	std::stringstream output;
 	output << std::setprecision(2);
-	output << "= hsv { " << hsvComponents[0] << ' ' << hsvComponents[1] << ' ' << hsvComponents[2] << " }";
+	output << "= hsv { " << hsvComponents[0] << ' ' << hsvComponents[1] << ' ' << hsvComponents[2] << ' ';
+	if (alpha)
+		output << *alpha << ' ';
+	output << "}";
 	return output.str();
 }
 
@@ -236,11 +239,12 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 	if (token == "hsv" || token == "HSV")
 	{
 		const auto hsv = doubleList{theStream}.getDoubles();
-		if (hsv.size() != 3)
-		{
-			throw std::runtime_error("Color has wrong number of components");
-		}
-		return Color(std::array{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+		if (hsv.size() == 3)
+			return Color(std::array{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])});
+		if (hsv.size() == 4)
+			return Color(std::array{static_cast<float>(hsv[0]), static_cast<float>(hsv[1]), static_cast<float>(hsv[2])}, static_cast<float>(hsv[3]));
+
+		throw std::runtime_error("Color has wrong number of components");
 	}
 	if (token == "hsv360")
 	{
@@ -274,24 +278,33 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 	{
 		// This is a double list.
 		auto doubleStream = std::stringstream(questionableList);
-		auto hsv = getDoubles(doubleStream);
-		if (hsv.size() != 3)
-		{
-			throw std::runtime_error("Color has wrong number of components");
-		}
-		return Color(
-			 std::array{static_cast<int>(std::round(hsv[0] * 255.0)), static_cast<int>(std::round(hsv[1] * 255.0)), static_cast<int>(std::round(hsv[2] * 255.0))});
+		auto rgb = getDoubles(doubleStream);
+		if (rgb.size() == 3) // This is not HSV, this is RGB doubles. Multiply by 255 and round to get normal rgb.
+			return Color(std::array{static_cast<int>(std::round(rgb[0] * 255.0)),
+				 static_cast<int>(std::round(rgb[1] * 255.0)),
+				 static_cast<int>(std::round(rgb[2] * 255.0))});
+		if (rgb.size() == 4) // this is a RGBA double situation. We shouldn't touch alpha.
+			return Color(std::array{static_cast<int>(std::round(rgb[0] * 255.0)),
+								  static_cast<int>(std::round(rgb[1] * 255.0)),
+								  static_cast<int>(std::round(rgb[2] * 255.0))},
+				 static_cast<float>(rgb[3]));
+
+		throw std::runtime_error("Color has wrong number of components");
 	}
 	else
 	{
 		// integer list
 		auto integerStream = std::stringstream(questionableList);
 		auto rgb = getInts(integerStream);
-		if (rgb.size() != 3)
+		if (rgb.size() == 3)
+			return Color(std::array{rgb[0], rgb[1], rgb[2]});
+		if (rgb.size() == 4)
 		{
-			throw std::runtime_error("Color has wrong number of components");
+			// This is an absolute RGBA list, eg. { 128 128 255 1 }. Maybe.
+			return Color(std::array{rgb[0], rgb[1], rgb[2]}, static_cast<float>(rgb[3]));
 		}
-		return Color(std::array{rgb[0], rgb[1], rgb[2]});
+
+		throw std::runtime_error("Color has wrong number of components");
 	}
 }
 
