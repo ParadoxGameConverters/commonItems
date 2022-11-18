@@ -23,6 +23,7 @@ Log::~Log()
 {
 	logMessageStream << std::endl;
 	const auto logMessage = logMessageStream.str();
+	WriteToConsole(logLevel, logMessage); // write to the console for the sake of tests and Frontend
 	WriteToFile(logLevel, logMessage);
 }
 
@@ -40,10 +41,14 @@ void Log::WriteToFile(LogLevel level, const std::string& logMessage)
 	WriteTheTime(logFile);
 	logFile << logLevelStrings.find(level)->second;
 	logFile << logMessage;
-	std::cout << logLevelStrings.find(level)->second;
-	std::cout << logMessage; // write to the console for the sake of tests
 }
 
+void Log::WriteToConsole(LogLevel level, const std::string& logMessage)
+{
+	WriteTheTime(std::cout);
+	std::cout << logLevelStrings.find(level)->second;
+	std::cout << logMessage;
+}
 
 void Log::WriteTheTime(std::ostream& logFile)
 {

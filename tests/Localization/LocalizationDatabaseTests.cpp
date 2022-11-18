@@ -149,7 +149,7 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsFromUnsupportedLangua
 	std::string actual_output = log.str();
 
 	EXPECT_EQ(base_language_lines, 0);
-	EXPECT_EQ(actual_output, " [WARNING] Scraping loc line [ KEY:0 \"value\"] without language specified!\n");
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"( [WARNING] Scraping loc line [ KEY:0 "value"] without language specified!)"));
 
 	EXPECT_EQ(database.size(), 0);
 	EXPECT_FALSE(database.HasLocalization("KEY"));
