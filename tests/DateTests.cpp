@@ -125,7 +125,7 @@ TEST(Date_Tests, DateLogsBadInitialization)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(" [WARNING] Problem inputting date:"));
+	EXPECT_THAT(log.str(), testing::HasSubstr("[WARNING] Problem inputting date:"));
 }
 
 

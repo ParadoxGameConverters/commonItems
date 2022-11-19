@@ -14,7 +14,7 @@ TEST(Log_Tests, ErrorMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(R"(   [ERROR] Error message)"));
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([ERROR] Error message)"));
 }
 
 
@@ -28,7 +28,7 @@ TEST(Log_Tests, WarningMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(R"( [WARNING] Warning message)"));
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([WARNING] Warning message)"));
 }
 
 
@@ -42,7 +42,7 @@ TEST(Log_Tests, InfoMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(R"(    [INFO] Info message)"));
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([INFO] Info message)"));
 }
 
 
@@ -56,7 +56,7 @@ TEST(Log_Tests, DebugMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(R"(   [DEBUG]     Debug message)"));
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([DEBUG]     Debug message)"));
 }
 
 TEST(Log_Tests, ProgressMessagesLogged)
@@ -82,5 +82,5 @@ TEST(Log_Tests, NoticeMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr(R"(  [NOTICE] Notice message)"));
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([NOTICE] Notice message)"));
 }

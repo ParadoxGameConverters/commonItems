@@ -25,7 +25,7 @@ TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 	std::stringstream actualStream(actualOutput);
 
 	EXPECT_TRUE(mods.empty());
-	EXPECT_THAT(actualStream.str(), testing::HasSubstr(R"(    [INFO] No mods were detected in savegame. Skipping mod processing.)"));
+	EXPECT_THAT(actualStream.str(), testing::HasSubstr(R"([INFO] No mods were detected in savegame. Skipping mod processing.)"));
 }
 
 
