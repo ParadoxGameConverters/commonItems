@@ -59,6 +59,7 @@ class Log
 
   private:
 	static void WriteToFile(LogLevel level, const std::string& logMessage);
+	static void WriteToConsole(LogLevel level, const std::string& logMessage);
 	static void WriteTheTime(std::ostream& logFile);
 
 	LogLevel logLevel;

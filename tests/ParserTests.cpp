@@ -405,7 +405,8 @@ TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItems)
 	std::cout.rdbuf(std_out_buf);
 	std::string actual_output = log.str();
 
-	EXPECT_EQ(actual_output, "   [DEBUG]     Ignoring keyword: key\n   [DEBUG]     Ignoring keyword: key_two\n");
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key)"));
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_two)"));
 }
 
 

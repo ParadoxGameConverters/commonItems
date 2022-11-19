@@ -1,7 +1,7 @@
 #include "../Log.h"
 #include "gtest/gtest.h"
+#include <gmock/gmock-matchers.h>
 #include <sstream>
-
 
 
 TEST(Log_Tests, ErrorMessagesLogged)
@@ -14,7 +14,7 @@ TEST(Log_Tests, ErrorMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("   [ERROR] Error message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([ERROR] Error message)"));
 }
 
 
@@ -28,7 +28,7 @@ TEST(Log_Tests, WarningMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ(" [WARNING] Warning message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([WARNING] Warning message)"));
 }
 
 
@@ -42,7 +42,7 @@ TEST(Log_Tests, InfoMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("    [INFO] Info message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([INFO] Info message)"));
 }
 
 
@@ -56,7 +56,7 @@ TEST(Log_Tests, DebugMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("   [DEBUG]     Debug message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([DEBUG]     Debug message)"));
 }
 
 TEST(Log_Tests, ProgressMessagesLogged)
@@ -69,7 +69,7 @@ TEST(Log_Tests, ProgressMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("[PROGRESS] Progress message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([PROGRESS] Progress message)"));
 }
 
 TEST(Log_Tests, NoticeMessagesLogged)
@@ -82,5 +82,5 @@ TEST(Log_Tests, NoticeMessagesLogged)
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_EQ("  [NOTICE] Notice message\n", log.str());
+	EXPECT_THAT(log.str(), testing::HasSubstr(R"([NOTICE] Notice message)"));
 }
