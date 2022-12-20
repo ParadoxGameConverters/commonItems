@@ -180,3 +180,19 @@ TEST(ReplaceCharacter_Tests, ReplaceCharacterCanReplaceMinuses)
 
 	ASSERT_EQ(replaceCharacter(input, '-'), "a file_with_name.eu4");
 }
+
+TEST(CardinalToRoman_Tests, NumbersCanBeConverted)
+{
+	EXPECT_EQ("", cardinalToRoman(-15));
+	EXPECT_EQ("", cardinalToRoman(0));
+	EXPECT_EQ("I", cardinalToRoman(1));
+	EXPECT_EQ("II", cardinalToRoman(2));
+	EXPECT_EQ("VII", cardinalToRoman(7));
+	EXPECT_EQ("IX", cardinalToRoman(9));
+	EXPECT_EQ("XI", cardinalToRoman(11));
+	EXPECT_EQ("XXXI", cardinalToRoman(31));
+	EXPECT_EQ("LI", cardinalToRoman(51));
+	EXPECT_EQ("CI", cardinalToRoman(101));
+	EXPECT_EQ("DI", cardinalToRoman(501));
+	EXPECT_EQ("MI", cardinalToRoman(1001));
+}

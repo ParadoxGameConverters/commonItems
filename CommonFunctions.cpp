@@ -77,7 +77,7 @@ std::string cardinalToRoman(int number)
 {
 	const std::array numbers{1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000};
 	const std::array symbols{"I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M"};
-	int i = static_cast<int>(numbers.size());
+	int i = static_cast<int>(numbers.size()) - 1;
 	std::string toReturn;
 	while (number > 0)
 	{
