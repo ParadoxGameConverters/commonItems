@@ -62,7 +62,7 @@ set(commonItems
     "ParserHelpers.h"
     "StringUtils.cpp"
     "StringUtils.h"
-	"external/zip/src/zip.c"
+    "external/zip/src/zip.c"
 )
 source_group("commonItems" FILES ${commonItems})
 
