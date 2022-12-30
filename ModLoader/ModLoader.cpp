@@ -255,7 +255,6 @@ bool commonItems::ModLoader::extractZip(const std::string& archive, const std::s
 	}
 
 	return true;
-	;
 }
 
 
