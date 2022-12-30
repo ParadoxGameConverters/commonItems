@@ -79,6 +79,12 @@
     <Filter Include="tests\Localization">
       <UniqueIdentifier>{2b71081d-5abb-4039-a19f-168a026762aa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{c75f0062-f110-4dde-ac68-b63a0daa8168}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\zip">
+      <UniqueIdentifier>{2de9c842-b145-49e3-92e3-b9345953453e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="googletest\googletest\src\gtest_main.cc">
@@ -204,6 +210,9 @@
     <ClCompile Include="..\LinuxUtils.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\external\zip\src\zip.c">
+      <Filter>external\zip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -268,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="..\Localization\LocalizationDatabase.h">
       <Filter>commonItems\Localization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\zip\src\miniz.h">
+      <Filter>external\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\external\zip\src\zip.h">
+      <Filter>external\zip</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,6 @@ project(CommonItemsTests)
 # Include directories
 include_directories(.)
 include_directories(/usr/include)
-include_directories("ZipLib")
 link_directories(/usr/lib)
 
 # Set the compiler options
@@ -20,7 +19,6 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 include_directories(googletest/googletest/include/gtest)
 include_directories(googletest/googlemock/include/gmock)
 add_subdirectory("tests/googletest" "googletest")
-add_subdirectory(ZipLib [binary_dir])
 
 ################################################################################
 # Source groups
@@ -64,6 +62,7 @@ set(commonItems
     "ParserHelpers.h"
     "StringUtils.cpp"
     "StringUtils.h"
+	"external/zip/src/zip.c"
 )
 source_group("commonItems" FILES ${commonItems})
 
@@ -182,7 +181,7 @@ add_custom_target(init
 ################################
 enable_testing()
 # Link test executable against gtest & gtest_main
-target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock ZIPLIB )
+target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
 
 ################################

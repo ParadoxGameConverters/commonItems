@@ -2,7 +2,7 @@
 #include "../CommonFunctions.h"
 #include "../Log.h"
 #include "../OSCompatibilityLayer.h"
-#include "../ZipLib/ZipFile.h"
+#include "../external/zip/src/zip.h"
 #include "ModParser.h"
 #include <filesystem>
 #include <set>
@@ -245,41 +245,8 @@ std::optional<std::string> commonItems::ModLoader::uncompressAndReturnNewPath(co
 bool commonItems::ModLoader::extractZip(const std::string& archive, const std::string& path) const
 {
 	TryCreateFolder(path);
-	const auto modFile = ZipFile::Open(archive);
-	if (!modFile)
-		return false;
-	for (size_t entryNum = 0; entryNum < modFile->GetEntriesCount(); ++entryNum)
-	{
-		const auto& entry = modFile->GetEntry(static_cast<int>(entryNum));
-		const auto& inPath = entry->GetFullName();
-		const auto& name = entry->GetName();
-		if (entry->IsDirectory())
-			continue;
 
-		// Does target directory exist?
-		const auto dirNamePos = inPath.find(name);
-
-		if (const auto dirName = path + "/" + inPath.substr(0, dirNamePos); !DoesFolderExist(dirName))
-		{
-			// we need to craft our way through to target directory.
-			auto remainder = inPath;
-			auto currentPath = path;
-			while (remainder != name)
-			{
-				if (const auto pos = remainder.find_first_of('/'); pos != std::string::npos)
-				{
-					auto makeDirName = remainder.substr(0, pos);
-					currentPath += "/" + makeDirName;
-					TryCreateFolder(currentPath);
-					remainder = remainder.substr(pos + 1, remainder.length());
-				}
-				else
-					break;
-			}
-		}
-		ZipFile::ExtractFile(archive, inPath, path + "/" + inPath);
-	}
-	return true;
+	return zip_extract(archive.c_str(), path.c_str(), NULL, NULL) == 0;
 }
 
 
