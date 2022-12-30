@@ -246,7 +246,16 @@ bool commonItems::ModLoader::extractZip(const std::string& archive, const std::s
 {
 	TryCreateFolder(path);
 
-	return zip_extract(archive.c_str(), path.c_str(), NULL, NULL) == 0;
+	const int result = zip_extract(archive.c_str(), path.c_str(), NULL, NULL);
+
+	if (result != 0)
+	{
+		DeleteFolder(path);
+		return false;
+	}
+
+	return true;
+	;
 }
 
 
