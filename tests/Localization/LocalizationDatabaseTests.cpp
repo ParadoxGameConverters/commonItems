@@ -191,4 +191,7 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	EXPECT_EQ(test_block_three->GetBaseLanguage(), "english");
 	EXPECT_EQ(test_block_three->GetKey(), "MOD_KEY1");
 	EXPECT_THAT(test_block_three->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "mod loc")));
+
+	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
+	EXPECT_FALSE(non_loc_block.has_value());
 }
