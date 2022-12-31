@@ -104,7 +104,7 @@ TEST(GetPath_Tests, GetPathGetsReversedMixedSlashedPath)
 	ASSERT_EQ(R"(/this/is\a\)", getPath(input));
 }
 
-TEST(GetPath_Tests, GetReturnsBlankStringForRawFiles)
+TEST(GetPath_Tests, GetPathReturnsBlankStringForRawFiles)
 {
 	const std::string input = R"(path.txt)";
 
