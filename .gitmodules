@@ -1,6 +1,6 @@
 [submodule "tests/googletest"]
 	path = tests/googletest
 	url = https://github.com/google/googletest.git
-[submodule "ZipLib"]
-	path = ZipLib
-	url = https://github.com/ParadoxGameConverters/ZipLib
+[submodule "external/zip"]
+	path = external/zip
+	url = https://github.com/kuba--/zip.git

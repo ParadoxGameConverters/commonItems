@@ -96,7 +96,7 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 }
 
 
-TEST(ModLoaderTests, BrokenCompressedModsAreNotSkippedEvenThoughTheyShouldBe)
+TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 {
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("broken packed mod", "mod/brokenpacked.mod"));
@@ -105,8 +105,5 @@ TEST(ModLoaderTests, BrokenCompressedModsAreNotSkippedEvenThoughTheyShouldBe)
 	modLoader.loadMods("./", incomingMods);
 	const auto mods = modLoader.getMods();
 
-	ASSERT_EQ(mods.size(), 1);
-	EXPECT_EQ(mods[0].name, "Broken Packed Mod");
-	EXPECT_EQ(mods[0].path, "mods/brokenpacked/");
-	EXPECT_TRUE(commonItems::DoesFolderExist("mods/brokenpacked/"));
+	EXPECT_TRUE(mods.empty());
 }

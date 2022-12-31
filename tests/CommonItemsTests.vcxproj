@@ -151,7 +151,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies);$(SolutionDir)$(Platform)\$(Configuration)\ZipLib.lib;$(SolutionDir)$(Platform)\$(Configuration)\zlib.lib;$(SolutionDir)$(Platform)\$(Configuration)\lzma.lib;$(SolutionDir)$(Platform)\$(Configuration)\bzip2.lib</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -160,6 +160,7 @@
     <ClCompile Include="..\ConvenientParser.cpp" />
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
+    <ClCompile Include="..\external\zip\src\zip.c" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\LinuxUtils.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -205,6 +206,8 @@
     <ClInclude Include="..\ConvenientParser.h" />
     <ClInclude Include="..\ConverterVersion.h" />
     <ClInclude Include="..\Date.h" />
+    <ClInclude Include="..\external\zip\src\miniz.h" />
+    <ClInclude Include="..\external\zip\src\zip.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Localization\LocalizationBlock.h" />
     <ClInclude Include="..\Localization\LocalizationDatabase.h" />
