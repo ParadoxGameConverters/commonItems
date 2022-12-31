@@ -1,4 +1,5 @@
 #include "LocalizationDatabase.h"
+#include "../CommonFunctions.h"
 #include "../Log.h"
 #include <fstream>
 
@@ -12,7 +13,10 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 	int lines_count = 0;
 	for (const auto& file: localization_files)
 	{
-		lines_count += ScrapeFile(file);
+		if (getExtension(file) == "yml")
+		{
+			lines_count += ScrapeFile(file);
+		}
 	}
 
 	Log(LogLevel::Info) << lines_count << " localization lines read.";

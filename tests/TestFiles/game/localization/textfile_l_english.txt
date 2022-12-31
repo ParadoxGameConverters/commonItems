@@ -1,0 +1,2 @@
+l_english:
+ NON_LOC_KEY: "The file extension is not .yml, therefore this won't be scraped."
