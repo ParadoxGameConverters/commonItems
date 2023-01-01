@@ -426,6 +426,24 @@ TEST(Color_Tests, ColorCanBeInitializedFromStreamInRgb)
 }
 
 
+TEST(Color_Tests, ColorCanBeInitializedFromStreamInRgbWithFloats)
+{
+	std::stringstream input;
+	input << "= rgb { 64.2 128.4 128.6 }";
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(64, r);
+	ASSERT_EQ(128, g);
+	ASSERT_EQ(128, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.5f, h, 0.01);
+	ASSERT_NEAR(0.5f, s, 0.01);
+	ASSERT_NEAR(0.5f, v, 0.01);
+}
+
+
 TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
 {
 	std::stringstream input;

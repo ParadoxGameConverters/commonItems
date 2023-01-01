@@ -217,12 +217,12 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		token = remQuotes(*token);
 	if (token == "rgb")
 	{
-		const auto rgb = intList{theStream}.getInts();
+		const auto rgb = getDoubles(theStream);
 		if (rgb.size() != 3)
 		{
 			throw std::runtime_error("Color has wrong number of components");
 		}
-		return Color(std::array{rgb[0], rgb[1], rgb[2]});
+		return Color(std::array{static_cast<int>(rgb[0]), static_cast<int>(rgb[1]), static_cast<int>(rgb[2])});
 	}
 	if (token == "hex")
 	{
