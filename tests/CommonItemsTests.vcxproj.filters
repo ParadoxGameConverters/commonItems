@@ -87,12 +87,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="googletest\googletest\src\gtest_main.cc">
-      <Filter>gtest</Filter>
-    </ClCompile>
-    <ClCompile Include="googletest\googletest\src\gtest-all.cc">
-      <Filter>gtest</Filter>
-    </ClCompile>
     <ClCompile Include="..\Log.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
@@ -180,9 +174,6 @@
     <ClCompile Include="ModParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="googletest\googlemock\src\gmock-all.cc">
-      <Filter>gtest</Filter>
-    </ClCompile>
     <ClCompile Include="..\targa.cpp">
       <Filter>commonItems</Filter>
     </ClCompile>
@@ -212,6 +203,15 @@
     </ClCompile>
     <ClCompile Include="..\external\zip\src\zip.c">
       <Filter>external\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\googletest\googletest\src\gtest_main.cc">
+      <Filter>gtest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\googletest\googletest\src\gtest-all.cc">
+      <Filter>gtest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\external\googletest\googlemock\src\gmock-all.cc">
+      <Filter>gtest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
