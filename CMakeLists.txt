@@ -18,7 +18,7 @@ message("-- Object files will be output to: ${OBJECT_DIR}")
 
 include_directories(../external/googletest/googletest/include/gtest)
 include_directories(../external/googletest/googlemock/include/gmock)
-add_subdirectory("../external/googletest" "googletest")
+add_subdirectory("external/googletest" "googletest")
 
 ################################################################################
 # Source groups
