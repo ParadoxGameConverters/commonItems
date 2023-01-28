@@ -46,9 +46,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -84,7 +82,6 @@
     <IncludePath>googletest\googletest;googletest\googletest\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -135,23 +132,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX20_U8PATH_DEPRECATION_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
-      <OmitFramePointers>false</OmitFramePointers>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);googletest/googletest;googletest/googletest/include;googletest/googlemock;googletest/googlemock/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);../external/googletest/googletest;../external/googletest/googletest/include;../external/googletest/googlemock;../external/googletest/googlemock/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -160,6 +147,9 @@
     <ClCompile Include="..\ConvenientParser.cpp" />
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
+    <ClCompile Include="..\external\googletest\googlemock\src\gmock-all.cc" />
+    <ClCompile Include="..\external\googletest\googletest\src\gtest-all.cc" />
+    <ClCompile Include="..\external\googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="..\external\zip\src\zip.c" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\LinuxUtils.cpp">
@@ -183,9 +173,6 @@
     <ClCompile Include="ConvenientParserTests.cpp" />
     <ClCompile Include="ConverterVersionTests.cpp" />
     <ClCompile Include="DateTests.cpp" />
-    <ClCompile Include="googletest\googlemock\src\gmock-all.cc" />
-    <ClCompile Include="googletest\googletest\src\gtest-all.cc" />
-    <ClCompile Include="googletest\googletest\src\gtest_main.cc" />
     <ClCompile Include="iconvliteTests.cpp" />
     <ClCompile Include="Localization\LocalizationBlockTests.cpp" />
     <ClCompile Include="Localization\LocalizationDatabaseTests.cpp" />

@@ -2,9 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
   schedule:
     - cron: '0 16 * * 6'
 
@@ -41,7 +39,7 @@ jobs:
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
-      if: always() # To ensure this step runs even when earlier steps fail
+      if: always()
 
   analyze:
     name: Analyze
