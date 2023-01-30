@@ -1,29 +1,18 @@
 #ifndef PARSER_H
 #define PARSER_H
-
-
-
-// A parser for reading Paradox Script.
-
-
-
-#include "ModLoader/ModFilesystem.h"
 #include <functional>
 #include <map>
 #include <optional>
 #include <regex>
+#include <set>
 
-
+// A parser for reading Paradox Script.
 
 namespace commonItems
 {
-
 using parsingFunction = std::function<void(const std::string&, std::istream&)>;
 using parsingFunctionStreamOnly = std::function<void(std::istream&)>;
-
-
 void absorbBOM(std::istream& theStream);
-
 
 class parser
 {
@@ -48,17 +37,6 @@ class parser
 	void parseStream(std::istream& theStream);
 	void parseFile(std::string_view filename);
 
-	// Parses a game file in either vanilla game or mods directory.
-	// For example:
-	//		relativePath may be "map_data/areas.txt"
-	void ParseGameFile(const std::string& relative_path, const ModFilesystem& mod_fs);
-
-	// Parses a game folder in both vanilla game and mods directory.
-	// For example:
-	//		relativePath may be "common/governments"
-	//		extensions may be "txt", "text"
-	void ParseGameFolder(const std::string& relative_path, const ModFilesystem& mod_fs, const std::set<std::string>& extensions, bool recursive);
-
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
 
@@ -71,9 +49,5 @@ class parser
 	std::map<std::string, parsingFunction> registeredKeywordStrings;
 	std::vector<std::pair<std::regex, parsingFunction>> generatedRegexes;
 };
-
 } // namespace commonItems
-
-
-
 #endif // PARSER_H

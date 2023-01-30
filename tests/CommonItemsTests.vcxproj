@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\BulkParser.cpp" />
     <ClCompile Include="..\Color.cpp" />
     <ClCompile Include="..\CommonFunctions.cpp" />
     <ClCompile Include="..\ConvenientParser.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="GameVersionTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\BulkParser.h" />
     <ClInclude Include="..\CommonFunctions.h" />
     <ClInclude Include="..\CommonRegexes.h" />
     <ClInclude Include="..\ConvenientParser.h" />
