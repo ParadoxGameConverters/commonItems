@@ -213,6 +213,9 @@
     <ClCompile Include="..\external\googletest\googlemock\src\gmock-all.cc">
       <Filter>gtest</Filter>
     </ClCompile>
+    <ClCompile Include="..\BulkParser.cpp">
+      <Filter>commonItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Log.h">
@@ -283,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="..\external\zip\src\zip.h">
       <Filter>external\zip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\BulkParser.h">
+      <Filter>commonItems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
