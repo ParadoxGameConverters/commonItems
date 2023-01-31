@@ -8,6 +8,9 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
+#include "Localization/LocalizationBlock.h"
+#include "Localization/LocalizationDatabase.h"
+#include "Localization/LocalizationLambdas.h"
 #include "ModLoader/Mod.h"
 #include "ModLoader/ModFilesystem.h"
 #include "ModLoader/ModLoader.h"
@@ -26,5 +29,6 @@
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "StringUtils.h"
+#include "targa.h"
 
 #endif //PCH_H
