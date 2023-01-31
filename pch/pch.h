@@ -8,13 +8,6 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
-#include "Localization/LocalizationBlock.h"
-#include "Localization/LocalizationDatabase.h"
-#include "Localization/LocalizationLambdas.h"
-#include "ModLoader/Mod.h"
-#include "ModLoader/ModFilesystem.h"
-#include "ModLoader/ModLoader.h"
-#include "ModLoader/ModParser.h"
 #include "BulkParser.h"
 #include "Color.h"
 #include "CommonFunctions.h"
@@ -23,12 +16,19 @@
 #include "ConverterVersion.h"
 #include "Date.h"
 #include "GameVersion.h"
-#include "iconvlite.h"
+#include "Localization/LocalizationBlock.h"
+#include "Localization/LocalizationDatabase.h"
+#include "Localization/LocalizationLambdas.h"
 #include "Log.h"
+#include "ModLoader/Mod.h"
+#include "ModLoader/ModFilesystem.h"
+#include "ModLoader/ModLoader.h"
+#include "ModLoader/ModParser.h"
 #include "OSCompatibilityLayer.h"
 #include "Parser.h"
 #include "ParserHelpers.h"
 #include "StringUtils.h"
+#include "iconvlite.h"
 #include "targa.h"
 
-#endif //PCH_H
+#endif // PCH_H
