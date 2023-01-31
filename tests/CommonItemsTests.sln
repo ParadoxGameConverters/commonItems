@@ -5,6 +5,13 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonItemsTests", "CommonItemsTests.vcxproj", "{CC2F3DAC-0BEE-41A5-A39D-3B8A83C5EEB1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zip", "..\zip\zip.vcxproj", "{3B8EC8C8-4066-46F7-851D-EB762C39C140}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pch", "..\pch\pch.vcxproj", "{095FC941-B5E2-4439-88D9-587E2029CB68}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B8EC8C8-4066-46F7-851D-EB762C39C140} = {3B8EC8C8-4066-46F7-851D-EB762C39C140}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Release|x64 = Release|x64
@@ -12,6 +19,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CC2F3DAC-0BEE-41A5-A39D-3B8A83C5EEB1}.Release|x64.ActiveCfg = Release|x64
 		{CC2F3DAC-0BEE-41A5-A39D-3B8A83C5EEB1}.Release|x64.Build.0 = Release|x64
+		{3B8EC8C8-4066-46F7-851D-EB762C39C140}.Release|x64.ActiveCfg = Release|x64
+		{3B8EC8C8-4066-46F7-851D-EB762C39C140}.Release|x64.Build.0 = Release|x64
+		{095FC941-B5E2-4439-88D9-587E2029CB68}.Release|x64.ActiveCfg = Release|x64
+		{095FC941-B5E2-4439-88D9-587E2029CB68}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

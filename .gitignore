@@ -16,7 +16,7 @@ testResults
 packages/
 tests/build/
 build/
-
+tests/lib/
 #OpenCppCoverage stuff
 *.log
 tests/.opencppcov/
