@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClInclude Include="..\external\zip\src\miniz.h" />
     <ClInclude Include="..\external\zip\src\zip.h" />
+    <ClInclude Include="..\targa.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\external\zip\src\zip.c" />
+    <ClCompile Include="..\targa.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
