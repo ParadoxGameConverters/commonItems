@@ -7,14 +7,8 @@
     <Filter Include="tests">
       <UniqueIdentifier>{d4597ca3-2edb-4fc8-b7ea-befa00db4f1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="commonItems">
-      <UniqueIdentifier>{d6b616bc-070f-4813-8376-a00f5f4e6b0e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TestFiles">
       <UniqueIdentifier>{4c7f9845-860d-462c-96fc-5f8db590be36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="commonItems\ModLoader">
-      <UniqueIdentifier>{92ace537-3417-4563-b6af-d049b12815c6}</UniqueIdentifier>
     </Filter>
     <Filter Include="TestFiles\mod">
       <UniqueIdentifier>{ee98048f-a7ba-415f-bfd2-cc09798c15ab}</UniqueIdentifier>
@@ -73,35 +67,11 @@
     <Filter Include="TestFiles\ModFilesystem\GetActualFileLocation\mod_two\test_folder\mod_two_folder">
       <UniqueIdentifier>{9f3c9031-a300-433f-8ced-a56b49125bbc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="commonItems\Localization">
-      <UniqueIdentifier>{6764c972-c8b3-4c83-9530-7abb8fa5ed59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="tests\Localization">
       <UniqueIdentifier>{2b71081d-5abb-4039-a19f-168a026762aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="external">
-      <UniqueIdentifier>{c75f0062-f110-4dde-ac68-b63a0daa8168}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="external\zip">
-      <UniqueIdentifier>{2de9c842-b145-49e3-92e3-b9345953453e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Log.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\WinUtils.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\iconvlite.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ParserHelpers.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Date.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="DateTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
@@ -111,17 +81,11 @@
     <ClCompile Include="LogTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\Parser.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="ParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
     <ClCompile Include="ParserHelperTests.cpp">
       <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\StringUtils.cpp">
-      <Filter>commonItems</Filter>
     </ClCompile>
     <ClCompile Include="StringUtilsTests.cpp">
       <Filter>tests</Filter>
@@ -129,44 +93,20 @@
     <ClCompile Include="OSCompatibilityLayerTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\GameVersion.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="GameVersionTests.cpp">
       <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\CommonFunctions.cpp">
-      <Filter>commonItems</Filter>
     </ClCompile>
     <ClCompile Include="CommonFunctionsTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\OSCommonLayer.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="ColorTests.cpp">
       <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Color.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ConvenientParser.cpp">
-      <Filter>commonItems</Filter>
     </ClCompile>
     <ClCompile Include="ConvenientParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\ConverterVersion.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
     <ClCompile Include="ConverterVersionTests.cpp">
       <Filter>tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ModLoader\ModLoader.cpp">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ModLoader\ModParser.cpp">
-      <Filter>commonItems\ModLoader</Filter>
     </ClCompile>
     <ClCompile Include="ModLoaderTests.cpp">
       <Filter>tests</Filter>
@@ -174,35 +114,17 @@
     <ClCompile Include="ModParserTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\targa.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\ModLoader\ModFilesystem.cpp">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClCompile>
     <ClCompile Include="ModFilesystemTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
     <ClCompile Include="CommonRegexesTests.cpp">
       <Filter>tests</Filter>
     </ClCompile>
-    <ClCompile Include="..\Localization\LocalizationBlock.cpp">
-      <Filter>commonItems\Localization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Localization\LocalizationDatabase.cpp">
-      <Filter>commonItems\Localization</Filter>
-    </ClCompile>
     <ClCompile Include="Localization\LocalizationBlockTests.cpp">
       <Filter>tests\Localization</Filter>
     </ClCompile>
     <ClCompile Include="Localization\LocalizationDatabaseTests.cpp">
       <Filter>tests\Localization</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LinuxUtils.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\zip\src\zip.c">
-      <Filter>external\zip</Filter>
     </ClCompile>
     <ClCompile Include="..\external\googletest\googletest\src\gtest_main.cc">
       <Filter>gtest</Filter>
@@ -213,83 +135,6 @@
     <ClCompile Include="..\external\googletest\googlemock\src\gmock-all.cc">
       <Filter>gtest</Filter>
     </ClCompile>
-    <ClCompile Include="..\BulkParser.cpp">
-      <Filter>commonItems</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Log.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\OSCompatibilityLayer.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\iconvlite.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ParserHelpers.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Date.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Parser.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\StringUtils.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\GameVersion.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\CommonFunctions.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Color.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\CommonRegexes.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ConvenientParser.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ConverterVersion.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ModLoader\ModLoader.h">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ModLoader\ModParser.h">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\targa.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ModLoader\Mod.h">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ModLoader\ModFilesystem.h">
-      <Filter>commonItems\ModLoader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Localization\LocalizationLambdas.h">
-      <Filter>commonItems\Localization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Localization\LocalizationBlock.h">
-      <Filter>commonItems\Localization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Localization\LocalizationDatabase.h">
-      <Filter>commonItems\Localization</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\zip\src\miniz.h">
-      <Filter>external\zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\zip\src\zip.h">
-      <Filter>external\zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\BulkParser.h">
-      <Filter>commonItems</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="TestFiles\version.txt">
