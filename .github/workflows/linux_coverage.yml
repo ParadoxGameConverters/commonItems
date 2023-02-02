@@ -121,7 +121,7 @@ jobs:
       run: |
        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
        sudo apt-get update
-       sudo apt-get install libcurl4-openssl-dev
+       sudo apt-get install libcurl4-openssl-dev lcov
        # Link gcc-11 and g++-11 to their standard commands
        sudo ln -s /usr/bin/gcc-11 /usr/local/bin/gcc
        sudo ln -s /usr/bin/g++-11 /usr/local/bin/g++
