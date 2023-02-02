@@ -135,7 +135,7 @@ jobs:
        # Check versions of gcc, g++ and cmake
        gcc -v && g++ -v && cmake --version
        # Run your build commands next
-       cmake -H. -Bbuild && cmake --build ./build -- -j3
+       cmake -H. -Bbuild && cmake --build ./build --target CommonItemsTests -- -j3
 
     - name: Run tests
       run: |
