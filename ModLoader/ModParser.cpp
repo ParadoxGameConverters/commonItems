@@ -73,17 +73,15 @@ void commonItems::ModParser::parseMetadata(std::istream& theStream)
 void commonItems::ModParser::parseMetadata(const std::string& fileName)
 {
 	auto file_path = ::getPath(fileName);
-
-	// remove last slash
-	if (const auto last_slash = file_path.find_last_of('/'); last_slash != std::string::npos)
+	if (!file_path.ends_with("/.metadata/"))
 	{
-		file_path = file_path.substr(0, last_slash);
-	}
-	else if (const auto last_slash = file_path.find_last_of('\\'); last_slash != std::string::npos)
-	{
-		file_path = file_path.substr(0, last_slash);
+		return;
 	}
 
+	// remove metadata parts from end of path
+	file_path = file_path.substr(0, file_path.size() - 11);
+
+	// remove everything before last path segment
 	if (const auto last_slash = file_path.find_last_of('/'); last_slash != std::string::npos)
 	{
 		path = file_path.substr(last_slash + 1, file_path.size());

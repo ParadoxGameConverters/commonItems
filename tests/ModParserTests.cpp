@@ -68,7 +68,7 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	EXPECT_TRUE(theMod.getReplacedPaths().empty());
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMetadata("mod/empty_mod/metadata.json");
+	the_mod_file.parseMetadata("mod/empty_mod/.metadata/metadata.json");
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
 	EXPECT_EQ(the_mod_file.getPath(), "empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty file
@@ -98,7 +98,7 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMetadata("mod/parseable_metadata/metadata.json");
+	the_mod_file.parseMetadata("mod/parseable_metadata/.metadata/metadata.json");
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
 	EXPECT_EQ(the_mod_file.getPath(), "parseable_metadata");
