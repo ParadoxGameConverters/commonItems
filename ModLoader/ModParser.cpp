@@ -72,23 +72,23 @@ void commonItems::ModParser::parseMetadata(std::istream& theStream)
 
 void commonItems::ModParser::parseMetadata(const std::string& fileName)
 {
-	auto file_path = ::getPath(fileName);
-	if (!file_path.ends_with("/.metadata/"))
-	{
-		return;
-	}
+	std::filesystem::path fs_path(fileName);
+	fs_path = fs_path.parent_path(); // remove metadata.json
+	fs_path = fs_path.parent_path(); // remove /.metadata
+	const std::string path_string = fs_path.generic_string();
 
-	// remove metadata parts from end of path
-	file_path = file_path.substr(0, file_path.size() - 11);
+	std::filesystem::path root_path = fs_path.parent_path(); // the mods folder
+	root_path = root_path.parent_path();							// the parent of the mods folder
+	const std::string root_path_string = root_path.generic_string();
 
-	// remove everything before last path segment
-	if (const auto last_slash = file_path.find_last_of('/'); last_slash != std::string::npos)
+	path = path_string.substr(root_path_string.size(), path_string.size());
+	while (path.starts_with('/'))
 	{
-		path = file_path.substr(last_slash + 1, file_path.size());
+		path.erase(0, 1);
 	}
-	else if (const auto last_slash = file_path.find_last_of('\\'); last_slash != std::string::npos)
+	while (path.starts_with('\\'))
 	{
-		path = file_path.substr(last_slash + 1, file_path.size());
+		path.erase(0, 1);
 	}
 
 	std::ifstream file_stream(fileName);
