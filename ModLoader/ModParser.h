@@ -12,6 +12,9 @@ class ModParser: convenientParser
 	void parseMod(std::istream& theStream);
 	void parseMod(const std::string& fileName);
 
+	void parseMetadata(std::istream& theStream);
+	void parseMetadata(const std::string& fileName);
+
 	[[nodiscard]] const auto& getName() const { return name; }
 	[[nodiscard]] const auto& getPath() const { return path; }
 	[[nodiscard]] auto isValid() const { return !name.empty() && !path.empty(); }

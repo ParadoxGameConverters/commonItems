@@ -8,7 +8,7 @@ using testing::UnorderedElementsAre;
 
 
 
-TEST(ModParserTests, primitivesDefaultToBlank)
+TEST(ModParserTests, modPrimitivesDefaultToBlank)
 {
 	std::stringstream input;
 	commonItems::ModParser theMod;
@@ -29,7 +29,7 @@ TEST(ModParserTests, primitivesDefaultToBlank)
 }
 
 
-TEST(ModParserTests, primitivesCanBeSet)
+TEST(ModParserTests, modPrimitivesCanBeSet)
 {
 	std::stringstream input;
 	input << "name=modName\n";
@@ -55,7 +55,59 @@ TEST(ModParserTests, primitivesCanBeSet)
 }
 
 
-TEST(ModParserTests, pathCanBeSetFromArchive)
+TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
+{
+	std::stringstream input;
+	input << "{}";
+	commonItems::ModParser theMod;
+	theMod.parseMetadata(input);
+
+	EXPECT_TRUE(theMod.getName().empty());
+	EXPECT_TRUE(theMod.getPath().empty());
+	EXPECT_TRUE(theMod.getDependencies().empty());
+	EXPECT_TRUE(theMod.getReplacedPaths().empty());
+
+	commonItems::ModParser the_mod_file;
+	the_mod_file.parseMetadata("mod/empty_mod/metadata.json");
+
+	EXPECT_TRUE(the_mod_file.getName().empty());
+	EXPECT_EQ(the_mod_file.getPath(), "empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty file
+	EXPECT_TRUE(the_mod_file.getDependencies().empty());
+	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
+}
+
+
+TEST(ModParserTests, metadataPrimitivesCanBeSet)
+{
+	std::stringstream input;
+	input << "{\n";
+	input << "  \"name\" : \"modName\",\n";
+	input << "  \"game_custom_data\" : {\n";
+	input << "    \"replace_paths\" : [\n";
+	input << "\t\t\t\"replaced/path\",\n";
+	input << "\t\t\t\"replaced/path/two\"\n";
+	input << "\t\t]\n";
+	input << " \t}\n";
+	input << "}";
+	commonItems::ModParser theMod;
+	theMod.parseMetadata(input);
+
+	EXPECT_EQ(theMod.getName(), "modName");
+	EXPECT_TRUE(theMod.getPath().empty());			  // path is derived from the path itself, so a stream leaves no path
+	EXPECT_TRUE(theMod.getDependencies().empty()); // dependencies are unknown for now
+	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+
+	commonItems::ModParser the_mod_file;
+	the_mod_file.parseMetadata("mod/parseable_metadata/metadata.json");
+
+	EXPECT_EQ(the_mod_file.getName(), "modName");
+	EXPECT_EQ(the_mod_file.getPath(), "parseable_metadata");
+	EXPECT_TRUE(theMod.getDependencies().empty()); // dependencies are unknown for now
+	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+}
+
+
+TEST(ModParserTests, modPathCanBeSetFromArchive)
 {
 	std::stringstream input;
 	input << "archive=modPath\n";
