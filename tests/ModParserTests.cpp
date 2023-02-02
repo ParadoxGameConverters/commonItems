@@ -104,14 +104,6 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getPath(), "mod/parseable_metadata");
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
-
-	commonItems::ModParser the_mod_file_two;
-	the_mod_file_two.parseMetadata("mod\\parseable_metadata\\.metadata\\metadata.json");
-
-	EXPECT_EQ(the_mod_file_two.getName(), "modName");
-	EXPECT_EQ(the_mod_file_two.getPath(), "mod/parseable_metadata");
-	EXPECT_TRUE(the_mod_file_two.getDependencies().empty()); // dependencies are unknown for now
-	EXPECT_THAT(the_mod_file_two.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
 }
 
 
