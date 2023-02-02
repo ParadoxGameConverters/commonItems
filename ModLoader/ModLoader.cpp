@@ -77,6 +77,9 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 			if (mod.name.empty())
 				Log(LogLevel::Warning) << "\t\tSavegame uses mod at " << mod.path
 											  << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
+			else if (mod.path.empty())
+				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name
+											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else
 				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name << "] at " << mod.path
 											  << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
@@ -85,20 +88,47 @@ void commonItems::ModLoader::loadModDirectory(const std::string& gameDocumentsPa
 
 		// if we do have a path incoming from the save, just make sure it's not some abnormality.
 		if (!trimmedModFileName.empty() && getExtension(trimmedModFileName) != "mod")
-			continue; // shouldn't be necessary but just in case.
+		{
+			// Vic3 mods won't have .mod, but they will be in the cache and lack .mod there
+			if (!modCache.contains(mod.name) || modCache.at(mod.name).ends_with(".mod"))
+				continue; // shouldn't be necessary but just in case.
+		}
 
 		// Attempt parsing .mod file
-		ModParser theMod;
-		try
+		if (!trimmedModFileName.empty() && trimmedModFileName.ends_with(".mod"))
 		{
-			theMod.parseMod(modsPath + "/" + trimmedModFileName);
+			ModParser theMod;
+			try
+			{
+				theMod.parseMod(modsPath + "/" + trimmedModFileName);
+			}
+			catch (std::exception&)
+			{
+				Log(LogLevel::Warning) << "\t\tError while reading " << modsPath << "/" << trimmedModFileName << "! Mod will not be useable for conversions.";
+				continue;
+			}
+			processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, modsPath, gameDocumentsPath);
 		}
-		catch (std::exception&)
+		else
 		{
-			Log(LogLevel::Warning) << "\t\tError while reading " << modsPath << "/" << trimmedModFileName << "! Mod will not be useable for conversions.";
-			continue;
+			// Vic3 mods
+
+			std::string mod_folder = mod.path.substr(mod.path.find_last_of('/') + 1, mod.path.size());
+			const std::string metadata_location = modsPath + "/" + mod_folder + "/.metadata/metadata.json";
+
+			ModParser theMod;
+			try
+			{
+				theMod.parseMetadata(metadata_location);
+			}
+			catch (std::exception&)
+			{
+				Log(LogLevel::Warning) << "\t\tError while reading " << metadata_location << "! Mod will not be useable for conversions.";
+				continue;
+			}
+			possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
+			Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] at " << theMod.getPath();
 		}
-		processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, modsPath, gameDocumentsPath);
 	}
 }
 
@@ -127,6 +157,28 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), diskModFile);
+	}
+
+	for (const auto& possible_mod_folder: GetAllSubfolders(modsPath))
+	{
+		const std::string metadata_location = modsPath + "/" + possible_mod_folder + "/.metadata/metadata.json";
+		if (!DoesFileExist(metadata_location))
+		{
+			continue;
+		}
+
+		ModParser theMod;
+		try
+		{
+			theMod.parseMetadata(metadata_location);
+		}
+		catch (std::exception&)
+		{
+			Log(LogLevel::Warning) << "\t\tError while caching " << possible_mod_folder << "! Mod will not be useable for conversions.";
+			continue;
+		}
+		if (theMod.isValid())
+			modCache.emplace(theMod.getName(), theMod.getPath());
 	}
 }
 
