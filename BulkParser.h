@@ -7,7 +7,7 @@
 
 namespace commonItems
 {
-class bulkParser: parser
+class bulkParser: public parser
 {
   public:
 	// Parses a game file in either vanilla game or mods directory.
