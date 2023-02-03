@@ -56,11 +56,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib />
     <Lib>
-      <AdditionalDependencies>CommonItems.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
