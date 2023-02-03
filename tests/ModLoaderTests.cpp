@@ -62,6 +62,22 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 }
 
 
+TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
+{
+	Mods incomingMods;												  // this is what comes from the save
+	incomingMods.emplace_back(Mod("The Metadata Mod", "")); // No path given, old-style mod inputs.
+
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("./", incomingMods);
+	const auto mods = modLoader.getMods();
+
+	ASSERT_EQ(mods.size(), 1);
+	EXPECT_EQ(mods[0].name, "The Metadata Mod");
+	EXPECT_EQ(mods[0].path, "mod/the_metadata_mod/");
+	EXPECT_THAT(mods[0].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
+}
+
+
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 {
 	Mods incomingMods;
