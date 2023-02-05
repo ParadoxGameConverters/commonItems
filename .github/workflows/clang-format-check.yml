@@ -7,8 +7,8 @@ jobs:
     strategy:
       matrix:
         path:
-          - check: 'commonItems'
-            exclude: 'commonItems/external'
+          - check: '.'
+            exclude: 'external'
 
     steps:
     - uses: actions/checkout@v3
