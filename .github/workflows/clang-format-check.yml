@@ -7,11 +7,13 @@ jobs:
     strategy:
       matrix:
         path:
-          - 'commonItems'
-          exclude: 'commonItems/external'
+          - check: 'commonItems'
+            exclude: 'commonItems/external'
+
     steps:
     - uses: actions/checkout@v3
     - name: Run clang-format style check for C/C++ programs.
-      uses: jidicula/clang-format-action@v4.9.0
+      uses: jidicula/clang-format-action@v4.10.0
       with:
-        check-path: ${{ matrix.path }}
+        check-path: ${{ matrix.path['check'] }}
+        exclude-regex: ${{ matrix.path['exclude'] }}
