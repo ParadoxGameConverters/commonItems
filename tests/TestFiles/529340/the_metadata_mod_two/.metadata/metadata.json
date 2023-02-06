@@ -1,0 +1,9 @@
+{
+  "name" : "The Metadata Mod Two",
+  "game_custom_data" : {
+    "replace_paths" : [
+			"replaced/path",
+			"replaced/path/two"
+		]
+	}
+}

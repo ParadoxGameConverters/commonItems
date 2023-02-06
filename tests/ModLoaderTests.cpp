@@ -123,3 +123,31 @@ TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 
 	EXPECT_TRUE(mods.empty());
 }
+
+
+TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoaded)
+{
+	Mods incomingMods;									  // this is what comes from the save
+	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
+	incomingMods.emplace_back(Mod("The Mod Two", "")); // No path given, old-style mod inputs.
+	incomingMods.emplace_back(Mod("The Metadata Mod Two", "")); // No path given, old-style mod inputs.
+	incomingMods.emplace_back(Mod("The Metadata Mod", "")); // No path given, old-style mod inputs.
+
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods(std::vector<std::string>{ "./mod", "./529340"}, incomingMods); // 529340 is Vic3's steam workshop mod folder
+	const auto mods = modLoader.getMods();
+
+	ASSERT_EQ(mods.size(), 5);
+	EXPECT_EQ(mods[1].name, "The Mod");
+	EXPECT_EQ(mods[1].path, "mod/themod/");
+	EXPECT_THAT(mods[1].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
+	EXPECT_EQ(mods[2].name, "The Mod Two");
+	EXPECT_EQ(mods[2].path, "529340/the_mod_two/");
+	EXPECT_THAT(mods[2].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
+	EXPECT_EQ(mods[3].name, "The Metadata Mod Two");
+	EXPECT_EQ(mods[3].path, "529340/the_metadata_mod_two/");
+	EXPECT_THAT(mods[3].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
+	EXPECT_EQ(mods[4].name, "The Metadata Mod");
+	EXPECT_EQ(mods[4].path, "mod/the_metadata_mod/");
+	EXPECT_THAT(mods[4].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
+}
