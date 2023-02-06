@@ -27,12 +27,13 @@ class ModLoader
 	ModLoader() = default;
 
 	void loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods);
+	void loadMods(const std::vector<std::string>& gameDocumentsPaths, const Mods& incomingMods);
 	void sortMods();
 
 	[[nodiscard]] const auto& getMods() const { return usableMods; }
 
   private:
-	void loadModDirectory(const std::string& gameDocumentsPath, const Mods& incomingMods);
+	void loadModDirectories(const std::vector<std::string>& gameDocumentsPath, const Mods& incomingMods);
 	void cacheModNames(const std::string& gameDocumentsPath);
 	void processLoadedMod(ModParser& theMod,
 		 const std::string& modName,
