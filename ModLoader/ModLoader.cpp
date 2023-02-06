@@ -10,8 +10,22 @@
 #include <string>
 
 
+
 void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods)
 {
+	loadMods(std::vector{gameDocumentsPath}, incomingMods);
+}
+
+
+void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocumentsPaths, const Mods& incomingMods)
+{
+	if (gameDocumentsPaths.empty())
+	{
+		Log(LogLevel::Info) << "No mod directories were provided. Skipping mod processing.";
+		return;
+	}
+
+
 	if (incomingMods.empty())
 	{
 		// We shouldn't even be here if the save didn't have mods! Why were Mods called?
@@ -22,7 +36,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 	// First see what we're up against. Load mod folder, and cache the mod names. We need the names as bare minimum in case
 	// we're doing old-style name-recognition modfinding and don't have the paths in incomingMods.
 
-	cacheModNames(gameDocumentsPath);
+	cacheModNames(*gameDocumentsPaths.begin());
 
 	// We enter this function with a vector of (optional) mod names and (required) mod file locations from the savegame.
 	// We need to read all the mod files, check their paths (and potential archives for ancient mods) unpack what's
@@ -31,7 +45,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 
 	// The function below reads all the incoming .mod files and verifies their internal paths/archives are correct and
 	// point to something present on disk. No unpacking yet.
-	loadModDirectory(gameDocumentsPath, incomingMods);
+	loadModDirectory(*gameDocumentsPaths.begin(), incomingMods);
 
 	// Now we merge all detected .mod files together.
 	Log(LogLevel::Info) << "\tDetermining Mod Usability";
