@@ -73,12 +73,12 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocume
 	}
 }
 
-void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& gameDocumentsPaths, const Mods& incomingMods)
+void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& modPaths, const Mods& incomingMods)
 {
 	std::set<std::string> diskModNames;
-	for (const auto& gameDocumentsPath: gameDocumentsPaths)
+	for (const auto& modPath: modPaths)
 	{
-		for (const auto& diskModName: GetAllFilesInFolder(gameDocumentsPath))
+		for (const auto& diskModName: GetAllFilesInFolder(modPath))
 		{
 			diskModNames.insert(diskModName);
 		}
@@ -119,11 +119,11 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 		}
 
 		// Attempt parsing .mod file
-		for (const auto& gameDocumentsPath: gameDocumentsPaths)
+		for (const auto& modPath: modPaths)
 		{
 			if (!trimmedModFileName.empty() && trimmedModFileName.ends_with(".mod"))
 			{
-				const std::string mod_file_location = gameDocumentsPath + "/" + trimmedModFileName;
+				const std::string mod_file_location = modPath + "/" + trimmedModFileName;
 
 				if (!DoesFileExist(mod_file_location))
 				{
@@ -140,7 +140,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 					Log(LogLevel::Warning) << "\t\tError while reading " << mod_file_location << "! Mod will not be useable for conversions.";
 					continue;
 				}
-				processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, gameDocumentsPath, gameDocumentsPath);
+				processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, modPath, modPath);
 				break;
 			}
 			else
@@ -148,7 +148,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 				// Vic3 mods
 
 				std::string mod_folder = mod.path.substr(mod.path.find_last_of('/') + 1, mod.path.size());
-				const std::string metadata_location = gameDocumentsPath + "/" + mod_folder + "/.metadata/metadata.json";
+				const std::string metadata_location = modPath + "/" + mod_folder + "/.metadata/metadata.json";
 				if (!DoesFileExist(metadata_location))
 				{
 					continue;
