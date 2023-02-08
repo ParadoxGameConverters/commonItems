@@ -27,20 +27,19 @@ class ModLoader
 	ModLoader() = default;
 
 	void loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods);
-	void loadMods(const std::vector<std::string>& gameDocumentsPaths, const Mods& incomingMods);
+	void loadMods(const std::vector<std::string>& gameModPaths, const Mods& incomingMods);
 	void sortMods();
 
 	[[nodiscard]] const auto& getMods() const { return usableMods; }
 
   private:
-	void loadModDirectories(const std::vector<std::string>& gameDocumentsPath, const Mods& incomingMods);
+	void loadModDirectories(const std::vector<std::string>& gameModPaths, const Mods& incomingMods);
 	void cacheModNames(const std::string& gameDocumentsPath);
 	void processLoadedMod(ModParser& theMod,
 		 const std::string& modName,
 		 const std::string& modFileName,
 		 const std::string& modPath,
-		 const std::string& modsPath,
-		 const std::string& gameDocumentsPath);
+		 const std::string& gameModPath);
 	static void warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path);
 	void fileUnderCategory(const ModParser& theMod, const std::string& path);
 

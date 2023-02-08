@@ -17,9 +17,9 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 }
 
 
-void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocumentsPaths, const Mods& incomingMods)
+void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPaths, const Mods& incomingMods)
 {
-	if (gameDocumentsPaths.empty())
+	if (gameModPaths.empty())
 	{
 		Log(LogLevel::Info) << "No mod directories were provided. Skipping mod processing.";
 		return;
@@ -36,10 +36,10 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocume
 	// First see what we're up against. Load mod folders, and cache the mod names. We need the names as bare minimum in case
 	// we're doing old-style name-recognition modfinding and don't have the paths in incomingMods.
 	Log(LogLevel::Info) << "\tMods directories are:";
-	for (const auto& gameDocumentsPath: gameDocumentsPaths)
+	for (const auto& gameModPath: gameModPaths)
 	{
-		Log(LogLevel::Info) << "\t\t" << gameDocumentsPath;
-		cacheModNames(gameDocumentsPath);
+		Log(LogLevel::Info) << "\t\t" << gameModPath;
+		cacheModNames(gameModPath);
 	}
 
 	// We enter this function with a vector of (optional) mod names and (required) mod file locations from the savegame.
@@ -49,7 +49,7 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocume
 
 	// The function below reads all the incoming .mod files and verifies their internal paths/archives are correct and
 	// point to something present on disk. No unpacking yet.
-	loadModDirectories(gameDocumentsPaths, incomingMods);
+	loadModDirectories(gameModPaths, incomingMods);
 
 	// Now we merge all detected .mod files together.
 	Log(LogLevel::Info) << "\tDetermining Mod Usability";
@@ -73,10 +73,10 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameDocume
 	}
 }
 
-void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& modPaths, const Mods& incomingMods)
+void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& gameModPaths, const Mods& incomingMods)
 {
 	std::set<std::string> diskModNames;
-	for (const auto& modPath: modPaths)
+	for (const auto& modPath: gameModPaths)
 	{
 		for (const auto& diskModName: GetAllFilesInFolder(modPath))
 		{
@@ -119,11 +119,11 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 		}
 
 		// Attempt parsing .mod file
-		for (const auto& modPath: modPaths)
+		for (const auto& gameModPath: gameModPaths)
 		{
 			if (!trimmedModFileName.empty() && trimmedModFileName.ends_with(".mod"))
 			{
-				const std::string mod_file_location = modPath + "/" + trimmedModFileName;
+				const std::string mod_file_location = gameModPath + "/" + trimmedModFileName;
 
 				if (!DoesFileExist(mod_file_location))
 				{
@@ -140,7 +140,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 					Log(LogLevel::Warning) << "\t\tError while reading " << mod_file_location << "! Mod will not be useable for conversions.";
 					continue;
 				}
-				processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, modPath, modPath);
+				processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, gameModPath);
 				break;
 			}
 			else
@@ -148,7 +148,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 				// Vic3 mods
 
 				std::string mod_folder = mod.path.substr(mod.path.find_last_of('/') + 1, mod.path.size());
-				const std::string metadata_location = modPath + "/" + mod_folder + "/.metadata/metadata.json";
+				const std::string metadata_location = gameModPath + "/" + mod_folder + "/.metadata/metadata.json";
 				if (!DoesFileExist(metadata_location))
 				{
 					continue;
@@ -223,12 +223,11 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	 const std::string& modName,
 	 const std::string& modFileName,
 	 const std::string& modPath,
-	 const std::string& modsPath,
-	 const std::string& gameDocumentsPath)
+	 const std::string& gameModPath)
 {
 	if (!theMod.isValid())
 	{
-		Log(LogLevel::Warning) << "\t\tMod at " << modsPath + "/" + modFileName << " does not look valid.";
+		Log(LogLevel::Warning) << "\t\tMod at " << gameModPath + "/" + modFileName << " does not look valid.";
 		return;
 	}
 
@@ -236,10 +235,11 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
 	{
 		// Maybe we have a relative path
-		if (DoesFolderExist(gameDocumentsPath + "/" + theMod.getPath()))
+		const auto trimmedPath = trimPath(theMod.getPath());
+		if (DoesFolderExist(gameModPath + "/" + trimmedPath))
 		{
 			// fix this.
-			theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+			theMod.setPath(gameModPath + "/" + trimmedPath);
 		}
 		else
 		{
@@ -250,10 +250,11 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	else if (theMod.isCompressed() && !DoesFileExist(theMod.getPath()))
 	{
 		// Maybe we have a relative path
-		if (DoesFileExist(gameDocumentsPath + "/" + theMod.getPath()))
+		const auto trimmedPath = trimPath(theMod.getPath());
+		if (DoesFileExist(gameModPath + "/" + trimmedPath))
 		{
 			// fix this.
-			theMod.setPath(gameDocumentsPath + "/" + theMod.getPath());
+			theMod.setPath(gameModPath + "/" + trimmedPath);
 		}
 		else
 		{
@@ -263,7 +264,7 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	}
 
 	// file under category.
-	fileUnderCategory(theMod, modsPath + "/" + modFileName);
+	fileUnderCategory(theMod, gameModPath + "/" + modFileName);
 }
 
 void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path)
