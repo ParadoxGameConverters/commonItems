@@ -27,7 +27,7 @@ class ModLoader
 	ModLoader() = default;
 
 	void loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods);
-	void loadMods(const std::vector<std::string>& gameModsPaths, const Mods& incomingMods);
+	void loadMods(const std::vector<std::string>& gameModPaths, const Mods& incomingMods);
 	void sortMods();
 
 	[[nodiscard]] const auto& getMods() const { return usableMods; }
