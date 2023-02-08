@@ -235,10 +235,11 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
 	{
 		// Maybe we have a relative path
-		if (DoesFolderExist(gameModPath + "/" + modFileName))
+		const auto trimmedPath = trimPath(theMod.getPath());
+		if (DoesFolderExist(gameModPath + "/" + trimmedPath))
 		{
 			// fix this.
-			theMod.setPath(gameModPath + "/" + modFileName);
+			theMod.setPath(gameModPath + "/" + trimmedPath);
 		}
 		else
 		{
@@ -249,10 +250,11 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	else if (theMod.isCompressed() && !DoesFileExist(theMod.getPath()))
 	{
 		// Maybe we have a relative path
-		if (DoesFileExist(gameModPath + "/" + modFileName))
+		const auto trimmedPath = trimPath(theMod.getPath());
+		if (DoesFileExist(gameModPath + "/" + trimmedPath))
 		{
 			// fix this.
-			theMod.setPath(gameModPath + "/" + modFileName);
+			theMod.setPath(gameModPath + "/" + trimmedPath);
 		}
 		else
 		{
