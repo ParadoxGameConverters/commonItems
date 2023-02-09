@@ -201,7 +201,6 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModFilesystem)
 {
-
 	commonItems::ModLoader modLoader;
 	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Metadata Mod", ""}});
 	const auto mods = modLoader.getMods();
