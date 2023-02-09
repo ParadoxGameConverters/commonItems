@@ -9,5 +9,5 @@ replace_path="common/country_tags/"
 replace_path="common/bookmarks/"
 replace_path="common/technologies/"
 supported_version="1.31.*"
-path="mod/themod"
+path="mod/themodsfolder"
 dependencies={ "Packed Mod" "Missing Mod" }

@@ -164,8 +164,8 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 					Log(LogLevel::Warning) << "\t\tError while reading " << metadata_location << "! Mod will not be useable for conversions.";
 					continue;
 				}
-				possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
-				Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] at " << theMod.getPath();
+				processLoadedMod(theMod, mod.name, mod_folder, mod.path, gameModPath);
+				Log(LogLevel::Info) << "\t\tFound a potential meta-mod [" << theMod.getName() << "] at " << theMod.getPath();
 				break;
 			}
 		}
@@ -189,11 +189,14 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "\t\tError while caching " << gameDocumentsPath << "/" << trimmedModFileName << "! Mod will not be useable for conversions.";
+			Log(LogLevel::Warning) << "\t\t\t! Error while caching " << gameDocumentsPath << "/" << trimmedModFileName
+										  << "! Mod will not be useable for conversions.";
 			continue;
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), diskModFile);
+		else
+			Log(LogLevel::Warning) << "\t\t\t! Mod at " << diskModFile << " is invalid.";
 	}
 
 	for (const auto& possible_mod_folder: GetAllSubfolders(gameDocumentsPath))
@@ -211,11 +214,13 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "\t\tError while caching " << possible_mod_folder << "! Mod will not be useable for conversions.";
+			Log(LogLevel::Warning) << "\t\t\t! Error while caching " << possible_mod_folder << "! Mod will not be useable for conversions.";
 			continue;
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), theMod.getPath());
+		else
+			Log(LogLevel::Warning) << "\t\t\t! Mod at " << gameDocumentsPath + "/" + possible_mod_folder << " has invalid metadata.";
 	}
 }
 
@@ -227,7 +232,7 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 {
 	if (!theMod.isValid())
 	{
-		Log(LogLevel::Warning) << "\t\tMod at " << gameModPath + "/" + modFileName << " does not look valid.";
+		Log(LogLevel::Warning) << "\t\t\t! Mod at " << gameModPath + "/" + modFileName << " does not look valid.";
 		return;
 	}
 

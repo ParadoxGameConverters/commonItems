@@ -20,7 +20,7 @@ TEST(ModParserTests, modPrimitivesDefaultToBlank)
 	EXPECT_TRUE(theMod.getReplacedPaths().empty());
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMod("mod/empty_mod_file.mod");
+	the_mod_file.parseMod("some_nonexistent_path/nonsense"); // loading non-existent mod
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
 	EXPECT_TRUE(the_mod_file.getPath().empty());
@@ -46,7 +46,7 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMod("mod/parseable_mod_file.mod");
+	the_mod_file.parseMod("GameDocumentsFolder/mod/parseable_mod_file.mod");
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
 	EXPECT_EQ(the_mod_file.getPath(), "modPath");
@@ -68,10 +68,11 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	EXPECT_TRUE(theMod.getReplacedPaths().empty());
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMetadata("mod/empty_mod/.metadata/metadata.json");
+	the_mod_file.parseMetadata("some_nonexistent_path/empty_mod/metadata/.metadata.json"); // doesn't exist
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
-	EXPECT_EQ(the_mod_file.getPath(), "mod/empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty file
+	EXPECT_EQ(the_mod_file.getPath(),
+		 "some_nonexistent_path/empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty/missing file
 	EXPECT_TRUE(the_mod_file.getDependencies().empty());
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
 }
@@ -98,7 +99,7 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
 
 	commonItems::ModParser the_mod_file;
-	the_mod_file.parseMetadata("mod/parseable_metadata/.metadata/metadata.json");
+	the_mod_file.parseMetadata("GameDocumentsFolder/mod/parseable_metadata/.metadata/metadata.json");
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
 	EXPECT_EQ(the_mod_file.getPath(), "mod/parseable_metadata");
