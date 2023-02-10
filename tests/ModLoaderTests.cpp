@@ -36,12 +36,12 @@ TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
-	EXPECT_EQ(mods[0].path, "mod/themod/");
+	EXPECT_EQ(mods[0].path, "GameDocumentsFolder/mod/themodsfolder/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
@@ -52,12 +52,12 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
-	EXPECT_EQ(mods[0].path, "mod/themod/");
+	EXPECT_EQ(mods[0].path, "GameDocumentsFolder/mod/themodsfolder/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 }
 
@@ -68,12 +68,12 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 	incomingMods.emplace_back(Mod("The Metadata Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Metadata Mod");
-	EXPECT_EQ(mods[0].path, "mod/the_metadata_mod/");
+	EXPECT_EQ(mods[0].path, "GameDocumentsFolder/mod/the_metadata_mod/");
 	EXPECT_THAT(mods[0].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 }
 
@@ -81,18 +81,18 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 {
 	Mods incomingMods;
-	incomingMods.emplace_back(Mod("", "mod/themod.mod"));								  // no name given
+	incomingMods.emplace_back(Mod("", "mod/themod.mod"));								  // no name given but valid!
 	incomingMods.emplace_back(Mod("Broken mod", "mod/brokenmod.mod"));			  // no path
 	incomingMods.emplace_back(Mod("Missing mod", "mod/missingmod.mod"));			  // missing directory
 	incomingMods.emplace_back(Mod("Nonexistent mod", "mod/nonexistentmod.mod")); // doesn't exist.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
-	EXPECT_EQ(mods[0].path, "mod/themod/");
+	EXPECT_EQ(mods[0].path, "GameDocumentsFolder/mod/themodsfolder/");
 }
 
 
@@ -102,7 +102,7 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	incomingMods.emplace_back(Mod("some packed mod", "mod/packedmod.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
@@ -118,7 +118,7 @@ TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 	incomingMods.emplace_back(Mod("broken packed mod", "mod/brokenpacked.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	modLoader.loadMods("GameDocumentsFolder", incomingMods);
 	const auto mods = modLoader.getMods();
 
 	EXPECT_TRUE(mods.empty());
@@ -133,17 +133,18 @@ TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoaded)
 	incomingMods.emplace_back(Mod("The Metadata Mod", ""));		// No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods(std::vector<std::string>{"./mod", "./529340"}, incomingMods); // 529340 is Vic3's steam workshop mod folder
+	modLoader.loadMods(std::vector<std::string>{"GameDocumentsFolder/mod", "SteamModsFolder/529340"},
+		 incomingMods); // SteamModsFolder/529340 is Vic3's steam workshop mod folder
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 3);
 	EXPECT_EQ(mods[0].name, "The Mod");
-	EXPECT_EQ(mods[0].path, "mod/themod/");
+	EXPECT_EQ(mods[0].path, "GameDocumentsFolder/mod/themodsfolder/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 	EXPECT_EQ(mods[1].name, "The Metadata Mod Two");
-	EXPECT_EQ(mods[1].path, "529340/the_metadata_mod_two/");
+	EXPECT_EQ(mods[1].path, "SteamModsFolder/529340/the_metadata_mod_two/");
 	EXPECT_THAT(mods[1].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 	EXPECT_EQ(mods[2].name, "The Metadata Mod");
-	EXPECT_EQ(mods[2].path, "mod/the_metadata_mod/");
+	EXPECT_EQ(mods[2].path, "GameDocumentsFolder/mod/the_metadata_mod/");
 	EXPECT_THAT(mods[2].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 }

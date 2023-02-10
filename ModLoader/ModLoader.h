@@ -39,9 +39,10 @@ class ModLoader
 		 const std::string& modName,
 		 const std::string& modFileName,
 		 const std::string& modPath,
-		 const std::string& gameModPath);
+		 const std::string& gameModPath,
+		 bool metaMod = false);
 	static void warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path);
-	void fileUnderCategory(const ModParser& theMod, const std::string& path);
+	void fileUnderCategory(const ModParser& theMod, const std::string& path, bool metaMod = false);
 
 	[[nodiscard]] std::optional<std::string> uncompressAndReturnNewPath(const std::string& modName) const;
 	[[nodiscard]] bool extractZip(const std::string& archive, const std::string& path) const;

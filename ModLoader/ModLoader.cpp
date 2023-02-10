@@ -38,7 +38,7 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPat
 	Log(LogLevel::Info) << "\tMods directories are:";
 	for (const auto& gameModPath: gameModPaths)
 	{
-		Log(LogLevel::Info) << "\t\t" << gameModPath;
+		Log(LogLevel::Info) << "\t\t-> [" << gameModPath << "]";
 		cacheModNames(gameModPath);
 	}
 
@@ -49,10 +49,11 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPat
 
 	// The function below reads all the incoming .mod files and verifies their internal paths/archives are correct and
 	// point to something present on disk. No unpacking yet.
+	Log(LogLevel::Info) << "\tLoading Mod Directories.";
 	loadModDirectories(gameModPaths, incomingMods);
 
 	// Now we merge all detected .mod files together.
-	Log(LogLevel::Info) << "\tDetermining Mod Usability";
+	Log(LogLevel::Info) << "\tDetermining Mod Usability.";
 	auto allMods = possibleUncompressedMods;
 	allMods.insert(allMods.end(), possibleCompressedMods.begin(), possibleCompressedMods.end());
 
@@ -63,7 +64,7 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPat
 		const auto possibleModPath = uncompressAndReturnNewPath(mod.name);
 		if (!possibleModPath)
 		{
-			Log(LogLevel::Warning) << "\t\tFailure unpacking " << mod.name << ", skipping this mod at your risk.";
+			Log(LogLevel::Warning) << "\t\tFailure unpacking [" << mod.name << "], skipping this mod at your risk.";
 			continue;
 		}
 
@@ -99,14 +100,14 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 		if (!diskModNames.contains(trimmedModFileName) && !modCache.contains(mod.name))
 		{
 			if (mod.name.empty())
-				Log(LogLevel::Warning) << "\t\tSavegame uses mod at " << mod.path
-											  << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
+				Log(LogLevel::Warning) << "\t\tSavegame uses mod at [" << mod.path
+											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else if (mod.path.empty())
 				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name
 											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else
-				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name << "] at " << mod.path
-											  << " which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
+				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name << "] at [" << mod.path
+											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			continue;
 		}
 
@@ -137,7 +138,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 				}
 				catch (std::exception&)
 				{
-					Log(LogLevel::Warning) << "\t\tError while reading " << mod_file_location << "! Mod will not be useable for conversions.";
+					Log(LogLevel::Warning) << "\t\tError while reading [" << mod_file_location << "]! Mod will not be useable for conversions.";
 					continue;
 				}
 				processLoadedMod(theMod, mod.name, trimmedModFileName, mod.path, gameModPath);
@@ -161,11 +162,10 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 				}
 				catch (std::exception&)
 				{
-					Log(LogLevel::Warning) << "\t\tError while reading " << metadata_location << "! Mod will not be useable for conversions.";
+					Log(LogLevel::Warning) << "\t\tError while reading [" << metadata_location << "]! Mod will not be useable for conversions.";
 					continue;
 				}
-				possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
-				Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] at " << theMod.getPath();
+				processLoadedMod(theMod, mod.name, mod_folder, mod.path, gameModPath, true);
 				break;
 			}
 		}
@@ -189,11 +189,14 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "\t\tError while caching " << gameDocumentsPath << "/" << trimmedModFileName << "! Mod will not be useable for conversions.";
+			Log(LogLevel::Warning) << "\t\t\t! Error while caching [" << gameDocumentsPath << "/" << trimmedModFileName
+										  << "]! Mod will not be useable for conversions.";
 			continue;
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), diskModFile);
+		else
+			Log(LogLevel::Warning) << "\t\t\t! Mod at [" << diskModFile << "] is invalid.";
 	}
 
 	for (const auto& possible_mod_folder: GetAllSubfolders(gameDocumentsPath))
@@ -211,11 +214,13 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "\t\tError while caching " << possible_mod_folder << "! Mod will not be useable for conversions.";
+			Log(LogLevel::Warning) << "\t\t\t! Error while caching [" << possible_mod_folder << "]! Mod will not be useable for conversions.";
 			continue;
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), theMod.getPath());
+		else
+			Log(LogLevel::Warning) << "\t\t\t! Mod at [" << gameDocumentsPath + "/" + possible_mod_folder << "] has invalid metadata.";
 	}
 }
 
@@ -223,15 +228,16 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	 const std::string& modName,
 	 const std::string& modFileName,
 	 const std::string& modPath,
-	 const std::string& gameModPath)
+	 const std::string& gameModPath,
+	 const bool metaMod)
 {
 	if (!theMod.isValid())
 	{
-		Log(LogLevel::Warning) << "\t\tMod at " << gameModPath + "/" + modFileName << " does not look valid.";
+		Log(LogLevel::Warning) << "\t\t\t! Mod at [" << gameModPath + "/" + modFileName << "] does not look valid.";
 		return;
 	}
 
-	// Fix potential pathing issues.
+	// Expand relative into absolute paths (or at least relative to the converter). THIS IS IMPORTANT for any mod that still has "mod/something" as path!
 	if (!theMod.isCompressed() && !DoesFolderExist(theMod.getPath()))
 	{
 		// Maybe we have a relative path
@@ -264,31 +270,41 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	}
 
 	// file under category.
-	fileUnderCategory(theMod, gameModPath + "/" + modFileName);
+	fileUnderCategory(theMod, gameModPath + "/" + modFileName, metaMod);
 }
 
 void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::string& path)
 {
 	if (name.empty())
-		Log(LogLevel::Warning) << "\t\tMod at " + path + " points to " + theMod.getPath() +
-												" which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+		Log(LogLevel::Warning) << "\t\tMod at [" + path + "] points to [" + theMod.getPath() +
+												"] which does not exist! Skipping at your risk, but this can greatly affect conversion.";
 	else
 		Log(LogLevel::Warning) << "\t\tMod [" << name
-									  << "] at " + path + " points to " + theMod.getPath() +
-												" which does not exist! Skipping at your risk, but this can greatly affect conversion.";
+									  << "] at [" + path + "] points to [" + theMod.getPath() +
+												"] which does not exist! Skipping at your risk, but this can greatly affect conversion.";
 }
 
-void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const std::string& path)
+void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const std::string& path, const bool metaMod)
 {
-	if (!theMod.isCompressed())
+	if (!metaMod)
 	{
-		possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
-		Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at " << path << " and itself at " << theMod.getPath();
+		if (!theMod.isCompressed())
+		{
+			possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
+			Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at [" << path << "] and itself at [" << theMod.getPath()
+									  << "].";
+		}
+		else
+		{
+			possibleCompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
+			Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at [" << path << "] and itself at ["
+									  << theMod.getPath() << "].";
+		}
 	}
 	else
 	{
-		possibleCompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
-		Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at " << path << " and itself at " << theMod.getPath();
+		possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getPath(), theMod.getDependencies(), theMod.getReplacedPaths()));
+		Log(LogLevel::Info) << "\t\tFound a potential meta-mod [" << theMod.getName() << "] at [" << theMod.getPath() << "].";
 	}
 }
 

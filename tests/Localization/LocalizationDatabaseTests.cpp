@@ -1,9 +1,8 @@
 #include "../../Localization/LocalizationDatabase.h"
 #include "../../ModLoader/Mod.h"
+#include "../../ModLoader/ModLoader.h"
 #include "gmock/gmock-matchers.h"
 #include "gtest/gtest.h"
-
-
 
 TEST(Localization_LocalizationDatabase_Tests, NewLocalizationDatabaseIsEmpty)
 {
@@ -158,7 +157,55 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsFromUnsupportedLangua
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesystem)
 {
-	commonItems::ModFilesystem filesystem("game", {Mod{"themod", "mod/themod"}});
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Mod", "mod/themod.mod"}});
+	const auto mods = modLoader.getMods();
+
+	commonItems::ModFilesystem filesystem("game", mods);
+
+	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
+
+	std::stringstream log;
+	auto stdout_buf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+	database.ScrapeLocalizations(filesystem, "localization");
+	std::cout.rdbuf(stdout_buf);
+	std::string actual_output = log.str();
+
+	EXPECT_THAT(actual_output, testing::HasSubstr("[WARNING] Scraping loc line [ NO_LANGUAGE_KEY1:0 \"loc w/o language\"] without language specified!"));
+
+	EXPECT_EQ(database.size(), 3);
+	EXPECT_TRUE(database.HasLocalization("KEY1"));
+	const auto test_block = database.GetLocalizationBlock("KEY1");
+	ASSERT_TRUE(test_block.has_value());
+	EXPECT_EQ(test_block->GetBaseLanguage(), "english");
+	EXPECT_EQ(test_block->GetKey(), "KEY1");
+	EXPECT_THAT(test_block->GetLocalizations(),
+		 testing::UnorderedElementsAre(testing::Pair("english", "value1 modded"), testing::Pair("french", "valeur1"), testing::Pair("spanish", "valor")));
+
+	const auto test_block_two = database.GetLocalizationBlock("KEY2");
+	ASSERT_TRUE(test_block_two.has_value());
+	EXPECT_EQ(test_block_two->GetBaseLanguage(), "english");
+	EXPECT_EQ(test_block_two->GetKey(), "KEY2");
+	EXPECT_THAT(test_block_two->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "value2"), testing::Pair("french", "valeur2")));
+
+	const auto test_block_three = database.GetLocalizationBlock("MOD_KEY1");
+	ASSERT_TRUE(test_block_three.has_value());
+	EXPECT_EQ(test_block_three->GetBaseLanguage(), "english");
+	EXPECT_EQ(test_block_three->GetKey(), "MOD_KEY1");
+	EXPECT_THAT(test_block_three->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "mod loc")));
+
+	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
+	EXPECT_FALSE(non_loc_block.has_value());
+}
+
+TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModFilesystem)
+{
+	commonItems::ModLoader modLoader;
+	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Metadata Mod", ""}});
+	const auto mods = modLoader.getMods();
+
+	commonItems::ModFilesystem filesystem("game", mods);
 
 	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
 
