@@ -46,7 +46,8 @@ int commonItems::LocalizationDatabase::ScrapeStream(std::istream& stream)
 
 		if (auto itr = localizations_.find(key); itr != localizations_.end())
 		{
-			itr->second.ModifyLocalization(current_language, localization);
+			if (!itr->second.GetLocalizations().contains(current_language))
+				itr->second.ModifyLocalization(current_language, localization);
 		}
 		else
 		{
