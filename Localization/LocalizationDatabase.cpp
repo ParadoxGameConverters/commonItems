@@ -5,7 +5,7 @@
 #include <fstream>
 
 
-#pragma optimize("",off)
+
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
 {
 	Log(LogLevel::Info) << "Reading Localization...";
@@ -153,4 +153,3 @@ int commonItems::LocalizationDatabase::ScrapeFile(const std::string& file_path)
 
 	return ScrapeStream(file);
 }
-#pragma optimize("",on)
