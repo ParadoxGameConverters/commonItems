@@ -1,10 +1,11 @@
 #include "LocalizationDatabase.h"
 #include "../CommonFunctions.h"
 #include "../Log.h"
+#include "../Parser.h"
 #include <fstream>
 
 
-
+#pragma optimize("",off)
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
 {
 	Log(LogLevel::Info) << "Reading Localization...";
@@ -25,6 +26,7 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 
 int commonItems::LocalizationDatabase::ScrapeStream(std::istream& stream)
 {
+	absorbBOM(stream);
 	int lines_read = 0;
 	std::string current_language;
 
@@ -44,8 +46,7 @@ int commonItems::LocalizationDatabase::ScrapeStream(std::istream& stream)
 
 		if (auto itr = localizations_.find(key); itr != localizations_.end())
 		{
-			if (!itr->second.GetLocalizations().contains(current_language))
-				itr->second.ModifyLocalization(current_language, localization);
+			itr->second.ModifyLocalization(current_language, localization);
 		}
 		else
 		{
@@ -152,3 +153,4 @@ int commonItems::LocalizationDatabase::ScrapeFile(const std::string& file_path)
 
 	return ScrapeStream(file);
 }
+#pragma optimize("",on)
