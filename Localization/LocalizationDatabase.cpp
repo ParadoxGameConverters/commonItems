@@ -1,6 +1,7 @@
 #include "LocalizationDatabase.h"
 #include "../CommonFunctions.h"
 #include "../Log.h"
+#include "../Parser.h"
 #include <fstream>
 
 
@@ -25,6 +26,7 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 
 int commonItems::LocalizationDatabase::ScrapeStream(std::istream& stream)
 {
+	absorbBOM(stream);
 	int lines_read = 0;
 	std::string current_language;
 
