@@ -52,8 +52,7 @@ class Color
 	explicit Color(std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
 	explicit Color(std::array<float, 3> hsvComponents, float alpha): hsvComponents(hsvComponents), alpha(alpha) { deriveRgbFromHsv(); }
 
-	bool operator==(const Color& rhs) const;
-	bool operator!=(const Color& rhs) const;
+	std::partial_ordering operator<=>(const Color&) const = default;
 
 	[[nodiscard]] const auto& getRgbComponents() const { return rgbComponents; }
 	[[nodiscard]] const auto& getHsvComponents() const { return hsvComponents; }
