@@ -12,18 +12,6 @@
 
 
 
-bool commonItems::Color::operator==(const Color& rhs) const
-{
-	return rgbComponents == rhs.rgbComponents;
-}
-
-
-bool commonItems::Color::operator!=(const Color& rhs) const
-{
-	return !(*this == rhs);
-}
-
-
 std::string commonItems::Color::outputRgb() const
 {
 	return "= rgb { " + std::to_string(rgbComponents[0]) + ' ' + std::to_string(rgbComponents[1]) + ' ' + std::to_string(rgbComponents[2]) + " }";
