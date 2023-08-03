@@ -138,11 +138,11 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	const auto quote_two_index = new_line.find_last_of('\"');
 	if (quote_index == std::string::npos || quote_two_index == std::string::npos || quote_two_index - quote_index == 0)
 	{
-		return {key, ""};
+		return {std::string(key), ""};
 	}
 
 	const auto value = new_line.substr(quote_index + 1, quote_two_index - quote_index - 1);
-	return {key, value};
+	return {std::string(key, std::string(value)};
 }
 
 
