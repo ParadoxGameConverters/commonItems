@@ -90,14 +90,16 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	{
 		return {};
 	}
-
-	const std::string partially_stripped_line = std::regex_replace(line, std::regex("^\\s+"), std::string(""));
-	if (partially_stripped_line.starts_with('#'))
+	const auto isspace = [](char x) {return std::isspace(x);});
+	const auto first_non_space = std::ranges::find_if_not(line, isspace);
+    
+    if (first_non_space == line.end() || *first_non_space == '#')
 	{
 		return {};
 	}
-	const std::string stripped_line = std::regex_replace(partially_stripped_line, std::regex("\\s+$"), std::string(""));
 
+	const auto last_non_space = std::ranges::find_if_not(line.rbegin(), line.rend(), isspace);
+	const std::string_view stripped_line(first_non_space, last_non_space.base());
 	const auto separator_location = stripped_line.find_first_of(':');
 	if (separator_location == std::string::npos)
 	{
