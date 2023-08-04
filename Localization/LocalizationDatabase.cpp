@@ -3,7 +3,7 @@
 #include "../Log.h"
 #include "../Parser.h"
 #include <fstream>
-
+#include <algorithm>
 
 
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
