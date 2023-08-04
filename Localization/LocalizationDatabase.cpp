@@ -90,10 +90,11 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	{
 		return {};
 	}
-	const auto isspace = [](char x) {return std::isspace(x);});
+	const auto isspace = [](char x) {
+		return std::isspace(x);});
 	const auto first_non_space = std::ranges::find_if_not(line, isspace);
-    
-    if (first_non_space == line.end() || *first_non_space == '#')
+
+	if (first_non_space == line.end() || *first_non_space == '#')
 	{
 		return {};
 	}
@@ -142,7 +143,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	}
 
 	const auto value = new_line.substr(quote_index + 1, quote_two_index - quote_index - 1);
-	return {std::string(key, std::string(value)};
+	return {std::string(key), std::string(value)};
 }
 
 
