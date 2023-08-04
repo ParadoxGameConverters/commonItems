@@ -2,8 +2,8 @@
 #include "../CommonFunctions.h"
 #include "../Log.h"
 #include "../Parser.h"
-#include <fstream>
 #include <algorithm>
+#include <fstream>
 
 
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
