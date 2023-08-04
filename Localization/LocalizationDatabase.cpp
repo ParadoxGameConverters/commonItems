@@ -90,8 +90,8 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	{
 		return {};
 	}
-	
-	const auto isspace = [](char x) { 
+
+	const auto isspace = [](char x) {
 		return std::isspace(x);
 	};
 	const auto first_non_space = std::ranges::find_if_not(line, isspace);
