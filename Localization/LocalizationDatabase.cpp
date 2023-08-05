@@ -2,8 +2,8 @@
 #include "../CommonFunctions.h"
 #include "../Log.h"
 #include "../Parser.h"
+#include <algorithm>
 #include <fstream>
-
 
 
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
@@ -91,13 +91,17 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 		return {};
 	}
 
-	const std::string partially_stripped_line = std::regex_replace(line, std::regex("^\\s+"), std::string(""));
-	if (partially_stripped_line.starts_with('#'))
+	const auto isspace = [](char x) {
+		return std::isspace(x);
+	};
+	const auto first_non_space = std::ranges::find_if_not(line, isspace);
+	if (first_non_space == line.end() || *first_non_space == '#')
 	{
 		return {};
 	}
-	const std::string stripped_line = std::regex_replace(partially_stripped_line, std::regex("\\s+$"), std::string(""));
 
+	const auto last_non_space = std::ranges::find_if_not(line.rbegin(), line.rend(), isspace);
+	const std::string_view stripped_line(first_non_space, last_non_space.base());
 	const auto separator_location = stripped_line.find_first_of(':');
 	if (separator_location == std::string::npos)
 	{
@@ -136,11 +140,11 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	const auto quote_two_index = new_line.find_last_of('\"');
 	if (quote_index == std::string::npos || quote_two_index == std::string::npos || quote_two_index - quote_index == 0)
 	{
-		return {key, ""};
+		return {std::string(key), ""};
 	}
 
 	const auto value = new_line.substr(quote_index + 1, quote_two_index - quote_index - 1);
-	return {key, value};
+	return {std::string(key), std::string(value)};
 }
 
 
