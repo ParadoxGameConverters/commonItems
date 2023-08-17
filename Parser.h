@@ -39,7 +39,8 @@ class parser
 
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
-
+	// as a function object, parse the stream.
+	void operator()(std::istream& theStream);
 
   private:
 	inline bool tryToMatchAgainstKeywords(const std::string& toReturn, const std::string& strippedLexeme, bool isLexemeQuoted, std::istream& theStream);
