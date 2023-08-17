@@ -54,7 +54,7 @@ TEST(Parser_Tests, FunctionObjectEquivalentToParse)
 {
 	std::stringstream input{"key = value"};
 	std::string value;
-	commonItems::parser parser();
+	commonItems::parser parser{};
 	parser.registerKeyword("key", [this](std::istream& theStream) {
 		value = commonItems::getString(theStream);
 	});
