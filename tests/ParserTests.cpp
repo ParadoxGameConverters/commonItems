@@ -50,6 +50,18 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	ASSERT_EQ("value", test.value);
 }
 
+TEST(Parser_Tests, FunctionObjectEquivalentToParse)
+{
+	std::stringstream input{"key = value"};
+	std::string value;
+	commonItems::parser parser();
+	parser.registerKeyword("key", [this](std::istream& theStream) {
+		value = commonItems::getString(theStream);
+	});
+	parser(input);
+	ASSERT_EQ("value", value);
+}
+
 TEST(Parser_Tests, QuotedKeywordsAreMatched)
 {
 	std::stringstream input{"\"key\" = value"};
