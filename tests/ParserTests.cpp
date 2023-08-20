@@ -14,7 +14,7 @@ TEST(Parser_Tests, AbsorbBOMAbsorbsBOM)
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
-	ASSERT_EQ("More text", std::string{buffer});
+	EXPECT_EQ("More text", std::string{buffer});
 }
 
 TEST(Parser_Tests, AbsorbBOMDoesNotAbsorbNonBOM)
@@ -24,7 +24,7 @@ TEST(Parser_Tests, AbsorbBOMDoesNotAbsorbNonBOM)
 
 	char buffer[256];
 	input.getline(buffer, sizeof buffer);
-	ASSERT_EQ("More text", std::string{buffer});
+	EXPECT_EQ("More text", std::string{buffer});
 }
 
 TEST(Parser_Tests, KeywordsAreMatched)
@@ -46,8 +46,20 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("key", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+}
+
+TEST(Parser_Tests, FunctionObjectEquivalentToParse)
+{
+	std::stringstream input{"key = value"};
+	std::string value;
+	commonItems::parser parser{};
+	parser.registerKeyword("key", [&value](std::istream& theStream) {
+		value = commonItems::getString(theStream);
+	});
+	parser(input);
+	EXPECT_EQ("value", value);
 }
 
 TEST(Parser_Tests, QuotedKeywordsAreMatched)
@@ -69,8 +81,8 @@ TEST(Parser_Tests, QuotedKeywordsAreMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"key\"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
@@ -92,8 +104,8 @@ TEST(Parser_Tests, QuotedKeywordsAreQuotedlyMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"key\"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 
@@ -116,8 +128,8 @@ TEST(Parser_Tests, QuotedValuesAreParsed)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("key", test.key);
-	ASSERT_EQ("value quote", test.value);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value quote", test.value);
 }
 
 
@@ -140,8 +152,8 @@ TEST(Parser_Tests, QuotedValuesWithEscapedQuotesAreParsed)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("key", test.key);
-	ASSERT_EQ(R"(value \"quote\" string)", test.value);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ(R"(value \"quote\" string)", test.value);
 }
 
 
@@ -164,8 +176,8 @@ TEST(Parser_Tests, StringLiteralsAreParsed)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("key", test.key);
-	ASSERT_EQ(R"(value "quote" string)", test.value);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ(R"(value "quote" string)", test.value);
 }
 
 
@@ -212,8 +224,8 @@ TEST(Parser_Tests, RegexesAreMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("key", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, WrongRegexesAreIgnored)
@@ -258,8 +270,8 @@ TEST(Parser_Tests, QuotedRegexesAreMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"key\"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
@@ -281,8 +293,8 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"key\"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
@@ -304,8 +316,8 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"key\"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
@@ -330,8 +342,8 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithWhitespaceInside)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"this\tis a key \"", test.key); // newlines have been replaced with spaces. This is WAD.
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"this\tis a key \"", test.key); // newlines have been replaced with spaces. This is WAD.
+	EXPECT_EQ("value", test.value);
 }
 
 TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
@@ -356,8 +368,8 @@ TEST(Parser_Tests, CatchAllCatchesQuotedKeysWithFigurativeCrapInside)
 	};
 	const auto test = Test(input);
 
-	ASSERT_EQ("\"this = is a silly { key\t} \"", test.key);
-	ASSERT_EQ("value", test.value);
+	EXPECT_EQ("\"this = is a silly { key\t} \"", test.key);
+	EXPECT_EQ("value", test.value);
 }
 
 

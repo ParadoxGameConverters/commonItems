@@ -135,6 +135,10 @@ void commonItems::parser::clearRegisteredKeywords() noexcept
 	std::vector<std::pair<std::regex, parsingFunction>>().swap(generatedRegexes);
 }
 
+void commonItems::parser::operator()(std::istream& theStream)
+{
+	this->parseStream(theStream);
+}
 
 std::optional<std::string> commonItems::parser::getNextToken(std::istream& theStream)
 {
