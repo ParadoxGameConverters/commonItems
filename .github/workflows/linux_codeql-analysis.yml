@@ -27,7 +27,7 @@ jobs:
         submodules: recursive
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
@@ -37,7 +37,7 @@ jobs:
        ./build_linux.sh
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
@@ -61,7 +61,7 @@ jobs:
         submodules: recursive
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
@@ -77,4 +77,4 @@ jobs:
        bash ./build_linux_foreign.sh
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
