@@ -50,7 +50,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: build/lcoverage/coverage.info
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: coverage-report
         path: build/lcoverage/
