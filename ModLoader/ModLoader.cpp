@@ -202,9 +202,16 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 	for (const auto& possible_mod_folder: GetAllSubfolders(gameDocumentsPath))
 	{
 		const std::string metadata_location = gameDocumentsPath + "/" + possible_mod_folder + "/.metadata/metadata.json";
-		if (!DoesFileExist(metadata_location))
+		try
 		{
-			continue;
+			if (!DoesFileExist(metadata_location))
+			{
+				continue;
+			}
+		}
+		catch (std::exception&)
+		{
+			Log(LogLevel::Warning) << "\t\t\t! Invalid mod name [" << possible_mod_folder << "] caused exception";
 		}
 
 		ModParser theMod;
