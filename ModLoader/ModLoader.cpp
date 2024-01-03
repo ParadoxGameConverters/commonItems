@@ -212,6 +212,7 @@ void commonItems::ModLoader::cacheModNames(const std::string& gameDocumentsPath)
 		catch (std::exception&)
 		{
 			Log(LogLevel::Warning) << "\t\t\t! Invalid mod name [" << possible_mod_folder << "] caused exception";
+			continue;
 		}
 
 		ModParser theMod;
