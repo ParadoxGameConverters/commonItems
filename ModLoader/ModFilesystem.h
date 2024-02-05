@@ -15,6 +15,8 @@ namespace commonItems
 class ModFilesystem
 {
   public:
+	explicit ModFilesystem() = default;
+
 	// The constructor establishes the root of the filesystem.
 	// game_root points at the game's root folder, and all paths in the lookup functions will be based on that root.
 	// mods is a list of the mods applied, in increasing order of precedence. Later mods will override files in the game root or earlier mods, and their
