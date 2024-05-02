@@ -122,7 +122,7 @@ TEST(Date_Tests, DateLogsBadInitializationFromEmptyString)
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
-	const date testDate("");
+	{}(date(""));
 
 	std::cout.rdbuf(stdOutBuf);
 
@@ -136,7 +136,7 @@ TEST(Date_Tests, DateLogsBadInitializationFromBadString)
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
-	const date testDate("2020.january.32");
+	{}(date("2020.january.32"));
 
 	std::cout.rdbuf(stdOutBuf);
 
@@ -457,8 +457,6 @@ TEST(Date_Tests, negativeYearComponentsCanBeGotten)
 
 TEST(Date_Tests, IncompleteDateElementsDefaultTo1)
 {
-	const date testDate("450.-10.7");
-
 	ASSERT_EQ("1450.10.1", date("1450.10.").toString());
 	ASSERT_EQ("1450.10.1", date("1450.10").toString());
 	ASSERT_EQ("1450.1.1", date("1450.").toString());
