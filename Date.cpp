@@ -2,6 +2,7 @@
 #include "OSCompatibilityLayer.h"
 #include "StringUtils.h"
 #include <array>
+#include <vector>
 
 
 
@@ -37,30 +38,27 @@ int CommonItems::DaysInMonth(int month)
 
 date::date(std::string init, const bool AUC)
 {
-	if (init.length() < 1)
-	{
-		return;
-	}
-
 	init = commonItems::remQuotes(init);
 
-	const auto first_dot = init.find_first_of('.');
-	const auto last_dot = init.find_last_of('.');
-
-	try
-	{
-		year = stoi(init.substr(0, first_dot));
-		if (AUC)
-			year = convertAUCtoAD(year);
-		month = stoi(init.substr(first_dot + 1, last_dot - first_dot));
-		day = stoi(init.substr(last_dot + 1, 2));
+	std::vector<std::string> dateElements = GetDateElementStrings(init);
+	try {
+		if (dateElements.size() >= 3) {
+			year = std::stoi(dateElements[0]);
+			month = std::stoi(dateElements[1]);
+			day = std::stoi(dateElements[2]);
+		} else if (dateElements.size() == 2) {
+			year = std::stoi(dateElements[0]);
+			month = std::stoi(dateElements[1]);
+		} else if (dateElements.size() == 1) {
+			year = std::stoi(dateElements[0]);
+		} else {
+			Log(LogLevel::Warning) << "Problem constructing date: at least a year should be provided!";
+		}
+	} catch (std::exception& e) {
+		Log(LogLevel::Warning) << "Problem constructing date from string \"" + init + "\": " + e.what() + "!";
 	}
-	catch (const std::exception& e)
-	{
-		Log(LogLevel::Warning) << "Problem inputting date: " << e.what();
-		year = 1;
-		month = 1;
-		day = 1;
+	if (AUC) {
+		year = convertAUCtoAD(year);
 	}
 }
 
@@ -140,12 +138,6 @@ float date::diffInYears(const date& rhs) const
 }
 
 
-bool date::isSet() const
-{
-	return *this != date{};
-}
-
-
 std::string date::toString() const
 {
 	std::stringstream buf;
@@ -167,4 +159,15 @@ int date::calculateDayInYear() const
 		return day + days_by_month[static_cast<size_t>(month) - 1];
 
 	return day;
+}
+
+
+std::vector<std::string> GetDateElementStrings(const std::string &s) {
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream tokenStream(s);
+	while (std::getline(tokenStream, token, '.')) {
+		tokens.push_back(token);
+	}
+	return tokens;
 }

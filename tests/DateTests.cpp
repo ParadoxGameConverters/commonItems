@@ -75,11 +75,12 @@ TEST(Date_Tests, DaysInMonthCorrectForDecember)
 	EXPECT_EQ(CommonItems::DaysInMonth(12), 31);
 }
 
-TEST(Date_Tests, DefaultDateIsNotSet)
+
+TEST(Date_Tests, DateDefaultsToFirstJanuaryFirst)
 {
 	const date testDate;
 
-	ASSERT_FALSE(testDate.isSet());
+	ASSERT_EQ("1.1.1", testDate.toString());
 }
 
 
@@ -115,45 +116,31 @@ TEST(Date_Tests, DateInitializedFromEmptyStringIsDefault)
 }
 
 
-TEST(Date_Tests, DateLogsBadInitialization)
+TEST(Date_Tests, DateLogsBadInitializationFromEmptyString)
 {
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
-	const date testDate("2020.4");
+	const date testDate("");
 
 	std::cout.rdbuf(stdOutBuf);
 
-	EXPECT_THAT(log.str(), testing::HasSubstr("[WARNING] Problem inputting date:"));
+	EXPECT_THAT(log.str(), testing::HasSubstr("[WARNING] Problem constructing date: at least a year should be provided!"));
 }
 
 
-TEST(Date_Tests, DateIsNotSetOnBadInitialization)
+TEST(Date_Tests, DateLogsBadInitializationFromBadString)
 {
 	const std::stringstream log;
 	auto* const stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 
-	const date testDate("2020.4");
+	const date testDate("2020.january.32");
 
 	std::cout.rdbuf(stdOutBuf);
 
-	ASSERT_FALSE(testDate.isSet());
-}
-
-
-TEST(Date_Tests, DateIsOneJanuaryFirstOnBadInitialization)
-{
-	const std::stringstream log;
-	auto* const stdOutBuf = std::cout.rdbuf();
-	std::cout.rdbuf(log.rdbuf());
-
-	const date testDate("2020.4");
-
-	std::cout.rdbuf(stdOutBuf);
-
-	ASSERT_EQ("1.1.1", testDate.toString());
+	EXPECT_THAT(log.str(), testing::HasSubstr("[WARNING] Problem constructing date from string \"2020.january.32\":"));
 }
 
 
@@ -465,4 +452,15 @@ TEST(Date_Tests, negativeYearComponentsCanBeGotten)
 	ASSERT_EQ(-450, testDate.getYear());
 	ASSERT_EQ(10, testDate.getMonth());
 	ASSERT_EQ(7, testDate.getDay());
+}
+
+
+TEST(Date_Tests, IncompleteDateElementsDefaultTo1)
+{
+	const date testDate("450.-10.7");
+
+	ASSERT_EQ("1450.10.1", date("1450.10.").toString());
+	ASSERT_EQ("1450.10.1", date("1450.10").toString());
+	ASSERT_EQ("1450.1.1", date("1450.").toString());
+	ASSERT_EQ("1450.1.1", date("1450").toString());
 }
