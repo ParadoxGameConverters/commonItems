@@ -41,23 +41,34 @@ date::date(std::string init, const bool AUC)
 	init = commonItems::remQuotes(init);
 
 	std::vector<std::string> dateElements = GetDateElementStrings(init);
-	try {
-		if (dateElements.size() >= 3) {
+	try
+	{
+		if (dateElements.size() >= 3)
+		{
 			year = std::stoi(dateElements[0]);
 			month = std::stoi(dateElements[1]);
 			day = std::stoi(dateElements[2]);
-		} else if (dateElements.size() == 2) {
+		}
+		else if (dateElements.size() == 2)
+		{
 			year = std::stoi(dateElements[0]);
 			month = std::stoi(dateElements[1]);
-		} else if (dateElements.size() == 1) {
+		}
+		else if (dateElements.size() == 1)
+		{
 			year = std::stoi(dateElements[0]);
-		} else {
+		}
+		else
+		{
 			Log(LogLevel::Warning) << "Problem constructing date: at least a year should be provided!";
 		}
-	} catch (std::exception& e) {
+	}
+	catch (std::exception& e)
+	{
 		Log(LogLevel::Warning) << "Problem constructing date from string \"" + init + "\": " + e.what() + "!";
 	}
-	if (AUC) {
+	if (AUC)
+	{
 		year = convertAUCtoAD(year);
 	}
 }
@@ -162,11 +173,13 @@ int date::calculateDayInYear() const
 }
 
 
-std::vector<std::string> GetDateElementStrings(const std::string &s) {
+std::vector<std::string> GetDateElementStrings(const std::string& s)
+{
 	std::vector<std::string> tokens;
 	std::string token;
 	std::istringstream tokenStream(s);
-	while (std::getline(tokenStream, token, '.')) {
+	while (std::getline(tokenStream, token, '.'))
+	{
 		tokens.push_back(token);
 	}
 	return tokens;
