@@ -35,12 +35,24 @@ int CommonItems::DaysInMonth(int month)
 }
 
 
+std::vector<std::string> getDateElementStrings(const std::string& s)
+{
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream tokenStream(s);
+	while (std::getline(tokenStream, token, '.'))
+	{
+		tokens.push_back(token);
+	}
+	return tokens;
+}
+
 
 date::date(std::string init, const bool AUC)
 {
 	init = commonItems::remQuotes(init);
 
-	std::vector<std::string> dateElements = GetDateElementStrings(init);
+	std::vector<std::string> dateElements = getDateElementStrings(init);
 	try
 	{
 		if (dateElements.size() >= 3)
@@ -170,17 +182,4 @@ int date::calculateDayInYear() const
 		return day + days_by_month[static_cast<size_t>(month) - 1];
 
 	return day;
-}
-
-
-std::vector<std::string> GetDateElementStrings(const std::string& s)
-{
-	std::vector<std::string> tokens;
-	std::string token;
-	std::istringstream tokenStream(s);
-	while (std::getline(tokenStream, token, '.'))
-	{
-		tokens.push_back(token);
-	}
-	return tokens;
 }
