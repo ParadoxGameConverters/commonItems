@@ -430,6 +430,11 @@ std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const
 
 		line = line.substr(0, pos);
 
+		if (!line.empty() && line[0] == 'v')
+		{
+			line = line.substr(1, line.length());
+		}
+
 		try
 		{
 			return GameVersion(line);

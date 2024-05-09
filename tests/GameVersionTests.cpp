@@ -432,6 +432,14 @@ TEST(GameVersion_Tests, extractVersionFromLauncherExtractsGameVersion)
 	EXPECT_EQ(GameVersion("1.31.5"), *version);
 }
 
+TEST(GameVersion_Tests, extractVVersionFromLauncherExtractsGameVersion)
+{
+	// They started adding v in front of a version, eg. v1.37.0.0
+	const auto version = GameVersion::extractVersionFromLauncher("launcher-settings-1.37.json");
+
+	EXPECT_EQ(GameVersion("1.37.0"), *version);
+}
+
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsNulloptForMissingFile)
 {
 	const auto version = GameVersion::extractVersionFromLauncher("launcher-settings.json2");

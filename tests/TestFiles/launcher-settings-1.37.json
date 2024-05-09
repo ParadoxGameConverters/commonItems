@@ -1,0 +1,13 @@
+{
+	"gameId": "eu4",
+	"displayName": "Europa Universalis IV",
+	"version": "EU4 v1.37.0.0 Inca (3d19)",
+	"rawVersion": "v1.37.0.0",
+	"distPlatform": "steam",
+	"gameDataPath": "%USER_DOCUMENTS%/Paradox Interactive/Europa Universalis IV",
+	"ingameSettingsLayoutPath": "settings-layout.json",
+	"themeFile": "launcher-assets/theme-settings.json",
+	"browserDlcUrl": "https://www.paradoxplaza.com/games/?prefn1=pdx-brand&amp;prefn2=pdx-type&amp;prefv1=EU4%7CEuropa%20Universalis&amp;prefv2=dlc",
+	"exePath": "./eu4.exe",
+	"exeArgs": [ "-enabletelemetry", "-gdpr-compliant" ]
+}
