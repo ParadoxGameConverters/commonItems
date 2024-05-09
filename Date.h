@@ -59,7 +59,6 @@ class date
 	[[nodiscard]] auto getDay() const { return day; }
 
 	[[nodiscard]] float diffInYears(const date& rhs) const;
-	[[nodiscard]] bool isSet() const;
 	[[nodiscard]] std::string toString() const;
 
 	friend std::ostream& operator<<(std::ostream& out, const date& date);
