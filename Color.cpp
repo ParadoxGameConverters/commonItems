@@ -14,7 +14,7 @@
 
 
 commonItems::Color::Color(std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) {
-	for (auto& component: rgbComponents)
+	for (auto& component: this->rgbComponents)
 	{
 		if (component < 0)
 		{
