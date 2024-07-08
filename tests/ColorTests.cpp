@@ -990,5 +990,44 @@ TEST(Color_Tests, ColorPaletteCanBeCleared)
 	ASSERT_TRUE(colorFactory.getRegisteredColors().empty());
 }
 
+TEST(Color_Tests, InvalidRgbComponentsAreClamped)
+{
+	commonItems::Color testColor(std::array<int, 3>{-1, 10, 10});
+	auto [r1, g1, b1] = testColor.getRgbComponents();
+	ASSERT_EQ(0, r1);
+	ASSERT_EQ(10, g1);
+	ASSERT_EQ(10, b1);
+
+	testColor = commonItems::Color(std::array<int, 3>{300, 10, 10});
+	auto [r2, g2, b2] = testColor.getRgbComponents();
+	ASSERT_EQ(255, r2);
+	ASSERT_EQ(10, g2);
+	ASSERT_EQ(10, b2);
+
+	testColor = commonItems::Color(std::array<int, 3>{10, -1, 10});
+	auto [r3, g3, b3] = testColor.getRgbComponents();
+	ASSERT_EQ(10, r3);
+	ASSERT_EQ(0, g3);
+	ASSERT_EQ(10, b3);
+
+	testColor = commonItems::Color(std::array<int, 3>{10, 300, 10});
+	auto [r4, g4, b4] = testColor.getRgbComponents();
+	ASSERT_EQ(10, r4);
+	ASSERT_EQ(255, g4);
+	ASSERT_EQ(10, b4);
+
+	testColor = commonItems::Color(std::array<int, 3>{10, 10, -1});
+	auto [r5, g5, b5] = testColor.getRgbComponents();
+	ASSERT_EQ(10, r5);
+	ASSERT_EQ(10, g5);
+	ASSERT_EQ(0, b5);
+
+	testColor = commonItems::Color(std::array<int, 3>{10, 10, 300});
+	auto [r6, g6, b6] = testColor.getRgbComponents();
+	ASSERT_EQ(10, r6);
+	ASSERT_EQ(10, g6);
+	ASSERT_EQ(255, b6);
+}
+
 
 // RandomlyFluctuate() isn't easily testable, so skipped

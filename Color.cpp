@@ -1,5 +1,6 @@
 #include "Color.h"
 #include "CommonRegexes.h"
+#include "Log.h"
 #include "ParserHelpers.h"
 #include "StringUtils.h"
 #include <algorithm>
@@ -10,6 +11,26 @@
 #include <regex>
 #include <sstream>
 
+
+
+commonItems::Color::Color(std::array<int, 3> rgbComponents): rgbComponents(rgbComponents)
+{
+	for (auto& component: this->rgbComponents)
+	{
+		if (component < 0)
+		{
+			Log(LogLevel::Warning) << "RGB color component " << component << " is less than 0. Clamping to 0.";
+			component = 0;
+		}
+		else if (component > 255)
+		{
+			Log(LogLevel::Warning) << "RGB color component " << component << " is greater than 255. Clamping to 255.";
+			component = 255;
+		}
+	}
+
+	deriveHsvFromRgb();
+}
 
 
 std::string commonItems::Color::outputRgb() const

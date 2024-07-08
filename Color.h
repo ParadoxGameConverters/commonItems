@@ -47,7 +47,7 @@ class Color
   public:
 	class Factory;
 	Color() = default;
-	explicit Color(std::array<int, 3> rgbComponents): rgbComponents(rgbComponents) { deriveHsvFromRgb(); }
+	explicit Color(std::array<int, 3> rgbComponents);
 	explicit Color(std::array<int, 3> rgbComponents, float alpha): rgbComponents(rgbComponents), alpha(alpha) { deriveHsvFromRgb(); }
 	explicit Color(std::array<float, 3> hsvComponents): hsvComponents(hsvComponents) { deriveRgbFromHsv(); }
 	explicit Color(std::array<float, 3> hsvComponents, float alpha): hsvComponents(hsvComponents), alpha(alpha) { deriveRgbFromHsv(); }
