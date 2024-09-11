@@ -766,6 +766,15 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedStringAfterEquals)
 	ASSERT_EQ("foo", theString.getString());
 }
 
+TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
+{
+	std::stringstream input{" = \"{\" "};
+
+	const commonItems::singleString theString(input);
+
+	ASSERT_EQ("{", theString.getString());
+}
+
 
 TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
 {
@@ -794,6 +803,33 @@ TEST(ParserHelper_Tests, StringOfItemConvertsBracedObjectsToStrings)
 	input << "\t\tid = 180\n";
 	input << "\t\ttype = 46\n";
 	input << "\t}\n";
+	input << "}";
+
+	const commonItems::stringOfItem theItem(input);
+
+	ASSERT_EQ(input.str(), theItem.getString());
+}
+
+TEST(ParserHelper_Tests, StringOfItemHandlesQuotedCurlyBracesInString)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "= \"blah { blah \"";
+
+	const commonItems::stringOfItem theItem(input);
+
+	ASSERT_EQ(input.str(), theItem.getString());
+}
+
+TEST(ParserHelper_Tests, StringOfItemHandlesNestedQuotedCurlyBraces)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "= {\n";
+	input << "\t{\n";
+	input << "\t\tid = \"{\"\n";
+	input << "\t\ttype = 46\n";
+	input << "\t} bla\n";
 	input << "}";
 
 	const commonItems::stringOfItem theItem(input);
@@ -840,6 +876,21 @@ TEST(ParserHelper_Tests, StringOfItemNamesConvertsItemNamesWithinBracesToStrings
 	input << "\t\tid = 180\n";
 	input << "\t\ttype = 46\n";
 	input << "\t}\n";
+	input << "\tbar = baz\n";
+	input << "}";
+
+	const commonItems::stringsOfItemNames theItemNames(input);
+
+	const auto expectedStrings = std::vector<std::string>{"foo", "bar"};
+	ASSERT_EQ(expectedStrings, theItemNames.getStrings());
+}
+
+TEST(ParserHelper_Tests, StringOfItemNamesIgnoresQuotedCurlyBraceValues)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "= {\n";
+	input << "\tfoo = \"{\" \n";
 	input << "\tbar = baz\n";
 	input << "}";
 
