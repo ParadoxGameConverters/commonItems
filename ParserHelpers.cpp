@@ -480,6 +480,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 	if (next == "{")
 	{
+		bool inQuotes = false;
 		auto braceDepth = 1;
 		while (true)
 		{
@@ -493,11 +494,22 @@ stringOfItem::stringOfItem(std::istream& theStream)
 
 			theString += inputChar;
 
-			if (inputChar == '{')
+			if (inputChar == '\"')
+			{
+				if (!inQuotes)
+				{
+					inQuotes = true;
+				}
+				else
+				{
+					inQuotes = false;
+				}
+			}
+			if (inputChar == '{' && !inQuotes)
 			{
 				braceDepth++;
 			}
-			else if (inputChar == '}')
+			else if (inputChar == '}' && !inQuotes)
 			{
 				braceDepth--;
 				if (braceDepth == 0)
