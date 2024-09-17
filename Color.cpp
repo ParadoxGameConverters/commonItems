@@ -288,11 +288,18 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		// This is a double list.
 		auto doubleStream = std::stringstream(questionableList);
 		auto rgb = getDoubles(doubleStream);
-		if (rgb.size() == 3) // This is not HSV, this is RGB doubles. Multiply by 255 and round to get normal rgb.
+		if (rgb.size() == 3)
+		{
+			// This is not HSV, this is RGB doubles. Just convert to ints to get normal RGB.
+			if (rgb[0] > 1 || rgb[1] > 1 || rgb[3] > 1)
+				return Color(std::array{static_cast<int>(std::round(rgb[0])), static_cast<int>(std::round(rgb[1])), static_cast<int>(std::round(rgb[2]))});
+
+			// If all RGB values are in the range 0-1, multiply by 255 and round to get normal RGB.
 			return Color(std::array{static_cast<int>(std::round(rgb[0] * 255.0)),
 				 static_cast<int>(std::round(rgb[1] * 255.0)),
 				 static_cast<int>(std::round(rgb[2] * 255.0))});
-		if (rgb.size() == 4) // this is a RGBA double situation. We shouldn't touch alpha.
+		}
+		if (rgb.size() == 4) // this is an RGBA double situation. We shouldn't touch alpha.
 			return Color(std::array{static_cast<int>(std::round(rgb[0] * 255.0)),
 								  static_cast<int>(std::round(rgb[1] * 255.0)),
 								  static_cast<int>(std::round(rgb[2] * 255.0))},
