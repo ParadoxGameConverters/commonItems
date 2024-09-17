@@ -291,7 +291,7 @@ commonItems::Color commonItems::Color::Factory::getColor(std::istream& theStream
 		if (rgb.size() == 3)
 		{
 			// This is not HSV, this is RGB doubles. Just convert to ints to get normal RGB.
-			if (rgb[0] > 1 || rgb[1] > 1 || rgb[3] > 1)
+			if (rgb[0] > 1 || rgb[1] > 1 || rgb[2] > 1)
 				return Color(std::array{static_cast<int>(std::round(rgb[0])), static_cast<int>(std::round(rgb[1])), static_cast<int>(std::round(rgb[2]))});
 
 			// If all RGB values are in the range 0-1, multiply by 255 and round to get normal RGB.
