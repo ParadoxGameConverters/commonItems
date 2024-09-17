@@ -345,6 +345,23 @@ TEST(Color_Tests, ColorCanBeInitializedFromStream)
 	ASSERT_NEAR(0.5f, v, 0.01);
 }
 
+TEST(Color_Tests, ColorIsCorrectlyConstructedFromRGBFloats)
+{
+	std::stringstream input;
+	input << "= { 49.0 35.0 58.0 }";
+	const auto testColor = commonItems::Color::Factory{}.getColor(input);
+
+	auto [r, g, b] = testColor.getRgbComponents();
+	ASSERT_EQ(49, r);
+	ASSERT_EQ(35, g);
+	ASSERT_EQ(58, b);
+
+	auto [h, s, v] = testColor.getHsvComponents();
+	ASSERT_NEAR(0.7681f, h, 0.01);
+	ASSERT_NEAR(0.39655f, s, 0.01);
+	ASSERT_NEAR(0.22745f, v, 0.01);
+}
+
 TEST(Color_Tests, ColorRGBDoublesCanBeInitializedFromStream) // Yes, this is a thing.
 {
 	std::stringstream input;
