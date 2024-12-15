@@ -92,7 +92,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 	}
 
 	const auto isspace = [](char x) {
-		return std::isspace(x);
+		return std::isspace(static_cast<unsigned char>(x));
 	};
 	const auto first_non_space = std::ranges::find_if_not(line, isspace);
 	if (first_non_space == line.end() || *first_non_space == '#')
