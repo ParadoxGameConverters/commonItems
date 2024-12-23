@@ -92,13 +92,12 @@ jobs:
 
     - name: Run gcov
       run: |
-       cd build
+       cd build/x64-release-linux
        make gcov
 
     - name: Run lcov
       run: |
-       cd build
-       pwd
+       cd build/x64-release-linux
        make lcov
 
     - name: Coveralls
