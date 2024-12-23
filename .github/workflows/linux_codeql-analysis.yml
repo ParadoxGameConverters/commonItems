@@ -72,9 +72,8 @@ jobs:
        sudo apt-get install libgtest-dev
        sudo ln -s /usr/bin/gcc-11 /usr/local/bin/gcc
        sudo ln -s /usr/bin/g++-11 /usr/local/bin/g++
-       # Run your build commands next
-       chmod u+x ./build_linux_foreign.sh
-       bash ./build_linux_foreign.sh
+       cmake --preset x64-release-linux
+       cmake -build --preset x64-release-linux --target CommonItemsTests -- -j3
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

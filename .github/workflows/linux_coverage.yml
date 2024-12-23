@@ -81,7 +81,8 @@ jobs:
        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov
-       cmake -H. -Bbuild && cmake --build ./build --target CommonItemsTests -- -j3
+       cmake --preset x64-release-linux
+       cmake -build --preset x64-release-linux --target CommonItemsTests -- -j3
 
     - name: Run tests
       run: |
