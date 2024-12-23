@@ -73,7 +73,7 @@ jobs:
        sudo ln -s /usr/bin/gcc-11 /usr/local/bin/gcc
        sudo ln -s /usr/bin/g++-11 /usr/local/bin/g++
        cmake --preset x64-release-linux
-       cmake --build --preset build-x64-release-linux --target CommonItemsTests -- -j40
+       cmake --build --preset build-x64-release-linux --target commonLib CommonItemsTests -- -j40
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
