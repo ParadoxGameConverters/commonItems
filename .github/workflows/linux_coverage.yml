@@ -42,7 +42,8 @@ jobs:
       run: |
         pwd
         ls
-        ls CMakeFiles
+        ls build
+        ls CommonItems
         cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
