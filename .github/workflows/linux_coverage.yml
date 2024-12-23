@@ -37,12 +37,10 @@ jobs:
 
     - name: Run gcov
       run: |
-       cd build/x64-release-linux
        make gcov
 
     - name: Run lcov
       run: |
-       cd build/x64-release-linux
        make lcov
 
     - name: Coveralls
@@ -92,12 +90,10 @@ jobs:
 
     - name: Run gcov
       run: |
-       cd build/x64-release-linux
        make gcov
 
     - name: Run lcov
       run: |
-       cd build/x64-release-linux
        make lcov
 
     - name: Coveralls
