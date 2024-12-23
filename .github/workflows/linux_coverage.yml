@@ -27,12 +27,12 @@ jobs:
 
     - name: Build solution
       run: |
-       cmake --preset x64-release-linux
-       cmake --build --preset build-x64-release-linux --target CommonItemsTests -- -j40
+       cmake --preset x64-coverage-linux
+       cmake --build --preset build-x64-coverage-linux --target CommonItemsTests gcov lcov -- -j40
 
     - name: Run tests
       run: |
-       cd build/x64-release-linux
+       cd build/x64-coverage-linux
        ./CommonItemsTests
 
     - name: Run gcov
@@ -80,12 +80,12 @@ jobs:
        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov
-       cmake --preset x64-release-linux
-       cmake --build --preset build-x64-release-linux --target commonLib CommonItemsTests gcov lcov -- -j40
+       cmake --preset x64-coverage-linux
+       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests gcov lcov -- -j40
 
     - name: Run tests
       run: |
-       cd build/x64-release-linux
+       cd build/x64-coverage-linux
        ./CommonItemsTests
 
     - name: Run gcov
