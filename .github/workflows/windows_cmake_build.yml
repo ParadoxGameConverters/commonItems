@@ -38,6 +38,7 @@ jobs:
     - name: "Run tests"
       run: |
        cd $Env:GITHUB_WORKSPACE\build\x64-release-windows
+       dir /w
        .\CommonItemsTests.exe
 
     - name: "Cleanup"
