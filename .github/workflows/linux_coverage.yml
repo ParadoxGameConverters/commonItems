@@ -28,7 +28,7 @@ jobs:
     - name: Build solution
       run: |
        cmake --preset x64-release-linux
-       cmake --build --preset x64-release-linux --target CommonItemsTests -- -j40
+       cmake --build --preset build-x64-release-linux --target CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
@@ -83,7 +83,7 @@ jobs:
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov
        cmake --preset x64-release-linux
-       cmake --build --preset x64-release-linux --target CommonItemsTests -- -j40
+       cmake --build --preset build-x64-release-linux --target CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
