@@ -28,7 +28,7 @@ jobs:
     - name: Build solution
       run: |
        cmake --preset x64-release-linux
-       cmake --build --preset build-x64-release-linux --target CommonItemsTests gcov lcov -- -j40
+       cmake --build --preset build-x64-release-linux --target CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
