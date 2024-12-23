@@ -32,7 +32,7 @@ jobs:
 
     - name: Run tests
       run: |
-       cd build
+       cd build/x64-release-linux
        ./CommonItemsTests
 
     - name: Run gcov
