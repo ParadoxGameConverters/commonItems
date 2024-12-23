@@ -1,16 +1,28 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.25)
 project(CommonItemsTests)
 
 # Include directories
 include_directories(.)
-include_directories(/usr/include)
-link_directories(/usr/lib)
+if (PLATFORM STREQUAL "Linux")
+    include_directories(/usr/include)
+    link_directories(/usr/lib)
+endif (PLATFORM STREQUAL "Linux")
 
 # Set the compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20 -g -O0")
-set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -fprofile-arcs -ftest-coverage")
-set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
+set(CMAKE_CXX_STANDARD 23)
+set (UNICODE_DEFAULT OFF)
+
+if (PLATFORM STREQUAL "Windows")
+	ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+elseif (PLATFORM STREQUAL "Linux")
+    set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
+	if (COVERAGE STREQUAL true)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+		set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
+	else (COVERAGE STREQUAL true)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall")
+	endif (COVERAGE STREQUAL true)
+endif (PLATFORM STREQUAL "Windows")
 
 # Create OBJECT_DIR variable
 set(OBJECT_DIR ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir)
@@ -23,48 +35,52 @@ add_subdirectory("external/googletest" "googletest")
 ################################################################################
 # Source groups
 ################################################################################
-set(commonItems
-    "Color.cpp"
-    "Color.h"
-    "CommonFunctions.cpp"
-    "CommonFunctions.h"
-    "CommonRegexes.h"
-    "ConvenientParser.cpp"
-    "ConvenientParser.h"
-    "ConverterVersion.cpp"
-    "ConverterVersion.h"
-    "Date.cpp"
-    "Date.h"
-    "GameVersion.cpp"
-    "GameVersion.h"
-    "iconvlite.cpp"
-    "iconvlite.h"
-    "LinuxUtils.cpp"
-    "Log.cpp"
-    "Log.h"
-	"Localization/LocalizationBlock.cpp"
-	"Localization/LocalizationBlock.h"
-	"Localization/LocalizationDatabase.cpp"
-	"Localization/LocalizationDatabase.h"
-	"Localization/LocalizationLambdas.h"
-	"ModLoader/Mod.h"
-	"ModLoader/ModFilesystem.cpp"
-    "ModLoader/ModFilesystem.h"
-    "ModLoader/ModLoader.cpp"
-    "ModLoader/ModLoader.h"
-    "ModLoader/ModParser.cpp"
-    "ModLoader/ModParser.h"
-    "OSCommonLayer.cpp"
-    "OSCompatibilityLayer.h"
-    "Parser.cpp"
-    "Parser.h"
-    "ParserHelpers.cpp"
-    "ParserHelpers.h"
-    "StringUtils.cpp"
-    "StringUtils.h"
-    "external/zip/src/zip.c"
+set(COMMON_SOURCES ${COMMON_SOURCES} "Color.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Color.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "CommonFunctions.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "CommonFunctions.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "CommonRegexes.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ConvenientParser.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ConvenientParser.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ConverterVersion.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ConverterVersion.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Date.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Date.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "GameVersion.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "GameVersion.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "iconvlite.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "iconvlite.h")
+if (PLATFORM STREQUAL "Windows")
+	set(COMMON_SOURCES ${COMMON_SOURCES} "WinUtils.cpp")
+elseif (PLATFORM STREQUAL "Linux")
+	set(COMMON_SOURCES ${COMMON_SOURCES} "LinuxUtils.cpp")
+endif (PLATFORM STREQUAL "Windows")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Log.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Log.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationBlock.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationBlock.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationDatabase.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationDatabase.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationLambdas.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/Mod.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModFilesystem.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModFilesystem.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModLoader.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModLoader.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModParser.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModParser.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "OSCommonLayer.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "OSCompatibilityLayer.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Parser.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Parser.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "external/zip/src/zip.c")
+add_library(commonLib
+	${COMMON_SOURCES}
 )
-source_group("commonItems" FILES ${commonItems})
 
 set(tests
 	"tests/test_main.cpp"
@@ -89,17 +105,12 @@ set(tests
 )
 source_group("tests" FILES ${tests})
 
-set(ALL_FILES
-    ${commonItems}
-    ${tests}
-)
-
 
 ################################################################################
 # Target
 ################################################################################
-add_executable(${PROJECT_NAME} ${ALL_FILES})
-
+add_executable(${PROJECT_NAME} ${tests})
+target_link_libraries(${PROJECT_NAME} commonLib)
 
 ################################################################################
 # Test Files
@@ -183,15 +194,3 @@ enable_testing()
 # Link test executable against gtest & gtest_main
 target_link_libraries(${PROJECT_NAME} gtest gtest_main gmock )
 add_test( runUnitTests ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} )
-
-################################
-# Clang-tidy
-################################
-
-find_program(CLANG_TIDY_EXE NAMES "clang-tidy")
-set(CLANG_TIDY_COMMAND "${CLANG_TIDY_EXE}")
-add_library(run_clang_tidy
-	${ALL_FILES}
-)
-target_link_libraries(run_clang_tidy pthread)
-set_target_properties(run_clang_tidy PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
