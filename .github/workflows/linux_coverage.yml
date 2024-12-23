@@ -50,8 +50,10 @@ jobs:
         ls build/x64-coverage-linux
         echo --- ls build/x64-coverage-linux/CMakeFiles
         ls build/x64-coverage-linux/CMakeFiles
-        echo --- ls CommonItems
-        ls CommonItems
+        echo --- ls build/x64-coverage-linux/CMakeFiles/commonLib.dir
+        ls build/x64-coverage-linux/CMakeFiles/commonLib.dir
+        echo --- ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir
+        ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir
         cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
