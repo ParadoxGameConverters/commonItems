@@ -40,10 +40,15 @@ jobs:
 
     - name: Run lcov
       run: |
+        echo pwd
         pwd
+        echo ls .
         ls .
+        echo ls build
         ls build
+        echo ls CommonItems
         ls CommonItems
+        echo ls CommonItems/build
         ls CommonItems/build
         cmake --build --preset build-x64-coverage-linux --target lcov
 
