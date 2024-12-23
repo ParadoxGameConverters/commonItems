@@ -121,71 +121,70 @@ file(COPY "tests/TestFiles/" DESTINATION "./")
 ################################
 # Coverage
 ################################
-add_custom_target(gcov
-	COMMAND mkdir -p gcoverage
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-add_custom_command(TARGET gcov
-	COMMAND echo "=================== GCOV ===================="
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationBlock.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationDatabase.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModFilesystem.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModLoader.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
-	#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
-	COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
-)
+if (COVERAGE STREQUAL true)
+	add_custom_target(gcov
+		COMMAND mkdir -p gcoverage
+	)
+	add_custom_command(TARGET gcov
+		COMMAND echo "=================== GCOV ===================="
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationBlock.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Localization/LocalizationDatabase.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/Localization
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModFilesystem.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModLoader.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ModLoader/ModParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir/ModLoader
+		#COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CardinalToOrdinal.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Color.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/CommonFunctions.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConvenientParser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ConverterVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Date.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/GameVersion.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/iconvlite.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/LinuxUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Log.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/OSCommonLayer.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/Parser.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/ParserHelpers.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+		COMMAND gcov -b ${CMAKE_SOURCE_DIR}/StringUtils.cpp -o ${CMAKE_BINARY_DIR}/CMakeFiles/CommonItemsTests.dir
+	)
 
-add_custom_target(lcov
-	COMMAND mkdir -p lcoverage
-)
-add_custom_command(TARGET lcov
-	COMMAND rm -rf CMakeFiles/CommonItemsTests.dir/tests
-	COMMAND echo "=================== LCOV ===================="
-	COMMAND echo "-- Passing lcov tool under code coverage"
-	COMMAND lcov --c --d CMakeFiles --o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/11/bits/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
-	COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info
-	COMMAND echo "-- Generating HTML output files"
-	COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
-)
-add_dependencies(gcov ${PROJECT_NAME})
+	add_custom_target(lcov
+		COMMAND mkdir -p lcoverage
+	)
+	add_custom_command(TARGET lcov
+		COMMAND rm -rf CMakeFiles/CommonItemsTests.dir/tests
+		COMMAND echo "=================== LCOV ===================="
+		COMMAND echo "-- Passing lcov tool under code coverage"
+		COMMAND lcov --c --d CMakeFiles --o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/11/bits/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info
+		COMMAND echo "-- Generating HTML output files"
+		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
+	)
+	add_dependencies(gcov ${PROJECT_NAME})
 
-# Make sure to clean up the coverage folder
-set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
+	# Make sure to clean up the coverage folder
+	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
 
-# Create the gcov-clean target. This cleans the build as well as generated 
-# .gcda and .gcno files.
-add_custom_target(init
-	COMMAND ${CMAKE_MAKE_PROGRAM} clean
-	COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcno
-	COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcda
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
+	# Create the gcov-clean target. This cleans the build as well as generated 
+	# .gcda and .gcno files.
+	add_custom_target(init
+		COMMAND ${CMAKE_MAKE_PROGRAM} clean
+		COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcno
+		COMMAND rm -f ${TEST_OUTPUT_DIRECTORY}/*.gcda
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	)
+endif (COVERAGE STREQUAL true)
 
 ################################
 # Unit Tests
