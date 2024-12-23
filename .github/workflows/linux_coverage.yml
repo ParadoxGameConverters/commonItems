@@ -8,7 +8,7 @@ on:
 
 jobs:
   analyze_main:
-    name: Analyze Local
+    name: Coverage Check Local
     if: github.repository_owner == 'ParadoxGameConverters'
     runs-on: [self-hosted, linux]
 
@@ -61,7 +61,7 @@ jobs:
       if: always()
 
   analyze:
-    name: Analyze Foreign
+    name: Coverage Check Foreign
     if: github.repository_owner != 'ParadoxGameConverters'
     runs-on: ubuntu-latest
 
