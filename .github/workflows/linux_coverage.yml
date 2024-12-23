@@ -28,7 +28,7 @@ jobs:
     - name: Build solution
       run: |
        cmake --preset x64-coverage-linux
-       cmake --build --preset build-x64-coverage-linux --target CommonItemsTests gcov lcov -- -j40
+       cmake --build --preset build-x64-coverage-linux --target CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
@@ -36,12 +36,10 @@ jobs:
        ./CommonItemsTests
 
     - name: Run gcov
-      run: |
-       make gcov
+      run: run: cmake --build --preset build-x64-coverage-linux --target gcov
 
     - name: Run lcov
-      run: |
-       make lcov
+      run: run: cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
@@ -81,7 +79,7 @@ jobs:
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov
        cmake --preset x64-coverage-linux
-       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests gcov lcov -- -j40
+       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
@@ -89,12 +87,10 @@ jobs:
        ./CommonItemsTests
 
     - name: Run gcov
-      run: |
-       make gcov
+      run: run: cmake --build --preset build-x64-coverage-linux --target gcov
 
     - name: Run lcov
-      run: |
-       make lcov
+      run: run: cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
