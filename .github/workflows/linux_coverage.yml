@@ -48,6 +48,8 @@ jobs:
         ls build
         echo --- ls build/x64-coverage-linux
         ls build/x64-coverage-linux
+        echo --- ls build/x64-coverage-linux/CMakeFiles
+        ls build/x64-coverage-linux/CMakeFiles
         echo --- ls CommonItems
         ls CommonItems
         cmake --build --preset build-x64-coverage-linux --target lcov

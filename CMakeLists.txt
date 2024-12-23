@@ -154,7 +154,7 @@ if (COVERAGE STREQUAL true)
 	add_custom_command(TARGET lcov
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --c --d CMakeFiles/CommonItemTests.dir --d CMakeFiles/CommonItemTests.dir --o lcoverage/coverage.info
+		COMMAND lcov --c --d build/x64-coverage-linux/CMakeFiles/CommonItemTests.dir --d build/x64-coverage-linux/CMakeFiles/CommonItemTests.dir --o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info
