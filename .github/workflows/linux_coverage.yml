@@ -39,35 +39,18 @@ jobs:
       run: cmake --build --preset build-x64-coverage-linux --target gcov
 
     - name: Run lcov
-      run: |
-        echo --- pwd
-        pwd
-        echo --- ls .
-        ls .
-        echo --- ls build
-        ls build
-        echo --- ls build/x64-coverage-linux
-        ls build/x64-coverage-linux
-        echo --- ls build/x64-coverage-linux/CMakeFiles
-        ls build/x64-coverage-linux/CMakeFiles
-        echo --- ls build/x64-coverage-linux/CMakeFiles/commonLib.dir
-        ls build/x64-coverage-linux/CMakeFiles/commonLib.dir
-        echo --- ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir
-        ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir
-        echo --- ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir/tests
-        ls build/x64-coverage-linux/CMakeFiles/CommonItemsTests.dir/tests
-        cmake --build --preset build-x64-coverage-linux --target lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: build/lcoverage/coverage.info
+        path-to-lcov: build/x64-coverage-linux/lcoverage/coverage.info
 
     - uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: build/lcoverage/
+        path: build/x64-coverage-linux/lcoverage/
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
