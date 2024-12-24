@@ -145,12 +145,11 @@ if (COVERAGE STREQUAL true)
 		COMMAND echo "-- Generating HTML output files"
 		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
 	)
-	add_dependencies(gcov ${PROJECT_NAME})
 
 	# Make sure to clean up the coverage folder
 	set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES gcoverage)
 
-	# Create the gcov-clean target. This cleans the build as well as generated 
+	# Create the clean target. This cleans the build as well as generated 
 	# .gcda and .gcno files.
 	add_custom_target(init
 		COMMAND ${CMAKE_MAKE_PROGRAM} clean
