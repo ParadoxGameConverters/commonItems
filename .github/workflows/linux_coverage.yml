@@ -8,7 +8,7 @@ on:
 
 jobs:
   analyze_main:
-    name: Analyze Local
+    name: Coverage Check Local
     if: github.repository_owner == 'ParadoxGameConverters'
     runs-on: [self-hosted, linux]
 
@@ -27,40 +27,34 @@ jobs:
 
     - name: Build solution
       run: |
-       cmake -H. -Bbuild && cmake --build ./build --target CommonItemsTests -- -j40
+       cmake --preset x64-coverage-linux
+       cmake --build --preset build-x64-coverage-linux --target CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
-       cd build
+       cd build/x64-coverage-linux
        ./CommonItemsTests
 
-    - name: Run gcov
-      run: |
-       cd build
-       make gcov
-
     - name: Run lcov
-      run: |
-       cd build
-       make lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: build/lcoverage/coverage.info
+        path-to-lcov: build/x64-coverage-linux/lcoverage/coverage.info
 
     - uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: build/lcoverage/
+        path: build/x64-coverage-linux/lcoverage/
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
       if: always()
 
   analyze:
-    name: Analyze Foreign
+    name: Coverage Check Foreign
     if: github.repository_owner != 'ParadoxGameConverters'
     runs-on: ubuntu-latest
 
@@ -81,23 +75,16 @@ jobs:
        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov
-       cmake -H. -Bbuild && cmake --build ./build --target CommonItemsTests -- -j3
+       cmake --preset x64-coverage-linux
+       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests -- -j40
 
     - name: Run tests
       run: |
-       cd build
+       cd build/x64-coverage-linux
        ./CommonItemsTests
 
-    - name: Run gcov
-      run: |
-       cd build
-       make gcov
-
     - name: Run lcov
-      run: |
-       cd build
-       pwd
-       make lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov
 
     - name: Coveralls
       uses: coverallsapp/github-action@master

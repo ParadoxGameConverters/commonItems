@@ -541,7 +541,7 @@ std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::s
 		return std::nullopt;
 	}
 	line = line.substr(0, pos);
-	if (!std::isdigit(*line.begin()))
+	if (line.empty() || !std::isdigit(*line.begin()))
 	{
 		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " has broken version.";
 		return std::nullopt;
