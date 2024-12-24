@@ -167,7 +167,7 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/include/nlohmann/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/nlohmann/*" -o lcoverage/coverage.info
 		COMMAND echo "-- Generating HTML output files"
 		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
 	)
