@@ -162,11 +162,11 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info
-		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info
-		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
-		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
-		COMMAND lcov --remove lcoverage/coverage.info "commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
 		COMMAND echo "-- Generating HTML output files"
 		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
 	)
