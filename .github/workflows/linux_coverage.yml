@@ -86,9 +86,6 @@ jobs:
        cd build/x64-coverage-linux
        ./CommonItemsTests
 
-    - name: Run gcov
-      run: cmake --build --preset build-x64-coverage-linux --target gcov
-
     - name: Run lcov
       run: cmake --build --preset build-x64-coverage-linux --target lcov
 
