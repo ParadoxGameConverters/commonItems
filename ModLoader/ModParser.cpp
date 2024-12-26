@@ -15,38 +15,48 @@ void commonItems::ModParser::parseMod(std::istream& theStream)
 	parseStream(theStream);
 	clearRegisteredKeywords();
 
-	if (!path.empty())
+	if (!path_.empty())
 	{
-		const auto ending = getExtension(path);
-		compressed = ending == "zip" || ending == "bin";
+		const auto ending = path_.extension();
+		compressed_ = ending == ".zip" || ending == ".bin";
 	}
 }
 
-void commonItems::ModParser::parseMod(const std::string& fileName)
+void commonItems::ModParser::parseMod(const std::filesystem::path& fileName)
 {
 	registerKeys();
 	parseFile(fileName);
 	clearRegisteredKeywords();
 
-	if (!path.empty())
+	if (!path_.empty())
 	{
-		const auto ending = getExtension(path);
-		compressed = ending == "zip" || ending == "bin";
+		const auto ending = path_.extension();
+		compressed_ = ending == ".zip" || ending == ".bin";
 	}
 }
 
+
+void commonItems::ModParser::parseMod(const std::string& fileName)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	parseMod(std::filesystem::u8path(fileName));
+#pragma warning(pop)
+}
+
+
 void commonItems::ModParser::registerKeys()
 {
-	registerSetter("name", name);
-	registerRegex("path|archive", [this](const std::string& unused, std::istream& theStream) {
-		path = getString(theStream);
+	registerSetter("name", name_);
+	registerRegex("path|archive", [this]([[maybe_unused]] const std::string& unused, std::istream& theStream) {
+		path_ = getString(theStream);
 	});
 	registerKeyword("dependencies", [this](std::istream& theStream) {
 		const auto theDependencies = getStrings(theStream);
-		dependencies.insert(theDependencies.begin(), theDependencies.end());
+		dependencies_.insert(theDependencies.begin(), theDependencies.end());
 	});
 	registerKeyword("replace_path", [this](std::istream& theStream) {
-		replacedPaths.emplace(getString(theStream));
+		replacedPaths_.emplace(getString(theStream));
 	});
 	registerRegex(catchallRegex, ignoreItem);
 }
@@ -55,46 +65,71 @@ void commonItems::ModParser::registerKeys()
 void commonItems::ModParser::parseMetadata(std::istream& theStream)
 {
 	nlohmann::json data = nlohmann::json::parse(theStream);
-	name = commonItems::remQuotes(data.value("name", ""));
+	name_ = commonItems::remQuotes(data.value("name", ""));
 
 	if (const auto game_custom_data = data.find("game_custom_data"); game_custom_data != data.end())
 	{
 		if (const auto replace_paths = game_custom_data->find("replace_paths"); replace_paths != game_custom_data->end())
 		{
-			for (const auto& path: *replace_paths)
+			for (const auto& replace_path: *replace_paths)
 			{
-				replacedPaths.emplace(path);
+				replacedPaths_.emplace(std::string(replace_path));
 			}
 		}
 	}
 }
 
 
-void commonItems::ModParser::parseMetadata(const std::string& fileName)
+void commonItems::ModParser::parseMetadata(const std::filesystem::path& path)
 {
-	std::filesystem::path fs_path(fileName);
+	std::filesystem::path fs_path(path);
 	fs_path = fs_path.parent_path(); // remove metadata.json
 	fs_path = fs_path.parent_path(); // remove /.metadata
-	const std::string path_string = fs_path.generic_string();
 
-	std::filesystem::path root_path = fs_path.parent_path(); // the mods folder
-	root_path = root_path.parent_path();							// the parent of the mods folder
-	const std::string root_path_string = root_path.generic_string();
-
-	path = path_string.substr(root_path_string.size(), path_string.size());
-	while (path.starts_with('/'))
+	// path_ should be the final two path components
+	std::filesystem::path last;
+	std::filesystem::path second_to_last;
+	for (const auto component: fs_path)
 	{
-		path.erase(0, 1);
+		second_to_last = last;
+		last = component;
 	}
-	while (path.starts_with('\\'))
-	{
-		path.erase(0, 1);
-	}
+	path_ = second_to_last / last;
 
-	std::ifstream file_stream(fileName);
+	std::ifstream file_stream(path);
 	if (file_stream.is_open())
 	{
 		parseMetadata(file_stream);
 		file_stream.close();
 	}
+}
+
+
+void commonItems::ModParser::parseMetadata(const std::string& fileName)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	parseMetadata(std::filesystem::u8path(fileName));
+#pragma warning(pop)
+}
+
+
+const std::set<std::string> commonItems::ModParser::getReplacedPaths() const
+{
+	std::set<std::string> replaced_paths;
+	for (const std::filesystem::path& path: replacedPaths_)
+	{
+		replaced_paths.emplace(path.string());
+	}
+
+	return replaced_paths;
+}
+
+
+void commonItems::ModParser::setPath(const std::string& path)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	path_ = std::filesystem::u8path(path);
+#pragma warning(pop)
 }
