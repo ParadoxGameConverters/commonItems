@@ -1,8 +1,8 @@
 #include "../../Localization/LocalizationDatabase.h"
 #include "../../ModLoader/Mod.h"
 #include "../../ModLoader/ModLoader.h"
-#include "gmock/gmock-matchers.h"
-#include "gtest/gtest.h"
+#include <gmock/gmock-matchers.h>
+#include <gtest/gtest.h>
 
 TEST(Localization_LocalizationDatabase_Tests, NewLocalizationDatabaseIsEmpty)
 {

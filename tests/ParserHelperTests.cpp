@@ -1,7 +1,7 @@
 #include "../CommonRegexes.h"
 #include "../ParserHelpers.h"
-#include "gtest/gtest.h"
 #include <gmock/gmock-matchers.h>
+#include <gtest/gtest.h>
 #include <sstream>
 
 

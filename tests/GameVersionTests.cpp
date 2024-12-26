@@ -1,5 +1,5 @@
 #include "../GameVersion.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 TEST(GameVersion_Tests, GameVersionDefaultsToZeroZeroZeroZero)

@@ -14,8 +14,6 @@ set (UNICODE_DEFAULT OFF)
 
 if (PLATFORM STREQUAL "Windows")
 	ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
-	add_compile_options(/permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 /w14311 /w14545 /w14546
-	    /w14547 /w14549 /w14555 /w14619 /w14640 /w14826 /w14905 /w14906 /w14928 /external:anglebrackets /external:W0 /WX)
 elseif (PLATFORM STREQUAL "Linux")
     #set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 	if (COVERAGE STREQUAL true)
@@ -79,10 +77,20 @@ set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.cpp")
 set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.cpp")
 set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "external/zip/src/zip.c")
 add_library(commonLib
 	${COMMON_SOURCES}
 )
+
+add_subdirectory(external/zip SYSTEM PRIVATE EXCLUDE_FROM_ALL)
+get_target_property(lib_include_dirs zip INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(commonLib SYSTEM PRIVATE ${lib_include_dirs})
+target_link_libraries(commonLib PRIVATE zip)
+
+if (PLATFORM STREQUAL "Windows")
+	target_compile_options(commonLib PRIVATE /permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 /w14311 /w14545 /w14546
+	    /w14547 /w14549 /w14555 /w14619 /w14640 /w14826 /w14905 /w14906 /w14928 /external:anglebrackets /external:W0 /WX)
+elseif (PLATFORM STREQUAL "Linux")
+endif (PLATFORM STREQUAL "Windows")
 
 set(tests
 	"tests/test_main.cpp"
@@ -113,6 +121,11 @@ source_group("tests" FILES ${tests})
 ################################################################################
 add_executable(${PROJECT_NAME} ${tests})
 target_link_libraries(${PROJECT_NAME} commonLib)
+if (PLATFORM STREQUAL "Windows")
+	target_compile_options(${PROJECT_NAME} PRIVATE /permissive /W4 /w14242 /w14254 /w14263 /w14265 /w14287 /we4289 /w14296 /w14311 /w14545 /w14546
+	    /w14547 /w14549 /w14555 /w14619 /w14640 /w14826 /w14905 /w14906 /w14928 /external:anglebrackets /external:W0 /WX)
+elseif (PLATFORM STREQUAL "Linux")
+endif (PLATFORM STREQUAL "Windows")
 
 ################################################################################
 # Test Files

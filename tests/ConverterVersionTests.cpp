@@ -1,5 +1,5 @@
 #include "../ConverterVersion.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 {

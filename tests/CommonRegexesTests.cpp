@@ -1,7 +1,7 @@
 #include <regex>
 
 #include "../CommonRegexes.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 

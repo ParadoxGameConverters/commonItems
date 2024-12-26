@@ -2,8 +2,8 @@
 #include "../CommonFunctions.h"
 #include "../Log.h"
 #include "../OSCompatibilityLayer.h"
-#include "../external/zip/src/zip.h"
 #include "ModParser.h"
+#include <external/zip/src/zip.h>
 #include <filesystem>
 #include <set>
 #include <stdexcept>
