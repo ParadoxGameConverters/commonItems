@@ -11,6 +11,8 @@ namespace commonItems
 
 bool TryCreateFolder(const std::string& path)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	if (fs::exists(fs::u8path(path)))
 		return true;
 	if (fs::create_directory(fs::u8path(path)))
@@ -18,6 +20,7 @@ bool TryCreateFolder(const std::string& path)
 
 	Log(LogLevel::Error) << "Could not create directory: " << path << " : " << GetLastErrorString();
 	return false;
+#pragma warning(pop)
 }
 
 std::wstring GetCurrentDirectoryWString()
@@ -36,8 +39,28 @@ std::wstring GetCurrentDirectoryWString()
 	}
 }
 
+
+std::set<fs::path> GetAllFilesInFolder(const fs::path& path)
+{
+	std::set<fs::path> fileNames;
+	if (!fs::exists(path))
+		return fileNames;
+	for (const auto& p: fs::directory_iterator(path))
+	{
+		if (!p.is_directory())
+		{
+			fileNames.insert(p.path().filename());
+		}
+	}
+	return fileNames;
+}
+
+
+
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	std::set<std::string> fileNames;
 	if (!fs::exists(fs::u8path(path)))
 		return fileNames;
@@ -49,10 +72,39 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 		}
 	}
 	return fileNames;
+#pragma warning(pop)
 }
+
+
+void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	fileNames = GetAllFilesInFolder(path);
+#pragma warning(pop)
+}
+
+
+std::set<fs::path> GetAllSubfolders(const fs::path& path)
+{
+	std::set<fs::path> subFolders;
+	if (!fs::exists(path))
+		return subFolders;
+	for (const auto& p: fs::directory_iterator(path))
+	{
+		if (p.is_directory())
+		{
+			subFolders.insert(p.path().filename());
+		}
+	}
+	return subFolders;
+}
+
 
 std::set<std::string> GetAllSubfolders(const std::string& path)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	std::set<std::string> subFolders;
 	if (!fs::exists(fs::u8path(path)))
 		return subFolders;
@@ -64,18 +116,63 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 		}
 	}
 	return subFolders;
+#pragma warning(pop)
 }
+
+
+void GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	subFolders = GetAllSubfolders(path);
+#pragma warning(pop)
+}
+
+
+std::set<fs::path> GetAllFilesInFolderRecursive(const fs::path& path)
+{
+	if (!fs::exists(path) || !fs::is_directory(path))
+	{
+		return {};
+	}
+
+	std::set<fs::path> fileNames;
+	for (const auto& p : fs::recursive_directory_iterator(path))
+	{
+		if (!p.is_directory())
+		{
+			fileNames.insert(p.path());
+		}
+	}
+	return fileNames;
+}
+
+
+void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	fileNames = GetAllFilesInFolderRecursive(path);
+#pragma warning(pop)
+}
+
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	if (fs::copy_file(fs::u8path(sourcePath), fs::u8path(destPath), std::filesystem::copy_options::overwrite_existing))
 		return true;
 	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
 	return false;
+#pragma warning(pop)
 }
+
 
 bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	try
 	{
 		fs::copy(fs::u8path(sourceFolder), fs::u8path(destFolder), fs::copy_options::recursive);
@@ -86,11 +183,14 @@ bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder)
 		Log(LogLevel::Error) << "Could not copy folder: " << e.what() << " " << GetLastErrorString();
 		return false;
 	}
+#pragma warning(pop)
 }
 
 
 bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	try
 	{
 		fs::rename(fs::u8path(sourceFolder), fs::u8path(destFolder));
@@ -101,32 +201,53 @@ bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder
 		Log(LogLevel::Error) << "Could not rename folder: " << e.what() << " " << GetLastErrorString();
 		return false;
 	}
+#pragma warning(pop)
 }
+
+
+bool DoesFileExist(const fs::path& path)
+{
+	return fs::exists(path) && !fs::is_directory(path);
+}
+
 
 bool DoesFileExist(const std::string& path)
 {
-	if (const auto tempPath = fs::u8path(path); fs::exists(tempPath) && !fs::is_directory(tempPath))
-		return true;
-	return false;
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return DoesFileExist(fs::u8path(path));
+#pragma warning(pop)
+}
+
+
+bool DoesFolderExist(const fs::path& path)
+{
+	return fs::exists(path) && fs::is_directory(path);
 }
 
 
 bool DoesFolderExist(const std::string& path)
 {
-	if (const auto tempPath = fs::u8path(path); fs::exists(tempPath) && fs::is_directory(tempPath))
-		return true;
-	return false;
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return DoesFolderExist(fs::u8path(path));
+#pragma warning(pop)
 }
+
 
 bool DeleteFolder(const std::string& folder)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	if (!fs::exists(fs::u8path(folder)))
 		return true;
 	if (fs::remove_all(fs::u8path(folder)) != static_cast<std::uintmax_t>(-1))
 		return true;
 	Log(LogLevel::Error) << "Could not delete folder: " << folder << " " << GetLastErrorString();
 	return false;
+#pragma warning(pop)
 }
+
 
 std::string normalizeUTF8Path(const std::string& utf_8_path)
 {
@@ -145,28 +266,6 @@ std::string normalizeUTF8Path(const std::string& utf_8_path)
 	asciiPath.erase(std::ranges::remove(asciiPath, '\r').begin(), asciiPath.end());
 
 	return asciiPath;
-}
-
-#if _MSC_VER >= 1900 && _MSC_VER < 1920
-std::string utf16_to_utf8(std::u16string utf16_string)
-{
-	std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> conversion;
-	auto p = reinterpret_cast<const int16_t*>(utf16_string.data());
-	return conversion.to_bytes(p, p + utf16_string.size());
-}
-#else
-std::string utf16_to_utf8(const std::u16string& utf16_string)
-{
-	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
-	return conversion.to_bytes(utf16_string);
-}
-#endif
-
-
-std::string UTF16ToUTF8(const std::wstring& UTF16)
-{
-	const std::u16string u16str(UTF16.begin(), UTF16.end());
-	return utf16_to_utf8(u16str);
 }
 
 } // namespace commonItems
