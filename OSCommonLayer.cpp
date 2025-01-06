@@ -4,6 +4,8 @@
 #include <codecvt>
 #include <filesystem>
 
+
+
 namespace fs = std::filesystem;
 
 namespace commonItems
@@ -137,11 +139,29 @@ std::set<fs::path> GetAllFilesInFolderRecursive(const fs::path& path)
 	}
 
 	std::set<fs::path> fileNames;
-	for (const auto& p : fs::recursive_directory_iterator(path))
+	for (const auto& p: fs::recursive_directory_iterator(path))
 	{
 		if (!p.is_directory())
 		{
-			fileNames.insert(p.path());
+			std::filesystem::path current_path = p.path();
+			current_path.make_preferred();
+
+			// Get the part of current_path that's not in the requested path
+			auto current_itr = current_path.begin();
+			for (auto path_itr = path.begin(); path_itr != path.end(); ++current_itr, ++path_itr)
+			{
+				if (path_itr->empty())
+				{
+					break;
+				}
+			}
+
+			std::filesystem::path requested_path;
+			for (; current_itr != current_path.end(); ++current_itr)
+			{
+				requested_path /= *current_itr;
+			}
+			fileNames.insert(requested_path);
 		}
 	}
 	return fileNames;
