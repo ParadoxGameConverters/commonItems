@@ -5,6 +5,9 @@
 #include "StringUtils.h"
 #include <filesystem>
 #include <fstream>
+
+
+
 namespace fs = std::filesystem;
 
 namespace commonItems
@@ -114,9 +117,9 @@ void commonItems::parser::parseStream(std::istream& theStream)
 }
 
 
-void commonItems::parser::parseFile(std::string_view filename)
+void commonItems::parser::parseFile(std::filesystem::path filename)
 {
-	std::ifstream theFile(fs::u8path(filename));
+	std::ifstream theFile(filename);
 	if (!theFile.is_open())
 	{
 		Log(LogLevel::Error) << "Could not open " << filename << " for parsing.";
@@ -127,6 +130,16 @@ void commonItems::parser::parseFile(std::string_view filename)
 	parseStream(theFile);
 	theFile.close();
 }
+
+
+void commonItems::parser::parseFile(std::string_view filename)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	parseFile(std::filesystem::path(filename));
+#pragma warning(pop)
+}
+
 
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {

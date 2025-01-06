@@ -1,10 +1,15 @@
 #ifndef PARSER_H
 #define PARSER_H
+
+
+#include <filesystem>
 #include <functional>
 #include <map>
 #include <optional>
 #include <regex>
 #include <set>
+
+
 
 // A parser for reading Paradox Script.
 
@@ -18,7 +23,7 @@ class parser
 {
   public:
 	parser() = default;
-	~parser() = default;
+	virtual ~parser() = default;
 	parser(const parser&) = default;
 	parser(parser&&) noexcept = default;
 	parser& operator=(const parser&) = default;
@@ -35,7 +40,8 @@ class parser
 	void clearRegisteredKeywords() noexcept;
 
 	void parseStream(std::istream& theStream);
-	void parseFile(std::string_view filename);
+	void parseFile(std::filesystem::path filename);
+	[[deprecated("Use std::filesystem::path version")]] void parseFile(std::string_view filename);
 
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);
