@@ -56,7 +56,7 @@ void commonItems::ModParser::registerKeys()
 		dependencies_.insert(theDependencies.begin(), theDependencies.end());
 	});
 	registerKeyword("replace_path", [this](std::istream& theStream) {
-		replacedPaths_.emplace(getString(theStream));
+		replacedPaths_.emplace(std::filesystem::path(getString(theStream)).make_preferred());
 	});
 	registerRegex(catchallRegex, ignoreItem);
 }
@@ -73,7 +73,7 @@ void commonItems::ModParser::parseMetadata(std::istream& theStream)
 		{
 			for (const auto& replace_path: *replace_paths)
 			{
-				replacedPaths_.emplace(std::string(replace_path));
+				replacedPaths_.emplace(std::filesystem::path(std::string(replace_path)).make_preferred());
 			}
 		}
 	}
@@ -95,6 +95,7 @@ void commonItems::ModParser::parseMetadata(const std::filesystem::path& path)
 		last = component;
 	}
 	path_ = second_to_last / last;
+	path_.make_preferred();
 
 	std::ifstream file_stream(path);
 	if (file_stream.is_open())
@@ -130,6 +131,6 @@ void commonItems::ModParser::setPath(const std::string& path)
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	path_ = std::filesystem::u8path(path);
+	path_ = std::filesystem::u8path(path).make_preferred();
 #pragma warning(pop)
 }
