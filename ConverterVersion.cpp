@@ -3,12 +3,24 @@
 #include "ParserHelpers.h"
 #include <fstream>
 
-void commonItems::ConverterVersion::loadVersion(const std::string& filename)
+
+
+void commonItems::ConverterVersion::loadVersion(const std::filesystem::path& filename)
 {
 	registerKeys();
 	parseFile(filename);
 	clearRegisteredKeywords();
 }
+
+
+void commonItems::ConverterVersion::loadVersion(const std::string& filename)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	loadVersion(std::filesystem::path(filename));
+#pragma warning(pop)
+}
+
 
 void commonItems::ConverterVersion::loadVersion(std::istream& theStream)
 {

@@ -19,7 +19,8 @@ class ConverterVersion: convenientParser
 {
   public:
 	ConverterVersion() = default;
-	void loadVersion(const std::string& filename);
+	void loadVersion(const std::filesystem::path& filename);
+	[[deprecated("Use std::filesystem::path version")]] void loadVersion(const std::string& filename);
 	void loadVersion(std::istream& theStream);
 
 	[[nodiscard]] const auto& getName() const { return name; }
