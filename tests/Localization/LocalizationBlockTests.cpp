@@ -103,7 +103,7 @@ TEST(Localization_LocalizationBlock_Tests, LocalizationBlockCanBeModifiedForEver
 	block.ModifyLocalization("spanish", "$NUM$ revuelta");
 
 	const std::string number = "2";
-	block.ModifyForEveryLanguage([number](const std::string& base_localization, const std::string& language) {
+	block.ModifyForEveryLanguage([number](const std::string& base_localization, [[maybe_unused]] const std::string& language) {
 		const std::string placeholder = "$NUM$";
 		std::string updated_localization = base_localization;
 		return updated_localization.replace(updated_localization.find(placeholder), placeholder.size(), number);
@@ -138,7 +138,7 @@ TEST(Localization_LocalizationBlock_Tests, LocalizationBlockCanBeModifiedForEver
 	adjective_block.ModifyLocalization("spanish", "Romana");
 
 	block.ModifyForEveryLanguage(adjective_block,
-		 [](const std::string& base_localization, const std::string& modifying_localization, const std::string& language) {
+		 [](const std::string& base_localization, const std::string& modifying_localization, [[maybe_unused]] const std::string& language) {
 			 const std::string placeholder = "$ADJ$";
 			 std::string updated_localization = base_localization;
 			 return updated_localization.replace(updated_localization.find(placeholder), placeholder.size(), modifying_localization);

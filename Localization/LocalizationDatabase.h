@@ -25,7 +25,8 @@ class LocalizationDatabase
 	{
 	}
 
-	void ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder);
+	void ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::filesystem::path& localization_folder);
+	[[deprecated("Use std::filesystem::path version")]] void ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder);
 	[[nodiscard]] int ScrapeStream(std::istream& stream);
 	void AddOrModifyLocalizationBlock(const std::string& key, const LocalizationBlock& new_block);
 
@@ -54,7 +55,7 @@ class LocalizationDatabase
 
   private:
 	std::pair<std::string, std::string> DetermineKeyLocalizationPair(const std::string& line, std::string& current_language) const;
-	int ScrapeFile(const std::string& file_path);
+	int ScrapeFile(const std::filesystem::path& file_path);
 
 	std::string base_language_;
 	std::vector<std::string> other_languages_;

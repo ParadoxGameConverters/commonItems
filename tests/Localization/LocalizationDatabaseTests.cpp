@@ -157,6 +157,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsFromUnsupportedLangua
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesystem)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
 	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Mod", "mod/themod.mod"}});
 	const auto mods = modLoader.getMods();
@@ -168,7 +170,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	std::stringstream log;
 	auto stdout_buf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	database.ScrapeLocalizations(filesystem, "localization");
+	// calling std::string version since that also calls the std::filesystem::path version
+	database.ScrapeLocalizations(filesystem, std::string("localization"));
 	std::cout.rdbuf(stdout_buf);
 	std::string actual_output = log.str();
 
@@ -197,10 +200,13 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
+#pragma warning(pop)
 }
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModFilesystem)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
 	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Metadata Mod", ""}});
 	const auto mods = modLoader.getMods();
@@ -212,7 +218,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 	std::stringstream log;
 	auto stdout_buf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	database.ScrapeLocalizations(filesystem, "localization");
+	// calling std::string version since that also calls the std::filesystem::path version
+	database.ScrapeLocalizations(filesystem, std::string("localization"));
 	std::cout.rdbuf(stdout_buf);
 	std::string actual_output = log.str();
 
@@ -241,4 +248,5 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
+#pragma warning(pop)
 }
