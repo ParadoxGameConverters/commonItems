@@ -7,7 +7,7 @@
 
 TEST(ModFilesystemTests, MissingFileReturnsNullopt)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/non_file.txt");
 	EXPECT_FALSE(file_path.has_value());
@@ -16,7 +16,7 @@ TEST(ModFilesystemTests, MissingFileReturnsNullopt)
 
 TEST(ModFilesystemTests, FileCanBeFoundInGameRoot)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
@@ -27,7 +27,7 @@ TEST(ModFilesystemTests, FileCanBeFoundInGameRoot)
 TEST(ModFilesystemTests, FileIsReplacedByMod)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
@@ -39,7 +39,7 @@ TEST(ModFilesystemTests, LatestModDeterminesFile)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
@@ -52,7 +52,7 @@ TEST(ModFilesystemTests, ModDoesNotReplaceFileIfFileNotInMod)
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
 	const Mod mod_three("Mod Three", "ModFilesystem/GetActualFileLocation/mod_three");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
@@ -65,7 +65,7 @@ TEST(ModFilesystemTests, ReplacePathBlocksEarlierInstancesOfFile)
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
 	const Mod mod_three("Mod Three", "ModFilesystem/GetActualFileLocation/mod_three", {}, {"test_folder"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	EXPECT_FALSE(file_path.has_value());
@@ -77,7 +77,7 @@ TEST(ModFilesystemTests, ReplacePathOnlyBlocksActualPath)
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
 	const Mod mod_three("Mod Three", "ModFilesystem/GetActualFileLocation/mod_three", {}, {"test_fold"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFileLocation("test_folder/test_file.txt");
 	ASSERT_TRUE(file_path.has_value());
@@ -87,7 +87,7 @@ TEST(ModFilesystemTests, ReplacePathOnlyBlocksActualPath)
 
 TEST(ModFilesystemTests, MissingFolderReturnsNullopt)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/non_folder");
 	EXPECT_FALSE(file_path.has_value());
@@ -96,7 +96,7 @@ TEST(ModFilesystemTests, MissingFolderReturnsNullopt)
 
 TEST(ModFilesystemTests, FolderCanBeFoundInGameRoot)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/deeper_folder");
 	ASSERT_TRUE(file_path.has_value());
@@ -107,7 +107,7 @@ TEST(ModFilesystemTests, FolderCanBeFoundInGameRoot)
 TEST(ModFilesystemTests, FolderIsReplacedByMod)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/deeper_folder");
 	ASSERT_TRUE(file_path.has_value());
@@ -119,7 +119,7 @@ TEST(ModFilesystemTests, LatestModDeterminesFolder)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/deeper_folder");
 	ASSERT_TRUE(file_path.has_value());
@@ -132,7 +132,7 @@ TEST(ModFilesystemTests, ModDoesNotReplaceFolderIfFolderNotInMod)
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
 	const Mod mod_three("Mod Three", "ModFilesystem/GetActualFileLocation/mod_three");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/deeper_folder");
 	ASSERT_TRUE(file_path.has_value());
@@ -145,7 +145,7 @@ TEST(ModFilesystemTests, ReplacePathBlocksEarlierInstancesOfFolder)
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
 	const Mod mod_three("Mod Three", "ModFilesystem/GetActualFileLocation/mod_three", {}, {"test_folder/"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two, mod_three});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two, mod_three});
 
 	const auto file_path = mod_filesystem.GetActualFolderLocation("test_folder/deeper_folder");
 	EXPECT_FALSE(file_path.has_value());
@@ -154,7 +154,7 @@ TEST(ModFilesystemTests, ReplacePathBlocksEarlierInstancesOfFolder)
 
 TEST(ModFilesystemTests, NoFilesInMissingDirectory)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("/non_folder"), testing::UnorderedElementsAre());
 }
@@ -162,7 +162,7 @@ TEST(ModFilesystemTests, NoFilesInMissingDirectory)
 
 TEST(ModFilesystemTests, FilesInGameRootAreFound)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/game_root/test_folder/test_file.txt",
@@ -173,7 +173,7 @@ TEST(ModFilesystemTests, FilesInGameRootAreFound)
 TEST(ModFilesystemTests, ModFilesAddToAndReplaceGameRootFiles)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_one/test_folder/test_file.txt",
@@ -186,7 +186,7 @@ TEST(ModFilesystemTests, ModFilesAddToAndReplaceEarlierModFiles)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
@@ -200,7 +200,7 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFilesFromBeingFound)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolder("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/test_file.txt",
@@ -210,7 +210,7 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFilesFromBeingFound)
 
 TEST(ModFilesystemTests, NoFoldersInMissingDirectory)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllSubfolders("/non_folder"), testing::UnorderedElementsAre());
 }
@@ -218,7 +218,7 @@ TEST(ModFilesystemTests, NoFoldersInMissingDirectory)
 
 TEST(ModFilesystemTests, FoldersInGameRootAreFound)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder",
@@ -229,7 +229,7 @@ TEST(ModFilesystemTests, FoldersInGameRootAreFound)
 TEST(ModFilesystemTests, ModFoldersAddToAndReplaceGameRootFolders)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one});
 
 	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder",
@@ -242,7 +242,7 @@ TEST(ModFilesystemTests, ModFoldersAddToAndReplaceEarlierModFolders)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder",
@@ -256,7 +256,7 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFoldersFromBeingFound)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllSubfolders("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder",
@@ -266,7 +266,7 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFoldersFromBeingFound)
 
 TEST(ModFilesystemTests, NoFilesInMissingDirectoryTree)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("/non_folder"), testing::UnorderedElementsAre());
 }
@@ -274,7 +274,7 @@ TEST(ModFilesystemTests, NoFilesInMissingDirectoryTree)
 
 TEST(ModFilesystemTests, FilesInGameRootAndSubfoldersAreFound)
 {
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/game_root/test_folder/deeper_folder/dummy.txt",
@@ -287,7 +287,7 @@ TEST(ModFilesystemTests, FilesInGameRootAndSubfoldersAreFound)
 TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceGameRootFiles)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_one/test_folder/deeper_folder/dummy.txt",
@@ -303,7 +303,7 @@ TEST(ModFilesystemTests, ModFilesAndSubfoldersAddToAndReplaceEarlierModFiles)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/dummy.txt",
@@ -321,7 +321,7 @@ TEST(ModFilesystemTests, ReplaceFolderKeepsFilesAndSubfoldersFromBeingFound)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two", {}, {"test_folder"});
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/dummy.txt",
@@ -335,7 +335,7 @@ TEST(ModFilesystemTests, FilesAreFoundEvenWithTrailingSlashInPath)
 {
 	const Mod mod_one("Mod One", "ModFilesystem/GetActualFileLocation/mod_one");
 	const Mod mod_two("Mod Two", "ModFilesystem/GetActualFileLocation/mod_two");
-	const commonItems::ModFilesystem mod_filesystem("ModFilesystem/GetActualFileLocation/game_root", {mod_one, mod_two});
+	const commonItems::ModFilesystem mod_filesystem(std::filesystem::path("ModFilesystem/GetActualFileLocation/game_root"), {mod_one, mod_two});
 
 	EXPECT_THAT(mod_filesystem.GetAllFilesInFolderRecursive("test_folder/"),
 		 testing::UnorderedElementsAre("ModFilesystem/GetActualFileLocation/mod_two/test_folder/deeper_folder/dummy.txt",

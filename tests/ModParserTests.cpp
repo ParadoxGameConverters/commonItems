@@ -52,7 +52,7 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_EQ("modPath", theMod.getPath());
 	EXPECT_EQ(std::filesystem::path("modPath"), theMod.getFilesystemPath());
 	EXPECT_THAT(theMod.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
-	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
@@ -63,7 +63,7 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getPath(), "modPath");
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), std::filesystem::path("modPath"));
 	EXPECT_THAT(the_mod_file.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
-	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
 		 UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
 #pragma warning(pop)
@@ -124,7 +124,7 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_TRUE(theMod.getPath().empty());				 // path is derived from the path itself, so a stream leaves no path
 	EXPECT_TRUE(theMod.getFilesystemPath().empty()); // path is derived from the path itself, so a stream leaves no path
 	EXPECT_TRUE(theMod.getDependencies().empty());	 // dependencies are unknown for now
-	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
@@ -135,7 +135,7 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getPath(), "mod\\parseable_metadata");
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), std::filesystem::path("mod/parseable_metadata"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
-	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
 		 UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
 #pragma warning(pop)
