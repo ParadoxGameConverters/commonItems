@@ -20,20 +20,20 @@ constexpr auto utf8BOM = "\xEF\xBB\xBF";
 
 
 // Given a file with path included (such as '/this/is/a/path.txt' or 'c:\this\is\a\path.txt'), returns the part that's just the filename ('path.txt')
-std::string trimPath(const std::string& fileName);
+[[deprecated("Use std::filesystem::path::filename()")]] std::string trimPath(const std::string& fileName);
 
 
 // Given a file with path included (such as '/this/is/a/path.txt' or 'c:\this\is\a\path.txt'), returns the part that's just the path ('/this/is/a/' or
 // 'c:\this\is\a\')
-std::string getPath(const std::string& fileName);
-
-
-// Given a filename with an extension (such as 'file.extension' or 'file.name.with.extension'), returns the extension ('extension')
-std::string trimExtension(const std::string& fileName);
+[[deprecated("Use std::filesystem::path::parent_path()")]] std::string getPath(const std::string& fileName);
 
 
 // Given a filename with an extension (such as 'file.extension' or 'file.name.with.extension'), returns the filename ('file' or 'file.name.with')
-std::string getExtension(const std::string& fileName);
+[[deprecated("Use std::filesystem::path::stem()")]] std::string trimExtension(const std::string& fileName);
+
+
+// Given a filename with an extension (such as 'file.extension' or 'file.name.with.extension'), returns the extension ('extension')
+[[deprecated("Use std::filesystem::path::extension()")]] std::string getExtension(const std::string& fileName);
 
 
 // Given a string (such as 'a file name.eu4'), replaces all instances of the specified character (such as ' ') with underscores (resulting in 'a_file_name.eu4')

@@ -16,14 +16,20 @@ std::string trimPath(const std::string& fileName)
 
 std::string getPath(const std::string& fileName)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	const auto rawFile = trimPath(fileName);
+#pragma warning(pop)
 	const auto filePos = fileName.find(rawFile);
 	return fileName.substr(0, filePos);
 }
 
 std::string trimExtension(const std::string& fileName)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	const auto rawFile = trimPath(fileName);
+#pragma warning(pop)
 	const auto dotPos = rawFile.find_last_of('.');
 	if (dotPos == std::string::npos)
 	{
@@ -35,7 +41,10 @@ std::string trimExtension(const std::string& fileName)
 
 std::string getExtension(const std::string& fileName)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	const auto rawFile = trimPath(fileName);
+#pragma warning(pop)
 	const auto dotPos = rawFile.find_last_of('.');
 	if (dotPos == std::string::npos)
 	{
