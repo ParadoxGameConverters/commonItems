@@ -309,7 +309,7 @@ std::string convertUTF8toWin1251(const std::string& UTF8)
 	return utf2cp(UTF8);
 }
 
-std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
+std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID)
 {
 	if (steamID.empty())
 		return std::nullopt;

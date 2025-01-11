@@ -52,10 +52,10 @@ std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesyst
 	 std::set<std::string>& fileNames);
 
 // Returns the current directory in UTF-16.
-std::wstring GetCurrentDirectoryWString();
+[[deprecated("Use std::filesystem::current_path")]] std::wstring GetCurrentDirectoryWString();
 
 // Given a Steam AppId, returns the install path for the corresponding game.
-std::optional<std::wstring> getSteamInstallPath(const std::string& steamID);
+std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID);
 
 
 //
