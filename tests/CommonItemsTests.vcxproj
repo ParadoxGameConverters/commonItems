@@ -46,7 +46,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>CommonItems.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CommonItems.lib;zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
