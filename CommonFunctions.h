@@ -33,7 +33,8 @@ constexpr auto utf8BOM = "\xEF\xBB\xBF";
 
 
 // Given a filename with an extension (such as 'file.extension' or 'file.name.with.extension'), returns the extension ('extension')
-[[deprecated("Use std::filesystem::path::extension()")]] std::string getExtension(const std::string& fileName);
+[[deprecated("Use std::filesystem::path::extension(). Note that the recommended function includes the dot.")]] std::string getExtension(
+	 const std::string& fileName);
 
 
 // Given a string (such as 'a file name.eu4'), replaces all instances of the specified character (such as ' ') with underscores (resulting in 'a_file_name.eu4')
