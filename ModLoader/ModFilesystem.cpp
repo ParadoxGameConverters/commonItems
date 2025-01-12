@@ -8,15 +8,19 @@
 
 
 
+using std::filesystem::path;
+
+
+
 namespace
 {
 
-std::vector<std::filesystem::path> SplitPath(std::filesystem::path path)
+std::vector<path> SplitPath(path path_to_split)
 {
-	std::vector<std::filesystem::path> split_path;
+	std::vector<path> split_path;
 
-	std::filesystem::path reassembled_path;
-	for (const std::filesystem::path& component: path)
+	path reassembled_path;
+	for (const path& component: path_to_split)
 	{
 		if (component.empty())
 		{
@@ -38,10 +42,10 @@ std::vector<std::filesystem::path> SplitPath(std::filesystem::path path)
 }
 
 
-bool PathIsReplaced(std::filesystem::path path, const std::set<std::filesystem::path>& replaced_paths)
+bool PathIsReplaced(path path_to_check, const std::set<path>& replaced_paths)
 {
-	const auto split_path = SplitPath(path);
-	return std::ranges::any_of(replaced_paths, [&split_path](const std::filesystem::path& replaced_path) {
+	const auto split_path = SplitPath(path_to_check);
+	return std::ranges::any_of(replaced_paths, [&split_path](const path& replaced_path) {
 		const auto split_replaced_path = SplitPath(replaced_path);
 		for (size_t i = 0; i < split_replaced_path.size(); i++)
 		{
@@ -58,23 +62,23 @@ bool PathIsReplaced(std::filesystem::path path, const std::set<std::filesystem::
 } // namespace
 
 
-std::optional<std::filesystem::path> commonItems::ModFilesystem::GetActualFileLocation(const std::filesystem::path& path) const
+std::optional<path> commonItems::ModFilesystem::GetActualFileLocation(const path& path_to_file) const
 {
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
-		std::filesystem::path mod_path = mod.path / path;
+		path mod_path = mod.path / path_to_file;
 		if (DoesFileExist(mod_path))
 		{
 			return mod_path;
 		}
-		if (PathIsReplaced(path, mod.replacedFolders))
+		if (PathIsReplaced(path_to_file, mod.replacedFolders))
 		{
 			return std::nullopt;
 		}
 	}
 
 	// check game root
-	if (std::filesystem::path root_path = game_root_ / path; DoesFileExist(root_path))
+	if (path root_path = game_root_ / path_to_file; DoesFileExist(root_path))
 	{
 		return root_path;
 	}
@@ -83,23 +87,23 @@ std::optional<std::filesystem::path> commonItems::ModFilesystem::GetActualFileLo
 }
 
 
-std::optional<std::filesystem::path> commonItems::ModFilesystem::GetActualFolderLocation(const std::filesystem::path& path) const
+std::optional<path> commonItems::ModFilesystem::GetActualFolderLocation(const path& path_to_folder) const
 {
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
-		std::filesystem::path mod_path = mod.path / path;
+		path mod_path = mod.path / path_to_folder;
 		if (DoesFolderExist(mod_path))
 		{
 			return mod_path;
 		}
-		if (PathIsReplaced(path, mod.replacedFolders))
+		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
 			return std::nullopt;
 		}
 	}
 
 	// check game root
-	std::filesystem::path root_path = game_root_ / path;
+	path root_path = game_root_ / path_to_folder;
 	if (DoesFolderExist(root_path))
 	{
 		return root_path;
@@ -109,14 +113,14 @@ std::optional<std::filesystem::path> commonItems::ModFilesystem::GetActualFolder
 }
 
 
-std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolder(const std::filesystem::path& path) const
+std::set<path> commonItems::ModFilesystem::GetAllFilesInFolder(const path& path_to_folder) const
 {
-	std::set<std::filesystem::path> full_files;
-	std::set<std::filesystem::path> found_files;
+	std::set<path> full_files;
+	std::set<path> found_files;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
-		for (const std::filesystem::path& new_file: commonItems::GetAllFilesInFolder(mod.path / path))
+		for (const path& new_file: commonItems::GetAllFilesInFolder(mod.path / path_to_folder))
 		{
 			if (found_files.contains(new_file))
 			{
@@ -124,16 +128,16 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolder(
 			}
 
 			found_files.insert(new_file);
-			full_files.insert(mod.path / path / new_file);
+			full_files.insert(mod.path / path_to_folder / new_file);
 		}
 
-		if (PathIsReplaced(path, mod.replacedFolders))
+		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
 			return full_files;
 		}
 	}
 
-	for (const std::filesystem::path& new_file: commonItems::GetAllFilesInFolder(game_root_ / path))
+	for (const path& new_file: commonItems::GetAllFilesInFolder(game_root_ / path_to_folder))
 	{
 		if (found_files.contains(new_file))
 		{
@@ -141,21 +145,21 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolder(
 		}
 
 		found_files.insert(new_file);
-		full_files.insert(game_root_ / path / new_file);
+		full_files.insert(game_root_ / path_to_folder / new_file);
 	}
 
 	return full_files;
 }
 
 
-std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllSubfolders(const std::filesystem::path& path) const
+std::set<path> commonItems::ModFilesystem::GetAllSubfolders(const path& path_to_folder) const
 {
-	std::set<std::filesystem::path> full_folders;
-	std::set<std::filesystem::path> found_folders;
+	std::set<path> full_folders;
+	std::set<path> found_folders;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
-		for (const auto& new_folder: commonItems::GetAllSubfolders(mod.path / path))
+		for (const auto& new_folder: commonItems::GetAllSubfolders(mod.path / path_to_folder))
 		{
 			if (found_folders.contains(new_folder))
 			{
@@ -163,16 +167,16 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllSubfolders(con
 			}
 
 			found_folders.insert(new_folder);
-			full_folders.insert(mod.path / path / new_folder);
+			full_folders.insert(mod.path / path_to_folder / new_folder);
 		}
 
-		if (PathIsReplaced(path, mod.replacedFolders))
+		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
 			return full_folders;
 		}
 	}
 
-	for (const auto& new_folder: commonItems::GetAllSubfolders(game_root_ / path))
+	for (const auto& new_folder: commonItems::GetAllSubfolders(game_root_ / path_to_folder))
 	{
 		if (found_folders.contains(new_folder))
 		{
@@ -180,21 +184,21 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllSubfolders(con
 		}
 
 		found_folders.insert(new_folder);
-		full_folders.insert(game_root_ / path / new_folder);
+		full_folders.insert(game_root_ / path_to_folder / new_folder);
 	}
 
 	return full_folders;
 }
 
 
-std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const std::filesystem::path& path) const
+std::set<path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const path& path_to_folder) const
 {
-	std::set<std::filesystem::path> full_files;
-	std::set<std::filesystem::path> found_files;
+	std::set<path> full_files;
+	std::set<path> found_files;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
-		for (const std::filesystem::path& new_file: commonItems::GetAllFilesInFolderRecursive(mod.path / path))
+		for (const path& new_file: commonItems::GetAllFilesInFolderRecursive(mod.path / path_to_folder))
 		{
 			if (found_files.contains(new_file))
 			{
@@ -202,16 +206,16 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolderR
 			}
 
 			found_files.insert(new_file);
-			full_files.insert((mod.path / path / new_file).make_preferred());
+			full_files.insert((mod.path / path_to_folder / new_file).make_preferred());
 		}
 
-		if (PathIsReplaced(path, mod.replacedFolders))
+		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
 			return full_files;
 		}
 	}
 
-	for (const std::filesystem::path& new_file: commonItems::GetAllFilesInFolderRecursive(game_root_ / path))
+	for (const path& new_file: commonItems::GetAllFilesInFolderRecursive(game_root_ / path_to_folder))
 	{
 		if (found_files.contains(new_file))
 		{
@@ -219,7 +223,7 @@ std::set<std::filesystem::path> commonItems::ModFilesystem::GetAllFilesInFolderR
 		}
 
 		found_files.insert(new_file);
-		full_files.insert((game_root_ / path / new_file).make_preferred());
+		full_files.insert((game_root_ / path_to_folder / new_file).make_preferred());
 	}
 
 	return full_files;

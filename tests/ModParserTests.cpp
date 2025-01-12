@@ -4,6 +4,7 @@
 
 
 
+using std::filesystem::path;
 using testing::UnorderedElementsAre;
 
 
@@ -22,7 +23,7 @@ TEST(ModParserTests, modPrimitivesDefaultToBlank)
 	EXPECT_TRUE(theMod.getReplacedPaths().empty());
 
 	commonItems::ModParser the_mod_file;
-	// test using the string version of the function, since that ends up calling the std::filesystem::path version
+	// test using the string version of the function, since that ends up calling the path version
 	the_mod_file.parseMod(std::string("some_nonexistent_path/nonsense")); // loading non-existent mod
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
@@ -50,22 +51,22 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 
 	EXPECT_EQ("modName", theMod.getName());
 	EXPECT_EQ("modPath", theMod.getPath());
-	EXPECT_EQ(std::filesystem::path("modPath"), theMod.getFilesystemPath());
+	EXPECT_EQ(path("modPath"), theMod.getFilesystemPath());
 	EXPECT_THAT(theMod.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
-	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
+	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
-	// test using the string version of the function, since that ends up calling the std::filesystem::path version
+	// test using the string version of the function, since that ends up calling the path version
 	the_mod_file.parseMod(std::string("GameDocumentsFolder/mod/parseable_mod_file.mod"));
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
 	EXPECT_EQ(the_mod_file.getPath(), "modPath");
-	EXPECT_EQ(the_mod_file.getFilesystemPath(), std::filesystem::path("modPath"));
+	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("modPath"));
 	EXPECT_THAT(the_mod_file.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
-		 UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
+		 UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
 
@@ -87,14 +88,14 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	EXPECT_TRUE(theMod.getFilesystemReplacedPaths().empty());
 
 	commonItems::ModParser the_mod_file;
-	// test using the string version of the function, since that ends up calling the std::filesystem::path version
+	// test using the string version of the function, since that ends up calling the path version
 	the_mod_file.parseMetadata(std::string("some_nonexistent_path/empty_mod/metadata/.metadata.json")); // doesn't exist
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
 	EXPECT_EQ(the_mod_file.getPath(),
 		 "some_nonexistent_path\\empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty/missing file
 	EXPECT_EQ(the_mod_file.getFilesystemPath(),
-		 std::filesystem::path(
+		 path(
 			  "some_nonexistent_path/empty_mod")); // path is derived from the path itself, so the path is filled out even with an empty/missing file
 	EXPECT_TRUE(the_mod_file.getDependencies().empty());
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
@@ -125,19 +126,19 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_TRUE(theMod.getFilesystemPath().empty()); // path is derived from the path itself, so a stream leaves no path
 	EXPECT_TRUE(theMod.getDependencies().empty());	 // dependencies are unknown for now
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
-	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
+	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
-	// test using the string version of the function, since that ends up calling the std::filesystem::path version
+	// test using the string version of the function, since that ends up calling the path version
 	the_mod_file.parseMetadata(std::string("GameDocumentsFolder/mod/parseable_metadata/.metadata/metadata.json"));
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
 	EXPECT_EQ(the_mod_file.getPath(), "mod\\parseable_metadata");
-	EXPECT_EQ(the_mod_file.getFilesystemPath(), std::filesystem::path("mod/parseable_metadata"));
+	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("mod/parseable_metadata"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
-		 UnorderedElementsAre(std::filesystem::path("replaced/path"), std::filesystem::path("replaced/path/two")));
+		 UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
 
@@ -152,7 +153,7 @@ TEST(ModParserTests, modPathCanBeSetFromArchive)
 	theMod.parseMod(input);
 
 	EXPECT_EQ("modPath", theMod.getPath());
-	EXPECT_EQ(std::filesystem::path("modPath"), theMod.getFilesystemPath());
+	EXPECT_EQ(path("modPath"), theMod.getFilesystemPath());
 #pragma warning(pop)
 }
 
@@ -221,7 +222,7 @@ TEST(ModParserTests, PathCanBeUpdated)
 	input << "path=modPath\n";
 	commonItems::ModParser theMod;
 	theMod.parseMod(input);
-	// use string version, since that calls the std::filesystem::path version
+	// use string version, since that calls the path version
 	theMod.setPath(std::string("updated_path"));
 
 	EXPECT_EQ(theMod.getPath(), "updated_path");

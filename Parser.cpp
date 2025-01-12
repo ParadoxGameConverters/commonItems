@@ -10,7 +10,9 @@
 
 
 
-namespace fs = std::filesystem;
+using std::filesystem::path;
+
+
 
 namespace commonItems
 {
@@ -119,7 +121,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 }
 
 
-void commonItems::parser::parseFile(std::filesystem::path filename)
+void commonItems::parser::parseFile(path filename)
 {
 	std::ifstream theFile(filename);
 	if (!theFile.is_open())
@@ -138,7 +140,7 @@ void commonItems::parser::parseFile(std::string_view filename)
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	parseFile(std::filesystem::path(filename));
+	parseFile(path(filename));
 #pragma warning(pop)
 }
 

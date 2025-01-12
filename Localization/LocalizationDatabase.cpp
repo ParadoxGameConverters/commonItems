@@ -9,7 +9,12 @@
 
 
 
-void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::filesystem::path& localization_folder)
+using std::filesystem::path;
+using std::filesystem::u8path;
+
+
+
+void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const path& localization_folder)
 {
 	Log(LogLevel::Info) << "Reading Localization...";
 
@@ -31,7 +36,7 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	commonItems::LocalizationDatabase::ScrapeLocalizations(mod_filesystem, std::filesystem::u8path(localization_folder));
+	commonItems::LocalizationDatabase::ScrapeLocalizations(mod_filesystem, u8path(localization_folder));
 #pragma warning(pop)
 }
 
@@ -160,7 +165,7 @@ std::pair<std::string, std::string> commonItems::LocalizationDatabase::Determine
 }
 
 
-int commonItems::LocalizationDatabase::ScrapeFile(const std::filesystem::path& file_path)
+int commonItems::LocalizationDatabase::ScrapeFile(const path& file_path)
 {
 	std::ifstream file(file_path);
 	if (!file.is_open())

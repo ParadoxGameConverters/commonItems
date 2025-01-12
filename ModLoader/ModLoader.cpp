@@ -13,8 +13,13 @@
 
 
 
+using std::filesystem::create_directories;
+using std::filesystem::path;
+using std::filesystem::u8path;
 
-void commonItems::ModLoader::loadMods(const std::filesystem::path& gameDocumentsPath, const Mods& incomingMods)
+
+
+void commonItems::ModLoader::loadMods(const path& gameDocumentsPath, const Mods& incomingMods)
 {
 	loadMods(std::vector{gameDocumentsPath / "mod"}, incomingMods);
 }
@@ -29,7 +34,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 }
 
 
-void commonItems::ModLoader::loadMods(const std::vector<std::filesystem::path>& gameModPaths, const Mods& incomingMods)
+void commonItems::ModLoader::loadMods(const std::vector<path>& gameModPaths, const Mods& incomingMods)
 {
 	if (gameModPaths.empty())
 	{
@@ -48,7 +53,7 @@ void commonItems::ModLoader::loadMods(const std::vector<std::filesystem::path>& 
 	// First see what we're up against. Load mod folders, and cache the mod names. We need the names as bare minimum in case
 	// we're doing old-style name-recognition modfinding and don't have the paths in incomingMods.
 	Log(LogLevel::Info) << "\tMods directories are:";
-	for (std::filesystem::path gameModPath: gameModPaths)
+	for (path gameModPath: gameModPaths)
 	{
 		gameModPath.make_preferred();
 		Log(LogLevel::Info) << "\t\t-> [" << gameModPath.string() << "]";
@@ -149,10 +154,10 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPat
 }
 
 
-void commonItems::ModLoader::loadModDirectories(const std::vector<std::filesystem::path>& gameModPaths, const Mods& incomingMods)
+void commonItems::ModLoader::loadModDirectories(const std::vector<path>& gameModPaths, const Mods& incomingMods)
 {
-	std::set<std::filesystem::path> diskModNames;
-	for (std::filesystem::path modPath: gameModPaths)
+	std::set<path> diskModNames;
+	for (path modPath: gameModPaths)
 	{
 		modPath.make_preferred();
 		for (const auto& diskModName: GetAllFilesInFolder(modPath))
@@ -198,12 +203,12 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::filesyste
 		}
 
 		// Attempt parsing .mod file
-		for (std::filesystem::path gameModPath: gameModPaths)
+		for (path gameModPath: gameModPaths)
 		{
 			gameModPath.make_preferred();
 			if (!trimmedModFileName.empty() && trimmedModFileName.extension() == ".mod")
 			{
-				const std::filesystem::path mod_file_location = gameModPath / trimmedModFileName;
+				const path mod_file_location = gameModPath / trimmedModFileName;
 
 				if (!DoesFileExist(mod_file_location))
 				{
@@ -227,12 +232,12 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::filesyste
 			{
 				// Vic3 mods
 
-				std::filesystem::path mod_folder;
+				path mod_folder;
 				for (auto itr = mod.path.begin(); itr != mod.path.end(); ++itr)
 				{
 					mod_folder = *itr;
 				}
-				const std::filesystem::path metadata_location = gameModPath / mod_folder / ".metadata/metadata.json";
+				const path metadata_location = gameModPath / mod_folder / ".metadata/metadata.json";
 				if (!DoesFileExist(metadata_location))
 				{
 					continue;
@@ -363,7 +368,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 }
 
 
-void commonItems::ModLoader::cacheModNames(const std::filesystem::path& gameDocumentsPath)
+void commonItems::ModLoader::cacheModNames(const path& gameDocumentsPath)
 {
 	if (!DoesFolderExist(gameDocumentsPath))
 		throw std::invalid_argument("Mods directory path is invalid! Is it at: " + gameDocumentsPath.string() + " ?");
@@ -392,7 +397,7 @@ void commonItems::ModLoader::cacheModNames(const std::filesystem::path& gameDocu
 
 	for (const auto& possible_mod_folder: GetAllSubfolders(gameDocumentsPath))
 	{
-		const std::filesystem::path metadata_location = gameDocumentsPath / possible_mod_folder / ".metadata/metadata.json";
+		const path metadata_location = gameDocumentsPath / possible_mod_folder / ".metadata/metadata.json";
 		try
 		{
 			if (!DoesFileExist(metadata_location))
@@ -425,11 +430,12 @@ void commonItems::ModLoader::cacheModNames(const std::filesystem::path& gameDocu
 	}
 }
 
+
 void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	 const std::string& modName,
-	 const std::filesystem::path& modFileName,
-	 const std::filesystem::path& modPath,
-	 const std::filesystem::path& gameModPath,
+	 const path& modFileName,
+	 const path& modPath,
+	 const path& gameModPath,
 	 const bool metaMod)
 {
 	if (!theMod.isValid())
@@ -474,7 +480,7 @@ void commonItems::ModLoader::processLoadedMod(ModParser& theMod,
 	fileUnderCategory(theMod, (gameModPath / modFileName).make_preferred(), metaMod);
 }
 
-void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod, const std::string& name, const std::filesystem::path& path)
+void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod, const std::string& name, const path& path)
 {
 	if (name.empty())
 		Log(LogLevel::Warning) << "\t\tMod at [" + path.string() + "] points to [" + theMod.getFilesystemPath().string() +
@@ -485,7 +491,7 @@ void commonItems::ModLoader::warnForInvalidPath(const ModParser& theMod, const s
 												"] which does not exist! Skipping at your risk, but this can greatly affect conversion.";
 }
 
-void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const std::filesystem::path& path, const bool metaMod)
+void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const path& path, const bool metaMod)
 {
 	if (!metaMod)
 	{
@@ -510,7 +516,7 @@ void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const st
 	}
 }
 
-std::optional<std::filesystem::path> commonItems::ModLoader::uncompressAndReturnNewPath(const std::string& modName) const
+std::optional<path> commonItems::ModLoader::uncompressAndReturnNewPath(const std::string& modName) const
 {
 	for (const auto& mod: possibleUncompressedMods)
 	{
@@ -525,7 +531,7 @@ std::optional<std::filesystem::path> commonItems::ModLoader::uncompressAndReturn
 
 		const auto uncompressedName = compressedMod.path.stem();
 
-		std::filesystem::create_directories("mods/");
+		create_directories("mods/");
 
 		if (!DoesFolderExist("mods" / uncompressedName))
 		{
@@ -550,15 +556,15 @@ std::optional<std::filesystem::path> commonItems::ModLoader::uncompressAndReturn
 	return std::nullopt;
 }
 
-bool commonItems::ModLoader::extractZip(const std::filesystem::path& archive, const std::filesystem::path& path) const
+bool commonItems::ModLoader::extractZip(const path& archive, const path& path) const
 {
-	std::filesystem::create_directories(path);
+	create_directories(path);
 
 	const int result = zip_extract(archive.string().c_str(), path.string().c_str(), NULL, NULL);
 
 	if (result != 0)
 	{
-		std::filesystem::remove_all(path);
+		remove_all(path);
 		return false;
 	}
 

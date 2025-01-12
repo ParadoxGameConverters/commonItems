@@ -7,7 +7,12 @@
 
 
 
-void commonItems::ConverterVersion::loadVersion(const std::filesystem::path& filename)
+using std::filesystem::path;
+using std::filesystem::u8path;
+
+
+
+void commonItems::ConverterVersion::loadVersion(const path& filename)
 {
 	registerKeys();
 	parseFile(filename);
@@ -19,7 +24,7 @@ void commonItems::ConverterVersion::loadVersion(const std::string& filename)
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	loadVersion(std::filesystem::path(filename));
+	loadVersion(path(filename));
 #pragma warning(pop)
 }
 
