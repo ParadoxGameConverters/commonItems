@@ -65,8 +65,7 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("modPath"));
 	EXPECT_THAT(the_mod_file.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
-	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
-		 UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
+	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
 
@@ -95,8 +94,7 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	EXPECT_EQ(the_mod_file.getPath(),
 		 "some_nonexistent_path\\empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty/missing file
 	EXPECT_EQ(the_mod_file.getFilesystemPath(),
-		 path(
-			  "some_nonexistent_path/empty_mod")); // path is derived from the path itself, so the path is filled out even with an empty/missing file
+		 path("some_nonexistent_path/empty_mod")); // path is derived from the path itself, so the path is filled out even with an empty/missing file
 	EXPECT_TRUE(the_mod_file.getDependencies().empty());
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
 	EXPECT_TRUE(the_mod_file.getFilesystemReplacedPaths().empty());
@@ -137,8 +135,7 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("mod/parseable_metadata"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
-	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(),
-		 UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
+	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
 
