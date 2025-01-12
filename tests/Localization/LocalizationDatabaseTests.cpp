@@ -164,7 +164,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Mod", "mod/themod.mod"}});
 	const auto mods = modLoader.getMods();
 
-	commonItems::ModFilesystem filesystem(std::filesystem::path("game"), mods);
+	// calling std::string_view version since that also calls the std::filesystem::path version
+	commonItems::ModFilesystem filesystem(std::string_view("game"), mods);
 
 	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
 
@@ -213,7 +214,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Metadata Mod", ""}});
 	const auto mods = modLoader.getMods();
 
-	commonItems::ModFilesystem filesystem(std::filesystem::path("game"), mods);
+	// calling std::string_view version since that also calls the std::filesystem::path version
+	commonItems::ModFilesystem filesystem(std::string_view("game"), mods);
 
 	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
 
