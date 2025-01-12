@@ -17,7 +17,9 @@ namespace commonItems
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	auto validatedPath = path;
 	if (validatedPath.ends_with('/') || validatedPath.ends_with('\\'))
 		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
@@ -43,6 +45,7 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 	}
 	return fileNames;
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 

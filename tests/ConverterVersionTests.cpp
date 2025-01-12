@@ -4,7 +4,9 @@
 TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ConverterVersion converterVersion;
 	// Using std::string_view version because it calls the other
 	converterVersion.loadVersion(std::string("emptyVersion.txt"));
@@ -18,13 +20,16 @@ TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 	EXPECT_EQ(GameVersion(), converterVersion.getMinTarget());
 	EXPECT_EQ(GameVersion(), converterVersion.getMaxTarget());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ConverterVersion_Tests, ItemsCanBeImported)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ConverterVersion converterVersion;
 	// Using std::string_view version because it calls the other
 	converterVersion.loadVersion(std::string("version.txt"));
@@ -38,19 +43,23 @@ TEST(ConverterVersion_Tests, ItemsCanBeImported)
 	EXPECT_EQ(GameVersion("1.0"), converterVersion.getMinTarget());
 	EXPECT_EQ(GameVersion("1.1"), converterVersion.getMaxTarget());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ConverterVersion_Tests, DescriptionCanBeConstructed)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ConverterVersion converterVersion;
 	// Using std::string_view version because it calls the other
 	converterVersion.loadVersion(std::string("version.txt"));
 
 	EXPECT_EQ("Compatible with EU4 [v1.31-v1.31.7] and Vic3 [v1.0-v1.1]", converterVersion.getDescription());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(ConverterVersion_Tests, DescriptionDoesNotDuplicateIdenticalVersions)
@@ -71,7 +80,9 @@ TEST(ConverterVersion_Tests, DescriptionDoesNotDuplicateIdenticalVersions)
 TEST(ConverterVersion_Tests, ConverterVersionCanBeOutput)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ConverterVersion converterVersion;
 	// Using std::string_view version because it calls the other
 	converterVersion.loadVersion(std::string("version.txt"));
@@ -111,6 +122,7 @@ TEST(ConverterVersion_Tests, ConverterVersionCanBeOutput)
 	std::getline(actualStream, actualLine);
 	EXPECT_EQ(expectedLine, actualLine); // footer line
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(ConverterVersion_Tests, ConverterVersionOutputSkipsIncompleteVersionOrName)

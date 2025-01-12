@@ -158,7 +158,9 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsFromUnsupportedLangua
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesystem)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ModLoader modLoader;
 	// calling std::string version because it calls the other
 	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Mod", "mod/themod.mod"}});
@@ -203,12 +205,15 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModFilesystem)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::ModLoader modLoader;
 	// calling std::string version because it calls the other
 	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Metadata Mod", ""}});
@@ -253,4 +258,5 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }

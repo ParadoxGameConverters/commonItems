@@ -12,7 +12,9 @@ using testing::UnorderedElementsAre;
 TEST(ModParserTests, modPrimitivesDefaultToBlank)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	commonItems::ModParser theMod;
 	theMod.parseMod(input);
@@ -33,13 +35,16 @@ TEST(ModParserTests, modPrimitivesDefaultToBlank)
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
 	EXPECT_TRUE(the_mod_file.getFilesystemReplacedPaths().empty());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ModParserTests, modPrimitivesCanBeSet)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input << "name=modName\n";
 	input << "path=modPath\n";
@@ -67,13 +72,16 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input << "{}";
 	commonItems::ModParser theMod;
@@ -99,13 +107,16 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
 	EXPECT_TRUE(the_mod_file.getFilesystemReplacedPaths().empty());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ModParserTests, metadataPrimitivesCanBeSet)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input << "{\n";
 	input << "  \"name\" : \"modName\",\n";
@@ -137,13 +148,16 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
 TEST(ModParserTests, modPathCanBeSetFromArchive)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input << "archive=modPath\n";
 	commonItems::ModParser theMod;
@@ -152,6 +166,7 @@ TEST(ModParserTests, modPathCanBeSetFromArchive)
 	EXPECT_EQ("modPath", theMod.getPath());
 	EXPECT_EQ(path("modPath"), theMod.getFilesystemPath());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 
@@ -213,7 +228,9 @@ TEST(ModParserTests, modIsCompressedForZipAndBinPaths)
 TEST(ModParserTests, PathCanBeUpdated)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input << "name=modName\n";
 	input << "path=modPath\n";
@@ -224,4 +241,5 @@ TEST(ModParserTests, PathCanBeUpdated)
 
 	EXPECT_EQ(theMod.getPath(), "updated_path");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }

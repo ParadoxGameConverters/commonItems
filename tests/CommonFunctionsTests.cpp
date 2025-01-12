@@ -45,9 +45,12 @@ TEST(TrimPath_Tests, TrimPathTrimsSlashes)
 {
 	const std::string input = R"(/this/is/a/path.txt)";
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimPath(input), "path.txt");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimPath_Tests, TrimPathTrimsBackslashes)
@@ -55,9 +58,12 @@ TEST(TrimPath_Tests, TrimPathTrimsBackslashes)
 	const std::string input = R"(c:\this\is\a\path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimPath(input), "path.txt");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimPath_Tests, TrimPathTrimsMixedSlashes)
@@ -65,9 +71,12 @@ TEST(TrimPath_Tests, TrimPathTrimsMixedSlashes)
 	const std::string input = R"(c:\this\is/a/path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimPath(input), "path.txt");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimPath_Tests, TrimPathTrimsReversedMixedSlashes)
@@ -75,9 +84,12 @@ TEST(TrimPath_Tests, TrimPathTrimsReversedMixedSlashes)
 	const std::string input = R"(/this/is\a\path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimPath(input), "path.txt");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimPath_Tests, TrimPathDoesNotAffectRawFiles)
@@ -85,9 +97,12 @@ TEST(TrimPath_Tests, TrimPathDoesNotAffectRawFiles)
 	const std::string input = R"(path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimPath(input), "path.txt");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetPath_Tests, GetPathGetsSlashedPath)
@@ -95,9 +110,12 @@ TEST(GetPath_Tests, GetPathGetsSlashedPath)
 	const std::string input = R"(/this/is/a/path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ("/this/is/a/", getPath(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetPath_Tests, GetPathGetsBackslashedPath)
@@ -105,9 +123,12 @@ TEST(GetPath_Tests, GetPathGetsBackslashedPath)
 	const std::string input = R"(c:\this\is\a\path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(R"(c:\this\is\a\)", getPath(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetPath_Tests, GetPathGetsMixedSlashedPath)
@@ -115,9 +136,12 @@ TEST(GetPath_Tests, GetPathGetsMixedSlashedPath)
 	const std::string input = R"(c:\this\is/a/path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(R"(c:\this\is/a/)", getPath(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetPath_Tests, GetPathGetsReversedMixedSlashedPath)
@@ -125,9 +149,12 @@ TEST(GetPath_Tests, GetPathGetsReversedMixedSlashedPath)
 	const std::string input = R"(/this/is\a\path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(R"(/this/is\a\)", getPath(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetPath_Tests, GetPathReturnsBlankStringForRawFiles)
@@ -135,9 +162,12 @@ TEST(GetPath_Tests, GetPathReturnsBlankStringForRawFiles)
 	const std::string input = R"(path.txt)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_TRUE(getPath(input).empty());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimExtension_Tests, TrimExtensionTrimsDot)
@@ -145,9 +175,12 @@ TEST(TrimExtension_Tests, TrimExtensionTrimsDot)
 	const std::string input = R"(file.extension)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimExtension(input), "file");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimExtension_Tests, TrimExtensionTrimsLastDot)
@@ -155,9 +188,12 @@ TEST(TrimExtension_Tests, TrimExtensionTrimsLastDot)
 	const std::string input = R"(file.name.with.extension)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimExtension(input), "file.name.with");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(TrimExtension_Tests, TrimExtensionDoesNotAffectDirectories)
@@ -165,9 +201,12 @@ TEST(TrimExtension_Tests, TrimExtensionDoesNotAffectDirectories)
 	const std::string input = R"(/path/with.extension/filename)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ(trimExtension(input), "/path/with.extension/filename");
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetExtension_Tests, GetExtensionGetsPostDot)
@@ -175,9 +214,12 @@ TEST(GetExtension_Tests, GetExtensionGetsPostDot)
 	const std::string input = R"(file.extension)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ("extension", getExtension(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetExtension_Tests, GetExtensionGetsPostLastDot)
@@ -185,9 +227,12 @@ TEST(GetExtension_Tests, GetExtensionGetsPostLastDot)
 	const std::string input = R"(file.name.with.extension)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ("extension", getExtension(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetExtension_Tests, GetExtensionReturnsEmptyStringForNoExtension)
@@ -195,9 +240,12 @@ TEST(GetExtension_Tests, GetExtensionReturnsEmptyStringForNoExtension)
 	const std::string input = R"(filename)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_TRUE(getExtension(input).empty());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetExtension_Tests, GetExtensionDoesNotAffectDirectories)
@@ -205,9 +253,12 @@ TEST(GetExtension_Tests, GetExtensionDoesNotAffectDirectories)
 	const std::string input = R"(/path/with.extension/directoryname)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_TRUE(getExtension(input).empty());
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(GetExtension_Tests, GetExtensionWorksOnAbsolutePaths)
@@ -215,9 +266,12 @@ TEST(GetExtension_Tests, GetExtensionWorksOnAbsolutePaths)
 	const std::string input = R"(c:\path/with.extension/filename.mod)";
 
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	ASSERT_EQ("mod", getExtension(input));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 TEST(ReplaceCharacter_Tests, ReplaceCharacterCanReplaceSpaces)

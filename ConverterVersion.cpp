@@ -23,9 +23,12 @@ void commonItems::ConverterVersion::loadVersion(const path& filename)
 void commonItems::ConverterVersion::loadVersion(const std::string& filename)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	loadVersion(u8path(filename));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 

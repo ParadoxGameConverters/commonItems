@@ -35,9 +35,12 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	commonItems::LocalizationDatabase::ScrapeLocalizations(mod_filesystem, u8path(localization_folder));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 

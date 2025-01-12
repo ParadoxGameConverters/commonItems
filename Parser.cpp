@@ -140,9 +140,12 @@ void commonItems::parser::parseFile(path filename)
 void commonItems::parser::parseFile(std::string_view filename)
 {
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	parseFile(u8path(filename));
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 }
 
 

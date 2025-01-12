@@ -24,12 +24,15 @@ class ModFilesystem
 	// replace_paths will block earlier mods and the game It is the caller's responsibility to sort the mods appropriately
 	explicit ModFilesystem(std::filesystem::path game_root, std::vector<Mod> mods): game_root_(game_root), mods_(std::move(mods)) {}
 #pragma warning(push)
+#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	[[deprecated("Use the std::filesystem::path version")]] explicit ModFilesystem(std::string_view game_root, std::vector<Mod> mods):
 		 game_root_(std::filesystem::u8path(game_root)), mods_(std::move(mods))
 	{
 	}
 #pragma warning(pop)
+#pragma GCC diagnostic pop
 
 	// lookup functions
 	[[nodiscard]] std::optional<std::filesystem::path> GetActualFileLocation(const std::filesystem::path& path) const;
