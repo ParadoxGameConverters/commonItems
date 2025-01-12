@@ -29,7 +29,7 @@ void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, cons
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	loadMods(std::vector<std::string>{gameDocumentsPath + "mod"}, incomingMods);
+	loadMods(std::vector<std::string>{gameDocumentsPath + "/mod"}, incomingMods);
 #pragma warning(pop)
 }
 
