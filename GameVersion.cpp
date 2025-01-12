@@ -1,9 +1,11 @@
 #include "GameVersion.h"
+
+#include <filesystem>
+#include <fstream>
+
 #include "CommonRegexes.h"
 #include "OSCompatibilityLayer.h"
 #include "ParserHelpers.h"
-#include <filesystem>
-#include <fstream>
 
 
 

@@ -1,13 +1,16 @@
 #include "ModLoader.h"
-#include "../CommonFunctions.h"
-#include "../Log.h"
-#include "../OSCompatibilityLayer.h"
-#include "ModParser.h"
+
 #include <external/zip/src/zip.h>
 #include <filesystem>
 #include <set>
 #include <stdexcept>
 #include <string>
+
+#include "../CommonFunctions.h"
+#include "../Log.h"
+#include "../OSCompatibilityLayer.h"
+#include "ModParser.h"
+
 
 
 

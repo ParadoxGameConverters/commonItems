@@ -1,10 +1,12 @@
 #include "Parser.h"
+
+#include <filesystem>
+#include <fstream>
+
 #include "CommonRegexes.h"
 #include "Log.h"
 #include "ParserHelpers.h"
 #include "StringUtils.h"
-#include <filesystem>
-#include <fstream>
 
 
 

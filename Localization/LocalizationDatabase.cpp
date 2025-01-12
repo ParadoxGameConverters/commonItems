@@ -1,9 +1,11 @@
 #include "LocalizationDatabase.h"
+
+#include <algorithm>
+#include <fstream>
+
 #include "../CommonFunctions.h"
 #include "../Log.h"
 #include "../Parser.h"
-#include <algorithm>
-#include <fstream>
 
 
 
