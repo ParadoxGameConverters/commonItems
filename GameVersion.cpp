@@ -474,7 +474,7 @@ std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	return extractVersionByStringFromLauncher(versionString, path(filePath));
+	return extractVersionByStringFromLauncher(versionString, u8path(filePath));
 #pragma warning(pop)
 }
 
@@ -534,7 +534,7 @@ std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::stri
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	return extractVersionFromReadMe(path(filePath));
+	return extractVersionFromReadMe(u8path(filePath));
 #pragma warning(pop)
 }
 
@@ -601,6 +601,6 @@ std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::s
 {
 #pragma warning(push)
 #pragma warning(disable : 4996)
-	return extractVersionFromChangeLog(path(filePath));
+	return extractVersionFromChangeLog(u8path(filePath));
 #pragma warning(pop)
 }
