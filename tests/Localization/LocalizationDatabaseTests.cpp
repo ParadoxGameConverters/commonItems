@@ -160,7 +160,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 #pragma warning(push)
 #pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Mod", "mod/themod.mod"}});
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Mod", "mod/themod.mod"}});
 	const auto mods = modLoader.getMods();
 
 	commonItems::ModFilesystem filesystem(std::filesystem::path("game"), mods);
@@ -208,7 +209,8 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 #pragma warning(push)
 #pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Metadata Mod", ""}});
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Metadata Mod", ""}});
 	const auto mods = modLoader.getMods();
 
 	commonItems::ModFilesystem filesystem(std::filesystem::path("game"), mods);

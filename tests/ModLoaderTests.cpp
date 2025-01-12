@@ -11,13 +11,16 @@ using testing::UnorderedElementsAre;
 
 TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	const Mods incomingMods;
 
 	std::stringstream log;
 	auto stdOutBuf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("./", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("./"), incomingMods);
 	const auto& mods = modLoader.getMods();
 
 	std::cout.rdbuf(stdOutBuf);
@@ -26,60 +29,75 @@ TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 
 	EXPECT_TRUE(mods.empty());
 	EXPECT_THAT(actualStream.str(), testing::HasSubstr(R"([INFO] No mods were detected in savegame. Skipping mod processing.)"));
+#pragma warning(pop)
 }
 
 
 
 TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	Mods incomingMods;														  // this is what comes from the save
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder\\mod\\themodsfolder");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
+#pragma warning(pop)
 }
 
 
 TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	Mods incomingMods;									  // this is what comes from the save
 	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder\\mod\\themodsfolder");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
+#pragma warning(pop)
 }
 
 
 TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	Mods incomingMods;												  // this is what comes from the save
 	incomingMods.emplace_back(Mod("The Metadata Mod", "")); // No path given, old-style mod inputs.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Metadata Mod");
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder\\mod\\the_metadata_mod");
 	EXPECT_THAT(mods[0].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
+#pragma warning(pop)
 }
 
 
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("", "mod/themod.mod"));								  // no name given but valid!
 	incomingMods.emplace_back(Mod("Broken mod", "mod/brokenmod.mod"));			  // no path
@@ -87,12 +105,14 @@ TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 	incomingMods.emplace_back(Mod("Nonexistent mod", "mod/nonexistentmod.mod")); // doesn't exist.
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder\\mod\\themodsfolder");
+#pragma warning(pop)
 }
 
 
@@ -104,7 +124,8 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	incomingMods.emplace_back(Mod("some packed mod", "mod/packedmod.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	ASSERT_EQ(mods.size(), 1);
@@ -117,14 +138,18 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 
 TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("broken packed mod", "mod/brokenpacked.mod"));
 
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", incomingMods);
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), incomingMods);
 	const auto mods = modLoader.getMods();
 
 	EXPECT_TRUE(mods.empty());
+#pragma warning(pop)
 }
 
 

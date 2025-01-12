@@ -17,6 +17,15 @@ void commonItems::ModLoader::loadMods(const std::filesystem::path& gameDocuments
 }
 
 
+void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	loadMods(std::vector<std::string>{gameDocumentsPath + "mod"}, incomingMods);
+#pragma warning(pop)
+}
+
+
 void commonItems::ModLoader::loadMods(const std::vector<std::filesystem::path>& gameModPaths, const Mods& incomingMods)
 {
 	if (gameModPaths.empty())
