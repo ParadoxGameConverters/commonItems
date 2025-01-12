@@ -37,6 +37,11 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);../external/googletest/googletest;../external/googletest/googletest/include;../external/googletest/googlemock;../external/googletest/googlemock/include</AdditionalIncludeDirectories>
+      <TreatSpecificWarningsAsErrors>4242;4254;4263;4265;4287;4289;4296;4311;4545;4546;4547;4549;4555;4619;4640;4826;4905;4906;4928</TreatSpecificWarningsAsErrors>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
