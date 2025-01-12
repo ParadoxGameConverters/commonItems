@@ -234,6 +234,37 @@ bool IsDirectory(const std::string& path)
 }
 
 
+/*
+	Note: since the function signature did not allow for a return value, it clears the fileNames set when an
+	error occurs to make sure no operations are done on an incomplete list of files
+*/
+std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
+{
+	auto validatedPath = path;
+	if (validatedPath.ends_with('/') || validatedPath.ends_with('\\'))
+		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
+	const auto origPathStr = fs::u8path(validatedPath).native();
+
+	if (const auto tempPath = fs::u8path(path); !fs::exists(tempPath) || !fs::is_directory(tempPath))
+	{
+		return {};
+	}
+
+	std::set<std::string> fileNames;
+	for (const auto& p: fs::recursive_directory_iterator(fs::u8path(path)))
+	{
+		if (!p.is_directory())
+		{
+			const auto currentPath = p.path().native();
+
+			const auto requestedPath = currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
+			fileNames.insert(requestedPath);
+		}
+	}
+	return fileNames;
+}
+
+
 void WriteToConsole(LogLevel level, const std::string& logMessage)
 {
 	if (level != LogLevel::Debug) // Don't log debug messages to console.
