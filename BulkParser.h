@@ -13,13 +13,16 @@ class bulkParser: public parser
 	// Parses a game file in either vanilla game or mods directory.
 	// For example:
 	//		relativePath may be "map_data/areas.txt"
-	void ParseGameFile(const std::string& relative_path, const ModFilesystem& mod_fs);
+	void ParseGameFile(const std::filesystem::path& relative_path, const ModFilesystem& mod_fs);
 
 	// Parses a game folder in both vanilla game and mods directory.
 	// For example:
 	//		relativePath may be "common/governments"
 	//		extensions may be "txt", "text"
-	void ParseGameFolder(const std::string& relative_path, const ModFilesystem& mod_fs, const std::set<std::string>& extensions, bool recursive);
+	void ParseGameFolder(const std::filesystem::path& relative_path,
+		 const ModFilesystem& mod_fs,
+		 const std::set<std::filesystem::path>& extensions,
+		 bool recursive);
 };
 } // namespace commonItems
 #endif // BULK_PARSER_H

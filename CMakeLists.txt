@@ -35,48 +35,29 @@ add_subdirectory("external/googletest" "googletest")
 ################################################################################
 # Source groups
 ################################################################################
+set(COMMON_SOURCES ${COMMON_SOURCES} "BulkParser.cpp")
 set(COMMON_SOURCES ${COMMON_SOURCES} "Color.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Color.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "CommonFunctions.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "CommonFunctions.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "CommonRegexes.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "ConvenientParser.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ConvenientParser.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "ConverterVersion.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ConverterVersion.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "Date.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Date.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "GameVersion.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "GameVersion.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "iconvlite.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "iconvlite.h")
 if (PLATFORM STREQUAL "Windows")
 	set(COMMON_SOURCES ${COMMON_SOURCES} "WinUtils.cpp")
 elseif (PLATFORM STREQUAL "Linux")
 	set(COMMON_SOURCES ${COMMON_SOURCES} "LinuxUtils.cpp")
 endif (PLATFORM STREQUAL "Windows")
 set(COMMON_SOURCES ${COMMON_SOURCES} "Log.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Log.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationBlock.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationBlock.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationDatabase.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationDatabase.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationLambdas.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/Mod.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModFilesystem.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModFilesystem.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModLoader.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModLoader.h")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModParser.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModParser.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "OSCommonLayer.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "OSCompatibilityLayer.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "Parser.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "Parser.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "ParserHelpers.h")
 set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.cpp")
-set(COMMON_SOURCES ${COMMON_SOURCES} "StringUtils.h")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationBlock.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "Localization/LocalizationDatabase.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModFilesystem.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModLoader.cpp")
+set(COMMON_SOURCES ${COMMON_SOURCES} "ModLoader/ModParser.cpp")
 add_library(commonLib
 	${COMMON_SOURCES}
 )
@@ -102,8 +83,6 @@ set(tests
     "tests/DateTests.cpp"
     "tests/GameVersionTests.cpp"
     "tests/iconvliteTests.cpp"
-	"tests/Localization/LocalizationBlockTests.cpp"
-	"tests/Localization/LocalizationDatabaseTests.cpp"
     "tests/LogTests.cpp"
 	"tests/ModFilesystemTests.cpp"
     "tests/ModLoaderTests.cpp"
@@ -112,6 +91,8 @@ set(tests
     "tests/ParserHelperTests.cpp"
     "tests/ParserTests.cpp"
     "tests/StringUtilsTests.cpp"
+	"tests/Localization/LocalizationBlockTests.cpp"
+	"tests/Localization/LocalizationDatabaseTests.cpp"
 )
 source_group("tests" FILES ${tests})
 
