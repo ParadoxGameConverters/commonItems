@@ -29,7 +29,7 @@ typedef unsigned __int32 uint32_t;
 #define BIT(index) (1 << (index))
 
 #ifdef _BIG_ENDIAN
-#define htole16(x) ((((x) & 0x00FF) << 8) | (((x) & 0xFF00) >> 8))
+#define htole16(x) ((((x)&0x00FF) << 8) | (((x)&0xFF00) >> 8))
 #define letoh16(x) htole16(x)
 #else /* little endian */
 #define htole16(x) (x)

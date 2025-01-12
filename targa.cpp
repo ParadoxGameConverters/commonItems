@@ -404,7 +404,7 @@ tga_result tga_write(const char* filename, const tga_image* src)
  * called from tga_write_to_FILE().  It assumes that <src> has its header
  * fields set up correctly.
  */
-#define PIXEL(ofs) (row + (ofs) * bpp)
+#define PIXEL(ofs) (row + (ofs)*bpp)
 static tga_result tga_write_row_RLE(FILE* fp, const tga_image* src, const uint8_t* row)
 {
 #define WRITE(src, size)                                                                                                                                       \
