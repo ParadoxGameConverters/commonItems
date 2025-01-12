@@ -28,12 +28,9 @@ void commonItems::ModLoader::loadMods(const path& gameDocumentsPath, const Mods&
 void commonItems::ModLoader::loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	loadMods(std::vector<std::string>{gameDocumentsPath + "/mod"}, incomingMods);
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -99,9 +96,7 @@ void commonItems::ModLoader::loadMods(const std::vector<path>& gameModPaths, con
 void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPaths, const Mods& incomingMods)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	if (gameModPaths.empty())
 	{
 		Log(LogLevel::Info) << "No mod directories were provided. Skipping mod processing.";
@@ -156,7 +151,6 @@ void commonItems::ModLoader::loadMods(const std::vector<std::string>& gameModPat
 		usableMods.emplace_back(Mod(mod.name, possibleModPath->string() + "/", mod.dependencies, mod.replacedFolders));
 	}
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -270,9 +264,7 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<path>& gameMod
 void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& gameModPaths, const Mods& incomingMods)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::set<std::string> diskModNames;
 	for (const auto& modPath: gameModPaths)
 	{
@@ -373,7 +365,6 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 		}
 	}
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 

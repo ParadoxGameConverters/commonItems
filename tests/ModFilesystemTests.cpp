@@ -6,9 +6,7 @@
 
 
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 TEST(ModFilesystemTests, MissingFileReturnsNullopt)
 {
 	const commonItems::ModFilesystem mod_filesystem(std::string_view("ModFilesystem/GetActualFileLocation/game_root"), {});
@@ -352,4 +350,3 @@ TEST(ModFilesystemTests, FilesAreFoundEvenWithTrailingSlashInPath)
 			  "ModFilesystem/GetActualFileLocation/mod_two/test_folder/mod_two_file.txt"));
 }
 #pragma warning(pop)
-#pragma GCC diagnostic pop

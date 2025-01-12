@@ -12,9 +12,7 @@ using testing::UnorderedElementsAre;
 TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	const Mods incomingMods;
 
 	std::stringstream log;
@@ -32,7 +30,6 @@ TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 	EXPECT_TRUE(mods.empty());
 	EXPECT_THAT(actualStream.str(), testing::HasSubstr(R"([INFO] No mods were detected in savegame. Skipping mod processing.)"));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -40,9 +37,7 @@ TEST(ModLoaderTests, LoadModsLogsWhenNoMods)
 TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;														  // this is what comes from the save
 	incomingMods.emplace_back(Mod("Some mod", "mod/themod.mod")); // mod's in fact named "The Mod" in the file.
 
@@ -56,16 +51,13 @@ TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;									  // this is what comes from the save
 	incomingMods.emplace_back(Mod("The Mod", "")); // No path given, old-style mod inputs.
 
@@ -79,16 +71,13 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;												  // this is what comes from the save
 	incomingMods.emplace_back(Mod("The Metadata Mod", "")); // No path given, old-style mod inputs.
 
@@ -102,16 +91,13 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\the_metadata_mod/");
 	EXPECT_THAT(mods[0].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("", "mod/themod.mod"));								  // no name given but valid!
 	incomingMods.emplace_back(Mod("Broken mod", "mod/brokenmod.mod"));			  // no path
@@ -127,16 +113,13 @@ TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 	EXPECT_EQ(mods[0].name, "The Mod");
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("some packed mod", "mod/packedmod.mod"));
 
@@ -150,16 +133,13 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 	EXPECT_EQ(mods[0].path.string(), "mods\\packedmod/");
 	EXPECT_TRUE(commonItems::DoesFolderExist(mods[0].path));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;
 	incomingMods.emplace_back(Mod("broken packed mod", "mod/brokenpacked.mod"));
 
@@ -170,7 +150,6 @@ TEST(ModLoaderTests, BrokenCompressedModsAreSkipped)
 
 	EXPECT_TRUE(mods.empty());
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -202,9 +181,7 @@ TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoaded)
 TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoadedStringVersion)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	Mods incomingMods;														// this is what comes from the save
 	incomingMods.emplace_back(Mod("The Mod", ""));					// No path given, old-style mod inputs.
 	incomingMods.emplace_back(Mod("The Metadata Mod Two", "")); // No path given, old-style mod inputs.
@@ -226,5 +203,4 @@ TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoadedStringVersion)
 	EXPECT_EQ(mods[2].path, "GameDocumentsFolder/mod/the_metadata_mod/");
 	EXPECT_THAT(mods[2].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }

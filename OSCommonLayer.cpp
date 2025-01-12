@@ -21,9 +21,7 @@ namespace commonItems
 bool TryCreateFolder(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	if (exists(u8path(path)))
 		return true;
 	if (create_directory(u8path(path)))
@@ -32,7 +30,6 @@ bool TryCreateFolder(const std::string& path)
 	Log(LogLevel::Error) << "Could not create directory: " << path << " : " << GetLastErrorString();
 	return false;
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 std::wstring GetCurrentDirectoryWString()
@@ -72,9 +69,7 @@ std::set<path> GetAllFilesInFolder(const path& folder_path)
 std::set<std::string> GetAllFilesInFolder(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::set<std::string> fileNames;
 	if (!exists(u8path(path)))
 		return fileNames;
@@ -87,19 +82,15 @@ std::set<std::string> GetAllFilesInFolder(const std::string& path)
 	}
 	return fileNames;
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 void GetAllFilesInFolder(const std::string& path, std::set<std::string>& fileNames)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	fileNames = GetAllFilesInFolder(path);
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -122,9 +113,7 @@ std::set<path> GetAllSubfolders(const path& folder_path)
 std::set<std::string> GetAllSubfolders(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::set<std::string> subFolders;
 	if (!exists(u8path(path)))
 		return subFolders;
@@ -137,19 +126,15 @@ std::set<std::string> GetAllSubfolders(const std::string& path)
 	}
 	return subFolders;
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 void GetAllSubfolders(const std::string& path, std::set<std::string>& subFolders)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	subFolders = GetAllSubfolders(path);
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -193,36 +178,28 @@ std::set<path> GetAllFilesInFolderRecursive(const path& folder_path)
 void GetAllFilesInFolderRecursive(const std::string& path, std::set<std::string>& fileNames)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	fileNames = GetAllFilesInFolderRecursive(path);
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 bool TryCopyFile(const std::string& sourcePath, const std::string& destPath)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	if (copy_file(u8path(sourcePath), u8path(destPath), copy_options::overwrite_existing))
 		return true;
 	LOG(LogLevel::Warning) << "Could not copy file " << sourcePath << " to " << destPath << " - " << GetLastErrorString();
 	return false;
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	try
 	{
 		copy(u8path(sourceFolder), u8path(destFolder), copy_options::recursive);
@@ -234,16 +211,13 @@ bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder)
 		return false;
 	}
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	try
 	{
 		rename(u8path(sourceFolder), u8path(destFolder));
@@ -255,7 +229,6 @@ bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder
 		return false;
 	}
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -268,12 +241,9 @@ bool DoesFileExist(const path& path)
 bool DoesFileExist(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return DoesFileExist(u8path(path));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -286,21 +256,16 @@ bool DoesFolderExist(const path& path)
 bool DoesFolderExist(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return DoesFolderExist(u8path(path));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
 bool DeleteFolder(const std::string& folder)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	if (!exists(u8path(folder)))
 		return true;
 	if (remove_all(u8path(folder)) != static_cast<std::uintmax_t>(-1))
@@ -308,7 +273,6 @@ bool DeleteFolder(const std::string& folder)
 	Log(LogLevel::Error) << "Could not delete folder: " << folder << " " << GetLastErrorString();
 	return false;
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 

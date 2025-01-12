@@ -46,12 +46,9 @@ void commonItems::ModParser::parseMod(const path& fileName)
 void commonItems::ModParser::parseMod(const std::string& fileName)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	parseMod(u8path(fileName));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -119,12 +116,9 @@ void commonItems::ModParser::parseMetadata(const path& metadata_path)
 void commonItems::ModParser::parseMetadata(const std::string& fileName)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	parseMetadata(u8path(fileName));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -143,10 +137,7 @@ const std::set<std::string> commonItems::ModParser::getReplacedPaths() const
 void commonItems::ModParser::setPath(const std::string& path)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	path_ = u8path(path).make_preferred();
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }

@@ -406,12 +406,9 @@ std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const path& f
 std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return extractVersionFromLauncher(u8path(filePath));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -476,12 +473,9 @@ std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const
 std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return extractVersionByStringFromLauncher(versionString, u8path(filePath));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -539,12 +533,9 @@ std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const path& fil
 std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return extractVersionFromReadMe(u8path(filePath));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 
@@ -609,10 +600,7 @@ std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const path& 
 std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	return extractVersionFromChangeLog(u8path(filePath));
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }

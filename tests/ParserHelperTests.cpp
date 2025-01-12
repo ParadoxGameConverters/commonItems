@@ -779,9 +779,7 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
 TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
 {
 #pragma warning(push)
-#pragma GCC diagnostic push
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 	std::stringstream input;
 	input >> std::noskipws;
 	input << "=\n";
@@ -796,7 +794,6 @@ TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
 
 	ASSERT_EQ(input.str(), theObject.getString());
 #pragma warning(pop)
-#pragma GCC diagnostic pop
 }
 
 

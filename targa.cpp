@@ -14,7 +14,6 @@
 /*@unused@*/ static const char rcsid[] = "$Id: targa.c,v 1.8 2004/10/09 09:30:26 emikulic Exp $";
 
 #pragma warning(disable : 4996)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 #define TGA_KEEP_MACROS /* BIT, htole16, letoh16 */
 #include "targa.h"
@@ -405,7 +404,7 @@ tga_result tga_write(const char* filename, const tga_image* src)
  * called from tga_write_to_FILE().  It assumes that <src> has its header
  * fields set up correctly.
  */
-#define PIXEL(ofs) (row + (ofs) * bpp)
+#define PIXEL(ofs) (row + (ofs)*bpp)
 static tga_result tga_write_row_RLE(FILE* fp, const tga_image* src, const uint8_t* row)
 {
 #define WRITE(src, size)                                                                                                                                       \
