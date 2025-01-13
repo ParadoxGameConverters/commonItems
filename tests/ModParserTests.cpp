@@ -148,7 +148,11 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	the_mod_file.parseMetadata(std::string("GameDocumentsFolder/mod/parseable_metadata/.metadata/metadata.json"));
 
 	EXPECT_EQ(the_mod_file.getName(), "modName");
+#ifdef WINDOWS
 	EXPECT_EQ(the_mod_file.getPath(), "mod\\parseable_metadata");
+#else
+	EXPECT_EQ(the_mod_file.getPath(), "mod/parseable_metadata");
+#endif
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("mod/parseable_metadata"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
 #ifdef WINDOWS
