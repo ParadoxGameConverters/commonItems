@@ -48,7 +48,11 @@ TEST(ModLoaderTests, ModsByPathCanBeLocatedUnpackedAndUpdated)
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
+#else
+	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod/themodsfolder/");
+#endif
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 #pragma warning(pop)
 }
@@ -68,7 +72,11 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedUnpackedAndUpdated)
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
+#else
+	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod/themodsfolder/");
+#endif
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 #pragma warning(pop)
 }
@@ -88,7 +96,11 @@ TEST(ModLoaderTests, ModsByNameCanBeLocatedByMetadataUnpackedAndUpdated)
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Metadata Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\the_metadata_mod/");
+#else
+	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod/the_metadata_mod/");
+#endif
 	EXPECT_THAT(mods[0].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 #pragma warning(pop)
 }
@@ -111,7 +123,11 @@ TEST(ModLoaderTests, BrokenMissingAndNonexistentModsAreDiscarded)
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "The Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod\\themodsfolder/");
+#else
+	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod/themodsfolder/");
+#endif
 #pragma warning(pop)
 }
 
@@ -130,7 +146,11 @@ TEST(ModLoaderTests, CompressedModsCanBeUnpacked)
 
 	ASSERT_EQ(mods.size(), 1);
 	EXPECT_EQ(mods[0].name, "Packed Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "mods\\packedmod/");
+#else
+	EXPECT_EQ(mods[0].path.string(), "mods/packedmod/");
+#endif
 	EXPECT_TRUE(commonItems::DoesFolderExist(mods[0].path));
 #pragma warning(pop)
 }
@@ -167,13 +187,25 @@ TEST(ModLoaderTests, MultipleModDirectoriesCanBeLoaded)
 
 	ASSERT_EQ(mods.size(), 3);
 	EXPECT_EQ(mods[0].name, "The Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder\\mod\\themodsfolder");
+#else
+	EXPECT_EQ(mods[0].path.string(), "GameDocumentsFolder/mod/themodsfolder");
+#endif
 	EXPECT_THAT(mods[0].dependencies, UnorderedElementsAre("Packed Mod", "Missing Mod"));
 	EXPECT_EQ(mods[1].name, "The Metadata Mod Two");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[1].path.string(), "SteamModsFolder\\529340\\the_metadata_mod_two");
+#else
+	EXPECT_EQ(mods[1].path.string(), "SteamModsFolder/529340/the_metadata_mod_two");
+#endif
 	EXPECT_THAT(mods[1].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 	EXPECT_EQ(mods[2].name, "The Metadata Mod");
+#ifdef WINDOWS
 	EXPECT_EQ(mods[2].path.string(), "GameDocumentsFolder\\mod\\the_metadata_mod");
+#else
+	EXPECT_EQ(mods[2].path.string(), "GameDocumentsFolder/mod/the_metadata_mod");
+#endif
 	EXPECT_THAT(mods[2].replacedFolders, testing::UnorderedElementsAre("replaced/path", "replaced/path/two"));
 }
 

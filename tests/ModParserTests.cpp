@@ -53,7 +53,11 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_EQ("modPath", theMod.getPath());
 	EXPECT_EQ(path("modPath"), theMod.getFilesystemPath());
 	EXPECT_THAT(theMod.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
+#ifdef WINDOWS
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
+#else
+	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+#endif
 	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
@@ -64,7 +68,11 @@ TEST(ModParserTests, modPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getPath(), "modPath");
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("modPath"));
 	EXPECT_THAT(the_mod_file.getDependencies(), UnorderedElementsAre("dep1", "dep2"));
+#ifdef WINDOWS
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
+#else
+	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+#endif
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
@@ -91,10 +99,15 @@ TEST(ModParserTests, metadataPrimitivesDefaultToBlank)
 	the_mod_file.parseMetadata(std::string("some_nonexistent_path/empty_mod/metadata/.metadata.json")); // doesn't exist
 
 	EXPECT_TRUE(the_mod_file.getName().empty());
-	EXPECT_EQ(the_mod_file.getPath(),
-		 "some_nonexistent_path\\empty_mod"); // path is derived from the path itself, so the path is filled out even with an empty/missing file
-	EXPECT_EQ(the_mod_file.getFilesystemPath(),
-		 path("some_nonexistent_path/empty_mod")); // path is derived from the path itself, so the path is filled out even with an empty/missing file
+#ifdef WINDOWS
+	// path is derived from the path itself, so the path is filled out even with an empty/missing file
+	EXPECT_EQ(the_mod_file.getPath(), "some_nonexistent_path\\empty_mod");
+#else
+	// path is derived from the path itself, so the path is filled out even with an empty/missing file
+	EXPECT_EQ(the_mod_file.getPath(), "some_nonexistent_path/empty_mod");
+#endif
+	// path is derived from the path itself, so the path is filled out even with an empty/missing file
+	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("some_nonexistent_path/empty_mod"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty());
 	EXPECT_TRUE(the_mod_file.getReplacedPaths().empty());
 	EXPECT_TRUE(the_mod_file.getFilesystemReplacedPaths().empty());
@@ -123,7 +136,11 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_TRUE(theMod.getPath().empty());				 // path is derived from the path itself, so a stream leaves no path
 	EXPECT_TRUE(theMod.getFilesystemPath().empty()); // path is derived from the path itself, so a stream leaves no path
 	EXPECT_TRUE(theMod.getDependencies().empty());	 // dependencies are unknown for now
+#ifdef WINDOWS
 	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
+#else
+	EXPECT_THAT(theMod.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+#endif
 	EXPECT_THAT(theMod.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 
 	commonItems::ModParser the_mod_file;
@@ -134,7 +151,11 @@ TEST(ModParserTests, metadataPrimitivesCanBeSet)
 	EXPECT_EQ(the_mod_file.getPath(), "mod\\parseable_metadata");
 	EXPECT_EQ(the_mod_file.getFilesystemPath(), path("mod/parseable_metadata"));
 	EXPECT_TRUE(the_mod_file.getDependencies().empty()); // dependencies are unknown for now
+#ifdef WINDOWS
 	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced\\path", "replaced\\path\\two"));
+#else
+	EXPECT_THAT(the_mod_file.getReplacedPaths(), UnorderedElementsAre("replaced/path", "replaced/path/two"));
+#endif
 	EXPECT_THAT(the_mod_file.getFilesystemReplacedPaths(), UnorderedElementsAre(path("replaced/path"), path("replaced/path/two")));
 #pragma warning(pop)
 }
