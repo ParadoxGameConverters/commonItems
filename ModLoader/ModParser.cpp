@@ -96,7 +96,7 @@ void commonItems::ModParser::parseMetadata(const path& metadata_path)
 	// path_ should be the final two path components
 	path last;
 	path second_to_last;
-	for (const auto component: fs_path)
+	for (const auto& component: fs_path)
 	{
 		second_to_last = last;
 		last = component;
