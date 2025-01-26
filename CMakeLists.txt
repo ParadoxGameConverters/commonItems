@@ -117,6 +117,7 @@ file(COPY "tests/TestFiles/" DESTINATION "./")
 ################################
 # Coverage
 ################################
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 if (COVERAGE STREQUAL true)
 	add_custom_target(lcov
 		COMMAND mkdir -p lcoverage
@@ -154,6 +155,7 @@ if (COVERAGE STREQUAL true)
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 	)
 endif (COVERAGE STREQUAL true)
+endif (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 
 ################################
 # Unit Tests
