@@ -1,5 +1,5 @@
 #include "../ConvenientParser.h"
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 
 TEST(ConvenientParser_Tests, StringSetterWorks)

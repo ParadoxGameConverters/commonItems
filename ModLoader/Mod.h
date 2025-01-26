@@ -2,13 +2,14 @@
 #define MOD_H_
 
 
+#include <filesystem>
 #include <set>
 #include <string>
 
 
 
 using Name = std::string;
-using Path = std::string;
+using Path = std::filesystem::path;
 struct Mod
 {
 	Mod() = default;
@@ -17,15 +18,17 @@ struct Mod
 		 name(std::move(theName)), path(std::move(thePath)), dependencies(std::move(theDependencies))
 	{
 	}
-	explicit Mod(Name theName, Path thePath, std::set<Name> theDependencies, std::set<std::string> theReplacedFolders):
+	explicit Mod(Name theName, Path thePath, std::set<Name> theDependencies, std::set<Path> theReplacedFolders):
 		 name(std::move(theName)), path(std::move(thePath)), dependencies(std::move(theDependencies)), replacedFolders(std::move(theReplacedFolders))
 	{
 	}
+
+	bool operator==(const Mod& rhs) const { return rhs.name == name && rhs.path == path && rhs.name == name; }
+
 	Name name;
 	Path path;
 	std::set<Name> dependencies;
-	std::set<std::string> replacedFolders;
-	bool operator==(const Mod& rhs) const { return rhs.name == name && rhs.path == path; }
+	std::set<Path> replacedFolders;
 };
 
 

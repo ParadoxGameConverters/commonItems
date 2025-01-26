@@ -1,8 +1,8 @@
 #include "../../Localization/LocalizationDatabase.h"
 #include "../../ModLoader/Mod.h"
 #include "../../ModLoader/ModLoader.h"
-#include "gmock/gmock-matchers.h"
-#include "gtest/gtest.h"
+#include <gmock/gmock-matchers.h>
+#include <gtest/gtest.h>
 
 TEST(Localization_LocalizationDatabase_Tests, NewLocalizationDatabaseIsEmpty)
 {
@@ -157,18 +157,23 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsFromUnsupportedLangua
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesystem)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Mod", "mod/themod.mod"}});
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Mod", "mod/themod.mod"}});
 	const auto mods = modLoader.getMods();
 
-	commonItems::ModFilesystem filesystem("game", mods);
+	// calling std::string_view version since that also calls the std::filesystem::path version
+	commonItems::ModFilesystem filesystem(std::string_view("game"), mods);
 
 	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
 
 	std::stringstream log;
 	auto stdout_buf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	database.ScrapeLocalizations(filesystem, "localization");
+	// calling std::string version since that also calls the std::filesystem::path version
+	database.ScrapeLocalizations(filesystem, std::string("localization"));
 	std::cout.rdbuf(stdout_buf);
 	std::string actual_output = log.str();
 
@@ -197,22 +202,28 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
+#pragma warning(pop)
 }
 
 TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModFilesystem)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	commonItems::ModLoader modLoader;
-	modLoader.loadMods("GameDocumentsFolder", {Mod{"The Metadata Mod", ""}});
+	// calling std::string version because it calls the other
+	modLoader.loadMods(std::string("GameDocumentsFolder"), {Mod{"The Metadata Mod", ""}});
 	const auto mods = modLoader.getMods();
 
-	commonItems::ModFilesystem filesystem("game", mods);
+	// calling std::string_view version since that also calls the std::filesystem::path version
+	commonItems::ModFilesystem filesystem(std::string_view("game"), mods);
 
 	commonItems::LocalizationDatabase database("english", {"french", "spanish"});
 
 	std::stringstream log;
 	auto stdout_buf = std::cout.rdbuf();
 	std::cout.rdbuf(log.rdbuf());
-	database.ScrapeLocalizations(filesystem, "localization");
+	// calling std::string version since that also calls the std::filesystem::path version
+	database.ScrapeLocalizations(filesystem, std::string("localization"));
 	std::cout.rdbuf(stdout_buf);
 	std::string actual_output = log.str();
 
@@ -241,4 +252,5 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromMetaModF
 
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());
+#pragma warning(pop)
 }

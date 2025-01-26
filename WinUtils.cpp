@@ -5,9 +5,10 @@
 #include <filesystem>
 #include <iostream>
 
+
+
 namespace fs = std::filesystem;
 
-#pragma warning(disable : 4996) // suppress warnings about wcscmp()
 
 
 namespace commonItems
@@ -15,6 +16,8 @@ namespace commonItems
 
 std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	auto validatedPath = path;
 	if (validatedPath.ends_with('/') || validatedPath.ends_with('\\'))
 		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
@@ -39,6 +42,7 @@ std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
 		}
 	}
 	return fileNames;
+#pragma warning(pop)
 }
 
 
@@ -113,6 +117,24 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 {
 	return convertUTF8ToWin125_(UTF8, 1252);
 }
+
+
+std::string UTF16ToUTF8(const std::wstring& UTF16)
+{
+	const int requiredSize = WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, nullptr, 0, "0", nullptr);
+	char* asciiArray = new char[requiredSize];
+
+	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, asciiArray, requiredSize, "0", nullptr))
+	{
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+	}
+	std::string returnable(asciiArray);
+
+	delete[] asciiArray;
+
+	return returnable;
+}
+
 
 std::string convertUTF8ToWin1251(const std::string& UTF8)
 {
@@ -287,7 +309,7 @@ std::string convertUTF8toWin1251(const std::string& UTF8)
 	return utf2cp(UTF8);
 }
 
-std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
+std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID)
 {
 	if (steamID.empty())
 		return std::nullopt;

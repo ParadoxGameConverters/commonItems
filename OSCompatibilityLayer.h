@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include <cstdint>
+#include <filesystem>
 #include <optional>
 #include <set>
 #include <string>
@@ -24,41 +25,37 @@ namespace commonItems
 //
 
 // Confirms the specified file exists (and is not a folder).
-bool DoesFileExist(const std::string& path);
+bool DoesFileExist(const std::filesystem::path& path);
+[[deprecated("Use std::filesystem::path version")]] bool DoesFileExist(const std::string& path);
 
 // Confirms the specified folder exists (and is actually a folder).
-bool DoesFolderExist(const std::string& path);
+bool DoesFolderExist(const std::filesystem::path& path);
+[[deprecated("Use std::filesystem::path version")]] bool DoesFolderExist(const std::string& path);
 
 // Returns the names of all files in the specified folder.
-std::set<std::string> GetAllFilesInFolder(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllFilesInFolder(const std::string& path)")]] inline void GetAllFilesInFolder(const std::string& path,
-	 std::set<std::string>& fileNames)
-{
-	fileNames = GetAllFilesInFolder(path);
-}
+std::set<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path);
+[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllFilesInFolder(const std::string& path);
+[[deprecated("Use std::set<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path)")]] void GetAllFilesInFolder(const std::string& path,
+	 std::set<std::string>& fileNames);
 
 // Returns the names of all subfolders in the specified folder.
-std::set<std::string> GetAllSubfolders(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllSubfolders(const std::string& path)")]] inline void GetAllSubfolders(const std::string& path,
-	 std::set<std::string>& subFolders)
-{
-	subFolders = GetAllSubfolders(path);
-}
+std::set<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path);
+[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllSubfolders(const std::string& path);
+[[deprecated("Use std::set<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path)")]] void GetAllSubfolders(const std::string& path,
+	 std::set<std::string>& subFolders);
 
 // Returns the names of all files in the specified folder and all its subfolders.
-std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
-[[deprecated("Use std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)")]] inline void GetAllFilesInFolderRecursive(
+std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path);
+[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
+[[deprecated("Use std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path)")]] void GetAllFilesInFolderRecursive(
 	 const std::string& path,
-	 std::set<std::string>& fileNames)
-{
-	fileNames = GetAllFilesInFolderRecursive(path);
-}
+	 std::set<std::string>& fileNames);
 
 // Returns the current directory in UTF-16.
-std::wstring GetCurrentDirectoryWString();
+[[deprecated("Use std::filesystem::current_path")]] std::wstring GetCurrentDirectoryWString();
 
 // Given a Steam AppId, returns the install path for the corresponding game.
-std::optional<std::wstring> getSteamInstallPath(const std::string& steamID);
+std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID);
 
 
 //
@@ -66,19 +63,19 @@ std::optional<std::wstring> getSteamInstallPath(const std::string& steamID);
 //
 
 // Attempts to create the specified directory.
-bool TryCreateFolder(const std::string& path);
+[[deprecated("Use std::filesystem::create_directories")]] bool TryCreateFolder(const std::string& path);
 
 // Attempts to copy the specified file to the specified location, overwriting any existing file.
-bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
+[[deprecated("Use std::filesystem::copy_file")]] bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
 
 // Attempts to recursively copy to specified folder to the specified location.
-bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder);
+[[deprecated("Use std::filesystem::copy")]] bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder);
 
 // Attempts to rename the specified folder to the specified name.
-bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder);
+[[deprecated("Use std::filesystem::rename")]] bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder);
 
 // Attempt to delete the specified folder (and everything in it).
-bool DeleteFolder(const std::string& folder);
+[[deprecated("Use std::filesystem::remove_all")]] bool DeleteFolder(const std::string& folder);
 
 
 //

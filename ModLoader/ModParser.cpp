@@ -1,11 +1,18 @@
 #include "ModParser.h"
+
+#include <external/json/single_include/nlohmann/json.hpp>
+#include <external/json/single_include/nlohmann/json_fwd.hpp>
+#include <fstream>
+
 #include "../CommonFunctions.h"
 #include "../CommonRegexes.h"
 #include "../ParserHelpers.h"
 #include "../StringUtils.h"
-#include "../external/json/single_include/nlohmann/json.hpp"
-#include "../external/json/single_include/nlohmann/json_fwd.hpp"
-#include <fstream>
+
+
+
+using std::filesystem::path;
+using std::filesystem::u8path;
 
 
 
@@ -15,38 +22,48 @@ void commonItems::ModParser::parseMod(std::istream& theStream)
 	parseStream(theStream);
 	clearRegisteredKeywords();
 
-	if (!path.empty())
+	if (!path_.empty())
 	{
-		const auto ending = getExtension(path);
-		compressed = ending == "zip" || ending == "bin";
+		const auto ending = path_.extension();
+		compressed_ = ending == ".zip" || ending == ".bin";
 	}
 }
 
-void commonItems::ModParser::parseMod(const std::string& fileName)
+void commonItems::ModParser::parseMod(const path& fileName)
 {
 	registerKeys();
 	parseFile(fileName);
 	clearRegisteredKeywords();
 
-	if (!path.empty())
+	if (!path_.empty())
 	{
-		const auto ending = getExtension(path);
-		compressed = ending == "zip" || ending == "bin";
+		const auto ending = path_.extension();
+		compressed_ = ending == ".zip" || ending == ".bin";
 	}
 }
 
+
+void commonItems::ModParser::parseMod(const std::string& fileName)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	parseMod(u8path(fileName));
+#pragma warning(pop)
+}
+
+
 void commonItems::ModParser::registerKeys()
 {
-	registerSetter("name", name);
-	registerRegex("path|archive", [this](const std::string& unused, std::istream& theStream) {
-		path = getString(theStream);
+	registerSetter("name", name_);
+	registerRegex("path|archive", [this]([[maybe_unused]] const std::string& unused, std::istream& theStream) {
+		path_ = getString(theStream);
 	});
 	registerKeyword("dependencies", [this](std::istream& theStream) {
 		const auto theDependencies = getStrings(theStream);
-		dependencies.insert(theDependencies.begin(), theDependencies.end());
+		dependencies_.insert(theDependencies.begin(), theDependencies.end());
 	});
 	registerKeyword("replace_path", [this](std::istream& theStream) {
-		replacedPaths.emplace(getString(theStream));
+		replacedPaths_.emplace(path(getString(theStream)).make_preferred());
 	});
 	registerRegex(catchallRegex, ignoreItem);
 }
@@ -55,46 +72,72 @@ void commonItems::ModParser::registerKeys()
 void commonItems::ModParser::parseMetadata(std::istream& theStream)
 {
 	nlohmann::json data = nlohmann::json::parse(theStream);
-	name = commonItems::remQuotes(data.value("name", ""));
+	name_ = commonItems::remQuotes(data.value("name", ""));
 
 	if (const auto game_custom_data = data.find("game_custom_data"); game_custom_data != data.end())
 	{
 		if (const auto replace_paths = game_custom_data->find("replace_paths"); replace_paths != game_custom_data->end())
 		{
-			for (const auto& path: *replace_paths)
+			for (const auto& replace_path: *replace_paths)
 			{
-				replacedPaths.emplace(path);
+				replacedPaths_.emplace(path(std::string(replace_path)).make_preferred());
 			}
 		}
 	}
 }
 
 
-void commonItems::ModParser::parseMetadata(const std::string& fileName)
+void commonItems::ModParser::parseMetadata(const path& metadata_path)
 {
-	std::filesystem::path fs_path(fileName);
+	path fs_path(metadata_path);
 	fs_path = fs_path.parent_path(); // remove metadata.json
 	fs_path = fs_path.parent_path(); // remove /.metadata
-	const std::string path_string = fs_path.generic_string();
 
-	std::filesystem::path root_path = fs_path.parent_path(); // the mods folder
-	root_path = root_path.parent_path();							// the parent of the mods folder
-	const std::string root_path_string = root_path.generic_string();
-
-	path = path_string.substr(root_path_string.size(), path_string.size());
-	while (path.starts_with('/'))
+	// path_ should be the final two path components
+	path last;
+	path second_to_last;
+	for (const auto& component: fs_path)
 	{
-		path.erase(0, 1);
+		second_to_last = last;
+		last = component;
 	}
-	while (path.starts_with('\\'))
-	{
-		path.erase(0, 1);
-	}
+	path_ = second_to_last / last;
+	path_.make_preferred();
 
-	std::ifstream file_stream(fileName);
+	std::ifstream file_stream(metadata_path);
 	if (file_stream.is_open())
 	{
 		parseMetadata(file_stream);
 		file_stream.close();
 	}
+}
+
+
+void commonItems::ModParser::parseMetadata(const std::string& fileName)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	parseMetadata(u8path(fileName));
+#pragma warning(pop)
+}
+
+
+const std::set<std::string> commonItems::ModParser::getReplacedPaths() const
+{
+	std::set<std::string> replaced_paths;
+	for (const path& path: replacedPaths_)
+	{
+		replaced_paths.emplace(path.string());
+	}
+
+	return replaced_paths;
+}
+
+
+void commonItems::ModParser::setPath(const std::string& path)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	path_ = u8path(path).make_preferred();
+#pragma warning(pop)
 }

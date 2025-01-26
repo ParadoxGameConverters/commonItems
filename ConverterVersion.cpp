@@ -1,14 +1,33 @@
 #include "ConverterVersion.h"
-#include "CommonRegexes.h"
-#include "ParserHelpers.h"
+
 #include <fstream>
 
-void commonItems::ConverterVersion::loadVersion(const std::string& filename)
+#include "CommonRegexes.h"
+#include "ParserHelpers.h"
+
+
+
+using std::filesystem::path;
+using std::filesystem::u8path;
+
+
+
+void commonItems::ConverterVersion::loadVersion(const path& filename)
 {
 	registerKeys();
 	parseFile(filename);
 	clearRegisteredKeywords();
 }
+
+
+void commonItems::ConverterVersion::loadVersion(const std::string& filename)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	loadVersion(u8path(filename));
+#pragma warning(pop)
+}
+
 
 void commonItems::ConverterVersion::loadVersion(std::istream& theStream)
 {

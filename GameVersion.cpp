@@ -1,8 +1,18 @@
 #include "GameVersion.h"
+
+#include <filesystem>
+#include <fstream>
+
 #include "CommonRegexes.h"
 #include "OSCompatibilityLayer.h"
 #include "ParserHelpers.h"
-#include <fstream>
+
+
+
+using std::filesystem::path;
+using std::filesystem::u8path;
+
+
 
 GameVersion::GameVersion(std::string version)
 {
@@ -369,7 +379,7 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 	return !fourthPart || testDigit <= *fourthPart;
 }
 
-std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const path& filePath)
 {
 	// use this for modern PDX games, point filePath to launcher-settings.json to get installation version.
 
@@ -393,7 +403,16 @@ std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::st
 	return result;
 }
 
-std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath)
+std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return extractVersionFromLauncher(u8path(filePath));
+#pragma warning(pop)
+}
+
+
+std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const path& filePath)
 {
 	std::ifstream versionFile(filePath);
 	if (!versionFile.is_open())
@@ -450,7 +469,17 @@ std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const
 	return std::nullopt;
 }
 
-std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
+
+std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return extractVersionByStringFromLauncher(versionString, u8path(filePath));
+#pragma warning(pop)
+}
+
+
+std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const path& filePath)
 {
 	// Use this for Vic2 ReadMe.txt/Readme.txt. Be sure to check both as name changes across versions, and it's not
 	// internally consistent on windows. Steam update from one version to another can in fact *not* change the case on
@@ -500,7 +529,17 @@ std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::stri
 	}
 }
 
-std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
+
+std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return extractVersionFromReadMe(u8path(filePath));
+#pragma warning(pop)
+}
+
+
+std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const path& filePath)
 {
 	// Use this to get CK2 installation version from CK2's ChangeLog.txt.
 
@@ -555,4 +594,13 @@ std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::s
 		Log(LogLevel::Warning) << "Failure extracting version: " << line << " is broken: " << e.what();
 		return std::nullopt;
 	}
+}
+
+
+std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
+{
+#pragma warning(push)
+#pragma warning(disable : 4996)
+	return extractVersionFromChangeLog(u8path(filePath));
+#pragma warning(pop)
 }

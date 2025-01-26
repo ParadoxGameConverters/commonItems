@@ -23,6 +23,7 @@
 //  A freestanding output function allows writing a GameVersion to output streams.
 
 
+#include <filesystem>
 
 #include "ConvenientParser.h"
 #include <string>
@@ -69,10 +70,23 @@ class GameVersion: commonItems::convenientParser
 
 	friend std::ostream& operator<<(std::ostream& out, const GameVersion& version);
 
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::string& filePath); // modern PDX games, scrapes launcher-settings.json.
-	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath);
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(const std::string& filePath); // extracts version from Vic2 ReadMe.txt/Readme.txt.
-	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(const std::string& filePath); // extracts version from CK2 ChangeLog.txt.
+	// modern PDX games, scrapes launcher-settings.json.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::filesystem::path& filePath);
+	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(
+		 const std::string& filePath);
+	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::filesystem::path& filePath);
+	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(
+		 const std::string& versionString,
+		 const std::string& filePath);
+	// extracts version from CK2 ChangeLog.txt.
+	// extracts version from Vic2 ReadMe.txt/Readme.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(const std::filesystem::path& filePath);
+	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(
+		 const std::string& filePath);
+	// extracts version from CK2 ChangeLog.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(const std::filesystem::path& filePath);
+	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(
+		 const std::string& filePath);
 
   private:
 	void registerKeys();

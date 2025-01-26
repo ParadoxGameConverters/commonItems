@@ -625,7 +625,22 @@ std::string convertToUTF8(const std::wstring& input)
 	return ConvertString<std::wstring, std::string>("wchar_t", "UTF-8//TRANSLIT", input);
 }
 
-std::optional<std::wstring> getSteamInstallPath(const std::string& steamID)
+
+std::string utf16_to_utf8(const std::u16string& utf16_string)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> conversion;
+	return conversion.to_bytes(utf16_string);
+}
+
+
+std::string UTF16ToUTF8(const std::wstring& UTF16)
+{
+	const std::u16string u16str(UTF16.begin(), UTF16.end());
+	return utf16_to_utf8(u16str);
+}
+
+
+std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID)
 {
 	// TODO: Write some actual code for this when able.
 	return std::nullopt;

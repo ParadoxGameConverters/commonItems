@@ -1,7 +1,7 @@
 #include "../CommonRegexes.h"
 #include "../ParserHelpers.h"
-#include "gtest/gtest.h"
 #include <gmock/gmock-matchers.h>
+#include <gtest/gtest.h>
 #include <sstream>
 
 
@@ -778,6 +778,8 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
 
 TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
 {
+#pragma warning(push)
+#pragma warning(disable : 4996)
 	std::stringstream input;
 	input >> std::noskipws;
 	input << "=\n";
@@ -791,6 +793,7 @@ TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
 	const commonItems::stringOfObject theObject(input);
 
 	ASSERT_EQ(input.str(), theObject.getString());
+#pragma warning(pop)
 }
 
 

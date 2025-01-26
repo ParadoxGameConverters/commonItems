@@ -17,7 +17,6 @@
     <ClCompile Include="..\ConvenientParser.cpp" />
     <ClCompile Include="..\ConverterVersion.cpp" />
     <ClCompile Include="..\Date.cpp" />
-    <ClCompile Include="..\external\zip\src\zip.c" />
     <ClCompile Include="..\GameVersion.cpp" />
     <ClCompile Include="..\iconvlite.cpp" />
     <ClCompile Include="..\LinuxUtils.cpp">
@@ -45,8 +44,6 @@
     <ClInclude Include="..\ConvenientParser.h" />
     <ClInclude Include="..\ConverterVersion.h" />
     <ClInclude Include="..\Date.h" />
-    <ClInclude Include="..\external\zip\src\miniz.h" />
-    <ClInclude Include="..\external\zip\src\zip.h" />
     <ClInclude Include="..\GameVersion.h" />
     <ClInclude Include="..\iconvlite.h" />
     <ClInclude Include="..\Localization\LocalizationBlock.h" />
@@ -109,6 +106,12 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <TreatSpecificWarningsAsErrors>4242;4254;4263;4265;4287;4289;4296;4311;4545;4546;4547;4549;4555;4619;4640;4826;4905;4906;4928</TreatSpecificWarningsAsErrors>
+      <WarningLevel>Level4</WarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -126,6 +129,10 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
     </ClCompile>
     <Link>
       <SubSystem>

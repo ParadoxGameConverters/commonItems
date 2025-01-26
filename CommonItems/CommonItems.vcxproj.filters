@@ -4,12 +4,6 @@
     <Filter Include="commonItems">
       <UniqueIdentifier>{569e5cb7-b294-4ea8-991d-ba24d2e9c236}</UniqueIdentifier>
     </Filter>
-    <Filter Include="external">
-      <UniqueIdentifier>{c32ded5e-5cf5-4c96-9d9d-0a332b595382}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="external\zip">
-      <UniqueIdentifier>{cdb3317d-89c8-469e-994a-ccea14e50e98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="commonItems\Localization">
       <UniqueIdentifier>{5e9fa605-7e0b-42ab-9583-fce44952fd6f}</UniqueIdentifier>
     </Filter>
@@ -65,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="..\WinUtils.cpp">
       <Filter>commonItems</Filter>
-    </ClCompile>
-    <ClCompile Include="..\external\zip\src\zip.c">
-      <Filter>external\zip</Filter>
     </ClCompile>
     <ClCompile Include="..\Localization\LocalizationBlock.cpp">
       <Filter>commonItems\Localization</Filter>
@@ -130,12 +121,6 @@
     </ClInclude>
     <ClInclude Include="..\targa.h">
       <Filter>commonItems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\zip\src\miniz.h">
-      <Filter>external\zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\external\zip\src\zip.h">
-      <Filter>external\zip</Filter>
     </ClInclude>
     <ClInclude Include="..\Localization\LocalizationBlock.h">
       <Filter>commonItems\Localization</Filter>
