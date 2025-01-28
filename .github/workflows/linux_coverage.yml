@@ -74,7 +74,7 @@ jobs:
       run: |
        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
        sudo apt-get update
-       sudo apt-get install libcurl4-openssl-dev lcov
+       sudo apt-get install libcurl4-openssl-dev lcov ninja-build
        cmake --preset x64-coverage-linux
        cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests -- -j40
 
