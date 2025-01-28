@@ -56,7 +56,7 @@ jobs:
   analyze:
     name: Coverage Check Foreign
     if: github.repository_owner != 'ParadoxGameConverters'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -76,7 +76,7 @@ jobs:
        sudo apt-get update
        sudo apt-get install libcurl4-openssl-dev lcov ninja-build
        cmake --preset x64-coverage-linux
-       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests -- -j40
+       cmake --build --preset build-x64-coverage-linux --target commonLib CommonItemsTests -- -j3
 
     - name: Run tests
       run: |
@@ -90,7 +90,7 @@ jobs:
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: build/lcoverage/coverage.info
+        path-to-lcov: build/x64-coverage-linux/lcoverage/coverage.info
 
     - name: Cleanup
       uses: colpal/actions-clean@v1
