@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <filesystem>
 #include <iostream>
+#include <stacktrace>
 
 
 
@@ -70,7 +71,7 @@ std::string convertUTF8ToASCII(const std::string& UTF8)
 
 	if (0 == WideCharToMultiByte(20127 /*US-ASCII (7-bit)*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
-		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << std::stacktrace::current() << "\n" << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -87,7 +88,7 @@ std::string convertUTF8To8859_15(const std::string& UTF8)
 
 	if (0 == WideCharToMultiByte(28605 /*8859-15*/, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
-		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << std::stacktrace::current() << "\n" << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -104,7 +105,7 @@ std::string convertUTF8ToWin125_(const std::string& UTF8, const int codepage)
 
 	if (0 == WideCharToMultiByte(codepage, 0, convertUTF8ToUTF16(UTF8).c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
-		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << std::stacktrace::current() << "\n" << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
@@ -126,7 +127,7 @@ std::string UTF16ToUTF8(const std::wstring& UTF16)
 
 	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, asciiArray, requiredSize, "0", nullptr))
 	{
-		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << std::stacktrace::current() << "\n" << GetLastErrorString();
 	}
 	std::string returnable(asciiArray);
 
