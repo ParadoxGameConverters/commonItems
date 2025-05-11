@@ -121,12 +121,13 @@ std::string convertUTF8ToWin1252(const std::string& UTF8)
 
 std::string UTF16ToUTF8(const std::wstring& UTF16)
 {
-	const int requiredSize = WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, nullptr, 0, "0", nullptr);
+	const int requiredSize = WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, nullptr, 0, NULL, NULL);
 	char* asciiArray = new char[requiredSize];
 
-	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, asciiArray, requiredSize, "0", nullptr))
+	if (0 == WideCharToMultiByte(CP_UTF8, 0, UTF16.c_str(), -1, asciiArray, requiredSize, NULL, NULL))
 	{
-		Log(LogLevel::Error) << "Could not translate string to ASCII - " << GetLastErrorString();
+		// Can only return error code, as getting the string requires calling this function, possibly leading to a recursive error
+		Log(LogLevel::Error) << "Could not translate string to ASCII - " << std::to_string(GetLastError());
 	}
 	std::string returnable(asciiArray);
 
