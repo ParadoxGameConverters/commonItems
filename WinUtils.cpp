@@ -4,7 +4,6 @@
 #include <Windows.h>
 #include <filesystem>
 #include <iostream>
-#include <stacktrace>
 
 
 
