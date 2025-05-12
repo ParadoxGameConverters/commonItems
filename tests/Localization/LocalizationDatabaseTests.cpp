@@ -185,20 +185,20 @@ TEST(Localization_LocalizationDatabase_Tests, LocalizationsCanBeReadFromFilesyst
 	ASSERT_TRUE(test_block.has_value());
 	EXPECT_EQ(test_block->GetBaseLanguage(), "english");
 	EXPECT_EQ(test_block->GetKey(), "KEY1");
-	EXPECT_THAT(test_block->GetLocalizations(),
+	ASSERT_THAT(test_block->GetLocalizations(),
 		 testing::UnorderedElementsAre(testing::Pair("english", "value1 modded"), testing::Pair("french", "valeur1"), testing::Pair("spanish", "valor")));
 
 	const auto test_block_two = database.GetLocalizationBlock("KEY2");
 	ASSERT_TRUE(test_block_two.has_value());
 	EXPECT_EQ(test_block_two->GetBaseLanguage(), "english");
 	EXPECT_EQ(test_block_two->GetKey(), "KEY2");
-	EXPECT_THAT(test_block_two->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "value2"), testing::Pair("french", "valeur2")));
+	ASSERT_THAT(test_block_two->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "value2"), testing::Pair("french", "valeur2")));
 
 	const auto test_block_three = database.GetLocalizationBlock("MOD_KEY1");
 	ASSERT_TRUE(test_block_three.has_value());
 	EXPECT_EQ(test_block_three->GetBaseLanguage(), "english");
 	EXPECT_EQ(test_block_three->GetKey(), "MOD_KEY1");
-	EXPECT_THAT(test_block_three->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "mod loc")));
+	ASSERT_THAT(test_block_three->GetLocalizations(), testing::UnorderedElementsAre(testing::Pair("english", "mod loc")));
 
 	const auto non_loc_block = database.GetLocalizationBlock("NON_LOC_KEY");
 	EXPECT_FALSE(non_loc_block.has_value());

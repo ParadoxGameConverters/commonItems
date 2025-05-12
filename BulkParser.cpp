@@ -16,7 +16,7 @@ void commonItems::bulkParser::ParseGameFile(const path& relative_path, const Mod
 
 void commonItems::bulkParser::ParseGameFolder(const path& relative_path, const ModFilesystem& mod_fs, const std::set<path>& extensions, bool recursive)
 {
-	std::set<path> all_files;
+	std::vector<path> all_files;
 	if (recursive)
 		all_files = mod_fs.GetAllFilesInFolderRecursive(relative_path);
 	else
