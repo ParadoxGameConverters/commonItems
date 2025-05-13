@@ -1,8 +1,8 @@
 #include "ModFilesystem.h"
 
 #include <algorithm>
+#include <map>
 #include <ranges>
-
 
 #include "../OSCompatibilityLayer.h"
 
@@ -113,10 +113,11 @@ std::optional<path> commonItems::ModFilesystem::GetActualFolderLocation(const pa
 }
 
 
-std::set<path> commonItems::ModFilesystem::GetAllFilesInFolder(const path& path_to_folder) const
+std::vector<path> commonItems::ModFilesystem::GetAllFilesInFolder(const path& path_to_folder) const
 {
-	std::set<path> full_files;
+	std::map<std::string, path> full_files;
 	std::set<path> found_files;
+	std::vector<path> to_return;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
@@ -128,12 +129,16 @@ std::set<path> commonItems::ModFilesystem::GetAllFilesInFolder(const path& path_
 			}
 
 			found_files.insert(new_file);
-			full_files.insert(mod.path / path_to_folder / new_file);
+			full_files.emplace(new_file.string(), mod.path / path_to_folder / new_file);
 		}
 
 		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
-			return full_files;
+			for (const auto& path: full_files | std::views::values)
+			{
+				to_return.emplace_back(path);
+			}
+			return to_return;
 		}
 	}
 
@@ -145,17 +150,22 @@ std::set<path> commonItems::ModFilesystem::GetAllFilesInFolder(const path& path_
 		}
 
 		found_files.insert(new_file);
-		full_files.insert(game_root_ / path_to_folder / new_file);
+		full_files.emplace(new_file.string(), game_root_ / path_to_folder / new_file);
 	}
 
-	return full_files;
+	for (const auto& path: full_files | std::views::values)
+	{
+		to_return.emplace_back(path);
+	}
+	return to_return;
 }
 
 
-std::set<path> commonItems::ModFilesystem::GetAllSubfolders(const path& path_to_folder) const
+std::vector<path> commonItems::ModFilesystem::GetAllSubfolders(const path& path_to_folder) const
 {
-	std::set<path> full_folders;
+	std::map<std::string, path> full_folders;
 	std::set<path> found_folders;
+	std::vector<path> to_return;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
@@ -167,12 +177,16 @@ std::set<path> commonItems::ModFilesystem::GetAllSubfolders(const path& path_to_
 			}
 
 			found_folders.insert(new_folder);
-			full_folders.insert(mod.path / path_to_folder / new_folder);
+			full_folders.emplace(new_folder.string(), mod.path / path_to_folder / new_folder);
 		}
 
 		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
-			return full_folders;
+			for (const auto& path: full_folders | std::views::values)
+			{
+				to_return.emplace_back(path);
+			}
+			return to_return;
 		}
 	}
 
@@ -184,17 +198,22 @@ std::set<path> commonItems::ModFilesystem::GetAllSubfolders(const path& path_to_
 		}
 
 		found_folders.insert(new_folder);
-		full_folders.insert(game_root_ / path_to_folder / new_folder);
+		full_folders.emplace(new_folder.string(), game_root_ / path_to_folder / new_folder);
 	}
 
-	return full_folders;
+	for (const auto& path: full_folders | std::views::values)
+	{
+		to_return.emplace_back(path);
+	}
+	return to_return;
 }
 
 
-std::set<path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const path& path_to_folder) const
+std::vector<path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const path& path_to_folder) const
 {
-	std::set<path> full_files;
+	std::map<std::string, path> full_files;
 	std::set<path> found_files;
+	std::vector<path> to_return;
 
 	for (const auto& mod: mods_ | std::views::reverse)
 	{
@@ -206,12 +225,16 @@ std::set<path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const pa
 			}
 
 			found_files.insert(new_file);
-			full_files.insert((mod.path / path_to_folder / new_file).make_preferred());
+			full_files.emplace(new_file.string(), (mod.path / path_to_folder / new_file).make_preferred());
 		}
 
 		if (PathIsReplaced(path_to_folder, mod.replacedFolders))
 		{
-			return full_files;
+			for (const auto& path: full_files | std::views::values)
+			{
+				to_return.emplace_back(path);
+			}
+			return to_return;
 		}
 	}
 
@@ -223,8 +246,12 @@ std::set<path> commonItems::ModFilesystem::GetAllFilesInFolderRecursive(const pa
 		}
 
 		found_files.insert(new_file);
-		full_files.insert((game_root_ / path_to_folder / new_file).make_preferred());
+		full_files.emplace(new_file.string(), (game_root_ / path_to_folder / new_file).make_preferred());
 	}
 
-	return full_files;
+	for (const auto& path: full_files | std::views::values)
+	{
+		to_return.emplace_back(path);
+	}
+	return to_return;
 }

@@ -34,9 +34,9 @@ class ModFilesystem
 	// lookup functions
 	[[nodiscard]] std::optional<std::filesystem::path> GetActualFileLocation(const std::filesystem::path& path) const;
 	[[nodiscard]] std::optional<std::filesystem::path> GetActualFolderLocation(const std::filesystem::path& path) const;
-	[[nodiscard]] std::set<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path) const;
-	[[nodiscard]] std::set<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path) const;
-	[[nodiscard]] std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path) const;
+	[[nodiscard]] std::vector<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path) const;
+	[[nodiscard]] std::vector<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path) const;
+	[[nodiscard]] std::vector<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path) const;
 
   private:
 	std::filesystem::path game_root_;
