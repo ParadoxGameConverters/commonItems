@@ -291,13 +291,13 @@ void commonItems::ModLoader::loadModDirectories(const std::vector<std::string>& 
 		if (!diskModNames.contains(trimmedModFileName) && !modCache.contains(mod.name))
 		{
 			if (mod.name.empty())
-				Log(LogLevel::Warning) << "\t\tSavegame uses mod at [" << mod.path
+				Log(LogLevel::Warning) << "\t\tSavegame uses mod at [" << mod.path.string()
 											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else if (mod.path.empty())
 				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name
 											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			else
-				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name << "] at [" << mod.path
+				Log(LogLevel::Warning) << "\t\tSavegame uses [" << mod.name << "] at [" << mod.path.string()
 											  << "] which is not present on disk. Skipping at your risk, but this can greatly affect conversion.";
 			continue;
 		}
@@ -385,14 +385,14 @@ void commonItems::ModLoader::cacheModNames(const path& gameDocumentsPath)
 		}
 		catch (std::exception&)
 		{
-			Log(LogLevel::Warning) << "\t\t\t! Error while caching [" << gameDocumentsPath << "/" << trimmedModFileName
+			Log(LogLevel::Warning) << "\t\t\t! Error while caching [" << gameDocumentsPath.string() << "/" << trimmedModFileName.string()
 										  << "]! Mod will not be useable for conversions.";
 			continue;
 		}
 		if (theMod.isValid())
 			modCache.emplace(theMod.getName(), diskModFile);
 		else
-			Log(LogLevel::Warning) << "\t\t\t! Mod at [" << diskModFile << "] is invalid.";
+			Log(LogLevel::Warning) << "\t\t\t! Mod at [" << diskModFile.string() << "] is invalid.";
 	}
 
 	for (const auto& possible_mod_folder: GetAllSubfolders(gameDocumentsPath))
@@ -499,20 +499,20 @@ void commonItems::ModLoader::fileUnderCategory(const ModParser& theMod, const pa
 		{
 			possibleUncompressedMods.emplace_back(
 				 Mod(theMod.getName(), theMod.getFilesystemPath(), theMod.getDependencies(), theMod.getFilesystemReplacedPaths()));
-			Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at [" << path << "] and itself at ["
-									  << theMod.getFilesystemPath() << "].";
+			Log(LogLevel::Info) << "\t\tFound a potential mod [" << theMod.getName() << "] with a mod file at [" << path.string() << "] and itself at ["
+									  << theMod.getFilesystemPath().string() << "].";
 		}
 		else
 		{
 			possibleCompressedMods.emplace_back(Mod(theMod.getName(), theMod.getFilesystemPath(), theMod.getDependencies(), theMod.getFilesystemReplacedPaths()));
-			Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at [" << path << "] and itself at ["
-									  << theMod.getFilesystemPath() << "].";
+			Log(LogLevel::Info) << "\t\tFound a compressed mod [" << theMod.getName() << "] with a mod file at [" << path.string() << "] and itself at ["
+									  << theMod.getFilesystemPath().string() << "].";
 		}
 	}
 	else
 	{
 		possibleUncompressedMods.emplace_back(Mod(theMod.getName(), theMod.getFilesystemPath(), theMod.getDependencies(), theMod.getFilesystemReplacedPaths()));
-		Log(LogLevel::Info) << "\t\tFound a potential meta-mod [" << theMod.getName() << "] at [" << theMod.getFilesystemPath() << "].";
+		Log(LogLevel::Info) << "\t\tFound a potential meta-mod [" << theMod.getName() << "] at [" << theMod.getFilesystemPath().string() << "].";
 	}
 }
 
@@ -539,7 +539,7 @@ std::optional<path> commonItems::ModLoader::uncompressAndReturnNewPath(const std
 			if (!extractZip(compressedMod.path, "mods" / uncompressedName))
 			{
 				Log(LogLevel::Warning) << "We're having trouble automatically uncompressing your mod.";
-				Log(LogLevel::Warning) << "Please, manually uncompress: " << compressedMod.path;
+				Log(LogLevel::Warning) << "Please, manually uncompress: " << compressedMod.path.string();
 				Log(LogLevel::Warning) << "Into converter's folder, mods/" << uncompressedName << " subfolder.";
 				Log(LogLevel::Warning) << "Then run the converter again. Thank you and good luck.";
 				return std::nullopt;
