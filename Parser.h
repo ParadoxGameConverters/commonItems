@@ -41,7 +41,6 @@ class parser
 
 	void parseStream(std::istream& theStream);
 	void parseFile(std::filesystem::path filename);
-	[[deprecated("Use std::filesystem::path version")]] void parseFile(std::string_view filename);
 
 	std::optional<std::string> getNextToken(std::istream& theStream);
 	static std::optional<std::string> getNextTokenWithoutMatching(std::istream& theStream);

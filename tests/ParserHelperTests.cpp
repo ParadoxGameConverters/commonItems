@@ -776,27 +776,6 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
 }
 
 
-TEST(ParserHelper_Tests, StringOfObjectConvertsBracedObjectsToStrings)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	std::stringstream input;
-	input >> std::noskipws;
-	input << "=\n";
-	input << "{\n";
-	input << "\t{\n";
-	input << "\t\tid = 180\n";
-	input << "\t\ttype = 46\n";
-	input << "\t}\n";
-	input << "}";
-
-	const commonItems::stringOfObject theObject(input);
-
-	ASSERT_EQ(input.str(), theObject.getString());
-#pragma warning(pop)
-}
-
-
 TEST(ParserHelper_Tests, StringOfItemConvertsBracedObjectsToStrings)
 {
 	std::stringstream input;

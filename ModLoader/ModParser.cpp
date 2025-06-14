@@ -43,15 +43,6 @@ void commonItems::ModParser::parseMod(const path& fileName)
 }
 
 
-void commonItems::ModParser::parseMod(const std::string& fileName)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	parseMod(u8path(fileName));
-#pragma warning(pop)
-}
-
-
 void commonItems::ModParser::registerKeys()
 {
 	registerSetter("name", name_);
@@ -110,34 +101,4 @@ void commonItems::ModParser::parseMetadata(const path& metadata_path)
 		parseMetadata(file_stream);
 		file_stream.close();
 	}
-}
-
-
-void commonItems::ModParser::parseMetadata(const std::string& fileName)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	parseMetadata(u8path(fileName));
-#pragma warning(pop)
-}
-
-
-const std::set<std::string> commonItems::ModParser::getReplacedPaths() const
-{
-	std::set<std::string> replaced_paths;
-	for (const path& path: replacedPaths_)
-	{
-		replaced_paths.emplace(path.string());
-	}
-
-	return replaced_paths;
-}
-
-
-void commonItems::ModParser::setPath(const std::string& path)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	path_ = u8path(path).make_preferred();
-#pragma warning(pop)
 }

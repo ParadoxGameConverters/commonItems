@@ -72,21 +72,12 @@ class GameVersion: commonItems::convenientParser
 
 	// modern PDX games, scrapes launcher-settings.json.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::filesystem::path& filePath);
-	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(
-		 const std::string& filePath);
 	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::filesystem::path& filePath);
-	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(
-		 const std::string& versionString,
-		 const std::string& filePath);
 	// extracts version from CK2 ChangeLog.txt.
 	// extracts version from Vic2 ReadMe.txt/Readme.txt.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(const std::filesystem::path& filePath);
-	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromReadMe(
-		 const std::string& filePath);
 	// extracts version from CK2 ChangeLog.txt.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(const std::filesystem::path& filePath);
-	[[deprecated("Use the std::filesystem::path version")]] [[nodiscard]] static std::optional<GameVersion> extractVersionFromChangeLog(
-		 const std::string& filePath);
 
   private:
 	void registerKeys();

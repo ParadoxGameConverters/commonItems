@@ -403,14 +403,6 @@ std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const path& f
 	return result;
 }
 
-std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const std::string& filePath)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	return extractVersionFromLauncher(u8path(filePath));
-#pragma warning(pop)
-}
-
 
 std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const path& filePath)
 {
@@ -470,15 +462,6 @@ std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const
 }
 
 
-std::optional<GameVersion> GameVersion::extractVersionByStringFromLauncher(const std::string& versionString, const std::string& filePath)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	return extractVersionByStringFromLauncher(versionString, u8path(filePath));
-#pragma warning(pop)
-}
-
-
 std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const path& filePath)
 {
 	// Use this for Vic2 ReadMe.txt/Readme.txt. Be sure to check both as name changes across versions, and it's not
@@ -527,15 +510,6 @@ std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const path& fil
 		Log(LogLevel::Warning) << "Failure extracting version: " << line << " is broken: " << e.what();
 		return std::nullopt;
 	}
-}
-
-
-std::optional<GameVersion> GameVersion::extractVersionFromReadMe(const std::string& filePath)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	return extractVersionFromReadMe(u8path(filePath));
-#pragma warning(pop)
 }
 
 
@@ -594,13 +568,4 @@ std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const path& 
 		Log(LogLevel::Warning) << "Failure extracting version: " << line << " is broken: " << e.what();
 		return std::nullopt;
 	}
-}
-
-
-std::optional<GameVersion> GameVersion::extractVersionFromChangeLog(const std::string& filePath)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	return extractVersionFromChangeLog(u8path(filePath));
-#pragma warning(pop)
 }

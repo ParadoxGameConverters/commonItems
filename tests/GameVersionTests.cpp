@@ -427,10 +427,7 @@ TEST(GameVersion_Tests, LargerishForActualIntendedZeroWithoutSubversions)
 
 TEST(GameVersion_Tests, extractVersionFromLauncherExtractsGameVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("launcher-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("launcher-settings.json");
 
 	EXPECT_EQ(GameVersion("1.31.5"), *version);
 }
@@ -438,150 +435,105 @@ TEST(GameVersion_Tests, extractVersionFromLauncherExtractsGameVersion)
 TEST(GameVersion_Tests, extractVVersionFromLauncherExtractsGameVersion)
 {
 	// They started adding v in front of a version, eg. v1.37.0.0
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("launcher-settings-1.37.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("launcher-settings-1.37.json");
 
 	EXPECT_EQ(GameVersion("1.37.0"), *version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsNulloptForMissingFile)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("launcher-settings.json2"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("launcher-settings.json2");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsNulloptForMissingRawVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("ChangeLog.txt"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("ChangeLog.txt");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsNulloptForBrokenRawVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("broken-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("broken-settings.json");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsNulloptForNonsenseRawVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("broken-settings2.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("broken-settings2.json");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsVersionForChangedRawVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("changed-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("changed-settings.json");
 
 	EXPECT_EQ(GameVersion("1.31.5"), *version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromLauncherReturnsVersionForRome)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromLauncher(std::string("rome-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromLauncher("rome-settings.json");
 
 	EXPECT_EQ(GameVersion("2.0.3"), *version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromReadMeExtractsGameVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromReadMe(std::string("Readme.txt"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromReadMe("Readme.txt");
 
 	EXPECT_EQ(GameVersion("3.3"), *version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromReadMeReturnsNulloptForMissingFile)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromReadMe(std::string("Readme.txt2"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromReadMe("Readme.txt2");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromReadMeReturnsNulloptForBrokenFile)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromReadMe(std::string("changed-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromReadMe("changed-settings.json");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromReadMeReturnsNulloptForNonsenseVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromReadMe(std::string("BrokenMe.txt"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromReadMe("BrokenMe.txt");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromChangeLogExtractsGameVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromChangeLog(std::string("ChangeLog.txt"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromChangeLog("ChangeLog.txt");
 
 	EXPECT_EQ(GameVersion("3.3.3"), *version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromChangeLogReturnsNulloptForMissingFile)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromChangeLog(std::string("ChangeLog.txt2"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromChangeLog("ChangeLog.txt2");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromChangeLogReturnsNulloptForBrokenFile)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromChangeLog(std::string("changed-settings.json"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromChangeLog("changed-settings.json");
 
 	EXPECT_EQ(std::nullopt, version);
 }
 
 TEST(GameVersion_Tests, extractVersionFromChangeLogReturnsNulloptForNonsenseVersion)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto version = GameVersion::extractVersionFromChangeLog(std::string("BrokenLog.txt"));
-#pragma warning(pop)
+	const auto version = GameVersion::extractVersionFromChangeLog("BrokenLog.txt");
 
 	EXPECT_EQ(std::nullopt, version);
 }

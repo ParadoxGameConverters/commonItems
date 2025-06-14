@@ -14,38 +14,6 @@ namespace fs = std::filesystem;
 namespace commonItems
 {
 
-std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	auto validatedPath = path;
-	if (validatedPath.ends_with('/') || validatedPath.ends_with('\\'))
-		validatedPath = validatedPath.substr(0, validatedPath.size() - 1); // remove the trailing slash
-	const auto origPathStr = fs::u8path(validatedPath).native();
-
-	if (const auto tempPath = fs::u8path(path); !fs::exists(tempPath) || !fs::is_directory(tempPath))
-	{
-		return {};
-	}
-
-	std::set<std::string> fileNames;
-	for (const auto& p: fs::recursive_directory_iterator(fs::u8path(validatedPath)))
-	{
-		if (!p.is_directory())
-		{
-			const auto currentPath = p.path().native();
-
-			const auto requestedPath = currentPath.substr(origPathStr.length() + 1, currentPath.length() - origPathStr.length() - 1);
-			auto utf8_path = UTF16ToUTF8(requestedPath);
-			std::ranges::replace(utf8_path, '\\', '/');
-			fileNames.insert(utf8_path);
-		}
-	}
-	return fileNames;
-#pragma warning(pop)
-}
-
-
 std::string GetLastErrorString()
 {
 	const DWORD errorCode = GetLastError();

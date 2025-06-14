@@ -20,15 +20,6 @@ void commonItems::ConverterVersion::loadVersion(const path& filename)
 }
 
 
-void commonItems::ConverterVersion::loadVersion(const std::string& filename)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	loadVersion(u8path(filename));
-#pragma warning(pop)
-}
-
-
 void commonItems::ConverterVersion::loadVersion(std::istream& theStream)
 {
 	registerKeys();

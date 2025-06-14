@@ -137,15 +137,6 @@ void commonItems::parser::parseFile(path filename)
 }
 
 
-void commonItems::parser::parseFile(std::string_view filename)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	parseFile(u8path(filename));
-#pragma warning(pop)
-}
-
-
 void commonItems::parser::clearRegisteredKeywords() noexcept
 {
 	std::map<std::string, parsingFunction>().swap(registeredKeywordStrings);
