@@ -26,56 +26,21 @@ namespace commonItems
 
 // Confirms the specified file exists (and is not a folder).
 bool DoesFileExist(const std::filesystem::path& path);
-[[deprecated("Use std::filesystem::path version")]] bool DoesFileExist(const std::string& path);
 
 // Confirms the specified folder exists (and is actually a folder).
 bool DoesFolderExist(const std::filesystem::path& path);
-[[deprecated("Use std::filesystem::path version")]] bool DoesFolderExist(const std::string& path);
 
 // Returns the names of all files in the specified folder.
 std::set<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path);
-[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllFilesInFolder(const std::string& path);
-[[deprecated("Use std::set<std::filesystem::path> GetAllFilesInFolder(const std::filesystem::path& path)")]] void GetAllFilesInFolder(const std::string& path,
-	 std::set<std::string>& fileNames);
 
 // Returns the names of all subfolders in the specified folder.
 std::set<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path);
-[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllSubfolders(const std::string& path);
-[[deprecated("Use std::set<std::filesystem::path> GetAllSubfolders(const std::filesystem::path& path)")]] void GetAllSubfolders(const std::string& path,
-	 std::set<std::string>& subFolders);
 
 // Returns the names of all files in the specified folder and all its subfolders.
 std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path);
-[[deprecated("Use std::filesystem::path version")]] std::set<std::string> GetAllFilesInFolderRecursive(const std::string& path);
-[[deprecated("Use std::set<std::filesystem::path> GetAllFilesInFolderRecursive(const std::filesystem::path& path)")]] void GetAllFilesInFolderRecursive(
-	 const std::string& path,
-	 std::set<std::string>& fileNames);
-
-// Returns the current directory in UTF-16.
-[[deprecated("Use std::filesystem::current_path")]] std::wstring GetCurrentDirectoryWString();
 
 // Given a Steam AppId, returns the install path for the corresponding game.
 std::optional<std::filesystem::path> getSteamInstallPath(const std::string& steamID);
-
-
-//
-// Directory modification functions
-//
-
-// Attempts to create the specified directory.
-[[deprecated("Use std::filesystem::create_directories")]] bool TryCreateFolder(const std::string& path);
-
-// Attempts to copy the specified file to the specified location, overwriting any existing file.
-[[deprecated("Use std::filesystem::copy_file")]] bool TryCopyFile(const std::string& sourcePath, const std::string& destPath);
-
-// Attempts to recursively copy to specified folder to the specified location.
-[[deprecated("Use std::filesystem::copy")]] bool CopyFolder(const std::string& sourceFolder, const std::string& destFolder);
-
-// Attempts to rename the specified folder to the specified name.
-[[deprecated("Use std::filesystem::rename")]] bool RenameFolder(const std::string& sourceFolder, const std::string& destFolder);
-
-// Attempt to delete the specified folder (and everything in it).
-[[deprecated("Use std::filesystem::remove_all")]] bool DeleteFolder(const std::string& folder);
 
 
 //
@@ -98,10 +63,6 @@ std::string convertUTF8ToASCII(const std::string& UTF8);
 std::string convertUTF8To8859_15(const std::string& UTF8);
 std::string convertUTF8ToWin1252(const std::string& UTF8);
 std::string UTF16ToUTF8(const std::wstring& UTF16);
-[[deprecated("Use UTF16ToUTF8")]] inline std::string convertUTF16ToUTF8(const std::wstring& UTF16)
-{
-	return UTF16ToUTF8(UTF16);
-}
 std::string convert8859_15ToASCII(const std::string& input);
 std::string convert8859_15ToUTF8(const std::string& input);
 std::wstring convert8859_15ToUTF16(const std::string& input);

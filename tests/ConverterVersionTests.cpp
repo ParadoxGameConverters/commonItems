@@ -1,13 +1,12 @@
 #include "../ConverterVersion.h"
 #include <gtest/gtest.h>
 
+
+
 TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
 	commonItems::ConverterVersion converterVersion;
-	// Using std::string_view version because it calls the other
-	converterVersion.loadVersion(std::string("emptyVersion.txt"));
+	converterVersion.loadVersion("emptyVersion.txt");
 
 	EXPECT_TRUE(converterVersion.getName().empty());
 	EXPECT_TRUE(converterVersion.getVersion().empty());
@@ -17,17 +16,13 @@ TEST(ConverterVersion_Tests, ItemsDefaultToEmpty)
 	EXPECT_EQ(GameVersion(), converterVersion.getMaxSource());
 	EXPECT_EQ(GameVersion(), converterVersion.getMinTarget());
 	EXPECT_EQ(GameVersion(), converterVersion.getMaxTarget());
-#pragma warning(pop)
 }
 
 
 TEST(ConverterVersion_Tests, ItemsCanBeImported)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
 	commonItems::ConverterVersion converterVersion;
-	// Using std::string_view version because it calls the other
-	converterVersion.loadVersion(std::string("version.txt"));
+	converterVersion.loadVersion("version.txt");
 
 	EXPECT_EQ("Adams-prerelease", converterVersion.getName());
 	EXPECT_EQ("0.1A", converterVersion.getVersion());
@@ -37,20 +32,15 @@ TEST(ConverterVersion_Tests, ItemsCanBeImported)
 	EXPECT_EQ(GameVersion("1.31.7"), converterVersion.getMaxSource());
 	EXPECT_EQ(GameVersion("1.0"), converterVersion.getMinTarget());
 	EXPECT_EQ(GameVersion("1.1"), converterVersion.getMaxTarget());
-#pragma warning(pop)
 }
 
 
 TEST(ConverterVersion_Tests, DescriptionCanBeConstructed)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
 	commonItems::ConverterVersion converterVersion;
-	// Using std::string_view version because it calls the other
-	converterVersion.loadVersion(std::string("version.txt"));
+	converterVersion.loadVersion("version.txt");
 
 	EXPECT_EQ("Compatible with EU4 [v1.31-v1.31.7] and Vic3 [v1.0-v1.1]", converterVersion.getDescription());
-#pragma warning(pop)
 }
 
 TEST(ConverterVersion_Tests, DescriptionDoesNotDuplicateIdenticalVersions)
@@ -70,11 +60,8 @@ TEST(ConverterVersion_Tests, DescriptionDoesNotDuplicateIdenticalVersions)
 
 TEST(ConverterVersion_Tests, ConverterVersionCanBeOutput)
 {
-#pragma warning(push)
-#pragma warning(disable : 4996)
 	commonItems::ConverterVersion converterVersion;
-	// Using std::string_view version because it calls the other
-	converterVersion.loadVersion(std::string("version.txt"));
+	converterVersion.loadVersion("version.txt");
 
 	std::stringstream log;
 	auto stdOutBuf = std::cout.rdbuf();
@@ -110,7 +97,6 @@ TEST(ConverterVersion_Tests, ConverterVersionCanBeOutput)
 	std::getline(expectedStream, expectedLine);
 	std::getline(actualStream, actualLine);
 	EXPECT_EQ(expectedLine, actualLine); // footer line
-#pragma warning(pop)
 }
 
 TEST(ConverterVersion_Tests, ConverterVersionOutputSkipsIncompleteVersionOrName)
