@@ -28,16 +28,13 @@ class ModLoader
 	ModLoader() = default;
 
 	void loadMods(const std::filesystem::path& gameDocumentsPath, const Mods& incomingMods);
-	[[deprecated("Use std::filesystem::path version")]] void loadMods(const std::string& gameDocumentsPath, const Mods& incomingMods);
 	void loadMods(const std::vector<std::filesystem::path>& gameModPaths, const Mods& incomingMods);
-	[[deprecated("Use std::filesystem::path version")]] void loadMods(const std::vector<std::string>& gameModPaths, const Mods& incomingMods);
 	void sortMods();
 
 	[[nodiscard]] const auto& getMods() const { return usableMods; }
 
   private:
 	void loadModDirectories(const std::vector<std::filesystem::path>& gameModPaths, const Mods& incomingMods);
-	[[deprecated("Use std::filesystem::path version")]] void loadModDirectories(const std::vector<std::string>& gameModPaths, const Mods& incomingMods);
 	void cacheModNames(const std::filesystem::path& gameDocumentsPath);
 	void processLoadedMod(ModParser& theMod,
 		 const std::string& modName,

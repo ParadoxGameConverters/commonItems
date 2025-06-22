@@ -5,55 +5,6 @@
 
 
 
-std::string trimPath(const std::string& fileName)
-{
-	auto lastSlash = fileName.find_last_of('\\');
-	auto trimmedFileName = fileName.substr(lastSlash + 1, fileName.length());
-	lastSlash = trimmedFileName.find_last_of('/');
-	trimmedFileName = trimmedFileName.substr(lastSlash + 1, trimmedFileName.length());
-	return trimmedFileName;
-}
-
-std::string getPath(const std::string& fileName)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto rawFile = trimPath(fileName);
-#pragma warning(pop)
-	const auto filePos = fileName.find(rawFile);
-	return fileName.substr(0, filePos);
-}
-
-std::string trimExtension(const std::string& fileName)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto rawFile = trimPath(fileName);
-#pragma warning(pop)
-	const auto dotPos = rawFile.find_last_of('.');
-	if (dotPos == std::string::npos)
-	{
-		return fileName;
-	}
-
-	return fileName.substr(0, fileName.find(rawFile) + dotPos);
-}
-
-std::string getExtension(const std::string& fileName)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	const auto rawFile = trimPath(fileName);
-#pragma warning(pop)
-	const auto dotPos = rawFile.find_last_of('.');
-	if (dotPos == std::string::npos)
-	{
-		return {};
-	}
-
-	return rawFile.substr(dotPos + 1);
-}
-
 std::string replaceCharacter(std::string fileName, const char character)
 {
 	std::ranges::replace(fileName, character, '_');

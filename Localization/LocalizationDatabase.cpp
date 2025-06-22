@@ -32,15 +32,6 @@ void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem&
 }
 
 
-void commonItems::LocalizationDatabase::ScrapeLocalizations(const ModFilesystem& mod_filesystem, const std::string& localization_folder)
-{
-#pragma warning(push)
-#pragma warning(disable : 4996)
-	commonItems::LocalizationDatabase::ScrapeLocalizations(mod_filesystem, u8path(localization_folder));
-#pragma warning(pop)
-}
-
-
 int commonItems::LocalizationDatabase::ScrapeStream(std::istream& stream)
 {
 	absorbBOM(stream);

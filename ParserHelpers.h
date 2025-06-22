@@ -199,18 +199,6 @@ class singleString: parser
 };
 
 
-class stringOfObject: parser
-{
-  public:
-	explicit stringOfObject(std::istream& theStream);
-
-	[[deprecated("Use stringOfItem")]] [[nodiscard]] std::string getString() const { return theString; }
-
-  private:
-	std::string theString;
-};
-
-
 class stringOfItem: parser
 {
   public:

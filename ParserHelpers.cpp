@@ -437,37 +437,6 @@ singleString::singleString(std::istream& theStream)
 }
 
 
-stringOfObject::stringOfObject(std::istream& theStream)
-{
-	auto braceDepth = 0;
-	while (true)
-	{
-		if (theStream.eof())
-		{
-			return;
-		}
-
-		char inputChar;
-		theStream >> inputChar;
-
-		theString += inputChar;
-
-		if (inputChar == '{')
-		{
-			braceDepth++;
-		}
-		else if (inputChar == '}')
-		{
-			braceDepth--;
-			if (braceDepth == 0)
-			{
-				return;
-			}
-		}
-	}
-}
-
-
 stringOfItem::stringOfItem(std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
