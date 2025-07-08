@@ -16,7 +16,7 @@ std::string getNextLexeme(std::istream& theStream);
 void ignoreItem([[maybe_unused]] const std::string& unused, std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
-	if (next == "=")
+	if (next == "=" || next == "?=")
 	{
 		next = getNextLexeme(theStream);
 	}
@@ -356,7 +356,7 @@ singleDouble::singleDouble(std::istream& theStream)
 blobList::blobList(std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
-	if (next == "=")
+	if (next == "=" || next == "?=")
 	{
 		next = getNextLexeme(theStream);
 	}
@@ -440,7 +440,7 @@ singleString::singleString(std::istream& theStream)
 stringOfItem::stringOfItem(std::istream& theStream)
 {
 	auto next = getNextLexeme(theStream);
-	if (next == "=")
+	if (next == "=" || next == "?=")
 	{
 		theString += next + " ";
 		next = getNextLexeme(theStream);
