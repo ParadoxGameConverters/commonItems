@@ -50,6 +50,29 @@ TEST(Parser_Tests, KeywordsAreMatched)
 	EXPECT_EQ("value", test.value);
 }
 
+TEST(Parser_Tests, KeywordsAreMatchedForExistsEquals)
+{
+	std::stringstream input{"key ?= value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+}
+
 TEST(Parser_Tests, FunctionObjectEquivalentToParse)
 {
 	std::stringstream input{"key = value"};
@@ -208,6 +231,29 @@ TEST(Parser_Tests, WrongKeywordsAreIgnored)
 TEST(Parser_Tests, RegexesAreMatched)
 {
 	std::stringstream input{"key = value"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex("[key]+", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+}
+
+TEST(Parser_Tests, RegexesAreMatchedOnExistsEquals)
+{
+	std::stringstream input{"key ?= value"};
 	class Test: commonItems::parser
 	{
 	  public:

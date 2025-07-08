@@ -353,7 +353,7 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 		}
 		else if (!inQuotes && !inLiteralQuote && inputChar == '=')
 		{
-			if (toReturn.empty())
+			if (toReturn.empty() || toReturn == "?")
 			{
 				toReturn += inputChar;
 			}
