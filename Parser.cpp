@@ -81,7 +81,7 @@ void commonItems::parser::parseStream(std::istream& theStream)
 		if (auto token = getNextToken(theStream); token)
 		{
 			tokensSoFar += *token;
-			if (*token == "=")
+			if (*token == "=" || *token == "?=")
 			{
 				if (!value)
 				{

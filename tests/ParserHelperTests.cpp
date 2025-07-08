@@ -52,6 +52,16 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItem)
 	ASSERT_EQ(" More text", std::string{buffer});
 }
 
+TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItemOnExistsEquals)
+{
+	std::stringstream input{"?= { { ignore_me } } More text"};
+	input >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" More text", std::string{buffer});
+}
 
 class Foo: commonItems::parser
 {
@@ -792,6 +802,22 @@ TEST(ParserHelper_Tests, StringOfItemConvertsBracedObjectsToStrings)
 	ASSERT_EQ(input.str(), theItem.getString());
 }
 
+TEST(ParserHelper_Tests, StringOfItemConvertsBracedObjectsToStringsOnExistsEquals)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "?= {\n";
+	input << "\t{\n";
+	input << "\t\tid = 180\n";
+	input << "\t\ttype = 46\n";
+	input << "\t}\n";
+	input << "}";
+
+	const commonItems::stringOfItem theItem(input);
+
+	ASSERT_EQ(input.str(), theItem.getString());
+}
+
 TEST(ParserHelper_Tests, StringOfItemHandlesQuotedCurlyBracesInString)
 {
 	std::stringstream input;
@@ -1056,6 +1082,17 @@ TEST(ParserHelper_Tests, BlobListDefaultsToEmpty)
 TEST(ParserHelper_Tests, BlobListAddsBlobs)
 {
 	std::stringstream input{"= { {foo} {bar} {baz} }"};
+
+	const commonItems::blobList theBlobs(input);
+	input >> std::noskipws;
+
+	const auto expectedBlobs = std::vector<std::string>{"foo", "bar", "baz"};
+	ASSERT_EQ(expectedBlobs, theBlobs.getBlobs());
+}
+
+TEST(ParserHelper_Tests, BlobListAddsBlobsOnExistsEquals)
+{
+	std::stringstream input{"?= { {foo} {bar} {baz} }"};
 
 	const commonItems::blobList theBlobs(input);
 	input >> std::noskipws;

@@ -467,6 +467,30 @@ TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItems)
 	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_two)"));
 }
 
+TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItemsOnExistsEquals)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "key ?= value\n";
+	input << "key_two ?= { nested_item}\n";
+
+	commonItems::parser parser;
+	parser.IgnoreAndLogUnregisteredItems();
+
+
+	std::stringstream log;
+	auto std_out_buf = std::cout.rdbuf();
+	std::cout.rdbuf(log.rdbuf());
+
+	parser.parseStream(input);
+
+	std::cout.rdbuf(std_out_buf);
+	std::string actual_output = log.str();
+
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key)"));
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_two)"));
+}
+
 
 TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItems)
 {
@@ -474,6 +498,23 @@ TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItems)
 	input << std::noskipws;
 	input << "key = value\n";
 	input << "key_two = { nested_item}\n";
+
+	std::set<std::string> ignored_items;
+	commonItems::parser parser;
+	parser.IgnoreAndStoreUnregisteredItems(ignored_items);
+
+
+	parser.parseStream(input);
+
+	EXPECT_THAT(ignored_items, testing::UnorderedElementsAre("key", "key_two"));
+}
+
+TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItemsOnExistsEquals)
+{
+	std::stringstream input;
+	input << std::noskipws;
+	input << "key ?= value\n";
+	input << "key_two ?= { nested_item}\n";
 
 	std::set<std::string> ignored_items;
 	commonItems::parser parser;
