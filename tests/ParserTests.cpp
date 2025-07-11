@@ -298,7 +298,7 @@ TEST(Parser_Tests, RegexesAreMatchedOnExistsEquals)
 	EXPECT_EQ("key", test.key);
 	EXPECT_EQ("value", test.value);
 
-   test = Test(input2);
+	test = Test(input2);
 	EXPECT_EQ("key", test.key);
 	EXPECT_EQ("value", test.value);
 
@@ -553,7 +553,7 @@ TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItemsOnExis
 	input << "key ?= value1\n";
 	input << "key_two ?= { nested_item}\n";
 	input << "key_three?= value3\n"; // no space before the ExistsEquals
-	input << "key_four ?=value4\n";  // no space after the ExistsEquals
+	input << "key_four ?=value4\n";	// no space after the ExistsEquals
 
 	std::set<std::string> ignored_items;
 	commonItems::parser parser;
