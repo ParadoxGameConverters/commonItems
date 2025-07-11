@@ -57,6 +57,14 @@ TEST(CommonRegexes_Tests, CatchallRegexMatchesQuotedInternalQuotes)
 }
 
 
+TEST(CommonRegexes_Tests, CatchallRegexDoesntMatchQuestionSign)
+{
+	std::smatch match;
+	const std::string test_string("1234-abcd?");
+	EXPECT_FALSE(std::regex_match(test_string, match, std::regex(commonItems::catchallRegex)));
+}
+
+
 TEST(CommonRegexes_Tests, CatchallRegexDoesntMatchEquals)
 {
 	std::smatch match;
