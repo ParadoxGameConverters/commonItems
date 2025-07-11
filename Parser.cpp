@@ -351,6 +351,19 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 			}
 			break;
 		}
+		else if (!inQuotes && !inLiteralQuote && inputChar == '?')
+		{
+			// We've likely encountered the beginning of an ExistEquals operator.
+			if (toReturn.empty())
+			{
+				toReturn += inputChar;
+			}
+			else
+			{
+				theStream.putback('?');
+				break;
+			}
+		}
 		else if (!inQuotes && !inLiteralQuote && inputChar == '=')
 		{
 			if (toReturn.empty() || toReturn == "?")
