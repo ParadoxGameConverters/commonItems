@@ -73,6 +73,29 @@ TEST(Parser_Tests, KeywordsAreMatchedForExistsEquals)
 	EXPECT_EQ("value", test.value);
 }
 
+TEST(Parser_Tests, KeywordsAreMatchedForExistsEqualsWithoutPrecedingWhitespace)
+{
+	std::stringstream input{"key?= value"}; // no whitespace between key and ?=
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerKeyword("key", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+}
+
 TEST(Parser_Tests, FunctionObjectEquivalentToParse)
 {
 	std::stringstream input{"key = value"};
@@ -253,7 +276,9 @@ TEST(Parser_Tests, RegexesAreMatched)
 
 TEST(Parser_Tests, RegexesAreMatchedOnExistsEquals)
 {
-	std::stringstream input{"key ?= value"};
+	std::stringstream input1{"key ?= value"};
+	std::stringstream input2{"key?= value"}; // no whitespace between key and ?=
+	std::stringstream input3{"key ?=value"}; // no whitespace between ?= and value
 	class Test: commonItems::parser
 	{
 	  public:
@@ -268,8 +293,16 @@ TEST(Parser_Tests, RegexesAreMatchedOnExistsEquals)
 		std::string key;
 		std::string value;
 	};
-	const auto test = Test(input);
 
+	auto test = Test(input1);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+
+	test = Test(input2);
+	EXPECT_EQ("key", test.key);
+	EXPECT_EQ("value", test.value);
+
+	test = Test(input3);
 	EXPECT_EQ("key", test.key);
 	EXPECT_EQ("value", test.value);
 }
@@ -471,8 +504,10 @@ TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItemsO
 {
 	std::stringstream input;
 	input << std::noskipws;
-	input << "key ?= value\n";
+	input << "key ?= value1\n";
 	input << "key_two ?= { nested_item}\n";
+	input << "key_three?= value3\n"; // no space before the ExistsEquals
+	input << "key_four ?=value4\n";	// no space after the ExistsEquals
 
 	commonItems::parser parser;
 	parser.IgnoreAndLogUnregisteredItems();
@@ -489,6 +524,8 @@ TEST(Parser_Tests, IgnoreAndLogUnregisteredItemsIgnoresAndLogsUnregisteredItemsO
 
 	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key)"));
 	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_two)"));
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_three)"));
+	EXPECT_THAT(actual_output, testing::HasSubstr(R"([DEBUG]     Ignoring keyword: key_four)"));
 }
 
 
@@ -513,8 +550,10 @@ TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItemsOnExis
 {
 	std::stringstream input;
 	input << std::noskipws;
-	input << "key ?= value\n";
+	input << "key ?= value1\n";
 	input << "key_two ?= { nested_item}\n";
+	input << "key_three?= value3\n"; // no space before the ExistsEquals
+	input << "key_four ?=value4\n";	// no space after the ExistsEquals
 
 	std::set<std::string> ignored_items;
 	commonItems::parser parser;
@@ -523,5 +562,5 @@ TEST(Parser_Tests, IgnoreAndStoreUnregisteredItemsIgnoresUnregisteredItemsOnExis
 
 	parser.parseStream(input);
 
-	EXPECT_THAT(ignored_items, testing::UnorderedElementsAre("key", "key_two"));
+	EXPECT_THAT(ignored_items, testing::UnorderedElementsAre("key", "key_two", "key_three", "key_four"));
 }
