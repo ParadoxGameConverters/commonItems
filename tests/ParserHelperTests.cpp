@@ -776,6 +776,7 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedStringAfterEquals)
 	ASSERT_EQ("foo", theString.getString());
 }
 
+
 TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
 {
 	std::stringstream input{" = \"{\" "};
@@ -783,6 +784,16 @@ TEST(ParserHelper_Tests, SingleStringGetsQuotedCurly)
 	const commonItems::singleString theString(input);
 
 	ASSERT_EQ("{", theString.getString());
+}
+
+
+TEST(ParserHelper_Tests, SingleStringGetsStringWithQuestionMark)
+{
+	std::stringstream input{"= var:war_propaganda_cost?75"};
+
+	const commonItems::singleString theString(input);
+
+	EXPECT_EQ("var:war_propaganda_cost?75", theString.getString());
 }
 
 
