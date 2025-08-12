@@ -96,6 +96,17 @@ TEST(Parser_Tests, KeywordsAreMatchedForExistsEqualsWithoutPrecedingWhitespace)
 	EXPECT_EQ("value", test.value);
 }
 
+
+TEST(Parser_Tests, KeywordsWithQuestionMarkInMiddleAreMatched)
+{
+	std::stringstream input{ "key?morekey" }; // no whitespace between key and ?=
+	const auto test = commonItems::parser::getNextTokenWithoutMatching(input);
+
+	EXPECT_TRUE(test.has_value());
+	EXPECT_EQ(test.value_or(""),"key?morekey");
+}
+
+
 TEST(Parser_Tests, FunctionObjectEquivalentToParse)
 {
 	std::stringstream input{"key = value"};
