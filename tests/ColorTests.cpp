@@ -466,7 +466,7 @@ TEST(Color_Tests, ColorInitializationRequiresThreeComponentsWhenRgb)
 	std::stringstream input;
 	input << "= rgb { 64 128 }";
 
-	ASSERT_THROW(auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
+	ASSERT_THROW([[maybe_unused]] auto color = commonItems::Color::Factory{}.getColor(input), std::runtime_error);
 }
 
 
