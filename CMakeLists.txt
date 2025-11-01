@@ -12,6 +12,9 @@ endif (PLATFORM STREQUAL "Linux")
 set(CMAKE_CXX_STANDARD 23)
 set (UNICODE_DEFAULT OFF)
 
+add_subdirectory(external/zip SYSTEM PRIVATE EXCLUDE_FROM_ALL)
+get_target_property(lib_include_dirs zip INTERFACE_INCLUDE_DIRECTORIES)
+
 if (PLATFORM STREQUAL "Windows")
 	ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DWINDOWS)
 elseif (PLATFORM STREQUAL "Linux")
@@ -62,8 +65,6 @@ add_library(commonLib
 	${COMMON_SOURCES}
 )
 
-add_subdirectory(external/zip SYSTEM PRIVATE EXCLUDE_FROM_ALL)
-get_target_property(lib_include_dirs zip INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(commonLib SYSTEM PRIVATE ${lib_include_dirs})
 target_link_libraries(commonLib PRIVATE zip)
 
