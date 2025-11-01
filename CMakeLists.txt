@@ -12,6 +12,8 @@ endif (PLATFORM STREQUAL "Linux")
 set(CMAKE_CXX_STANDARD 23)
 set (UNICODE_DEFAULT OFF)
 
+message("-- Configuring for platform: ${PLATFORM}")
+message("-- Code coverage enabled: ${COVERAGE}")
 if (PLATFORM STREQUAL "Windows")
 	ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DWINDOWS)
 elseif (PLATFORM STREQUAL "Linux")
