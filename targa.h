@@ -29,7 +29,7 @@ typedef unsigned __int32 uint32_t;
 #define BIT(index) (1 << (index))
 
 #ifdef _BIG_ENDIAN
-#define htole16(x) ((((x)&0x00FF) << 8) | (((x)&0xFF00) >> 8))
+#define htole16(x) ((((x) & 0x00FF) << 8) | (((x) & 0xFF00) >> 8))
 #define letoh16(x) htole16(x)
 #else /* little endian */
 #define htole16(x) (x)
@@ -77,8 +77,8 @@ typedef struct
  * bits 6,7     - unused (must be set to zero)
  */
 #define TGA_ATTRIB_BITS (uint8_t)(BIT(0) | BIT(1) | BIT(2) | BIT(3))
-#define TGA_R_TO_L_BIT (uint8_t) BIT(4)
-#define TGA_T_TO_B_BIT (uint8_t) BIT(5)
+#define TGA_R_TO_L_BIT (uint8_t)BIT(4)
+#define TGA_T_TO_B_BIT (uint8_t)BIT(5)
 #define TGA_UNUSED_BITS (uint8_t)(BIT(6) | BIT(7))
 	/* Note: right-to-left order is not honored by some Targa readers */
 
