@@ -12,17 +12,14 @@ endif (PLATFORM STREQUAL "Linux")
 set(CMAKE_CXX_STANDARD 23)
 set (UNICODE_DEFAULT OFF)
 
-add_subdirectory(external/zip SYSTEM PRIVATE EXCLUDE_FROM_ALL)
-get_target_property(lib_include_dirs zip INTERFACE_INCLUDE_DIRECTORIES)
-
 if (PLATFORM STREQUAL "Windows")
 	ADD_DEFINITIONS(-DUNICODE -D_UNICODE -DWINDOWS)
 elseif (PLATFORM STREQUAL "Linux")
     #set(CMAKE_CXX_CLANG_TIDY clang-tidy -checks=-*,readability-*)
 	if (COVERAGE STREQUAL true)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated-declarations -Wno-unknown-pragmas")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-calloc-transposed-args")
 		set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
-	else (COVERAGE STREQUAL true)
+	else (COVERAGE STREQUAL false)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Wno-deprecated-declarations -Wno-unknown-pragmas")
 	endif (COVERAGE STREQUAL true)
 endif (PLATFORM STREQUAL "Windows")
@@ -65,6 +62,8 @@ add_library(commonLib
 	${COMMON_SOURCES}
 )
 
+add_subdirectory(external/zip SYSTEM PRIVATE EXCLUDE_FROM_ALL)
+get_target_property(lib_include_dirs zip INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(commonLib SYSTEM PRIVATE ${lib_include_dirs})
 target_link_libraries(commonLib PRIVATE zip)
 
