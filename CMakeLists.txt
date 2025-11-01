@@ -20,7 +20,7 @@ elseif (PLATFORM STREQUAL "Linux")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-calloc-transposed-args")
 		set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 	else (COVERAGE STREQUAL false)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Wno-deprecated-declarations -Wno-unknown-pragmas")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -Wno-deprecated-declarations -Wno-unknown-pragmas -Wno-calloc-transposed-args")
 	endif (COVERAGE STREQUAL true)
 endif (PLATFORM STREQUAL "Windows")
 
