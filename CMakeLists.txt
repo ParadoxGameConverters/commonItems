@@ -127,7 +127,7 @@ if (COVERAGE STREQUAL true)
 	add_custom_command(TARGET lcov
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
-		COMMAND lcov --ignore-errors inconsistent --c --d CMakeFiles/commonLib.dir --o lcoverage/coverage.info
+		COMMAND lcov --c --d CMakeFiles/commonLib.dir --o lcoverage/coverage.info --ignore-errors inconsistent 
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info
@@ -142,7 +142,7 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/nlohmann/*" -o lcoverage/coverage.info
 		COMMAND echo "-- Generating HTML output files"
-		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage
+		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage --ignore-errors inconsistent 
 	)
 
 	# Make sure to clean up the coverage folder
