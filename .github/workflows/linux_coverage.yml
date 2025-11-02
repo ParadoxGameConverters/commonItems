@@ -36,7 +36,7 @@ jobs:
        ./CommonItemsTests
 
     - name: Run lcov
-      run: cmake --build --preset build-x64-coverage-linux --target lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov --ignore-errors inconsistent
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
@@ -84,7 +84,7 @@ jobs:
        ./CommonItemsTests
 
     - name: Run lcov
-      run: cmake --build --preset build-x64-coverage-linux --target lcov
+      run: cmake --build --preset build-x64-coverage-linux --target lcov --ignore-errors inconsistent
 
     - name: Coveralls
       uses: coverallsapp/github-action@master
