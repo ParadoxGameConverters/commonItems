@@ -49,3 +49,5 @@ Utilities for modifying strings.
 
 ### targa.h
 A borrowed utility to handle targa (.tga) files.
+
+foobar
