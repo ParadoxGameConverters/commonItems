@@ -141,8 +141,8 @@ if (COVERAGE STREQUAL true)
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info --keep-going
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info --keep-going
 		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/nlohmann/*" -o lcoverage/coverage.info --keep-going
-		#COMMAND echo "-- Generating HTML output files"
-		#COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage --keep-going
+		COMMAND echo "-- Generating HTML output files"
+		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage --keep-going
 	)
 
 	# Make sure to clean up the coverage folder
