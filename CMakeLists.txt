@@ -128,21 +128,21 @@ if (COVERAGE STREQUAL true)
 		COMMAND echo "=================== LCOV ===================="
 		COMMAND echo "-- Passing lcov tool under code coverage"
 		COMMAND lcov --c --d CMakeFiles/commonLib.dir --o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/11/bits/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
-		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/nlohmann/*" -o lcoverage/coverage.info-- ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/11/ext/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/11/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/c++/12/ext/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "/usr/include/x86_64-linux-gnu/c++/12/bits/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googlemock/include/gmock/internal/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/googletest/googletest/include/gtest/internal/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND lcov --remove lcoverage/coverage.info "*/commonItems/external/json/single_include/nlohmann/*" -o lcoverage/coverage.info --ignore-errors inconsistent,inconsistent,unused,unused
 		COMMAND echo "-- Generating HTML output files"
-		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage-- ignore-errors inconsistent,inconsistent,unused,unused
+		COMMAND genhtml lcoverage/coverage.info --output-directory lcoverage --ignore-errors inconsistent,inconsistent,unused,unused
 	)
 
 	# Make sure to clean up the coverage folder
