@@ -52,6 +52,28 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItem)
 	ASSERT_EQ(" More text", std::string{buffer});
 }
 
+TEST(ParserHelper_Tests, IgnoreItemIgnoresMisquotedItem)
+{
+	std::stringstream input{"= \\\"ignore_me\" More text"};
+	input >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ("More text", std::string{buffer});
+}
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresMisquotedBracedItem)
+{
+	std::stringstream input{"= { \\\"ignore_me\" } More text"};
+	input >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" More text", std::string{buffer});
+}
+
 TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItemOnExistsEquals)
 {
 	std::stringstream input{"?= { { ignore_me } } More text"};

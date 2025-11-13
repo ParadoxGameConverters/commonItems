@@ -455,7 +455,6 @@ stringOfItem::stringOfItem(std::istream& theStream)
 		char inputChar;
 		while (theStream >> inputChar)
 		{
-
 			theString += inputChar;
 
 			if (inputChar == '\"' && previousCharacter != '\\')
@@ -481,6 +480,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 					return;
 				}
 			}
+			previousCharacter = inputChar;
 		}
 	}
 }
