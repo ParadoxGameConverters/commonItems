@@ -867,6 +867,21 @@ TEST(ParserHelper_Tests, StringOfItemGetsStringAfterEquals)
 }
 
 
+TEST(ParserHelper_Tests, StringOfItemHandlesMismatchedQuotes)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "= {\n";
+	input << "\tfoo = \"some junk\\\"\" \n";
+	input << "\tbar = baz\n";
+	input << "}";
+
+	const commonItems::stringOfItem theItem(input);
+
+	ASSERT_EQ(input.str(), theItem.getString());
+}
+
+
 TEST(ParserHelper_Tests, StringOfItemsConvertsItemsWithinBracesToStrings)
 {
 	std::stringstream input;
