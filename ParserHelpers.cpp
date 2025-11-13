@@ -451,19 +451,13 @@ stringOfItem::stringOfItem(std::istream& theStream)
 	{
 		bool inQuotes = false;
 		auto braceDepth = 1;
-		while (true)
+		unsigned char previousCharacter = '\0';
+		char inputChar;
+		while (theStream >> inputChar)
 		{
-			if (theStream.eof())
-			{
-				return;
-			}
-
-			char inputChar;
-			theStream >> inputChar;
-
 			theString += inputChar;
 
-			if (inputChar == '\"')
+			if (inputChar == '\"' && previousCharacter != '\\')
 			{
 				if (!inQuotes)
 				{
@@ -486,6 +480,7 @@ stringOfItem::stringOfItem(std::istream& theStream)
 					return;
 				}
 			}
+			previousCharacter = inputChar;
 		}
 	}
 }

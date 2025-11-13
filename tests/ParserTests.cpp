@@ -387,6 +387,29 @@ TEST(Parser_Tests, QuotedRegexesAreQuotedlyMatched)
 	EXPECT_EQ("value", test.value);
 }
 
+TEST(Parser_Tests, MisQuotedRegexesAreQuotedlyMatched)
+{
+	std::stringstream input{R"("\"key" = value)"};
+	class Test: commonItems::parser
+	{
+	  public:
+		explicit Test(std::istream& stream)
+		{
+			registerRegex(R"([k\"\\ey]+)", [this](const std::string& keyword, std::istream& theStream) {
+				key = keyword;
+				value = commonItems::getString(theStream);
+			});
+			parseStream(stream);
+		}
+		std::string key;
+		std::string value;
+	};
+	const auto test = Test(input);
+
+	EXPECT_EQ("\"\\\"key\"", test.key);
+	EXPECT_EQ("value", test.value);
+}
+
 TEST(Parser_Tests, CatchAllCatchesQuotedKeys)
 {
 	std::stringstream input{"\"key\" = value"};

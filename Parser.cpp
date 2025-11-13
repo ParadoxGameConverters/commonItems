@@ -270,12 +270,9 @@ std::string commonItems::getNextLexeme(std::istream& theStream)
 	auto inLiteralQuote = false;
 	unsigned char previousCharacter = '\0';
 
-	while (true)
+	char inputChar;
+	while (theStream >> inputChar)
 	{
-		char inputChar;
-		theStream >> inputChar;
-		if (theStream.eof())
-			break;
 		if (!inQuotes && inputChar == '#')
 		{
 			std::string bitBucket;

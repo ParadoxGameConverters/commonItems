@@ -52,6 +52,28 @@ TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItem)
 	ASSERT_EQ(" More text", std::string{buffer});
 }
 
+TEST(ParserHelper_Tests, IgnoreItemIgnoresMisquotedItem)
+{
+	std::stringstream input{"= \\\"ignore_me\" More text"};
+	input >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ("More text", std::string{buffer});
+}
+
+TEST(ParserHelper_Tests, IgnoreItemIgnoresMisquotedBracedItem)
+{
+	std::stringstream input{"= { \\\"ignore_me\" } More text"};
+	input >> std::noskipws;
+	commonItems::ignoreItem("unused", input);
+
+	char buffer[256];
+	input.getline(buffer, sizeof buffer);
+	ASSERT_EQ(" More text", std::string{buffer});
+}
+
 TEST(ParserHelper_Tests, IgnoreItemIgnoresAssignedBracedItemOnExistsEquals)
 {
 	std::stringstream input{"?= { { ignore_me } } More text"};
@@ -864,6 +886,21 @@ TEST(ParserHelper_Tests, StringOfItemGetsStringAfterEquals)
 	const commonItems::stringOfItem theItem(input);
 
 	ASSERT_EQ("= foo", theItem.getString());
+}
+
+
+TEST(ParserHelper_Tests, StringOfItemHandlesMismatchedQuotes)
+{
+	std::stringstream input;
+	input >> std::noskipws;
+	input << "= {\n";
+	input << "\tfoo = \"some junk\\\"\" \n";
+	input << "\tbar = baz\n";
+	input << "}";
+
+	const commonItems::stringOfItem theItem(input);
+
+	ASSERT_EQ(input.str(), theItem.getString());
 }
 
 
