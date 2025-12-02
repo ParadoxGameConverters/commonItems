@@ -537,3 +537,38 @@ TEST(GameVersion_Tests, extractVersionFromChangeLogReturnsNulloptForNonsenseVers
 
 	EXPECT_EQ(std::nullopt, version);
 }
+
+TEST(GameVersion_Tests, extractVersionFromBranchTxtExtractsVersion)
+{
+	const auto version = GameVersion::extractVersionFromBranchTxt("clausewitz_branch.txt");
+
+	EXPECT_EQ(GameVersion("1.0.7"), *version);
+}
+
+TEST(GameVersion_Tests, extractVersionFromBranchTxtReturnsNulloptForMissingFile)
+{
+	const auto version = GameVersion::extractVersionFromBranchTxt("clausewitz_branch.txt2");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractVersionFromBranchTxtReturnsNulloptForBrokenFile)
+{
+	const auto version = GameVersion::extractVersionFromBranchTxt("clausewitz_branch_broken.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractVersionFromBranchTxtReturnsNulloptForIncompleteFile)
+{
+	const auto version = GameVersion::extractVersionFromBranchTxt("clausewitz_branch_broken2.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
+
+TEST(GameVersion_Tests, extractVersionFromBranchTxtReturnsNulloptForNonsenseFile)
+{
+	const auto version = GameVersion::extractVersionFromBranchTxt("clausewitz_rev.txt");
+
+	EXPECT_EQ(std::nullopt, version);
+}
