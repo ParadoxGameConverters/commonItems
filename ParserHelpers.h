@@ -87,6 +87,17 @@ class ullongList: parser
 	std::vector<unsigned long long> ullongs;
 };
 
+class intRange: parser
+{
+  public:
+	explicit intRange(std::istream& theStream);
+
+	[[nodiscard]] std::set<int> getInts() const { return rangedIntegers; }
+
+  private:
+	std::vector<int> integers;
+	std::set<int> rangedIntegers;
+};
 
 class singleInt: parser
 {

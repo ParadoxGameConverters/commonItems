@@ -235,6 +235,32 @@ ullongList::ullongList(std::istream& theStream)
 	parseStream(theStream);
 }
 
+intRange::intRange(std::istream& theStream)
+{
+	registerRegex(integerRegex, [this](const std::string& theInt, [[maybe_unused]] std::istream& unused) {
+		integers.push_back(stringToInteger<int>(theInt));
+	});
+	registerRegex(quotedIntegerRegex, [this](const std::string& theInt, [[maybe_unused]] std::istream& unused) {
+		const auto newInt = theInt.substr(1, theInt.size() - 2);
+		integers.push_back(stringToInteger<int>(newInt));
+	});
+
+	parseStream(theStream);
+	if ((integers.size() % 2) != 0)
+	{
+		throw std::runtime_error("IntRange has an odd number of items. We cannot parse it.");
+	}
+	for (unsigned int i = 0; i < integers.size(); i += 2U)
+	{
+		const int startingInt = integers[i];
+		const int additionalInts = integers[i + 1U];
+		for (int j = 0; j <= additionalInts; j++)
+		{
+			rangedIntegers.emplace(startingInt + j);
+		}
+	}
+}
+
 
 singleInt::singleInt(std::istream& theStream)
 {
