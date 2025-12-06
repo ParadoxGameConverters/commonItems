@@ -1287,3 +1287,20 @@ TEST(ParserHelper_Tests, getStringWrapperWorks)
 	std::stringstream input{str}, input2{str};
 	ASSERT_EQ(commonItems::singleString(input).getString(), commonItems::getString(input2));
 }
+
+TEST(ParserHelper_Tests, IntRangeCanBeInputAndUnpacked)
+{
+	std::stringstream input;
+	input << "={ 37330 1 37333 9 37348 1 }\n";
+	const auto theInts = commonItems::intRange(input).getInts();
+
+	EXPECT_THAT(theInts, testing::UnorderedElementsAre(37330, 37331, 37333, 37334, 37335, 37336, 37337, 37338, 37339, 37340, 37341, 37342, 37348, 37349));
+}
+
+TEST(ParserHelper_Tests, IntRangeThrowsExceptionForOddNumberOfItems)
+{
+	std::stringstream input;
+	input << "={37330 1 37333 9 37348 }\n";
+
+	EXPECT_THROW(const auto theInts = commonItems::intRange(input), std::runtime_error);
+}
