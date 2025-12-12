@@ -44,7 +44,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: build/x64-coverage-linux/lcoverage/coverage.info
 
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: coverage-report
         path: build/x64-coverage-linux/lcoverage/
