@@ -70,7 +70,9 @@ class GameVersion: commonItems::convenientParser
 
 	friend std::ostream& operator<<(std::ostream& out, const GameVersion& version);
 
-	// modern PDX games, scrapes launcher-settings.json.
+	// modern(?) PDX games, scrapes clausewitz_branch.txt.
+	[[nodiscard]] static std::optional<GameVersion> extractVersionFromBranchTxt(const std::filesystem::path& filePath);
+	// semi-modern PDX games, scrapes launcher-settings.json.
 	[[nodiscard]] static std::optional<GameVersion> extractVersionFromLauncher(const std::filesystem::path& filePath);
 	[[nodiscard]] static std::optional<GameVersion> extractVersionByStringFromLauncher(const std::string& versionString, const std::filesystem::path& filePath);
 	// extracts version from CK2 ChangeLog.txt.

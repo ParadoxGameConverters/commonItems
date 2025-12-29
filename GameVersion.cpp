@@ -379,6 +379,42 @@ bool GameVersion::isLargerishThan(const GameVersion& rhs) const
 	return !fourthPart || testDigit <= *fourthPart;
 }
 
+std::optional<GameVersion> GameVersion::extractVersionFromBranchTxt(const path& filePath)
+{
+	// use this for modern PDX games, point filePath to clausewitz_branch.txt in installation folder root to get installation version.
+
+	if (!commonItems::DoesFileExist(filePath))
+	{
+		Log(LogLevel::Warning) << "Failure extracting version: " << filePath << " does not exist.";
+		return std::nullopt;
+	}
+
+	std::ifstream versionFile(filePath, std::ios::binary);
+	std::stringstream inStream;
+	inStream << versionFile.rdbuf();
+	auto versionString = inStream.str();
+
+	if (versionString.find_last_of('/') == std::string::npos || versionString.find_last_of('/') == versionString.size() - 1)
+	{
+		Log(LogLevel::Warning) << "Failure extracting version from " << filePath << ", no slashes. Are you sure this is _branch (and not _rev file)?";
+		return std::nullopt;
+	}
+	versionString = versionString.substr(versionString.find_last_of('/') + 1);
+
+	try
+	{
+		return GameVersion(versionString);
+	}
+	catch (std::exception& e)
+	{
+		versionFile.close();
+		Log(LogLevel::Warning) << "Failure extracting version from " << filePath << ": " << e.what() << ".";
+	}
+
+	return std::nullopt;
+}
+
+
 std::optional<GameVersion> GameVersion::extractVersionFromLauncher(const path& filePath)
 {
 	// use this for modern PDX games, point filePath to launcher-settings.json to get installation version.
