@@ -1,10 +1,10 @@
 #include "ModLoader.h"
 
-#include <external/zip/src/zip.h>
 #include <filesystem>
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <zip.h>
 
 #include "../CommonFunctions.h"
 #include "../Log.h"
